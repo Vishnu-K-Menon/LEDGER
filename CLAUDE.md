@@ -16,7 +16,7 @@ Loaded every session. Rationale lives in `docs/` and is referenced by path, neve
 - A decision enters `docs/decisions.md` when it is the one being built under, not when proposed. Rejected options go in the winner's "Rejected" section, not as their own entries. A revisited decision gets a new entry naming the old id.
 
 ## Commands (the contract, built incrementally across T1–T14; T1 creates the CLI skeleton and `--help`)
-Console entry point `ledger = "ledger.cli:main"` in `pyproject.toml`. **Naming:** `ledger` is the project, the CLI, and a data structure. The Python package is `ledger/`; the claim-ledger data structure lives at `ledger/claims/ledger.py` exporting `ClaimLedger`. Never create a top-level `ledger/ledger.py`.
+Console entry point `ledger = "ledger.cli:main"` in `pyproject.toml`. **Paths in this file (`tracing/otel.py`, `eval/kappa.py`, `retrieval/store.py`, …) are relative to the `ledger/` package** — never create a top-level `tracing/`, `eval/` or `retrieval/`. **Naming:** `ledger` is the project, the CLI, and a data structure. The Python package is `ledger/`; the claim-ledger data structure lives at `ledger/claims/ledger.py` exporting `ClaimLedger`. Never create a top-level `ledger/ledger.py`.
 ```
 uv sync                                   # Python 3.12, deps from pyproject.toml / uv.lock
 uv run pytest -q                          # unit tests: schemas, ledger invariants, stop rule, config, D-002/D-006 guards
@@ -72,7 +72,7 @@ CLAUDE.md is context, not enforced configuration. Anything that must be **blocke
 - **Chunk IDs are frozen before question generation** (`ledger index` writes `data/chunk_ids.lock`; `ledger questions` refuses to run without it). Re-chunking after questions exist breaks `evidence_recall@STOP`. (D24)
 
 ## Known pitfalls
-- Instrumentation is **OpenInference (`llm.*`), not `gen_ai.*`** — chosen *because* `gen_ai.*` is unreleased and still Development as of Aug 2026 (D-014). Do not "upgrade" to `gen_ai.*`; do not set `OTEL_SEMCONV_STABILITY_OPT_IN`. Pins: `openinference-semantic-conventions==0.1.29`, `openinference-instrumentation>=0.1.57` (D-017). Verify attribute keys against the pinned package, not from memory.
+- Instrumentation is **OpenInference (`llm.*`), not `gen_ai.*`** — chosen *because* `gen_ai.*` is unreleased and still Development as of Aug 2026 (D-014). Do not "upgrade" to `gen_ai.*`; do not set `OTEL_SEMCONV_STABILITY_OPT_IN`. Pins: `openinference-semantic-conventions==0.1.37`, `openinference-instrumentation==0.1.63` (D-018; D-017's 0.1.29 lacked the `evaluations` constant). Verify attribute keys against the pinned package, not from memory.
 - Qwen3-Reranker is a yes/no LM scorer, not a drop-in cross-encoder — use the official scoring snippet or scores are garbage.
 - Sonnet 5's tokenizer produces ~30% more tokens than older models; budget projections must use measured usage from the API, not estimates.
 - Docling is unmeasured on OmniDocBench; the A1 ten-table audit is the only table score this project has for it. Fail A1 → `parser: paddleocr_vl` in config, re-audit.
