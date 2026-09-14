@@ -1,0 +1,132 @@
+# LEDGER v1 base configuration (D31). Every numeric parameter lives here, validated by
+# ledger/config.py. Commands read this file plus an optional --config override (deep-merged).
+# Conventions with no external source are listed in docs/architecture.md §10.
+
+paths:
+  data_dir: data
+  results_dir: results
+  reports_dir: reports
+  manifest: data/manifest.jsonl
+  parsed_dir: data/parsed
+  qdrant_path: data/qdrant            # D-002 local file mode; NVMe on the g6e
+  chunk_ids_lock: data/chunk_ids.lock # D24: written by `ledger index`, required by `ledger questions`
+  questions_draft: data/questions_draft.jsonl
+  questions: data/questions.jsonl
+  matrix_cells: experiments/matrix.yaml
+
+corpus:                               # D1 / D-001 (provisional mix, RESOLVES-ON-DATA)
+  agency_mix:
+    eia: 50
+    cbo: 40
+    gao: 30
+
+ingest:                               # D-001
+  confirm_after_docs: 20              # ingest stops here until table_chunk_share is confirmed
+  table_chunk_share_band: [0.50, 0.70]
+
+parser:                               # D2, gated on A1
+  name: docling                       # docling | paddleocr_vl (A1 fallback)
+  table_mode: accurate
+  audit_tables_n: 10                  # A1
+  audit_min_cells: 150
+  audit_cell_accuracy_min: 0.95
+
+chunking:                             # D3
+  max_tokens: 512
+  overlap: 0
+  tables_atomic: true
+  prepend_headings: true
+
+embedding:                            # D4, size gated on A8
+  model: Qwen/Qwen3-Embedding-4B
+  fallback_model: Qwen/Qwen3-Embedding-0.6B
+  precision: bf16
+  dim: 2560
+
+vector_store:                         # D5 / D-002
+  mode: local                         # local | docker (v2/demo)
+  collection: ledger_chunks
+  sparse_enabled: false
+
+retrieval:                            # D8 / D17, gated on A6
+  k_dense: 30
+  k_final: 5
+  k_final_fallback: 8
+  hybrid: false
+  recall_gate: 0.85
+  hybrid_floor: 0.75
+  max_context_chunks: 12              # D22 cap; re-retrieval appends up to this many
+
+reranker:                             # D8
+  model: Qwen/Qwen3-Reranker-0.6B
+  precision: bf16
+
+generator:                            # D11
+  model: claude-sonnet-5
+  temperature: 0.3
+  max_tokens: 4096
+  use_batch: true                     # Batch API for generate/decompose/rewrite (D28 guard at T14)
+  pricing_usd_per_mtok:               # cost = measured usage x price; usage is never estimated
+    input: 2.0
+    output: 10.0
+    batch_input: 1.0
+    batch_output: 5.0
+
+decomposition:                        # D15
+  method: claimify                    # claimify | sentence_split
+
+verifier:                             # D16 / D-004 / D-012
+  model: bespoke-ai/Bespoke-MiniCheck-7B   # pilot candidate; fixed after A2
+  revision: ""
+  precision: bf16                     # D-012: bf16 and only bf16
+  input_mode: concatenated            # concatenated | per_chunk_max (D-004)
+  threshold: 0.5
+  pilot_candidates:                   # T6 scores each x both input modes -> four kappa values
+    - bespoke-ai/Bespoke-MiniCheck-7B
+    - ibm-granite/granite-guardian-3.3-8b
+
+judge:                                # D-007: OPEN until the owner picks; loader raises on empty revision
+  model: ""
+  revision: ""
+
+loop:                                 # D22
+  max_iter: 1
+  graft_max_iters: [2, 3]             # re_retrieve graft cells (claimify only)
+  max_tool_calls: 12
+  max_tokens_per_query: 60000
+
+repair:                               # Repair arms - LOCKED; D-008 marker
+  arm: none                           # none | delete | rewrite | re_retrieve
+  delete_marker: "[unverified claim removed]"
+
+questions:                            # D24 / evaluation.md section 1
+  n: 200
+  controls: 20
+  table_share: 0.60
+  min_words: 8
+  max_words: 40
+  dup_cosine: 0.9
+  hand_validated: 50
+  answerable_per_run: 150
+  writer_model: Qwen/Qwen3-8B
+
+eval:                                 # evaluation.md sections 3-9, plan.md gates
+  seeds: [1, 2, 3]                    # D-009: seed 1 first
+  bootstrap_n: 1000
+  kappa_go: 0.6                       # A2 branches
+  kappa_tune: 0.5
+  input_mode_tie: 0.05                # D-004 tie-break
+  pilot_claims: 50
+  pilot_min_unsupported: 4            # A3
+  labels_per_half: 100                # D-010
+  schema_valid_min: 0.98              # A4
+  budget_max_usd: 120                 # A7
+  smoke_n: 20                         # D28
+  decomp_audit_n: 25                  # D15 per audit round
+  abstention_controls_min: 0.90       # D12
+  abstention_answerable_max: 0.05
+
+tracing:                              # D29 / D-014. Endpoint comes ONLY from OTEL_EXPORTER_OTLP_ENDPOINT.
+  enabled: true
+  project_name: ledger
+  service_name: ledger
