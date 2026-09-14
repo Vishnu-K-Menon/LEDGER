@@ -3,7 +3,7 @@
 Loaded every session. Rationale lives in `docs/` and is referenced by path, never imported.
 
 ## Read on demand (not imported)
-- `docs/decisions.md` — every decision with reason; D-001…D-016 govern the rules below. Process decisions (tooling, sizing, workflow) are logged there on the same rule as pipeline decisions.
+- `docs/decisions.md` — every decision with reason; the D-numbered entries govern the rules below. Process decisions (tooling, sizing, workflow) are logged there on the same rule as pipeline decisions.
 - `docs/architecture.md` — pipeline spec, alternatives and why each was rejected, idea-level rationale
 - `docs/evaluation.md` — eval set, metrics, results table, κ pilot protocol, decomposition audit, failure taxonomy
 - `docs/plan.md` — build order as checkboxes; tick tasks and gates as you complete them
@@ -46,6 +46,10 @@ Every command reads `configs/base.yaml` plus an optional `--config` override. No
 - GPU work runs on an AWS g6e.xlarge (L40S, **44.7 GiB usable**, 250 GB local NVMe). Qdrant file and model cache on the NVMe; corpus, parsed output and `results/*.jsonl` sync to S3.
 - Generation, decomposition, rewrite: Claude Sonnet 5 via the **Batch API**. Never call the generator synchronously inside the matrix runner (unit-tested, D28).
 - Do not start GPU jobs without confirming the instance has an idle auto-stop configured. **This is the one hard constraint with no code guard** — its violation shows up only on the bill.
+- Host is **Windows / PowerShell**. Conda base must NOT be active — `uv`
+  manages `.venv`, and a layered conda environment resolves imports from the
+  wrong site-packages. Run `conda deactivate` (or set `auto_activate_base
+  false`) before any `uv` command. Never suggest `conda install`.
 
 ## Enforcement
 CLAUDE.md is context, not enforced configuration. Anything that must be **blocked** rather than requested goes through a code guard or a PreToolUse hook. Most hard constraints already are code guards: ingest stops at 20 (D-001), the seed flag (D-009), the missing retriever handle in rewrite (D-006), the judge-revision raise (D-007), the bf16 validator (D-012), the `chunk_ids.lock` check (D24), the single-client test (D-002), and a unit test that the matrix runner never calls the generator synchronously (D28). The one uncovered candidate is the idle auto-stop above; if it is ever violated, a PreToolUse hook on GPU-launching commands is the mechanism.
