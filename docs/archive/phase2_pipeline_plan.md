@@ -1,3 +1,7 @@
+SUPERSEDED. Source document for docs/architecture.md, docs/evaluation.md,
+and docs/plan.md. Kept for provenance only. Where this file and the derived
+docs disagree, the derived docs win. Not referenced from CLAUDE.md.
+
 # Phase 2 — Pipeline plan for Idea 2 (claim-verify-repair with a calibrated local verifier)
 
 Date: 2026-09-12. Constraints: 60 h (15 h/wk × 4), $200 frontier-API, ~300 hand-labels, one rented 24–40 GB GPU, correctness over latency. Locked items from Stages 2–3 are taken as given; the one disagreement with a locked item is in §9.
