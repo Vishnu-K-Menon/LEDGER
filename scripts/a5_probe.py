@@ -45,12 +45,17 @@ def _usage(msg) -> dict[str, int | None]:
     }
 
 
+def message_params(model: str, max_tokens: int) -> dict:
+    """The exact request body for both paths. No sampling keys (D-019) - tested on the wire."""
+    return {
+        "model": model,
+        "max_tokens": max_tokens,
+        "messages": [{"role": "user", "content": PROMPT}],
+    }
+
+
 def _call_sync(client, model: str, max_tokens: int):
-    return client.messages.create(
-        model=model,
-        max_tokens=max_tokens,
-        messages=[{"role": "user", "content": PROMPT}],
-    )
+    return client.messages.create(**message_params(model, max_tokens))
 
 
 def _call_batch(client, model: str, max_tokens: int):
@@ -61,11 +66,7 @@ def _call_batch(client, model: str, max_tokens: int):
         requests=[
             Request(
                 custom_id="a5-probe",
-                params=MessageCreateParamsNonStreaming(
-                    model=model,
-                    max_tokens=max_tokens,
-                    messages=[{"role": "user", "content": PROMPT}],
-                ),
+                params=MessageCreateParamsNonStreaming(**message_params(model, max_tokens)),
             )
         ]
     )
@@ -134,11 +135,7 @@ def main(argv: list[str] | None = None) -> int:
                 ),
             )
             target = otel.ids_of(verify)
-        price = gen.pricing_usd_per_mtok
-        pin, pout = (
-            (price.batch_input, price.batch_output) if args.batch else (price.input, price.output)
-        )
-        cost = (usage["input_tokens"] * pin + usage["output_tokens"] * pout) / 1_000_000
+        cost = gen.cost_usd(usage, batch=args.batch)  # batch=True -> batch_* rates (tested)
         otel.set_query_result(
             root, iterations=0, stop_reason="a5_probe", cost_usd=cost, answer=text
         )
@@ -151,7 +148,7 @@ def main(argv: list[str] | None = None) -> int:
     otel.shutdown_tracing()
 
     print(f"model={gen.model} batch={args.batch} reply={text!r}")
-    print(f"usage={usage} cost_usd={cost:.6f}")
+    print(f"usage={usage} cost_usd={cost:.6f} (rates: {'batch' if args.batch else 'sync'})")
     print(f"(a) query trace_id={otel.ids_of(root)[0]}")
     print(f"(b) verify span_id={target[1]}  (inline evaluations.0.evaluation.*)")
     print(f"(c) carrier span_id={otel.ids_of(carrier)[1]} -> linked to verify {target[1]}")

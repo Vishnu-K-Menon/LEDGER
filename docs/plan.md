@@ -3,8 +3,8 @@
 60 h = 15 h/week × 4. Hours are Stage 3 estimates. Sources: Phase 2 §4–§6, `docs/decisions.md`. Tick `[x]` when done; write the measured number next to every gate.
 
 ## Day 1 — before any GPU hour (D-011, D-014)
-- [ ] Request the "Running On-Demand G and VT instances" vCPU quota — the long pole. No approval by day 4 → κ pilot on an hourly non-AWS L40S/A100, then move to g6e.xlarge.
-- [ ] Billing alarm at $50; confirm credits apply to EC2 and S3 in the chosen region.
+- [x] Request the "Running On-Demand G and VT instances" vCPU quota — the long pole. **Approved 2026-09-14: 8 vCPU us-east-1 = one g6e.xlarge, no headroom for a second GPU instance or a g6e.2xlarge (D-011 status).** ~~No approval by day 4 → κ pilot on an hourly non-AWS L40S/A100, then move to g6e.xlarge.~~ (moot; branch kept)
+- [x] Billing alarm at $50; confirm credits apply to EC2 and S3 in the chosen region. (done 2026-09-14, us-east-1)
 - [ ] Idle auto-stop on the g6e.xlarge (idle ~153 h/week).
 - [ ] Phoenix on a t3.medium (D-015): container up, `OTEL_EXPORTER_OTLP_ENDPOINT` set in the environment (never in code).
 - [ ] Confirm the D-010 pairing rule (`docs/evaluation.md` §7).
@@ -12,7 +12,7 @@
 
 ## Week 1 — index, baseline, go/no-go (15 h)
 - [x] **T1 · 2 h** CLI skeleton (`uv run ledger --help`); pydantic config + YAML (D31); OTLP exporter via `tracing/otel.py` with OpenInference (D29/D-014); first traced call visible with token counts.
-  - [ ] **A5 · 0.5 h** — with `openinference-semantic-conventions==0.1.37` and `openinference-instrumentation==0.1.63` pinned (D-018) (record `arize-phoenix` version: ___), on the first traced call: (a) spans render in Phoenix with token counts; (b) an inline `evaluations.*` verdict shows in the verify span's Evaluations panel; (c) a post-hoc `EVALUATOR` carrier with one Span Link renders against the linked verify span (D-017). (a) false → OTLP to Langfuse Cloud Core, same instrumentors. (c) false → D-017 successor: keep the wire form, add a Phoenix-side display import. Decide this week.
+  - [ ] **A5 · 0.5 h** — with `openinference-semantic-conventions==0.1.37` and `openinference-instrumentation==0.1.63` pinned (D-018) (record `arize-phoenix` version: ___), on the first traced call: (a) spans render in Phoenix with token counts; (b) an inline `evaluations.*` verdict shows in the verify span's Evaluations panel; (c) a post-hoc `EVALUATOR` carrier stores all `evaluations.*` attributes and exactly one Span Link; **rendering as a separate root trace is expected and accepted (D-022)** — Phoenix does not resolve Span Links; the carrier carries `rag.record_type` for filtering. (a) false → OTLP to Langfuse Cloud Core, same instrumentors. **Local smoke test 2026-09-14 (Phoenix 20.12.0): (a) pass, (b) pass, (c) as accepted — this does not tick A5; A5 is the t3.medium.**
 - [ ] **T2 · 3 h** Corpus: EIA 50 / CBO 40 / GAO 30 provisional; manifest URL · SHA-256 · agency · date (D1, D-001).
 - [ ] **T3 · 3 h** Docling parse (TableFormer accurate) on the first 20 documents; then the rest after A9.
   - [ ] **A1 · 1.0 h** — ≥ 95% of cells correct on 10 tables (≥ 150 cells). If false → `parser: paddleocr_vl`, re-audit. Measured: ___

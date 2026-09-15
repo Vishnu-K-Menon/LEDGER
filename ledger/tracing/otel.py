@@ -57,6 +57,11 @@ RAG_ITER = "rag.iter"
 RAG_STOP_REASON = "rag.stop_reason"
 RAG_COST_USD = "rag.cost_usd"
 RAG_CLAIM_ID = "rag.claim_id"
+# D-022: Phoenix renders post-hoc carriers as separate root traces (Span Links are not
+# resolved), so root spans carry a record type that a filter can separate them by.
+RAG_RECORD_TYPE = "rag.record_type"
+RECORD_TYPE_QUERY = "query"
+RECORD_TYPE_BY_ANNOTATOR = {"HUMAN": "human_label", "CODE": "code_label"}
 
 VERDICT_EVALUATION_NAME = "claim_support"
 
@@ -138,6 +143,7 @@ def query_span(question: str, *, question_id: str, arm: str, seed: int) -> Itera
     attrs: dict[str, Any] = {
         **_kind_attrs(OpenInferenceSpanKindValues.AGENT),
         SpanAttributes.INPUT_VALUE: question,
+        RAG_RECORD_TYPE: RECORD_TYPE_QUERY,
         RAG_QUESTION_ID: question_id,
         RAG_ARM: arm,
         RAG_SEED: seed,
@@ -339,6 +345,11 @@ def emit_posthoc_evaluation(
     ``name`` plus at least one of ``score`` / ``label`` / ``explanation``, and optional
     ``identifier`` / ``metadata``. The carrier is a root span: parentage must never identify the
     target (D-017). Returns the (ended) span; on a non-recording provider it is a no-op span.
+
+    Phoenix (20.12.0, checked 2026-09-14) renders the carrier as a separate root trace and does
+    not resolve the Span Link into an annotation on the target (D-022, accepted). The carrier
+    therefore also carries ``rag.record_type`` so root-trace lists can filter it out; the
+    annotator kind (HUMAN/CODE vs LLM inline) keeps labels and verdicts separable in queries.
     """
     trace_id_hex, span_id_hex = target
     if not isinstance(annotation, Mapping) or not isinstance(annotation.get("name"), str):
@@ -364,6 +375,7 @@ def emit_posthoc_evaluation(
         links=[link],
         attributes={
             **_kind_attrs(OpenInferenceSpanKindValues.EVALUATOR),
+            RAG_RECORD_TYPE: RECORD_TYPE_BY_ANNOTATOR[annotator_kind],
             **get_evaluation_attributes(evaluations=[payload], scope="span"),
         },
     )

@@ -4,6 +4,7 @@ hardcoded in code. ``load_config`` reads ``configs/base.yaml`` plus an optional 
 from __future__ import annotations
 
 import copy
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Literal
 
@@ -124,6 +125,16 @@ class GeneratorConfig(_Strict):
     max_tokens: int = Field(gt=0)
     use_batch: bool
     pricing_usd_per_mtok: PricingConfig
+
+    def cost_usd(self, usage: Mapping[str, int | None], *, batch: bool) -> float:
+        """D30/D31: cost = measured API usage fields x configured price. ``batch`` selects the
+        Batch rates (50%); applying sync rates to a Batch run would double every D26 cost figure.
+        Cache tokens are not priced here until caching is used (T5 adds the keys)."""
+        p = self.pricing_usd_per_mtok
+        rate_in, rate_out = (p.batch_input, p.batch_output) if batch else (p.input, p.output)
+        tokens_in = usage.get("input_tokens") or 0
+        tokens_out = usage.get("output_tokens") or 0
+        return (tokens_in * rate_in + tokens_out * rate_out) / 1_000_000
 
 
 class DecompositionConfig(_Strict):
