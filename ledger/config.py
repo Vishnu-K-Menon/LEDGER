@@ -8,9 +8,31 @@ from pathlib import Path
 from typing import Any, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 DEFAULT_CONFIG_PATH = Path("configs/base.yaml")
+
+# D-019: sampling parameters were removed from the Claude API (anthropic SDK 1.0.0, 2026-08-20;
+# Sonnet 5 returns 400 for non-default values on both the sync and Batch paths). They may not be
+# reintroduced anywhere in config; a "seed" is an independent run at the model's default sampling.
+REMOVED_SAMPLING_KEYS = frozenset({"temperature", "top_p", "top_k"})
+
+
+def _reject_sampling_keys(data: Any, path: str = "") -> None:
+    if isinstance(data, dict):
+        for key, value in data.items():
+            here = f"{path}.{key}" if path else str(key)
+            if key in REMOVED_SAMPLING_KEYS:
+                raise ValueError(
+                    f"config key {here!r} is not allowed (D-019): {key} was removed from the "
+                    "Claude API itself (anthropic SDK 1.0.0, 2026-08-20; Sonnet 5 rejects it with "
+                    "400 on both the sync and Batch paths). This is not a missing schema field - "
+                    "do not add it. A 'seed' is an independent run at default sampling."
+                )
+            _reject_sampling_keys(value, here)
+    elif isinstance(data, list):
+        for i, item in enumerate(data):
+            _reject_sampling_keys(item, f"{path}[{i}]")
 
 
 class _Strict(BaseModel):
@@ -99,7 +121,6 @@ class PricingConfig(_Strict):
 
 class GeneratorConfig(_Strict):
     model: str
-    temperature: float = Field(ge=0.0, le=1.0)
     max_tokens: int = Field(gt=0)
     use_batch: bool
     pricing_usd_per_mtok: PricingConfig
@@ -189,6 +210,13 @@ class TracingConfig(_Strict):
 
 
 class Config(_Strict):
+    @model_validator(mode="before")
+    @classmethod
+    def _no_sampling_parameters(cls, data: Any) -> Any:
+        """D-019: raise explicitly, before ``extra="forbid"`` can turn this into a vague error."""
+        _reject_sampling_keys(data)
+        return data
+
     paths: PathsConfig
     corpus: CorpusConfig
     ingest: IngestConfig

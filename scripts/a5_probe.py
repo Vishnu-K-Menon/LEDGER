@@ -1,14 +1,20 @@
-"""A5 probe — one traced Sonnet 5 call plus the two D-017 evaluation records, for the
-Phoenix rendering checks in docs/plan.md:
+"""Traced-call probe — one Sonnet 5 call plus the two D-017 evaluation records, for the
+Phoenix rendering checks in docs/plan.md A5:
 
   (a) spans render with token counts        -> the `generate` LLM span under the `query` AGENT span
   (b) inline `evaluations.*` verdict         -> the `verify` TOOL span's Evaluations panel
   (c) post-hoc EVALUATOR carrier + Span Link -> shown against the *linked* verify span
 
-Requires ANTHROPIC_API_KEY (or an `ant auth login` profile) and OTEL_EXPORTER_OTLP_ENDPOINT.
-Default is a synchronous Messages call (A5 only needs token counts on a span; the CLAUDE.md
-synchronous ban is scoped to the matrix runner). `--batch` submits the same request through the
-Batch API and polls, so the batch usage-field path is verified once before T5 depends on it.
+Against a LOCAL Phoenix this is an instrumentation SMOKE TEST, not A5. A5 is the real path:
+the t3.medium, its security group, and that server's arize-phoenix version recorded in the A5
+line. A green local run does not close the A5 box.
+
+Requires ANTHROPIC_API_KEY (or an `ant auth login` profile) and OTEL_EXPORTER_OTLP_ENDPOINT
+(the BASE URL, e.g. http://localhost:6006 — the exporter appends /v1/traces itself).
+No sampling parameters are sent (D-019). Default is a synchronous Messages call (A5 only needs
+token counts on a span; the CLAUDE.md synchronous ban is scoped to the matrix runner).
+`--batch` submits the same request through the Batch API and polls, so the batch usage-field
+path is verified once before T5 depends on it.
 
     uv run python scripts/a5_probe.py            # sync
     uv run python scripts/a5_probe.py --batch    # Batch API, polls until ended
@@ -39,16 +45,15 @@ def _usage(msg) -> dict[str, int | None]:
     }
 
 
-def _call_sync(client, model: str, max_tokens: int, temperature: float):
+def _call_sync(client, model: str, max_tokens: int):
     return client.messages.create(
         model=model,
         max_tokens=max_tokens,
-        temperature=temperature,
         messages=[{"role": "user", "content": PROMPT}],
     )
 
 
-def _call_batch(client, model: str, max_tokens: int, temperature: float):
+def _call_batch(client, model: str, max_tokens: int):
     from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
     from anthropic.types.messages.batch_create_params import Request
 
@@ -59,7 +64,6 @@ def _call_batch(client, model: str, max_tokens: int, temperature: float):
                 params=MessageCreateParamsNonStreaming(
                     model=model,
                     max_tokens=max_tokens,
-                    temperature=temperature,
                     messages=[{"role": "user", "content": PROMPT}],
                 ),
             )
@@ -103,13 +107,9 @@ def main(argv: list[str] | None = None) -> int:
             "generate",
             provider="anthropic",
             model_name=gen.model,
-            invocation_parameters={
-                "temperature": gen.temperature,
-                "max_tokens": gen.max_tokens,
-                "batch": args.batch,
-            },
+            invocation_parameters={"max_tokens": gen.max_tokens, "batch": args.batch},
         ) as llm:
-            msg = call(client, gen.model, gen.max_tokens, gen.temperature)
+            msg = call(client, gen.model, gen.max_tokens)
             text = next((b.text for b in msg.content if b.type == "text"), "")
             usage = _usage(msg)
             otel.set_llm_result(
@@ -155,7 +155,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"(a) query trace_id={otel.ids_of(root)[0]}")
     print(f"(b) verify span_id={target[1]}  (inline evaluations.0.evaluation.*)")
     print(f"(c) carrier span_id={otel.ids_of(carrier)[1]} -> linked to verify {target[1]}")
-    print("Open Phoenix, project 'ledger', and record pass/fail for (a)(b)(c) in docs/plan.md.")
+    print("Open Phoenix, project 'ledger', and check (a)(b)(c).")
+    print(
+        "Local Phoenix => instrumentation smoke test only. A5 = the t3.medium; record its version."
+    )
     return 0
 
 

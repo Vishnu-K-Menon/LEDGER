@@ -29,6 +29,22 @@ def test_verifier_precision_must_be_bf16(base_config_path: Path):
         Config.model_validate(_mutated(base_config_path, "verifier", "precision", "awq-int4"))
 
 
+@pytest.mark.parametrize("key", ["temperature", "top_p", "top_k"])
+def test_sampling_parameters_rejected_explicitly(base_config_path: Path, key: str):
+    """D-019: the message must name the decision and say the API removed the parameter."""
+    with pytest.raises(ValidationError, match=r"D-019.*removed from the Claude API"):
+        Config.model_validate(_mutated(base_config_path, "generator", key, 0.3))
+    # anywhere in the tree, not just under generator
+    with pytest.raises(ValidationError, match="D-019"):
+        Config.model_validate(_mutated(base_config_path, "questions", key, 0.3))
+
+
+def test_base_config_has_no_sampling_keys(base_config_path: Path):
+    text = base_config_path.read_text("utf-8")
+    for key in ("temperature:", "top_p:", "top_k:"):
+        assert key not in text
+
+
 def test_unknown_key_rejected(base_config_path: Path):
     with pytest.raises(ValidationError):
         Config.model_validate(_mutated(base_config_path, "loop", "max_iters_typo", 3))

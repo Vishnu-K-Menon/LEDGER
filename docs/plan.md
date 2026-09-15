@@ -19,7 +19,8 @@
   - [ ] **A9 · 0.3 h** — `table_chunk_share` after 20 documents inside 50–70%. If false → adjust the remaining ingest only; never re-parse. Report and confirm before document 21 (D-001). Measured: ___
 - [ ] **T4 · 3 h** HybridChunker (tables atomic, headings, 512 tok); Qwen3-Embedding-4B bf16; Qdrant local file via the single `make_client` (D-002); **freeze chunk IDs** (`data/chunk_ids.lock`).
   - [ ] **A8 · 0.2 h** — embedder 4B + reranker 0.6B + verifier 8B, all bf16, resident on the L40S (44.7 GiB); one verify call; `nvidia-smi`. If false → 0.6B embedder, then separate stages; never quantize (D-012). Measured GiB: ___
-- [ ] **T5 · 2 h** Single-shot baseline: strict prompt (D12), JSON schema (D13), Batch client; 25 draft questions.
+- [ ] **T5 · 2 h** Single-shot baseline: strict prompt (D12), JSON schema (D13), Batch client; 25 draft questions. No sampling parameters (D-019). Investigate `output_config` (native structured output in anthropic 1.5.0) against D13's retry-once-then-fallback and A4.
+  - [ ] **T5 variance probe · 0.5 h (D-019)** — same prompt, 3 runs × 25 draft questions at default sampling. Report: numeric exact-match agreement vs gold ___ · **digit-level disagreement (own line; a D12/D14 problem if non-zero, not a seed question)** ___ · abstention consistency ___ · citation-set stability ___ · answer-token spread ___. **This number does not decide the seed count** — that waits for the first run with an unsupported-claim rate (T9/T11) and gets a D-019 successor entry.
   - [ ] **A4 · 0.5 h** — ≥ 98% schema-valid JSON on 25 draft calls. If false → forced tool-use schema + retry policy. Measured: ___
   - [ ] **A6 · 0.5 h** — recall@5 of the gold chunk ≥ 0.85 on the 25 drafts. If false → hybrid BM25; < 0.75 after → `k_final: 8` (D8). Measured: ___
   - [ ] **A7 · 0.2 h** — full matrix ≤ $120 projected from measured tokens/query. If false → Batch-only; cut graft cells. Projected: ___
@@ -37,6 +38,7 @@
 - [ ] **T9 · 3 h** Verifier node: two-level verification (D16), verdict schema; verdict written inline on the verify span as `evaluations.0.evaluation.*` via `tracing/otel.py::record_verdict` (D-017); ledger row stores `trace_id`, `span_id`; threshold fixed from the pilot.
 - [ ] **T10 · 4 h** `delete` (with marker, D-008) and `rewrite` (same context only, D-006) arms; ledger invariants + unit tests (D21, D28).
 - [ ] **T11 · 1 h** `delete-all` trivial baseline from the no-repair run; retained-content metric with markers stripped (D26).
+  - [ ] **Seed-count decision (D-019 successor)** — first run where unsupported-claim rate exists: report its run-to-run spread beside the T5 probe numbers; decide 3 seeds vs fewer; log the successor entry. Until then D26 stays at 10 cells × 3 seeds.
 
 ## Week 3 — the loop, the labels (15 h)
 - [ ] **T12 · 6 h** LangGraph graph + checkpoints (D20); `re_retrieve` arm; stop rule and caps (D22); `stop_reason`; `evidence_recall@STOP` (the Idea 1 graft).

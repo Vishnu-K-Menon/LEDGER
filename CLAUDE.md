@@ -37,7 +37,7 @@ uv run ledger kappa --labels data/labels_week3.jsonl            # paired 100/100
 uv run ledger audit-decomp --answers <run> --n 25               # D15 decomposition audit sheet
 uv run ledger smoke                          # 20-question regression eval (D28), ~$0.50
 ```
-Every command reads `configs/base.yaml` plus an optional `--config` override. Nothing numeric is passed on the command line except `--seed`, `--n`, `--limit`.
+Every command reads `configs/base.yaml` plus an optional `--config` override. Only run-scoping flags are passed on the command line (`--seed`, `--n`, `--limit`, `--controls`). Every tuning parameter lives in config. (D-021)
 
 ## Environment
 - Python 3.12; `uv` for packages and venv; `ruff` for lint/format; `pytest`.
@@ -67,6 +67,8 @@ CLAUDE.md is context, not enforced configuration. Anything that must be **blocke
 - **Claim labels are paired**: 100 baseline + 100 post-repair from the same 100 questions, post-repair from the `re_retrieve(1) × claimify` cell, seed 1. `eval/labels.py` refuses unpaired halves. (D-010)
 - **Verifier precision is bf16 and only bf16.** No quantized path; `verifier.precision` validates to `bf16`. If A8 fails: 0.6B embedder, then separate stages. Never quantize. (D-012)
 - **Every parameter lives in `configs/*.yaml`** validated by pydantic; nothing numeric is hardcoded. Cost per query comes from API usage fields, never estimates. (D31)
+- **No sampling parameters, anywhere.** `temperature`/`top_p`/`top_k` were removed from the Claude API (SDK 1.0.0, 2026-08-20; Sonnet 5 400s on non-default values, sync and Batch alike). The config validator raises explicitly on any of them — that error is not a missing schema field; do not add the key. A "seed" is an independent run at default sampling; the seed count is provisional until T9/T11. (D-019)
+- **The judge guard is at the use site**: `load_config` accepts an empty `judge.revision`; `JudgeConfig.require_pinned()` raises where the judge is loaded. (D-020)
 - **No project skills or slash commands in v1** (D-016). Revisit at T14 after two hand runs of the matrix; the trigger is in `docs/plan.md`.
 - **Instrument from the first commit.** Every LLM call, retrieval, rerank and verify emits an OpenInference span over OTLP through `tracing/otel.py`; span kinds and attribute names per `docs/architecture.md` D29. Verifier verdicts go **inline** on the open verify span as `evaluations.0.evaluation.*`; human labels go **post-hoc** as `EVALUATOR` carrier spans with exactly one Span Link, over OTLP. **Nothing under `tracing/` or `eval/` imports `phoenix`** (unit-tested). (D29 as revised by D-014, D-017)
 - **Chunk IDs are frozen before question generation** (`ledger index` writes `data/chunk_ids.lock`; `ledger questions` refuses to run without it). Re-chunking after questions exist breaks `evidence_recall@STOP`. (D24)
@@ -78,3 +80,6 @@ CLAUDE.md is context, not enforced configuration. Anything that must be **blocke
 - Docling is unmeasured on OmniDocBench; the A1 ten-table audit is the only table score this project has for it. Fail A1 → `parser: paddleocr_vl` in config, re-audit.
 - The L40S reports 44.7 GiB, not 48. Plan residency against 44.7.
 - Batch API results arrive out of order and hours later; the matrix runner must key everything by `(cell, seed, question_id)`, never by position.
+- **OTLP endpoint trap.** Phoenix's startup banner prints `OTLP over HTTP http://localhost:6006/v1/traces`. That value belongs in `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`. `OTEL_EXPORTER_OTLP_ENDPOINT` takes the **base only** (`http://host:6006`); the HTTP exporter appends `/v1/traces` itself. Copying the banner into the base variable produces `/v1/traces/v1/traces` and a `405 Method Not Allowed` on export.
+- **Sampling parameters are gone.** `temperature`, `top_p`, `top_k` are absent from anthropic ≥1.0 signatures (`TypeError`), and Sonnet 5 400s on non-default values. On the Batch path the `params` TypedDict is not enforced at runtime, so the key *can* reach the wire — which is why the block is in our config validator (D-019). The Messages API reference still documents `temperature`; trust the SDK and the 400.
+- **A local Phoenix run is an instrumentation smoke test, not A5.** A5 verifies the t3.medium, its security group, and that server's `arize-phoenix` version. A green `scripts/a5_probe.py` against `localhost:6006` does not tick the box.

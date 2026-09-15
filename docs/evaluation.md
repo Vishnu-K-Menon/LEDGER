@@ -42,7 +42,7 @@ Fixed retriever for every arm: dense top-30 (Qwen3-Embedding-4B) → Qwen3-Reran
 | abstention rate | on controls (target ≥ 90%) and on answerables (target ≤ 5%) | answers |
 | parametric leakage | unsupported claims judged world-true, on the labelled subset | labels + judge |
 
-Every rate carries a 95% CI: bootstrap over questions (paired bootstrap for the X−Y difference, D-010), plus mean ± sd over three sampled runs (`temperature: 0.3`; "seed" means an independent sampled run — the API has no seed parameter).
+Every rate carries a 95% CI: bootstrap over questions (paired bootstrap for the X−Y difference, D-010), plus mean ± sd over three sampled runs. **"Seed" means an independent sampled run at the model's default adaptive sampling** — the API has no seed parameter, and `temperature`/`top_p`/`top_k` were removed from the API (anthropic SDK 1.0.0, 2026-08-20; Sonnet 5 returns 400 for non-default values — D-019). The earlier `temperature: 0.3` no longer exists; the README must say so. **The seed count (three) is provisional**: the T5 variance probe (3 runs × 25 draft questions: numeric exact-match agreement, digit-level disagreement reported on its own line, abstention consistency, citation-set stability, answer-token spread) measures the run-to-run spread, and the seed decision is taken only once unsupported-claim rate exists (T9/T11) — never on the T5 number alone.
 
 ## 4. Decomposition audit (D15, mandate 1)
 

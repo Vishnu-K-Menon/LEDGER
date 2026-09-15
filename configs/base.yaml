@@ -61,9 +61,8 @@ reranker:                             # D8
   model: Qwen/Qwen3-Reranker-0.6B
   precision: bf16
 
-generator:                            # D11
-  model: claude-sonnet-5
-  temperature: 0.3
+generator:                            # D11. No sampling parameters - removed from the API (D-019);
+  model: claude-sonnet-5              # a "seed" is an independent run at default sampling.
   max_tokens: 4096
   use_batch: true                     # Batch API for generate/decompose/rewrite (D28 guard at T14)
   pricing_usd_per_mtok:               # cost = measured usage x price; usage is never estimated

@@ -189,3 +189,34 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Rejected.** Keeping 0.1.29 (mechanism absent; unresolvable with the instrumentation floor). Leaving instrumentation as a floor `>=0.1.57` (resolves to 0.1.63 today but lets a later release move attribute keys under the tests).
 **Code.** `pyproject.toml` pins; `ledger/tracing/otel.py` imports the keys from the package, never spells them from memory. References corrected in `docs/plan.md` A5, `docs/architecture.md` D29, `CLAUDE.md` pitfalls.
 **Validation.** `uv.lock` resolves; `tests/test_otel.py` asserts the flattened keys and the one-Span-Link carrier; A5 (a)(b)(c) still pending on the Phoenix endpoint — `arize-phoenix` server version to be recorded then (PyPI latest on 2026-09-14: 20.12.0).
+
+## D-019 · 2026-09-14 · FIXED · Sampling parameters removed from the API — "seed" is an independent run at default sampling; seed count OPEN pending a variance probe
+
+**What happened.** `scripts/a5_probe.py` raised `TypeError: Messages.create() got an unexpected keyword argument 'temperature'` (anthropic 1.5.0).
+**Evidence (verified 2026-09-14).** (1) SDK: `inspect.signature(Anthropic().messages.create)` in anthropic 1.5.0 has no `temperature`/`top_p`/`top_k` and no `**kwargs`; the removal is anthropic 1.0.0 (2026-08-20), MIGRATION.md "Removed request parameters". (2) **Batch path**: `messages.batches.create` takes `requests=[Request(custom_id, params=MessageCreateParamsNonStreaming)]`; the `params` TypedDict has no sampling keys either, **but a TypedDict is not enforced at runtime and the SDK forwards unknown keys** — a batch request can put `temperature` on the wire. (3) API: Claude Sonnet 5 returns 400 for any non-default `temperature`/`top_p`/`top_k`; Opus 4.7+ rejects the field outright. The Messages API reference still documents `temperature` with default 1.0 — the docs lag the SDK and the model behaviour; the SDK and the 400 win. (4) The same removal applies on Bedrock, Vertex and Foundry — not recoverable by changing provider.
+**Scope.** Both the sync path and the Batch path (T14's matrix runner is Batch-only). Because the batch path forwards unknown keys, the block must be ours: it lives in config validation, not in the SDK.
+**Decision.**
+1. `generator.temperature` removed from `configs/base.yaml`; `a5_probe.py` sends no sampling parameter.
+2. `ledger/config.py` raises an **explicit** `ValueError` naming D-019 if `temperature`, `top_p` or `top_k` appears anywhere in the config tree — before `extra="forbid"` could turn it into a "field not permitted" error that a later session would read as a missing schema field and "fix" by adding the key. The message says the parameter was removed from the API, not from our config.
+3. **"Seed" is redefined**: an independent sampled run at the model's default adaptive sampling — not `temperature: 0.3`. `docs/evaluation.md` §3, `docs/architecture.md` §10 and the README wording are corrected. The three-seed design in D26 rested on a parameter that no longer exists.
+4. **Seed count and the D26 table are NOT changed in this entry.** A variance probe is added to T5 (3 runs × 25 draft questions; numeric exact-match agreement, digit-level disagreement as its own line, abstention consistency, citation-set stability, answer-token spread). The seed decision waits for the first run where unsupported-claim rate exists (T9/T11) — a successor entry records it.
+**Why the digit line is separate.** D12 tells the generator to copy numbers verbatim and D14 lists numeric transcription as a hallucination mode; `temperature: 0.3` was implicitly part of that mitigation. If digits drift between runs at default sampling that is a D12/D14 problem, not a seed-count problem, and must not be averaged into a variance figure.
+**Rejected.** `extra_body={"temperature": 0.3}` (Sonnet 5 400s on non-default values; it only works on models this project does not use). Switching to a 4.6-line model to keep temperature (D11 chose Sonnet 5 for generator quality; a weaker generator inflates the baseline rate). Silently dropping to one seed now (the budget/validity question needs the measured spread first).
+**Code.** `ledger/config.py::_reject_sampling_keys` + `Config._no_sampling_parameters`; tests `test_sampling_parameters_rejected_explicitly`, `test_base_config_has_no_sampling_keys`.
+**Validation.** T5 variance probe numbers in `docs/plan.md`; successor entry at T9/T11 fixes the seed count.
+
+## D-020 · 2026-09-14 · FIXED · D-007's "judge loader raises" means the use site, not config loading
+
+**Question.** D-007 says "the judge loader raises if `judge.revision` is empty". Read literally as the *config* loader, every command would fail while D-007 is open — including `ledger pilot`, which selects the verifier that determines which family the judge may come from. That is a deadlock.
+**Decision.** `load_config` accepts empty `judge.model` / `judge.revision`. `JudgeConfig.require_pinned()` raises (naming D-007) and is called by whatever loads the judge model (T15/T16), never earlier. The revision hash is still pinned once and never changed.
+**Rejected.** Raising in `load_config` (the deadlock above). A default placeholder revision (would let a run proceed with an unpinned judge, which is what D-007 exists to prevent).
+**Code.** `ledger/config.py::JudgeConfig.require_pinned`; test `test_judge_requires_pinned_revision`.
+**Validation.** Every `results/*.jsonl` header carries the revision (D-007 unchanged).
+
+## D-021 · 2026-09-14 · FIXED · CLI flag rule restated as a principle: run-scoping flags only
+
+**Question.** CLAUDE.md's command block showed `ledger questions --n 200 --controls 20` while its rule said "nothing numeric on the command line except `--seed`, `--n`, `--limit`". One flag falsified the sentence.
+**Decision.** The rule's intent is *no tuning parameters on the command line*. Restated: "Only run-scoping flags are passed on the command line (`--seed`, `--n`, `--limit`, `--controls`). Every tuning parameter lives in config." `--controls` is registered as in the block; `questions.controls: 20` is the config default the flag overrides. A future run-scoping flag extends the list; a tuning value never becomes a flag.
+**Rejected.** Dropping `--controls` (the block is the contract later sessions copy from). Leaving the sentence as an enumeration (the next flag falsifies it again).
+**Code.** `ledger/cli.py` (`questions --n --controls`); CLAUDE.md rule text.
+**Validation.** `tests/test_cli.py::test_all_subcommands_registered`, `test_bodies_not_implemented`.
