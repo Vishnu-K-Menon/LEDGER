@@ -5,9 +5,10 @@ Phoenix rendering checks in docs/plan.md A5:
   (b) inline `evaluations.*` verdict         -> the `verify` TOOL span's Evaluations panel
   (c) post-hoc EVALUATOR carrier + Span Link -> shown against the *linked* verify span
 
-Against a LOCAL Phoenix this is an instrumentation SMOKE TEST, not A5. A5 is the real path:
-the t3.medium, its security group, and that server's arize-phoenix version recorded in the A5
-line. A green local run does not close the A5 box.
+Against a LOCAL Phoenix this is an instrumentation SMOKE TEST, not A5. A5 (passed 2026-09-16,
+D-023) is the real path: the EC2 host `ledger-phoenix` (t3.small), its security group, and that
+server's arize-phoenix version (v20.12.0, pinned). Re-run it there after any server change, and
+once from the g6e (private endpoint) before T6.
 
 Requires ANTHROPIC_API_KEY (or an `ant auth login` profile) and OTEL_EXPORTER_OTLP_ENDPOINT
 (the BASE URL, e.g. http://localhost:6006 — the exporter appends /v1/traces itself).
@@ -154,7 +155,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"(c) carrier span_id={otel.ids_of(carrier)[1]} -> linked to verify {target[1]}")
     print("Open Phoenix, project 'ledger', and check (a)(b)(c).")
     print(
-        "Local Phoenix => instrumentation smoke test only. A5 = the t3.medium; record its version."
+        "Against localhost this is an instrumentation smoke test. A5 passed 2026-09-16 on "
+        "ledger-phoenix (t3.small, Phoenix v20.12.0, D-023); re-run there after any server change."
     )
     return 0
 

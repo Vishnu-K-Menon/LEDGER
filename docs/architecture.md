@@ -153,7 +153,7 @@ D24 eval set: 200 questions from a local, different-family model, 60% table chun
 ## 7. Operations layer
 
 ### D29 Tracing — REVISED by D-014
-**Choice:** OpenTelemetry over OTLP with **OpenInference** semantic conventions, exported to **Arize Phoenix self-hosted on a t3.medium** (2 vCPU / 4 GiB — sized by D-015; single container). Endpoint from `OTEL_EXPORTER_OTLP_ENDPOINT`; instrumentation behind `tracing/otel.py` so the convention set is swappable.
+**Choice:** OpenTelemetry over OTLP with **OpenInference** semantic conventions, exported to **Arize Phoenix self-hosted on a t3.small** (2 vCPU / 2 GiB + 2 GiB swap — D-023 revises D-015's t3.medium; resize check at end of week 3; single container, image pinned `arizephoenix/phoenix:20.12.0`). Endpoint from `OTEL_EXPORTER_OTLP_ENDPOINT`; instrumentation behind `tracing/otel.py` so the convention set is swappable.
 **Span plan (shape retained, names mapped):**
 - Root span per query, kind `AGENT`: `input.value` = question; attributes `rag.question_id`, `rag.arm`, `rag.seed`, `rag.iter`, `rag.stop_reason`, `rag.cost_usd`.
 - One `LLM`-kind span per generate / decompose / rewrite: `llm.provider`, `llm.model_name`, `llm.invocation_parameters`, `llm.input_messages`, `llm.output_messages`, `llm.token_count.prompt`, `llm.token_count.completion` (cache tokens under `llm.token_count.prompt_details.*` — verify the key against the pinned `openinference-semantic-conventions`).
