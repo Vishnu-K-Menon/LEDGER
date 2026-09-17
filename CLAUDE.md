@@ -51,6 +51,11 @@ Every command reads `configs/base.yaml` plus an optional `--config` override. On
   wrong site-packages. Run `conda deactivate` (or set `auto_activate_base
   false`) before any `uv` command. Never suggest `conda install`.
 
+## Conventions
+- **`git push` is part of finishing a task, not a separate step.** The remote is the only backup of this work; a task is not done until origin has it. Report the pushed commit hash(es).
+- Every decision made in a session — process, tooling, sizing, interpretation — goes in `docs/decisions.md`; end the session report with the ids written and a one-line summary of each.
+- `ledger smoke` never runs in CI; CI is `pytest` + `ruff` (D-028).
+
 ## Enforcement
 CLAUDE.md is context, not enforced configuration. Anything that must be **blocked** rather than requested goes through a code guard or a PreToolUse hook. Most hard constraints already are code guards: ingest stops at 20 (D-001), the seed flag (D-009), the missing retriever handle in rewrite (D-006), the judge-revision raise (D-007), the bf16 validator (D-012), the `chunk_ids.lock` check (D24), the single-client test (D-002), and a unit test that the matrix runner never calls the generator synchronously (D28). The one uncovered candidate is the idle auto-stop above; if it is ever violated, a PreToolUse hook on GPU-launching commands is the mechanism.
 

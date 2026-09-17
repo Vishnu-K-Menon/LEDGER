@@ -78,6 +78,7 @@ Rule for the build (from the owner, 2026-09-12): when you reach the code that im
 **Reason.** The headline X→Y needs both endpoints human-measured; precision on X alone is precision where it does the least good. Pairing cancels between-question variance and tightens the CI on X−Y, which is the number actually reported.
 **Code (Claude's implementation detail — confirm).** Sample 100 questions stratified table/prose. For each question: one baseline claim chosen at random; the post-repair claim is the descendant of that claim if it survived repair unchanged (same `claim_id`), the claim recorded as its replacement if it was repaired (`replaces: claim_id` in the ledger), or a random claim from the post-repair answer if it was deleted. Post-repair answers come from the `re_retrieve(1)` × `claimify` cell, **seed 1**. Paired analysis: per-question unsupported indicator difference, bootstrap over questions.
 **Validation.** `eval/labels.py` refuses a label set whose two halves do not share the same 100 question ids.
+**Status 2026-09-16.** Pairing rule confirmed by the owner as written (E5); branch recorded per pair, 3a/3b split, pre-committed interpretation rule, and the open T12 successor-matching requirement are in **D-027**. Body above unedited.
 
 ## D-011 · 2026-09-12 · FIXED · Environment: AWS with $220 credits
 
@@ -233,6 +234,7 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Re-check triggers (two).** (1) Taking the D-014 escape hatch to Langfuse Cloud Core — re-run the probe there; Langfuse may resolve Span Links. (2) Any `arize-phoenix` version upgrade — link resolution is backend behaviour and may land in a later release. Either way the wire form does not change; only the rendering caveat does.
 **Code.** `ledger/tracing/otel.py`: `RAG_RECORD_TYPE`, `RECORD_TYPE_QUERY`, `RECORD_TYPE_BY_ANNOTATOR`; tests `test_carrier_record_type`, `test_cost_lands_on_root_query_span`, `test_verdict_metadata_is_json_string_on_the_wire`.
 **Validation.** A5 on the t3.medium uses the amended (c) criterion in `docs/plan.md`.
+**Status 2026-09-16.** A5 ran and passed on the **t3.small** host `ledger-phoenix` (D-023), Phoenix v20.12.0, under the amended (c) criterion. Body above unedited.
 
 ## D-023 · 2026-09-16 · FIXED · Tracing host as built — revises D-015 (instance, budget); qualifies D-014 (endpoint per host) and D-022 (pinned server)
 
@@ -280,3 +282,31 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Decision.** (a), the owner's inclination — confirmed. Snapshots at three points: **(1) now** — the four A5 traces plus the verified instrumentation are already worth more than the cents a snapshot costs, and the first snapshot is the one that establishes the chain; **(2) immediately before T15**, when the week-3 data becomes irreplaceable; **(3) before terminating `ledger-phoenix`** at teardown. Take the pre-T15 and teardown snapshots with the container stopped (`docker stop phoenix`, snapshot, `docker start phoenix`) so the SQLite files are quiescent; the "now" snapshot may be taken hot (nothing is being written).
 **Rejected.** S3 sync (IAM + bucket + cron for no consistency benefit). A single snapshot only at teardown (leaves week 3 unprotected during the T15 burst that D-023 says may need a resize).
 **Validation.** Snapshot ids recorded on the `docs/plan.md` checkboxes.
+
+## D-027 · 2026-09-16 · FIXED · D-010 pairing rule confirmed (Option B: branch recorded per pair) with a pre-committed interpretation rule; successor matching is an open T12 requirement
+
+**Confirmed (owner, E5).** The pairing rule as D-010 specified it: for each of 100 stratified questions, one random baseline claim from the no-repair answer; the post-repair claim from the `re_retrieve(1) × claimify` cell, seed 1, is (1) the same `claim_id` if the claim survived unchanged, (2) the claim recorded in `replaces` if it was repaired, (3) a random claim from the post-repair answer if the baseline claim has no successor. Initial generation is shared across arms within a seed (`docs/evaluation.md` §5), so baseline claim ids exist in the re_retrieve cell.
+**Option B — the branch is recorded on the label record.** A `pair_branch` field is written **when the pair is selected**, by `eval/labels.py`, not by the labeller. Branch 3 is split: **3a** — terminal delete (the claim was still unsupported at STOP and the arm's terminal action removed it, D22): a real repair outcome; **3b** — no successor found (the claim was lost in regeneration): bookkeeping loss. `eval/labels.py` emits the four counts (1, 2, 3a, 3b).
+**Pre-committed interpretation — fixed before the number exists.**
+- Headline X→Y: question-level paired bootstrap over all 100 pairs, **always**. Pairing is on questions (§7) and holds under every branch.
+- All four branch counts are printed next to X→Y in the D26 table.
+- branch 3 (3a+3b) ≤ 20 → the README may use claim-level language ("unsupported claims were repaired").
+- branch 3 > 20 → answer-level language only ("post-repair answers contain fewer unsupported claims"), with the branch-3 n stated.
+- 3b > 5 → reported as a successor-matching defect in the D27 taxonomy discussion, regardless of the total.
+- Branches 1+2 alone may appear as a secondary line labelled **CONDITIONAL**. It is selection-biased (deletion correlates with being unsupported) and is never presented as the effect.
+**Open requirement on T12 — successor matching is specified nowhere.** `regenerate(question, chunks, ledger)` (D21) produces a new answer that is re-decomposed into new claims; neither D21 nor `claims/ledger.py` says how a surviving claim keeps its `claim_id` or how `replaces` is populated. Without a mechanism, branches 1–2 cannot occur and branch 3 approaches 100. **T12 must define successor matching, and a T12 unit test must show that an unchanged claim keeps its `claim_id` and a regenerated claim carries `replaces`.** The mechanism is not designed here; candidates and their failure modes are in the 2026-09-16 session report and are to be evaluated at T12.
+**Rejected.** Switching the headline to an unpaired bootstrap when branch 3 is high — discards valid question-level pairing for no correctness gain. Letting the labeller judge the branch (introduces a judgement into what is a bookkeeping fact).
+**Code.** `eval/labels.py`: `pair_branch ∈ {1, 2, 3a, 3b}` on every label record, written at selection; branch counts in its output; the D-010 refusal on unpaired halves unchanged. T12: successor matching + test.
+**Validation.** Branch counts beside X→Y in `reports/results.md`; the T12 test.
+
+## D-028 · 2026-09-16 · FIXED · `ledger smoke` never runs in CI; CI is the unit-test gate; wiring is covered by fake-client tests — amends D28
+
+**Problem.** A CI gate that blocks on Batch latency is broken, not slow (D-025) — a correctness problem with D28, not one more reason for cut #5. And the docs already contradicted each other: `docs/evaluation.md` §9 said smoke runs on demand; `docs/plan.md` T17 said "`ledger smoke` in CI".
+**Options.**
+(a) **Smoke runs synchronously in CI.** Catches behavioural drift (unsupported rate, `evidence_recall@STOP`) on every push. Misses nothing the smoke measures, but: needs `ANTHROPIC_API_KEY` in GitHub secrets; sync = 2× the Batch rate, ~$1/run; ~50 pushes of dev iteration ≈ $50 of the $200 API budget; minutes of latency per push; and it makes the model's output the gate for a docs-only commit.
+(b) **Smoke never runs in CI; unit tests are the whole gate; smoke stays on demand.** $0 per push, no key in GitHub. Misses behavioural drift between on-demand runs — which is what on-demand smoke before each matrix seed is for.
+(c) **CI replays recorded API responses.** $0, no key, no latency; tests config → graph → spans → `rag.cost_usd` wiring. Misses behavioural drift entirely (a replay cannot see the model change). Costs a cassette harness for a multi-call Batch flow (create → poll → results) that goes stale with every prompt change.
+**Decision.** (b), with (c)'s benefit obtained without cassettes: the wiring is already exercised by fake-client + `InMemorySpanExporter` unit tests (`tests/test_probe_and_cost.py`), and T14's resumability test extends that pattern to the matrix runner. CI = `pytest` + `ruff`. `ledger smoke` stays on demand — run before each matrix seed and before the README numbers — through the same Batch path as the matrix, so it exercises what the matrix uses; its wait is acceptable on demand.
+**Consequences.** `docs/evaluation.md` §9 and `docs/plan.md` T17 now agree; cut-list item 5 ("Smoke-eval CI → v2") is moot because smoke-in-CI is not the design; E6's remaining Actions step gates only `pytest`/`ruff`, so if it exceeds ~1 h it is deferred at no loss to measurement.
+**Rejected.** (a) and (c) as above. A manual `workflow_dispatch` smoke job (that is (b) with a button, plus a key in GitHub secrets for no gain).
+**Validation.** No workflow file invokes `ledger smoke`; §9 and T17 read the same.
