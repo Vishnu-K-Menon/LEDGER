@@ -35,7 +35,7 @@ uv run ledger matrix --seed 2 --confirm-seed-1-inspected        # seeds 2–3 re
 uv run ledger eval results/                  # D26 table with CIs → reports/results.md
 uv run ledger kappa --labels data/labels_week3.jsonl            # paired 100/100 κ (D-010)
 uv run ledger audit-decomp --answers <run> --n 25               # D15 decomposition audit sheet
-uv run ledger smoke                          # 20-question regression eval (D28), ~$0.50; centre = seed 1, after post-seed-1 code changes + before README (D-029)
+uv run ledger smoke                          # 20-question regression eval (D28), ~$0.50; centre = seed 1, after post-seed-1 code changes + before README (D-029); gate rule D-030
 ```
 Every command reads `configs/base.yaml` plus an optional `--config` override. Only run-scoping flags are passed on the command line (`--seed`, `--n`, `--limit`, `--controls`). Every tuning parameter lives in config. (D-021)
 
@@ -54,7 +54,7 @@ Every command reads `configs/base.yaml` plus an optional `--config` override. On
 ## Conventions
 - **`git push` is part of finishing a task, not a separate step.** The remote is the only backup of this work; a task is not done until origin has it. Report the pushed commit hash(es).
 - Every decision made in a session — process, tooling, sizing, interpretation — goes in `docs/decisions.md`; end the session report with the ids written and a one-line summary of each.
-- If any instruction looks wrong — contradicts the docs or code, misreads an entry, or would cause harm later — do not carry out that part: stop, explain in the report with file:line evidence, and propose the alternative. Do not silently substitute your own version, and do not log a decision the owner has not made. Everything unaffected proceeds.
+- If a session instruction looks wrong — contradicts the docs or code, misreads an entry, or would cause harm later — do not carry out that part: stop, explain in the report with file:line evidence, and propose the alternative. Do not silently substitute your own version, and do not log a decision the owner has not made. Everything unaffected proceeds. This covers instructions; FIXED decision entries follow line 15 — say so once, then follow, until the owner writes a successor. (D-031)
 - `ledger smoke` never runs in CI; CI is `pytest` + `ruff` (D-028). Its tolerance is centred on seed 1's results; it runs after post-seed-1 code changes and once before the README — not before each seed (D-029). Gate rule: D-030 (structural assertions; paired t on the share; exact McNemar on recall; 90 % two-sided; worse fails, better flags).
 
 ## Enforcement
