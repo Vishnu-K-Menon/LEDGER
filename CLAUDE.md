@@ -35,7 +35,7 @@ uv run ledger matrix --seed 2 --confirm-seed-1-inspected        # seeds 2–3 re
 uv run ledger eval results/                  # D26 table with CIs → reports/results.md
 uv run ledger kappa --labels data/labels_week3.jsonl            # paired 100/100 κ (D-010)
 uv run ledger audit-decomp --answers <run> --n 25               # D15 decomposition audit sheet
-uv run ledger smoke                          # 20-question regression eval (D28), ~$0.50
+uv run ledger smoke                          # 20-question regression eval (D28), ~$0.50; centre = seed 1, after post-seed-1 code changes + before README (D-029)
 ```
 Every command reads `configs/base.yaml` plus an optional `--config` override. Only run-scoping flags are passed on the command line (`--seed`, `--n`, `--limit`, `--controls`). Every tuning parameter lives in config. (D-021)
 
@@ -54,7 +54,7 @@ Every command reads `configs/base.yaml` plus an optional `--config` override. On
 ## Conventions
 - **`git push` is part of finishing a task, not a separate step.** The remote is the only backup of this work; a task is not done until origin has it. Report the pushed commit hash(es).
 - Every decision made in a session — process, tooling, sizing, interpretation — goes in `docs/decisions.md`; end the session report with the ids written and a one-line summary of each.
-- `ledger smoke` never runs in CI; CI is `pytest` + `ruff` (D-028).
+- `ledger smoke` never runs in CI; CI is `pytest` + `ruff` (D-028). Its tolerance is centred on seed 1's results; it runs after post-seed-1 code changes and once before the README — not before each seed (D-029).
 
 ## Enforcement
 CLAUDE.md is context, not enforced configuration. Anything that must be **blocked** rather than requested goes through a code guard or a PreToolUse hook. Most hard constraints already are code guards: ingest stops at 20 (D-001), the seed flag (D-009), the missing retriever handle in rewrite (D-006), the judge-revision raise (D-007), the bf16 validator (D-012), the `chunk_ids.lock` check (D24), the single-client test (D-002), and a unit test that the matrix runner never calls the generator synchronously (D28). The one uncovered candidate is the idle auto-stop above; if it is ever violated, a PreToolUse hook on GPU-launching commands is the mechanism.

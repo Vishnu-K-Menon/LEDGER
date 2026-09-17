@@ -256,6 +256,7 @@ signal to take the escape hatch — decide in week 1, not week 4.
 
 **Rejected (this entry).** t3.medium now (a prediction, not a measurement — deferred, not overruled). Unlimited credit spec (burst overage billing). CloudWatch memory alarm (above). `:latest` image (untestable drift; D-022's acceptance is version-specific). Widening inbound to 0.0.0.0/0. Pointing the g6e at the Elastic IP (silently dropped by the SG-to-SG rule).
 **Code.** None; `CLAUDE.md` environment + pitfalls (endpoint per host; pinned server version); `docs/architecture.md` D29 instance line.
+**Status 2026-09-17 — §7 rates verified.** g6e.xlarge $1.8610/h and t3.small $0.0208/h (on-demand Linux us-east-1) retrieved from third-party pricing aggregators (DoiT, DevZero, Vantage, Holori), not AWS's own page; public IPv4 $0.005/h per AWS's announcement of the charge effective 2024-02-01, not re-checked against a current AWS page; gp3 $0.08/GB-month from the AWS Pricing Calculator (AWS primary; estimate `3d00189832a7d03fe497a22b4c16cb88a0fe12ce`: 1 × 20 GB × 730 h, no snapshots = $1.60/mo; `vol-06d56753ddf4149a0` is at the included 3,000 IOPS / 125 MB/s, no provisioned-performance charge). All match §7; **committed and slack unchanged.**
 **Validation.** A5 **passed** on this host (Phoenix v20.12.0; sync trace `fd24cb3bde5d321dbb78e88eb03f1c83`, batch trace `9bff4c724852c3cc2363df2df2475b9e`; batch cost exactly half of sync on identical usage). Next-session checkboxes: mem log writing, docker/crond enabled. Week-3 resize check. First traced call from the g6e before T6.
 
 ## D-024 · 2026-09-16 · FIXED · Post-hoc carriers stay in the `ledger` project; no separate `ledger-labels` project — qualifies D-022
@@ -298,6 +299,7 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Rejected.** Switching the headline to an unpaired bootstrap when branch 3 is high — discards valid question-level pairing for no correctness gain. Letting the labeller judge the branch (introduces a judgement into what is a bookkeeping fact).
 **Code.** `eval/labels.py`: `pair_branch ∈ {1, 2, 3a, 3b}` on every label record, written at selection; branch counts in its output; the D-010 refusal on unpaired halves unchanged. T12: successor matching + test.
 **Validation.** Branch counts beside X→Y in `reports/results.md`; the T12 test.
+**Status 2026-09-17.** The T12 test gains negative cases (different entity not matched; one-to-one) and an open qualifier-correction decision — **D-029**. Body above unedited.
 
 ## D-028 · 2026-09-16 · FIXED · `ledger smoke` never runs in CI; CI is the unit-test gate; wiring is covered by fake-client tests — amends D28
 
@@ -310,3 +312,15 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Consequences.** `docs/evaluation.md` §9 and `docs/plan.md` T17 now agree; cut-list item 5 ("Smoke-eval CI → v2") is moot because smoke-in-CI is not the design; E6's remaining Actions step gates only `pytest`/`ruff`, so if it exceeds ~1 h it is deferred at no loss to measurement.
 **Rejected.** (a) and (c) as above. A manual `workflow_dispatch` smoke job (that is (b) with a button, plus a key in GitHub secrets for no gain).
 **Validation.** No workflow file invokes `ledger smoke`; §9 and T17 read the same.
+**Status 2026-09-17.** Smoke cadence revised: tolerance centre is seed 1; runs after post-seed-1 code changes and once before the README, not before each seed — **D-029**. Body above unedited.
+
+## D-029 · 2026-09-17 · FIXED · Smoke cadence anchored on seed 1; T12 successor-matching test gains negative cases — revises D-028 (cadence) and D-027 (test)
+
+**1. Smoke cadence — the hole in D-028.** D-028 said `ledger smoke` runs "before each matrix seed" and fails against "a tolerance set from the week-4 run". The seed-1 run *is* the week-4 run: before seed 1 there is no tolerance to fail against. And each smoke run is its own Batch wait (D-025), so before-every-seed turns T15's three waits into six and breaks the assumed 3-day window — D-028 was not checked against D-025.
+**Decision.** The tolerance **centre** is seed 1's results on the 20 smoke questions (unsupported-claim rate, `evidence_recall@STOP`). Smoke runs **(a)** after any code change made after seed 1, and **(b)** once before the README numbers — not routinely before seeds. **Tolerance width is OPEN**: one seed gives no variance estimate; two candidate width rules are in the 2026-09-17 session report for the owner to choose; the chosen rule gets a status line here.
+**Rejected.** Before-every-seed (no centre before seed 1; doubles the T15 waits). A width picked now (no variance to derive it from).
+
+**2. T12 successor-matching test — negative cases.** D-027's 3b > 5 rule rewards an over-eager matcher: 3b falls, and the damage shows as *wrong pairs*, which nothing counts. The T12 test therefore adds: a regenerated claim about a **different entity** is not matched; **one-to-one** — two baseline claims cannot both map to one regenerated claim.
+**Deliberately NOT added:** "unit or period changed → not matched". A repair that corrects a wrong unit or fiscal period — the D14/D15 qualifier-error class, the main failure this corpus exists to test — produces a **true successor whose qualifiers changed**. Forbidding that match would push every qualifier repair into 3b. **Open T12 decision, with a required test:** how a claim whose unit/period was corrected is matched as branch 2 without admitting unrelated claims about the same entity. Candidate 2 in the 2026-09-16 report keys on exactly `{entity, unit, period}`; the 2026-09-17 report states whether that changes the lean.
+**Code.** `docs/plan.md` T12 and T17 lines; `docs/evaluation.md` §9; CLAUDE.md smoke comment.
+**Validation.** T12 tests as listed; smoke tolerance centre recorded from seed 1 in `reports/smoke.json`.
