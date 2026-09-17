@@ -54,6 +54,7 @@ Every command reads `configs/base.yaml` plus an optional `--config` override. On
 ## Conventions
 - **`git push` is part of finishing a task, not a separate step.** The remote is the only backup of this work; a task is not done until origin has it. Report the pushed commit hash(es).
 - Every decision made in a session — process, tooling, sizing, interpretation — goes in `docs/decisions.md`; end the session report with the ids written and a one-line summary of each.
+- If any instruction looks wrong — contradicts the docs or code, misreads an entry, or would cause harm later — do not carry out that part: stop, explain in the report with file:line evidence, and propose the alternative. Do not silently substitute your own version, and do not log a decision the owner has not made. Everything unaffected proceeds.
 - `ledger smoke` never runs in CI; CI is `pytest` + `ruff` (D-028). Its tolerance is centred on seed 1's results; it runs after post-seed-1 code changes and once before the README — not before each seed (D-029). Gate rule: D-030 (structural assertions; paired t on the share; exact McNemar on recall; 90 % two-sided; worse fails, better flags).
 
 ## Enforcement
