@@ -45,6 +45,22 @@ def test_base_config_has_no_sampling_keys(base_config_path: Path):
         assert key not in text
 
 
+@pytest.mark.parametrize(
+    ("key", "bad"),
+    [("repeat_table_header", False), ("omit_header_on_overflow", True), ("merge_peers", True)],
+)
+def test_chunker_switches_pinned(base_config_path: Path, key: str, bad: bool):
+    """D-033: the three HybridChunker switches are pinned with explicit messages."""
+    with pytest.raises(ValidationError, match="D-033"):
+        Config.model_validate(_mutated(base_config_path, "chunking", key, bad))
+
+
+def test_tables_atomic_key_is_gone(base_config_path: Path):
+    """D-033: the switch the library never had is not a config key."""
+    with pytest.raises(ValidationError):
+        Config.model_validate(_mutated(base_config_path, "chunking", "tables_atomic", True))
+
+
 def test_unknown_key_rejected(base_config_path: Path):
     with pytest.raises(ValidationError):
         Config.model_validate(_mutated(base_config_path, "loop", "max_iters_typo", 3))

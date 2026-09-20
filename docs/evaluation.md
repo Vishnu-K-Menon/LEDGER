@@ -10,7 +10,7 @@ Read on demand. Sources: Phase 2 plan D8, D15, D24–D28, §6, §7; `docs/decisi
 
 **Sampling.** 200 questions from randomly sampled chunks: 60% table chunks, 40% prose chunks. The 60/40 is design intent; the corpus-level tolerance is 50–70% table chunks (D-001). Each item:
 ```json
-{"question_id": "q041", "question": "...", "gold_answer": "1,022", "gold_chunk_id": "cbo-2026-01-outlook::p24::tbl-1-1",
+{"question_id": "q041", "question": "...", "gold_answer": "1,022", "gold_chunk_id": "cbo-2026-01-outlook::p24::tbl-1-1::s0",
  "answer_type": "number|short_phrase", "chunk_type": "table|prose", "unanswerable": false}
 ```
 **Automatic filters.** Gold answer string present verbatim in the gold chunk; numeric answers copyable as printed (unit and period must be recoverable from the same chunk); no near-duplicates (embedding cosine > 0.9 to any accepted question); question length 8–40 words.

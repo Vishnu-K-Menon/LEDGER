@@ -59,7 +59,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command", required=True, metavar="<command>")
 
-    p = sub.add_parser("ingest", help="download + parse the corpus; stops at 20 docs (D-001)")
+    p = sub.add_parser(
+        "ingest",
+        help="download, parse + chunk; prints table_chunk_share; stops at 20 docs (D-001, D-032)",
+    )
     p.add_argument("--limit", type=int, metavar="N", help="parse only the first N documents")
     p.add_argument("--all", action="store_true", help="continue past the D-001 stop")
     p.add_argument(
@@ -73,7 +76,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--n", type=int, metavar="N", help="number of tables to audit")
     p.set_defaults(func=cmd_audit_tables)
 
-    p = sub.add_parser("index", help="chunk, embed (bf16), build the Qdrant file, freeze chunk IDs")
+    p = sub.add_parser(
+        "index", help="embed (bf16) the ingested chunks, build the Qdrant file, freeze chunk IDs"
+    )
     p.set_defaults(func=cmd_index)
 
     p = sub.add_parser("loadtest", help="A8: embedder + reranker + verifier resident, nvidia-smi")

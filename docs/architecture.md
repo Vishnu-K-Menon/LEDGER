@@ -40,7 +40,7 @@ Five ideas were generated in Stage 2, each traced to a Stage 1 finding, and audi
 **Validation:** A1 — 10 tables across agencies, ≥150 cells, ≥95% cells correct with header association. Parser sweep on this corpus is v2.
 
 ### D3 Chunking — DECIDED, held constant
-Docling `HybridChunker`: section headings prepended; tables atomic (never split; header row serialized with every table chunk; caption attached); `max_tokens: 512` in the embedder's tokenizer; no overlap.
+Docling `HybridChunker`, run at ingest on CPU with the embedder's tokenizer only (D-032): section headings and captions prepended (`contextualize`); tables are never mixed with prose (`merge_peers: false`) and are **split by rows when they exceed `max_tokens`, with the header row repeated on every slice** (`repeat_table_header: true`, `omit_header_on_overflow: false`; all three pinned — D-033); chunk IDs carry a slice index; `max_tokens: 512`; no overlap. **`max_tokens` is the main lever on A6 difficulty** under row-splitting (smaller → tighter gold slice, more near-identical siblings; larger → fewer siblings, more irrelevant rows); v1 holds 512; the chunking sweep is v2.
 **Reason:** retrieval is a held-constant, retrieval-equalized stage — the comparison is between repair arms, not retrievers — so the budget should not buy retrieval gains. Heading-prepending is a free, deterministic slice of the "context" benefit.
 **Rejected:** Anthropic contextual retrieval (−35% top-20 retrieval failure, −49% with BM25, vendor-run; ~30k LLM calls ≈ $15–40 of the $200 API budget on a constant stage). Jina late chunking. Fixed-size recursive splitting. Proposition chunking. Chunking sweep is v2 (kill list).
 **No external source:** 512 tokens is a convention, not a measured optimum. Say so in the README.
@@ -93,7 +93,7 @@ pydantic schemas `Answer`, `Claim`, `Verdict`; validation failure → one retry 
 ### D14 Hallucination modes and mitigations
 | Mode | Mitigation | Measured where |
 |---|---|---|
-| Numeric transcription (wrong cell / row–column slip) | text-layer parser (D2); atomic table chunks with header row (D3) | labels; numeric exact match |
+| Numeric transcription (wrong cell / row–column slip) | text-layer parser (D2); table slices that carry the header row (D3/D-033) — column identity on every slice, fewer rows per slice; a needed row in an unretrieved slice is counted as retrieval (`evidence_recall@STOP`, R) or as aggregation-not-present, not as transcription | labels; numeric exact match |
 | Unit / period confusion | claims carry `qualifiers{unit, period}`; strict "copy as printed" | decomposition audit; labels |
 | Parametric leakage | strict stance; abstention schema | leakage rate on labelled subset |
 | Aggregation not literally present | verifier marks unsupported; rewrite must cite constituents | repair-arm results |

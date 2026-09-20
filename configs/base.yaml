@@ -20,7 +20,7 @@ corpus:                               # D1 / D-001 (provisional mix, RESOLVES-ON
     cbo: 40
     gao: 30
 
-ingest:                               # D-001
+ingest:                               # D-001 / D-032: ingest = parse + chunk (CPU), so the share is a chunk share
   confirm_after_docs: 20              # ingest stops here until table_chunk_share is confirmed
   table_chunk_share_band: [0.50, 0.70]
 
@@ -31,11 +31,13 @@ parser:                               # D2, gated on A1
   audit_min_cells: 150
   audit_cell_accuracy_min: 0.95
 
-chunking:                             # D3
-  max_tokens: 512
+chunking:                             # D3 as revised by D-033: HybridChunker at ingest, tokenizer only
+  max_tokens: 512                     # the main lever on A6 difficulty under row-splitting (D-033); v1 holds 512
   overlap: 0
-  tables_atomic: true
-  prepend_headings: true
+  repeat_table_header: true           # header row on every table slice; validator refuses false (D-033)
+  omit_header_on_overflow: false      # a slice must never drop its header (unit/period); validator refuses true (D-033)
+  merge_peers: false                  # never merge a table slice with prose; validator refuses true (D-033)
+  prepend_headings: true              # embed chunker.contextualize(chunk): headings + captions prepended
 
 embedding:                            # D4, size gated on A8
   model: Qwen/Qwen3-Embedding-4B

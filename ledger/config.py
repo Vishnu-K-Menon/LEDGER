@@ -81,8 +81,44 @@ class ParserConfig(_Strict):
 class ChunkingConfig(_Strict):
     max_tokens: int = Field(gt=0)
     overlap: int = Field(ge=0)
-    tables_atomic: bool
+    repeat_table_header: bool
+    omit_header_on_overflow: bool
+    merge_peers: bool
     prepend_headings: bool
+
+    # D-033: the three HybridChunker switches that decide whether a table slice keeps its
+    # header (unit, period) and stays unmixed with prose. Pinned; a later library default flip
+    # is caught here and by the T3 test, not in a label sheet.
+    @field_validator("repeat_table_header")
+    @classmethod
+    def _header_on_every_slice(cls, v: bool) -> bool:
+        if v is not True:
+            raise ValueError(
+                "chunking.repeat_table_header must be true (D-033): every table slice carries the "
+                "header row, or the unit and period leave the chunk"
+            )
+        return v
+
+    @field_validator("omit_header_on_overflow")
+    @classmethod
+    def _never_drop_header(cls, v: bool) -> bool:
+        if v is not False:
+            raise ValueError(
+                "chunking.omit_header_on_overflow must be false (D-033): a slice that drops its "
+                "header silently loses the unit and period"
+            )
+        return v
+
+    @field_validator("merge_peers")
+    @classmethod
+    def _no_table_prose_merge(cls, v: bool) -> bool:
+        if v is not False:
+            raise ValueError(
+                "chunking.merge_peers must be false (D-033): HybridChunker merges undersized "
+                "peers on headings only, so a table slice would merge with prose and chunk_type "
+                "becomes ambiguous"
+            )
+        return v
 
 
 class EmbeddingConfig(_Strict):
