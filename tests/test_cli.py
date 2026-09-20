@@ -35,8 +35,8 @@ def test_help_exits_zero(argv, capsys):
 @pytest.mark.parametrize(
     "argv",
     [
-        ["ingest", "--limit", "20"],
-        ["ingest", "--all", "--confirmed"],
+        ["ingest", "--stage", "parse", "--limit", "20"],
+        ["ingest", "--stage", "parse", "--all", "--confirmed"],
         ["audit-tables", "--n", "10"],
         ["index"],
         ["loadtest"],
@@ -66,5 +66,5 @@ def test_matrix_seed_flag_guard():
 def test_ingest_all_requires_confirmed():
     """D-001 guard shape."""
     with pytest.raises(SystemExit) as exc:
-        main(["ingest", "--all"])
+        main(["ingest", "--stage", "parse", "--all"])
     assert exc.value.code == 2

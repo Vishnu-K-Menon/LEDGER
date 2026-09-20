@@ -1,8 +1,13 @@
-﻿.venv/
+.venv/
 __pycache__/
 *.pyc
 .env
-data/
+# data/ is local except the reproducibility records below. `data/*` (not `data/`) so the
+# negations work: git never descends into a fully excluded directory.
+data/*
 !data/chunk_ids.lock
+!data/frames/
+!data/sources.yaml
+!data/manifest.jsonl
 results/
 reports/

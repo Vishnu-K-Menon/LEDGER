@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import sys
 from collections.abc import Callable, Sequence
+from pathlib import Path
 
 from ledger import __version__
 from ledger.config import DEFAULT_CONFIG_PATH, Config, load_config
@@ -28,7 +29,25 @@ def _not_built(task: str) -> Handler:
 
 # ---- subcommand handlers (all stubs in T1) -------------------------------------------------
 
-cmd_ingest = _not_built("T2/T3 (D-001: stops at ingest.confirm_after_docs until confirmed)")
+
+def cmd_ingest(cfg: Config, args: argparse.Namespace) -> int:
+    """T2 listing stage is built; fetch (T2, after the owner confirms the draw) and parse (T3,
+    D-032) are not yet."""
+    if args.stage == "list":
+        from ledger.ingest.listing import render_report, run_listing
+
+        res = run_listing(cfg, repo=Path.cwd())
+        print(render_report(res))
+        return 0
+    if args.stage == "fetch":
+        raise NotImplementedError(
+            "`ledger ingest --stage fetch` is built after the draw is confirmed (D-034)"
+        )
+    raise NotImplementedError(
+        "`ledger ingest --stage parse` is built in T3 (D-032; D-001 stop at confirm_after_units)"
+    )
+
+
 cmd_audit_tables = _not_built("T3 (A1)")
 cmd_index = _not_built("T4 (D-002, D24: writes data/chunk_ids.lock)")
 cmd_loadtest = _not_built("T4 (A8, D-012)")
@@ -63,8 +82,21 @@ def build_parser() -> argparse.ArgumentParser:
         "ingest",
         help="download, parse + chunk; prints table_chunk_share; stops at 20 docs (D-001, D-032)",
     )
-    p.add_argument("--limit", type=int, metavar="N", help="parse only the first N documents")
-    p.add_argument("--all", action="store_true", help="continue past the D-001 stop")
+    p.add_argument(
+        "--stage",
+        choices=("list", "fetch", "parse"),
+        default="list",
+        help="list: frames -> gate -> seeded draw, downloads nothing (T2); "
+        "fetch: requires --draw-confirmed (D-034); parse: T3, D-001 stop applies",
+    )
+    p.add_argument(
+        "--draw-confirmed",
+        action="store_true",
+        dest="draw_confirmed",
+        help="owner has confirmed the listing-pass draw; required for --stage fetch (D-034)",
+    )
+    p.add_argument("--limit", type=int, metavar="N", help="parse only the first N units")
+    p.add_argument("--all", action="store_true", help="continue past the D-001 stop (parse stage)")
     p.add_argument(
         "--confirmed",
         action="store_true",
@@ -128,8 +160,16 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _validate(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
     """Cross-argument guards that argparse cannot express. These are code guards, not context."""
-    if args.command == "ingest" and args.all and not args.confirmed:
-        parser.error("--all requires --confirmed: report table_chunk_share first (D-001)")
+    if args.command == "ingest":
+        if args.stage == "fetch" and not args.draw_confirmed:
+            parser.error(
+                "--stage fetch requires --draw-confirmed: the owner confirms the "
+                "listing-pass draw first (D-034)"
+            )
+        if args.stage != "parse" and args.all:
+            parser.error("--all applies to --stage parse only (D-001)")
+        if args.all and not args.confirmed:
+            parser.error("--all requires --confirmed: report table_chunk_share first (D-001)")
     if args.command == "matrix" and args.seed != 1 and not args.confirm_seed_1_inspected:
         parser.error("seeds other than 1 require --confirm-seed-1-inspected (D-009)")
 

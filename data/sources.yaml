@@ -1,0 +1,42 @@
+# data/sources.yaml
+# Per-SOURCE provenance and licensing. Committed (needs !data/sources.yaml
+# in .gitignore). Ingest copies policy_url and policy_note into every
+# manifest row for that source, so the fact is recorded once and cannot
+# drift per document.
+#
+# architecture.md:34 says public-domain status is "an inference; confirm
+# per agency page". A null policy_url with an empty policy_note is a hard
+# error — "no agency page exists, the basis is 17 U.S.C. §105" IS a
+# confirmation; a blank is not.
+
+cbo:
+  fetch_method: manual            # DataDome; unreachable by script
+  policy_url: null                # <- fill: url, or leave null
+  policy_note: null               # <- REQUIRED if policy_url is null
+  policy_confirmed: null          # <- date you checked, YYYY-MM-DD
+  frame: data/frames/README.yaml
+
+eia:
+  fetch_method: direct
+  policy_url: null                # <- fill
+  policy_note: null
+  policy_confirmed: null
+  frame: >                        # actually used (2026-09-20): the sitemap is a flat list of 133
+    sitemap.xml -> landing pages   # HTML pages with NO PDFs; PDF links are read off the landing
+    (totalenergy/data/monthly,     # pages configured in fetch.eia_landing_pages
+    outlooks/steo, outlooks/aeo) -> PDF links
+  robots_note: >
+    robots.txt allows /, but Disallow covers /reports/ and the archive
+    patterns (/archive/, /*archive/, /archive*/). Latest-edition-only
+    (D-034) avoids the archive paths; the v2 multi-edition plan does not.
+
+govinfo:
+  fetch_method: api               # api.govinfo.gov, GOVINFO_API_KEY
+  policy_url: null                # <- fill
+  policy_note: null
+  policy_confirmed: null
+  frame: "api.govinfo.gov /published/{start}/{end}?collection="
+  api_note: >
+    Use /published (dateIssued). NEVER /collections/{code}/{date}, which
+    filters lastModified — that is why GAOREPORTS appeared current when
+    it actually ends in 2008.

@@ -51,16 +51,18 @@ class PathsConfig(_Strict):
     questions_draft: Path
     questions: Path
     matrix_cells: Path
+    s3_bucket: str  # empty until T4 (bucket + IAM instance profile)
 
 
 class CorpusConfig(_Strict):
     source_mix: dict[str, int]  # D-034: pilot composition by source key
     min_units: int = Field(gt=0)  # D-034 floor: >= 25 units
     min_sources: int = Field(gt=0)  # D-034 floor: >= 3 sources
+    selection_seed: int
 
 
 class IngestConfig(_Strict):
-    confirm_after_docs: int = Field(gt=0)  # D-001
+    confirm_after_units: int = Field(gt=0)  # D-001: one manifest row = one unit
     table_chunk_share_band: tuple[float, float]
 
     @field_validator("table_chunk_share_band")
@@ -251,6 +253,32 @@ class EvalConfig(_Strict):
     abstention_answerable_max: float = Field(ge=0.0, le=1.0)
 
 
+class CrptFilterTerms(_Strict):
+    all_of: list[str]
+    any_of: list[str]
+
+
+class FetchConfig(_Strict):
+    user_agent: str
+    request_delay_s: dict[str, float]
+    backoff_base_s: float = Field(gt=0)
+    backoff_max_s: float = Field(gt=0)
+    max_retries: int = Field(ge=0)
+    timeout_s: float = Field(gt=0)
+    text_layer_ratio_min: float = Field(ge=0.0, le=1.0)
+    govinfo_base_url: str
+    govinfo_page_size: int = Field(gt=0, le=1000)
+    date_range: tuple[str, str]
+    eia_sitemap_url: str
+    eia_landing_pages: dict[str, str]
+    eia_disallow_patterns: list[str]
+    crpt_sample_n: int = Field(gt=0)
+    crpt_filter_terms: CrptFilterTerms
+    gate_spot_check_n: int = Field(gt=0)
+    gate_min_text_chars: int = Field(gt=0)
+    pilot_eia_mer_sections: int = Field(ge=0)
+
+
 class TracingConfig(_Strict):
     # No endpoint field on purpose: it is read from OTEL_EXPORTER_OTLP_ENDPOINT only (D-014).
     enabled: bool
@@ -283,6 +311,7 @@ class Config(_Strict):
     repair: RepairConfig
     questions: QuestionsConfig
     eval: EvalConfig
+    fetch: FetchConfig
     tracing: TracingConfig
 
 

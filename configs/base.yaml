@@ -13,6 +13,7 @@ paths:
   questions_draft: data/questions_draft.jsonl
   questions: data/questions.jsonl
   matrix_cells: experiments/matrix.yaml
+  s3_bucket: ""                       # set at T4 with the IAM instance profile; empty until then
 
 corpus:                               # D-034 (succeeds D1 / D-001): 20-unit PILOT composition. GAO dropped.
   source_mix:                         # full-corpus mix is set at A9 from measurement, not here
@@ -24,9 +25,10 @@ corpus:                               # D-034 (succeeds D1 / D-001): 20-unit PIL
     govinfo_crpt: 1                   # one unit, parse test only (A1)
   min_units: 25                       # D-034 floor, fixed now
   min_sources: 3
+  selection_seed: 20260920            # seeded stratified draw (convention); same seed -> same draw
 
 ingest:                               # D-001 / D-032: ingest = parse + chunk (CPU), so the share is a chunk share
-  confirm_after_docs: 20              # ingest stops here until table_chunk_share is confirmed
+  confirm_after_units: 20             # one manifest row = one unit (granule or report); stops here until confirmed
   table_chunk_share_band: [0.50, 0.70]
 
 parser:                               # D2, gated on A1
@@ -131,6 +133,33 @@ eval:                                 # evaluation.md sections 3-9, plan.md gate
   decomp_audit_n: 25                  # D15 per audit round
   abstention_controls_min: 0.90       # D12
   abstention_answerable_max: 0.05
+
+fetch:                                # T2 fetcher (D-034). Nothing here is hardcoded in code.
+  user_agent: "LEDGER-research/0.1 (+vishnukm147@gmail.com)"
+  request_delay_s:                    # per source, between requests
+    eia: 2.0
+    govinfo: 0.5
+  backoff_base_s: 2.0                 # 429 / 5xx exponential backoff
+  backoff_max_s: 60.0
+  max_retries: 5
+  timeout_s: 30
+  text_layer_ratio_min: 0.95          # born-digital check at --stage fetch (convention)
+  govinfo_base_url: https://api.govinfo.gov
+  govinfo_page_size: 100
+  date_range: ["2023-01-01", "2026-12-31"]   # D-034 window, dateIssued
+  eia_sitemap_url: https://www.eia.gov/sitemap.xml
+  eia_landing_pages:                  # the frame actually used: sitemap -> these pages -> PDF links
+    mer: https://www.eia.gov/totalenergy/data/monthly/
+    steo: https://www.eia.gov/outlooks/steo/
+    aeo: https://www.eia.gov/outlooks/aeo/
+  eia_disallow_patterns: ["/reports/", "/archive/", "archive/", "/archive"]  # robots.txt (D-034)
+  crpt_sample_n: 40                   # CRPT packages sampled before the cost-estimate filter
+  crpt_filter_terms:
+    all_of: ["Congressional Budget Office"]
+    any_of: ["cost estimate", "Estimated Budgetary Effects"]
+  gate_spot_check_n: 3                # granule self-containment spot-check per source
+  gate_min_text_chars: 1000           # a txtLink rendition shorter than this is a stub: unjudgeable
+  pilot_eia_mer_sections: 6           # eia 8 = 6 MER sections + STEO + AEO
 
 tracing:                              # D29 / D-014. Endpoint comes ONLY from OTEL_EXPORTER_OTLP_ENDPOINT.
   enabled: true

@@ -22,8 +22,10 @@ uv sync                                   # Python 3.12, deps from pyproject.tom
 uv run pytest -q                          # unit tests: schemas, ledger invariants, stop rule, config, D-002/D-006 guards
 uv run ruff check . && uv run ruff format --check .
 
-uv run ledger ingest --limit 20              # parse + chunk first 20 docs (CPU; tokenizer only), print table_chunk_share, STOP (D-001, D-032)
-uv run ledger ingest --all --confirmed       # continue past 20 only after the owner confirmed the share
+uv run ledger ingest --stage list            # T2: frames -> granule gate -> seeded draw -> data/manifest.jsonl; downloads NOTHING (D-034)
+uv run ledger ingest --stage fetch --draw-confirmed   # T2: fetch the confirmed draw; hashes, pages (pypdf), text-layer ratio
+uv run ledger ingest --stage parse --limit 20        # T3: parse + chunk the 20-unit pilot (CPU), print table_chunk_share, STOP (D-001, D-032)
+uv run ledger ingest --stage parse --all --confirmed # continue past 20 units only after the owner confirmed the share
 uv run ledger audit-tables --n 10            # A1: 10-table cell-integrity audit, writes reports/a1_tables.md
 uv run ledger index                          # embed (bf16) the ingested chunks, build the Qdrant file, FREEZE chunk IDs
 uv run ledger loadtest                       # A8: embedder + reranker + verifier resident, one verify call, nvidia-smi

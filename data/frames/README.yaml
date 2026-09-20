@@ -1,0 +1,66 @@
+# data/frames/README.yaml
+# Sampling frames captured in a browser because the source blocks scripts.
+# These files ARE the provenance: the seeded draw is reproducible from them.
+
+cbo:
+  source: CBO cost estimates
+  url: https://www.cbo.gov/cost-estimates/search
+  blocked_to_scripts: true      # DataDome; robots.txt itself returns 403
+  captured: 2026-09-20
+  captured_by: owner, browser "Save page as"
+
+  filter: Publication Date facet
+  filter_warning: >
+    Do NOT use the keyword box. A fulltext search on a year matches bill
+    NUMBERS and short titles, not publication dates. The first attempt that
+    way returned documents published in 2004, 2006 and 2012 (e.g. "S. 2024,
+    Sandia Pueblo Settlement" from 2012-11-02) and produced no year strata
+    at all. Those frames were discarded.
+
+  candidates: 40                # 10 per year, verified one year per frame
+  per_year:
+    2023: {n: 10, span: "all December 2023"}
+    2024: {n: 10, span: "August-December 2024"}
+    2025: {n: 10, span: "all December 2025"}
+    2026: {n: 10, span: "all September 2026 (year incomplete)"}
+
+  capture_note: >
+    2023, 2025 and 2026 are page 1 sorted date-descending, i.e. that year's
+    most recent 10. 2024 was captured separately and spans Aug-Dec: its
+    page 1 had 7 of 10 from a single day (2024-12-20) including five
+    consecutive ids from one rural-health markup, which would have risked
+    drawing two near-identical estimates.
+
+  pool_size_available:          # from the facet's own counts
+    2023: 378
+    2024: 903
+    2025: 91
+    2026: 34
+
+  document_types: >
+    Mostly single-bill cost estimates with the standard "By Fiscal Year,
+    Millions of Dollars" table. Also present: batch estimates
+    ("Legislation considered under suspension of the Rules") and baseline
+    comparisons ("Estimate of H.R. NNNN Relative to CBO's ... Baseline
+    Projections"). Both have different table layouts — expect them at A1.
+
+  known_bias: >
+    Page 1 per year, so end-of-year publication is over-represented in
+    2023/2025. CBO's template does not vary by month, so this is treated
+    as benign for table layout; it is recorded because it is a real
+    property of the pool, not a neutral sample of the year.
+
+  links: /publication/NNNNN pages, NOT PDFs
+  second_hop: >
+    Each drawn candidate must be opened in a browser to reach its PDF.
+    The PDF URL (not the publication-page URL) goes in
+    data/manual/cbo/sources.csv.
+
+  not_applied:
+    - >
+      Direct Spending / Revenues / Deficit Min filters. Many cost estimates
+      report no significant budgetary effect and have all-zero tables, which
+      cannot yield a usable D24 question. Filtering on those facets would
+      select for estimates with real figures. Not applied to the pilot: the
+      proportion of zero-tables in a random draw is itself informative for
+      A1 and the question generator. Revisit when extending past the pilot.
