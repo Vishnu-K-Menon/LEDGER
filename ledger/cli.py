@@ -45,12 +45,78 @@ def cmd_ingest(cfg: Config, args: argparse.Namespace) -> int:
         res = run_fetch(cfg, repo=Path.cwd())
         print(render_fetch_report(res))
         return 0
-    raise NotImplementedError(
-        "`ledger ingest --stage parse` is built in T3 (D-032; D-001 stop at confirm_after_units)"
+    # --stage parse (T3, D-032): parse + chunk; the D-001 stop applies here.
+    from ledger.ingest.parse import run_parse
+    from ledger.ingest.stats import read_chunks, render, tally
+
+    repo = Path.cwd()
+    res = run_parse(
+        cfg,
+        repo,
+        config_path=args.config or str(DEFAULT_CONFIG_PATH),
+        limit=args.limit,
+        all_=args.all,
     )
+    failed = [u for u in res.parsed if u.error]
+    pages_by_unit = {u.unit_id: u.pages for u in res.parsed}
+    records = read_chunks(repo / cfg.paths.chunks)
+    total, by_source, by_unit = tally(records, pages_by_unit)
+    report = render(
+        total,
+        by_source,
+        by_unit,
+        band=cfg.ingest.table_chunk_share_band,
+        skipped=res.skipped,
+        seconds=res.seconds,
+        workers=res.workers,
+    )
+    out = repo / cfg.paths.reports_dir / "a9_pilot.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(report + "\n", encoding="utf-8")
+    print(report)
+    pages = sum(pages_by_unit.values())
+    rate = pages / res.seconds if res.seconds else 0.0
+    print(
+        f"\nparsed {len(res.parsed) - len(failed)}/{len(res.parsed)} units · {pages} pages · "
+        f"{res.seconds:.1f}s · {rate:.2f} pages/s "
+        f"({res.workers} worker(s)) · report {out.relative_to(repo).as_posix()}"
+    )
+    for u in failed:
+        print(f"  ! {u.unit_id}: {u.error}")
+    if res.stopped:
+        print(
+            "\nD-001 STOP: the pilot is parsed. Report table_chunk_share and confirm before "
+            "unit 21; `--stage parse --all --confirmed` continues. Do not tune (D-001/D-032)."
+        )
+    return 0
 
 
-cmd_audit_tables = _not_built("T3 (A1)")
+def cmd_audit_tables(cfg: Config, args: argparse.Namespace) -> int:
+    """A1 audit sheet (T3). The cell verdicts are the owner's; this writes the evidence."""
+    from ledger.ingest.audit_tables import build_sheet
+    from ledger.ingest.http import Fetcher
+
+    repo = Path.cwd()
+    if args.n:
+        parser_cfg = cfg.parser.model_copy(update={"audit_tables_n": args.n})
+        cfg = cfg.model_copy(update={"parser": parser_cfg})
+    sheet, picks = build_sheet(cfg, repo, fetcher=Fetcher(cfg.fetch))
+    out = repo / cfg.paths.reports_dir / "a1_tables.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(sheet + "\n", encoding="utf-8")
+    cells = sum(p.cells for p in picks)
+    print(
+        f"{len(picks)} tables · {cells} cells (floor {cfg.parser.audit_min_cells}) "
+        f"-> {out.relative_to(repo).as_posix()}"
+    )
+    for p in picks:
+        print(
+            f"  - {p.unit_id} {p.table_ref} p{p.page} "
+            f"{p.rows}x{p.cols}={p.cells} · {p.digit_source}"
+        )
+    return 0
+
+
 cmd_index = _not_built("T4 (D-002, D24: writes data/chunk_ids.lock)")
 cmd_loadtest = _not_built("T4 (A8, D-012)")
 cmd_baseline = _not_built("T5 (A4/A6/A7)")

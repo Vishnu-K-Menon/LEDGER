@@ -10,6 +10,7 @@ paths:
   raw_dir: data/raw                   # fetched PDFs: data/raw/<source>/<unit_id>.pdf (gitignored)
   parsed_dir: data/parsed
   qdrant_path: data/qdrant            # D-002 local file mode; NVMe on the g6e
+  chunks: data/chunks.jsonl           # D-032: chunks are written at ingest, before embedding
   chunk_ids_lock: data/chunk_ids.lock # D24: written by `ledger index`, required by `ledger questions`
   questions_draft: data/questions_draft.jsonl
   questions: data/questions.jsonl
@@ -35,6 +36,17 @@ ingest:                               # D-001 / D-032: ingest = parse + chunk (C
 parser:                               # D2, gated on A1
   name: docling                       # docling | paddleocr_vl (A1 fallback)
   table_mode: accurate
+  do_ocr: false                       # D2 is a TEXT-LAYER parser; Docling defaults OCR on and
+                                      # `standard` bundles rapidocr. Blank/graphic pages in FCS and
+                                      # CROSSCUT (text_layer_ratio 0.92) must not be OCR'd into the
+                                      # A1 measurement. Validator: v1 refuses true.
+  pdf_backend: docling_parse_v4       # docling_parse_v4 | pypdfium2; A1 reports the ERP decimals
+                                      # under both; v1 runs on this default.
+  workers: 1                          # MEASURED T3 2026-09-20 on the 15.4 GiB / 16-core laptop:
+                                      # each pool worker loads its own ~2.5 GB of models, so a
+                                      # pool dies with BrokenProcessPool at 5 AND at 3 workers on
+                                      # table-dense units; single-process is the only reliable
+                                      # path here. 0 = os.cpu_count(); revisit on the g6e.
   audit_tables_n: 10                  # A1
   audit_min_cells: 150
   audit_cell_accuracy_min: 0.95

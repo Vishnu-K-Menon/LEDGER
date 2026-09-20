@@ -48,6 +48,7 @@ class PathsConfig(_Strict):
     raw_dir: Path
     parsed_dir: Path
     qdrant_path: Path
+    chunks: Path  # D-032: chunk output of the ingest stage
     chunk_ids_lock: Path  # D24
     questions_draft: Path
     questions: Path
@@ -78,9 +79,24 @@ class IngestConfig(_Strict):
 class ParserConfig(_Strict):
     name: Literal["docling", "paddleocr_vl"]
     table_mode: str
+    do_ocr: bool
+    pdf_backend: Literal["docling_parse_v4", "pypdfium2"]
+    workers: int = Field(ge=0)  # 0 = os.cpu_count()
     audit_tables_n: int = Field(gt=0)
     audit_min_cells: int = Field(gt=0)
     audit_cell_accuracy_min: float = Field(ge=0.0, le=1.0)
+
+    @field_validator("do_ocr")
+    @classmethod
+    def _no_ocr_in_v1(cls, v: bool) -> bool:
+        # D2: the corpus is born-digital and the text layer holds the exact digits. OCR would
+        # invent text on the very pages A1 measures (FCS/CROSSCUT blank pages).
+        if v is not False:
+            raise ValueError(
+                "parser.do_ocr must be false in v1 (D2): Docling is used as a text-layer parser; "
+                "the OCR fallback is a different parser (parser.name: paddleocr_vl) chosen at A1"
+            )
+        return v
 
 
 class ChunkingConfig(_Strict):

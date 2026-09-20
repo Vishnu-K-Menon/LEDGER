@@ -17,6 +17,13 @@ dependencies = [
     # T2 (D-034): pinned exactly - the Docling lesson.
     "requests==2.34.2",
     "pypdf==6.19.0",
+    # T3 (D-033): Docling pinned exactly. `docling` is a meta-package over
+    # `docling-slim[standard]`; the models and parser backends are pinned too, not just the
+    # two top-level names, so a transitive bump cannot change a parse.
+    "docling==2.129.0",
+    "docling-core==2.97.1",
+    "docling-ibm-models==4.0.3",
+    "docling-parse==7.20.0",
 ]
 
 [project.scripts]
@@ -43,3 +50,4 @@ select = ["E", "F", "I", "W", "UP", "B"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = ["parse: T3 tests that import docling/torch (slow to collect)"]
