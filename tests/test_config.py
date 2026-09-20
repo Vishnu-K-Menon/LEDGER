@@ -12,6 +12,8 @@ def test_base_config_loads(base_config_path: Path):
     assert cfg.verifier.precision == "bf16"
     assert cfg.chunking.max_tokens == 512
     assert cfg.paths.chunk_ids_lock == Path("data/chunk_ids.lock")
+    assert sum(cfg.corpus.source_mix.values()) == 20  # D-034 pilot composition
+    assert "gao" not in cfg.corpus.source_mix  # D-034: GAO dropped
     assert not hasattr(cfg.tracing, "endpoint")  # D-014: env only
 
 

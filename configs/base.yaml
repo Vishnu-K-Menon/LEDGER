@@ -14,11 +14,16 @@ paths:
   questions: data/questions.jsonl
   matrix_cells: experiments/matrix.yaml
 
-corpus:                               # D1 / D-001 (provisional mix, RESOLVES-ON-DATA)
-  agency_mix:
-    eia: 50
-    cbo: 40
-    gao: 30
+corpus:                               # D-034 (succeeds D1 / D-001): 20-unit PILOT composition. GAO dropped.
+  source_mix:                         # full-corpus mix is set at A9 from measurement, not here
+    eia: 8                            # direct; sitemap.xml is the frame (MER sections, STEO, AEO)
+    govinfo_budget: 5                 # GovInfo BUDGET via API
+    govinfo_erp: 2                    # GovInfo ERP via API
+    govinfo_econi: 0                  # ONE edition only in the full corpus; none in the pilot
+    cbo_manual: 4                     # hand-fetched cost estimates (~15-20 total)
+    govinfo_crpt: 1                   # one unit, parse test only (A1)
+  min_units: 25                       # D-034 floor, fixed now
+  min_sources: 3
 
 ingest:                               # D-001 / D-032: ingest = parse + chunk (CPU), so the share is a chunk share
   confirm_after_docs: 20              # ingest stops here until table_chunk_share is confirmed

@@ -41,7 +41,7 @@ Every command reads `configs/base.yaml` plus an optional `--config` override. On
 
 ## Environment
 - Python 3.12; `uv` for packages and venv; `ruff` for lint/format; `pytest`.
-- Env vars: `ANTHROPIC_API_KEY` (generator, Batch API); `OTEL_EXPORTER_OTLP_ENDPOINT` (Phoenix, D-014) and `OTEL_EXPORTER_OTLP_HEADERS` if Phoenix auth is on; `AWS_PROFILE` / `AWS_DEFAULT_REGION` for S3; `HF_HOME` on the NVMe. No other keys.
+- Env vars: `ANTHROPIC_API_KEY` (generator, Batch API); `OTEL_EXPORTER_OTLP_ENDPOINT` (Phoenix, D-014) and `OTEL_EXPORTER_OTLP_HEADERS` if Phoenix auth is on; `AWS_PROFILE` / `AWS_DEFAULT_REGION` for S3; `HF_HOME` on the NVMe; `GOVINFO_API_KEY` (api.data.gov, D-034 — `DEMO_KEY` rate-limits within a few calls). No other keys.
 - Services: none run locally. Qdrant is a local file (D-002). Phoenix is **self-hosted on a t3.small** (`ledger-phoenix`, D-023 — revises D-015's t3.medium; resize check end of week 3), image **pinned `arizephoenix/phoenix:20.12.0`**, auth and TLS off, security group is the only access control; the endpoint comes from the environment and is never hardcoded.
 - GPU work runs on an AWS g6e.xlarge (L40S, **44.7 GiB usable**, 250 GB local NVMe). Qdrant file and model cache on the NVMe; corpus, parsed output and `results/*.jsonl` sync to S3.
 - Generation, decomposition, rewrite: Claude Sonnet 5 via the **Batch API**. Never call the generator synchronously inside the matrix runner (unit-tested, D28).

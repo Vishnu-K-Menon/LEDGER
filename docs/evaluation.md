@@ -13,9 +13,9 @@ Read on demand. Sources: Phase 2 plan D8, D15, D24–D28, §6, §7; `docs/decisi
 {"question_id": "q041", "question": "...", "gold_answer": "1,022", "gold_chunk_id": "cbo-2026-01-outlook::p24::tbl-1-1::s0",
  "answer_type": "number|short_phrase", "chunk_type": "table|prose", "unanswerable": false}
 ```
-**Automatic filters.** Gold answer string present verbatim in the gold chunk; numeric answers copyable as printed (unit and period must be recoverable from the same chunk); no near-duplicates (embedding cosine > 0.9 to any accepted question); question length 8–40 words.
+**Automatic filters.** Gold answer string present verbatim in the gold chunk; numeric answers copyable as printed (unit and period must be recoverable from the same chunk); no near-duplicates (embedding cosine > 0.9 to any accepted question); **at most 3 questions from any one distinct table** (D-034 — under row-splitting, table chunks from few tables look diverse and are not; a convention, revisable at A9; the per-unit cap is set at A9); question length 8–40 words.
 **Human validation.** 50 items checked by hand: answerable, gold correct, unambiguous. Rejection rate is recorded.
-**Controls.** 20 deliberately unanswerable questions (entities or periods absent from the corpus); accepted only if retrieval top-5 does not contain the answer; all 20 human-checked. They measure both directions of the strict stance (D12).
+**Controls.** 20 deliberately unanswerable questions — absent **entities** or **out-of-range periods** (D-034: "periods absent from the corpus" is impractical against compendia spanning decades); accepted only if retrieval top-5 does not contain the answer; all 20 human-checked. They measure both directions of the strict stance (D12).
 **Use.** 150 answerable + 20 controls in every run; spares held back. **Chunk IDs are frozen before generation** (`data/chunk_ids.lock`); re-chunking afterwards invalidates `evidence_recall@STOP`.
 
 ## 2. Retrieval gate (D8, A6)

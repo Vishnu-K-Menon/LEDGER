@@ -54,7 +54,9 @@ class PathsConfig(_Strict):
 
 
 class CorpusConfig(_Strict):
-    agency_mix: dict[str, int]
+    source_mix: dict[str, int]  # D-034: pilot composition by source key
+    min_units: int = Field(gt=0)  # D-034 floor: >= 25 units
+    min_sources: int = Field(gt=0)  # D-034 floor: >= 3 sources
 
 
 class IngestConfig(_Strict):

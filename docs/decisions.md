@@ -15,6 +15,7 @@ Rule for the build (from the owner, 2026-09-12): when you reach the code that im
 **Code.** `ingest/manifest.py` records agency per document; `ingest/stats.py` prints `table_chunk_share` after the first 20; the ingest CLI refuses to continue past 20 documents until the share has been reported and the owner has confirmed.
 **Validation.** Week 1, T3–T4: report `table_chunk_share` and which branch (in band / below / above) it selects. Confirm before ingesting documents 21+.
 **Status 2026-09-19.** `table_chunk_share` is a post-chunker share and chunking now runs inside `ingest` on CPU (T3), so A9 runs before document 21 — **D-032**. The prohibition extends: never re-parse **and never re-chunk** (`chunking.max_tokens` moves the share directly). Body above unedited.
+**Status 2026-09-19 (corpus).** The agency mix EIA 50 / CBO 40 / GAO 30 is superseded: GAO dropped, sources and a 20-unit pilot composition are in **D-034**; the full mix is set at A9 from measurement. The band and the adjust-remaining-only rule are unchanged. Body above unedited.
 
 ## D-002 · 2026-09-12 · FIXED · Qdrant in local file mode
 
@@ -22,6 +23,7 @@ Rule for the build (from the owner, 2026-09-12): when you reach the code that im
 **Reason.** ~30k vectors; zero extra services in a 60-hour project (D5).
 **Code.** The Qdrant client is constructed in exactly one place, `retrieval/store.py::make_client(cfg)`, behind `vector_store.mode` in config. Nothing else imports `QdrantClient`. The swap to Docker is a one-line config change, not a search-and-replace.
 **Validation.** A unit test asserts `QdrantClient` is referenced only in `retrieval/store.py`.
+**Status 2026-09-19.** The "~30k vectors" in the Reason line was a justification for local file mode, written before D-033's row-splitting, which invalidates the assumption behind it. Local file mode is unaffected by a larger count; **the figure is not a corpus target** and the real count comes from A9 (D-034). Body above unedited.
 
 ## D-003 · 2026-09-12 · FIXED · Partial support is a third label, collapsed for the headline
 
@@ -376,3 +378,51 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Rejected.** Raising `max_tokens` for table items only (not a stock behaviour; blows the D17 context budget). Dropping large tables (loses the multi-header tables the corpus exists for). Leaving `merge_peers` at its default (mixed chunks). Post-filtering mixed chunks after merging (fixes the symptom, hides the count).
 **Code.** `configs/base.yaml` `chunking:`; `ledger/config.py::ChunkingConfig` validators; `tests/test_config.py`; `docs/architecture.md` D3 and D14; `docs/evaluation.md` ID example; `CLAUDE.md` rule. T3: pin `docling`/`docling-core`, the four chunker tests.
 **Validation.** T3 tests; A6 at T5 read against this prediction; A9 per-agency slice counts.
+**Status 2026-09-19.** (1) A6's second failure has one pre-decided answer: after hybrid BM25 and `k_final: 8`, the only lever is corpus composition — `max_tokens` is frozen (D-032); see D-034 §5. (2) `merge_peers: false` enlarges the prose denominator while row-splitting inflates the table numerator, so `table_chunk_share` moves in opposite directions from two switches of this entry; the band is already two-sided (D-001), what was missing is visibility — **the A9 report shows table slices, distinct tables and prose chunks separately, not just the share.** Body above unedited.
+
+## D-034 · 2026-09-19 · FIXED · Corpus sources, unit rule and size procedure — successor to D1 (LOCKED, `docs/architecture.md:31–34`) and D-001
+
+**What happened.** Five stdlib probes from the owner's laptop on 2026-09-19 (measured, not estimated) showed that two of D1's three agencies have no scriptable download path, and that the one apparent workaround was a false positive:
+- **cbo.gov** is behind DataDome (`geo.captcha-delivery.com`); **gao.gov** behind Akamai Bot Manager (`errors.edgesuite.net`); both return 403 on a browser UA and on urllib's default UA, and **both 403 their own `robots.txt`**.
+- **eia.gov** returns 200 on both UAs; `robots.txt` is `Allow: /` with `Disallow: /reports/, /archive/, /*archive/, /archive*/` (and others); sitemap at `https://www.eia.gov/sitemap.xml`. STEO back editions live under `/outlooks/steo/archives/`, so the **v2 multi-edition plan is robots-constrained**.
+- **GovInfo** (`api.govinfo.gov`) is reachable, standard robots, direct PDFs 200. **`/collections/{code}/{date}` filters on `lastModified`, not `dateIssued`** — `GAOREPORTS` returned 16,569 for both a 2023 and a 2025 start date, every displayed package dated 1994–1999 and re-processed in 2025. **`/published/{start}/{end}?collection=` filters on `dateIssued`**: `GAOREPORTS` 2023–2026 = 0, 2015–2019 = 0, 2008–2012 = 724, 2000–2004 = 5,081 — the GAO collection is closed and ends somewhere in 2008–2014. `BILLS` as positive control: 21,961 for 2025–2026 with dates to 2026-09-16.
+- GovInfo currency 2023–2026: `BUDGET` 40 (newest 2026-09-04), `ECONI` 43 (monthly, newest 2026-08-01), `ERP` 4 (newest 2026-04-01), `CRPT` 2,256, `CPRT` 198, `ANNUALREP` 23, `GOVPUB` 3,537. Measured page counts, one sample each: BUDGET-2027-MSR 12 · ECONI-2026-07 40 · ERP-2026 450 · CRPT-119hrpt796 21.
+- GovInfo needs an **api.data.gov key**; `DEMO_KEY` hit `OVER_RATE_LIMIT` within four probe runs. Package metadata carries **`pages` before any download**; `modsLink` is the richer manifest source; `txtLink` cannot replace the PDF parse (table structure is flattened) but is useful as a pre-download filter and as a digit-level cross-check for A1.
+
+**1. GAO is dropped.** No scriptable path, weakest on table density, largest manual burden. **The project's claim narrows from "federal reports" to federal statistical and budget publications.** The README says so plainly.
+
+**2. Sources** (`configs/base.yaml` `corpus.source_mix`, keyed by these names):
+| key | what | acquisition |
+|---|---|---|
+| `eia` | statistical monthlies and outlooks (MER sections, STEO, AEO, …) | direct fetch; `sitemap.xml` is the frame |
+| `govinfo_budget` | GovInfo `BUDGET` | API |
+| `govinfo_erp` | GovInfo `ERP` | API |
+| `govinfo_econi` | GovInfo `ECONI`, **one edition only** (43 near-identical monthly editions are the cross-edition `gold_chunk_id` ambiguity the one-edition rule exists to prevent) | API |
+| `cbo_manual` | CBO cost estimates, hand-fetched, ~15–20 total — kept because nothing scriptable matches "by fiscal year, millions of dollars" over a ten-year column span (the D14 case) | owner's browser; URL + SHA-256 in the manifest keep the corpus reproducible even though acquisition is not |
+| `govinfo_crpt` | GovInfo `CRPT`, **one unit in the pilot, as a parse test only** — does a GPO-typeset embedded cost estimate parse as a table? (A1) | API |
+
+**Pilot composition (20 units):** `eia` 8 (MER sections, STEO, AEO) · `govinfo_budget` 5 · `govinfo_erp` 2 · `cbo_manual` 4 · `govinfo_crpt` 1. **The full-corpus mix is set at A9 from measurement, not now.**
+
+**3. The size target is a procedure, not a number.** D1's "100–150 born-digital PDFs" is **retired**: it assumed 30–100-page documents; the corpus now spans 1-page estimates to 450-page compendia, so a document count no longer describes corpus size. Replacement: **a floor, fixed now — ≥ 25 units across ≥ 3 sources**; everything else is measured at A9 — the pilot reports **chunks, table slices, distinct tables and prose chunks, per source and per unit** — and the full-corpus target is set from those numbers and logged before unit 21. No chunk band and no distinct-tables floor are set here.
+
+**4. Unit = granule where the source provides one, report otherwise — decided per source at T2's listing pass, behind a reliability gate.** The risk is not whether granules exist but whether a granule is **self-contained**: if a package's front matter states the unit convention ("all figures in billions of chained 2017 dollars") and that front matter is a granule not selected, every table in the selected granules has silently lost its unit — D-033's `omit_header_on_overflow` failure one level up. **Gate, per source, before any download:** (a) every granule carries its own `pdfLink` **and** `pages` in metadata; (b) spot-check 3 granules per source — does each carry its own table headers and its own unit/period statement, or does it depend on package front matter it does not contain; (c) no table spans a granule boundary. **Fail on any check → that source falls back to report-level units.** The outcome is recorded per source in the manifest as `unit_kind`, so one source can be granule-level while another is report-level.
+
+**5. A6's second failure has one answer — pre-decided.** `max_tokens` is frozen after ingest (D-032). If hybrid BM25 and then `k_final: 8` (D8) both leave recall@5 below 0.75, **the only remaining lever is corpus composition**: fewer giant tables per unit, more prose-bearing units, applied to the remaining ingest under D-001's rule. Not a chunking change, not a retriever change.
+
+**6. D24 diversity is enforced by a sampling cap, not a floor.** Under row-splitting, 30,000 table chunks drawn from 50 tables would look diverse and would not be. D24 draws **at most 3 questions from any one distinct table** (a convention; revisable at A9 from the realised distribution). The per-unit question cap is set at A9, not now. Controls use absent **entities** or **out-of-range periods** — "periods absent from the corpus" is impractical against compendia spanning decades; the top-5 check stays.
+
+**Manifest spec** (`ingest/manifest.py`, not yet written): `source`, `parent_series`, `unit_kind ∈ {granule, report}`, `pages`, `text_layer_ratio`, `snapshot_date`, `fetch_method ∈ {direct, govinfo, manual}`, `policy_url` (public-domain confirmation), plus the existing `url`, `sha256`, `date`. **Fetcher requirements:** explicit UA, robots check, per-source rate limit, 429 backoff; `GOVINFO_API_KEY` from the environment.
+
+**Open owner items on the T2 line.** Manual CBO fetch; **public-domain confirmation per source, in a browser, recording the policy URL** — `architecture.md:34` is satisfied only when that is done.
+
+**Rejected.** Keeping GAO via manual download (30 units by hand, weakest table density). CRPT as a substitute for native cost estimates (same numbers, GPO typesetting; a parse test first). SEC EDGAR (scriptable and table-rich, but hands the differentiator to finance-specific work — the FinanceBench reason at `architecture.md:33`). A chunk band or distinct-tables floor set by assertion. Multiple ECONI editions.
+**Code.** `configs/base.yaml` `source_mix`; `ledger/config.py::CorpusConfig.source_mix`; `CLAUDE.md:44` key line; `docs/plan.md` T2/A1/A9/A3; `docs/evaluation.md` §1 filters and controls; `docs/architecture.md` D1 pointer, FinanceBench restatement, §8 wording.
+**Validation.** T2 listing pass reports pool sizes and the gate outcome per source before the owner confirms the draw; A9 per-source/per-unit report; A1 CRPT parse test.
+
+## D-035 · 2026-09-19 · FIXED · No cuts for the week-1 overrun; the overrun is absorbed in calendar, not measurement
+
+**Facts.** `docs/plan.md` week 1 sums to 20.5 h against a 15 h header (task lines 16.5 h after D-032/D-033's T3 re-baseline, plus gate hours A1 1.0, A9 0.3, A8 0.2, T5 variance probe 0.5, A4 0.5, A6 0.5, A7 0.2, A3 0.3, A5 0.5 — never added to the header; A2's 2.0 h is inside T6). Weeks 2, 3 and 4 sum to exactly 15.0 h each. T1 + A5 are done (2.5 h); 18 h remain in week 1.
+**Decision.** **No cuts.** The overrun is front-loaded discovery cost (T1's library corrections, the tracing host, the corpus re-sourcing) and is absorbed in **calendar**: the four-week window is self-imposed; week 1 may run into week 2. The cut list is untouched and stays reserved for its stated trigger ("only if week 3 runs over"). The week-1 header is left at 15 h with this entry as the record of the discrepancy.
+**Caveat, recorded.** T13 is 8 h of hand-labelling and does not compress with a better skeleton, so weeks 2–3 will not absorb as much as week 1's overrun might suggest; if week 2 also overruns, the cut list's trigger is reconsidered then, not now.
+**Rejected.** Taking cut #1 (graft cells) and #3 (seeds 3 → 2) now — recommended in the 2026-09-19 analysis; declined because they trade measurement for hours before the κ pilot has shown whether the measurement is needed. Cutting T2's listing pass or the granule gate (the discovery cost is the point).
+**Validation.** Week-1 close-out reports actual hours against 20.5.

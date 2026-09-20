@@ -30,7 +30,8 @@ Five ideas were generated in Stage 2, each traced to a Stage 1 finding, and audi
 
 ### D1 Corpus — LOCKED
 100–150 born-digital PDFs: GAO reports, CBO cost estimates and outlooks, EIA outlooks. Provisional mix EIA 50 / CBO 40 / GAO 30, adjusted only on the remaining ingest after 20 documents are parsed and `table_chunk_share` is measured; 50–70% table chunks is in band (D-001). Manifest per document: source URL, SHA-256, agency, publication date, page count. Hard because answers are cells in multi-header tables and the unit and fiscal period sit in captions and headers.
-**Rejected:** FinanceBench — the Stage 2 audit showed it erodes the differentiator (FinGround already occupies finance) and hands over the hard-question distribution (150 questions, many "not answerable").
+**Rejected:** FinanceBench — the Stage 2 audit showed it erodes the differentiator (FinGround already occupies finance) and hands over the hard-question distribution (150 questions, many "not answerable"). **Restated under D-034:** the differentiator now rests on *federal statistical and budget publications* — multi-year, unit-in-header tables from EIA, the Budget volumes, the ERP and CBO cost estimates — a domain no faithfulness benchmark occupies; SEC EDGAR was considered and rejected for the same reason as FinanceBench.
+**Status 2026-09-19.** D1 is superseded by **D-034** (GAO dropped; six sources; unit = granule behind a reliability gate; the 100–150 document target retired for a ≥ 25-unit / ≥ 3-source floor plus an A9 procedure). Text above unedited.
 **No external source:** US government works as public domain (17 U.S.C. §105) is an inference; confirm per agency page.
 
 ### D2 Parser — GATED on A1
@@ -178,7 +179,7 @@ All parameters in `configs/*.yaml` validated by pydantic; `experiments/matrix.ya
 ---
 
 ## 8. Security layer — DECIDED out of scope for v1
-Single writer, frozen snapshot of agency-published PDFs, no untrusted ingestion path, so corpus poisoning and injection via retrieved documents have no attack surface to measure. Converted from a Stage 2 "deleted by side effect" to an explicit decision. First security row in v2 = the Idea 3 borrow (§1).
+Single writer, frozen snapshot of government-published PDFs (agency sites and GPO, D-034), no untrusted ingestion path, so corpus poisoning and injection via retrieved documents have no attack surface to measure. Converted from a Stage 2 "deleted by side effect" to an explicit decision. First security row in v2 = the Idea 3 borrow (§1).
 
 ---
 
