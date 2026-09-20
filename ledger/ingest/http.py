@@ -36,6 +36,7 @@ class Fetcher:
         self._robots: dict[str, RobotFileParser | None] = {}
         self._last_call: dict[str, float] = {}
         self.calls = 0
+        self.calls_by_host: dict[str, int] = {}
 
     # ---- robots -----------------------------------------------------------------------------
 
@@ -93,6 +94,8 @@ class Fetcher:
         for attempt in range(self.cfg.max_retries + 1):
             self._throttle(source)
             self.calls += 1
+            host = urlsplit(url).netloc
+            self.calls_by_host[host] = self.calls_by_host.get(host, 0) + 1
             r = self.session.get(url, params=params, timeout=self.cfg.timeout_s, stream=stream)
             if r.status_code not in RETRY_STATUSES or attempt == self.cfg.max_retries:
                 r.raise_for_status()
@@ -112,6 +115,16 @@ class Fetcher:
 
     def get_text(self, url: str, *, source: str, params: dict[str, Any] | None = None) -> str:
         return self.get(url, source=source, params=params).text
+
+    def download(
+        self, url: str, dest, *, source: str, params: dict[str, Any] | None = None
+    ) -> None:
+        """Stream a file to ``dest`` (a Path). Caller decides whether to re-download."""
+        r = self.get(url, source=source, params=params, stream=True)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        with dest.open("wb") as fh:
+            for chunk in r.iter_content(chunk_size=1 << 16):
+                fh.write(chunk)
 
 
 def govinfo_api_key() -> str:

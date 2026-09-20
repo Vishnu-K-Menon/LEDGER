@@ -40,9 +40,11 @@ def cmd_ingest(cfg: Config, args: argparse.Namespace) -> int:
         print(render_report(res))
         return 0
     if args.stage == "fetch":
-        raise NotImplementedError(
-            "`ledger ingest --stage fetch` is built after the draw is confirmed (D-034)"
-        )
+        from ledger.ingest.fetch import render_fetch_report, run_fetch
+
+        res = run_fetch(cfg, repo=Path.cwd())
+        print(render_fetch_report(res))
+        return 0
     raise NotImplementedError(
         "`ledger ingest --stage parse` is built in T3 (D-032; D-001 stop at confirm_after_units)"
     )

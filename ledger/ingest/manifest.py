@@ -95,7 +95,8 @@ def check_manual_dir(manual_dir: Path) -> list[dict[str, str]]:
     csv_path = manual_dir / "sources.csv"
     if not csv_path.exists():
         raise ManualMismatch(f"{csv_path} missing")
-    with csv_path.open("r", encoding="utf-8", newline="") as fh:
+    # utf-8-sig: the owner writes this file from Windows PowerShell, which emits a BOM.
+    with csv_path.open("r", encoding="utf-8-sig", newline="") as fh:
         reader = csv.DictReader(fh)
         if reader.fieldnames != MANUAL_CSV_FIELDS:
             raise ManualMismatch(f"{csv_path}: columns must be {MANUAL_CSV_FIELDS}")

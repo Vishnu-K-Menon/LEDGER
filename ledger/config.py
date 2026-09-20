@@ -45,6 +45,7 @@ class PathsConfig(_Strict):
     results_dir: Path
     reports_dir: Path
     manifest: Path
+    raw_dir: Path
     parsed_dir: Path
     qdrant_path: Path
     chunk_ids_lock: Path  # D24

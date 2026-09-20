@@ -7,6 +7,7 @@ paths:
   results_dir: results
   reports_dir: reports
   manifest: data/manifest.jsonl
+  raw_dir: data/raw                   # fetched PDFs: data/raw/<source>/<unit_id>.pdf (gitignored)
   parsed_dir: data/parsed
   qdrant_path: data/qdrant            # D-002 local file mode; NVMe on the g6e
   chunk_ids_lock: data/chunk_ids.lock # D24: written by `ledger index`, required by `ledger questions`
