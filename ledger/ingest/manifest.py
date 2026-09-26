@@ -54,6 +54,7 @@ class ManifestRow(BaseModel):
 
 
 def write_manifest(path: Path, header: ManifestHeader, rows: list[ManifestRow]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="\n") as fh:
         fh.write(header.model_dump_json() + "\n")
         for r in rows:

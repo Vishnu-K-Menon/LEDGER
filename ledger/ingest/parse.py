@@ -4,7 +4,14 @@ One manifest row = one unit. A row without ``sha256`` is UNFETCHABLE (``BUDGET-2
 D-034) and is skipped, not an error. Each parsed unit writes its Docling document JSON to
 ``paths.parsed_dir`` and its chunks to ``paths.chunks``; chunk ids are
 ``<unit_id>::p<page>::<item>::s<slice>`` (D-032: content and position, never a global counter)
-and ``chunk_type`` is ``table`` iff every doc item in the chunk is a table item (D-033).
+and ``chunk_type`` is ``table`` iff the chunk holds at least one table item and every other doc
+item is a caption or footnote (**D-036**, successor to D-033's literal wording).
+
+**Resumable** (D-032 status 2026-09-25): a unit whose document JSON *and* chunk records are both
+on disk is reused, never re-parsed; every write is atomic (temp file + ``os.replace``), so an
+interrupted unit leaves neither file. Each unit's provenance — library versions, backend,
+``table_mode``, ``do_ocr``, device, wall seconds, chunk count — is written to
+``<unit>.meta.json`` and onto the manifest row, so laptop and g6e parses stay tellable apart.
 
 The D-001 stop fires once every row up to ``ingest.confirm_after_units`` has been parsed or
 skipped; ``--all --confirmed`` continues past it.
@@ -12,12 +19,14 @@ skipped; ``--all --confirmed`` continues past it.
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 import logging
 import os
 import time
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, field
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
@@ -31,7 +40,7 @@ from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTok
 from docling_core.types.doc import TableItem
 
 from ledger.config import Config, load_config
-from ledger.ingest.manifest import ManifestRow, read_manifest
+from ledger.ingest.manifest import ManifestRow, read_manifest, write_manifest
 
 log = logging.getLogger(__name__)
 
@@ -169,6 +178,68 @@ class UnitParse:
     seconds: float
     error: str | None = None
     records: list[dict] = field(default_factory=list)
+    reused: bool = False  # already on disk from an earlier run; never re-parsed
+
+
+# ---- durable per-unit output (resumability) ---------------------------------------------------
+
+
+def unit_paths(cfg: Config, repo: Path, unit_id: str) -> tuple[Path, Path, Path]:
+    """(docling document json, chunk records jsonl, parse provenance json) for one unit."""
+    d = repo / cfg.paths.parsed_dir
+    return d / f"{unit_id}.json", d / f"{unit_id}.chunks.jsonl", d / f"{unit_id}.meta.json"
+
+
+def already_parsed(cfg: Config, repo: Path, unit_id: str) -> bool:
+    """A unit counts as parsed only when BOTH the document and its chunk records are on disk and
+    non-empty. Interrupted units leave neither (writes are atomic), so a resumed run re-does only
+    the unit that was in flight."""
+    doc, chunks, _ = unit_paths(cfg, repo, unit_id)
+    return doc.exists() and doc.stat().st_size > 0 and chunks.exists() and chunks.stat().st_size > 0
+
+
+def _atomic_write(path: Path, text: str) -> None:
+    """Write via a temp file in the same directory then ``os.replace`` (atomic on Windows and
+    POSIX), so an interrupted parse never leaves a half-written document or chunk file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8", newline="\n")
+    os.replace(tmp, path)
+
+
+def parse_provenance(cfg: Config, *, backend: str, seconds: float, n_chunks: int) -> dict:
+    """What produced this parse. Units parsed on different devices or library versions must be
+    tellable apart later (D-032), so this travels with the unit and onto the manifest row."""
+    try:
+        import torch
+
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        torch_v = torch.__version__
+    except Exception:  # noqa: BLE001
+        device, torch_v = "cpu", None
+    return {
+        "docling": version("docling"),
+        "docling_core": version("docling-core"),
+        "docling_ibm_models": version("docling-ibm-models"),
+        "docling_parse": version("docling-parse"),
+        "torch": torch_v,
+        "backend": backend,
+        "table_mode": cfg.parser.table_mode,
+        "do_ocr": cfg.parser.do_ocr,
+        "device": device,
+        "max_tokens": cfg.chunking.max_tokens,
+        "seconds": round(seconds, 2),
+        "n_chunks": n_chunks,
+        "parsed_at": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
+    }
+
+
+def provenance_note(p: dict) -> str:
+    return (
+        f"parse: docling {p['docling']} backend={p['backend']} table_mode={p['table_mode']} "
+        f"do_ocr={p['do_ocr']} device={p['device']} {p['seconds']}s chunks={p['n_chunks']} "
+        f"at {p['parsed_at']}"
+    )
 
 
 def parse_unit(
@@ -180,19 +251,28 @@ def parse_unit(
     chunker=None,
     backend: str | None = None,
 ) -> UnitParse:
-    converter = converter or build_converter(cfg, backend=backend)
+    backend_name = backend or cfg.parser.pdf_backend
+    converter = converter or build_converter(cfg, backend=backend_name)
     chunker = chunker or build_chunker(cfg)
+    doc_path, chunks_path, meta_path = unit_paths(cfg, repo, row.unit_id)
     pdf = repo / cfg.paths.raw_dir / row.source / f"{row.unit_id}.pdf"
     t0 = time.perf_counter()
     try:
         result = converter.convert(pdf)
         doc = result.document
-        parsed_dir = repo / cfg.paths.parsed_dir
-        parsed_dir.mkdir(parents=True, exist_ok=True)
-        doc.save_as_json(parsed_dir / f"{row.unit_id}.json")
         records = chunk_records(row, list(chunker.chunk(dl_doc=doc)), chunker, cfg)
+        seconds = time.perf_counter() - t0
+        prov = parse_provenance(cfg, backend=backend_name, seconds=seconds, n_chunks=len(records))
+        # Document first, then chunks: `already_parsed` requires both, so a crash between the two
+        # leaves the unit un-parsed rather than half-parsed.
+        _atomic_write(doc_path, json.dumps(doc.export_to_dict(), ensure_ascii=False))
+        _atomic_write(
+            chunks_path, "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records)
+        )
+        _atomic_write(meta_path, json.dumps(prov, ensure_ascii=False, indent=1))
     except Exception as exc:  # noqa: BLE001 - a failed unit is data, not a crash
         return UnitParse(row.unit_id, row.pages or 0, 0, 0, 0, time.perf_counter() - t0, str(exc))
+    row.notes = [n for n in row.notes if not n.startswith("parse:")] + [provenance_note(prov)]
     tables = {t for r in records if r["chunk_type"] == "table" for t in r["table_refs"]}
     return UnitParse(
         unit_id=row.unit_id,
@@ -200,8 +280,27 @@ def parse_unit(
         n_chunks=len(records),
         n_table_chunks=sum(1 for r in records if r["chunk_type"] == "table"),
         distinct_tables=len(tables),
-        seconds=time.perf_counter() - t0,
+        seconds=seconds,
         records=records,
+    )
+
+
+def load_parsed_unit(cfg: Config, repo: Path, row: ManifestRow) -> UnitParse:
+    """Rebuild a UnitParse from disk for an already-parsed unit — no Docling call."""
+    _, chunks_path, _ = unit_paths(cfg, repo, row.unit_id)
+    records = [
+        json.loads(ln) for ln in chunks_path.read_text(encoding="utf-8").splitlines() if ln.strip()
+    ]
+    tables = {t for r in records if r["chunk_type"] == "table" for t in r["table_refs"]}
+    return UnitParse(
+        unit_id=row.unit_id,
+        pages=row.pages or 0,
+        n_chunks=len(records),
+        n_table_chunks=sum(1 for r in records if r["chunk_type"] == "table"),
+        distinct_tables=len(tables),
+        seconds=0.0,
+        records=records,
+        reused=True,
     )
 
 
@@ -246,6 +345,7 @@ def _worker_parse(args: tuple[str, str, str, int]) -> dict:
         "seconds": up.seconds,
         "error": up.error,
         "records": up.records,
+        "reused": up.reused,
     }
 
 
@@ -275,6 +375,14 @@ class ParseResult:
     seconds: float
     workers: int
 
+    @property
+    def reused(self) -> list[str]:
+        return [u.unit_id for u in self.parsed if u.reused]
+
+    @property
+    def fresh(self) -> list[UnitParse]:
+        return [u for u in self.parsed if not u.reused]
+
 
 def eligible_rows(rows: list[ManifestRow]) -> tuple[list[ManifestRow], list[str]]:
     """(parseable, skipped-unfetchable). A row without sha256 was never fetched (D-034)."""
@@ -289,14 +397,27 @@ def d001_stop_reached(rows: list[ManifestRow], done: int, skipped: int, cfg: Con
 
 
 def write_chunks(path: Path, parses: list[UnitParse]) -> int:
-    path.parent.mkdir(parents=True, exist_ok=True)
+    """Rebuild the combined chunk file from what is on disk, in manifest order. The per-unit
+    ``<unit>.chunks.jsonl`` files are the durable record; this is a convenience concatenation, so
+    an interrupted run never leaves it inconsistent with the units that completed."""
     n = 0
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        for up in parses:
-            for rec in up.records:
-                fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
-                n += 1
+    lines: list[str] = []
+    for up in parses:
+        for rec in up.records:
+            lines.append(json.dumps(rec, ensure_ascii=False) + "\n")
+            n += 1
+    _atomic_write(path, "".join(lines))
     return n
+
+
+def _progress(line: str) -> None:
+    """One line per unit, timestamped, flushed — the owner reads these from a log file.
+
+    ASCII only: an unattended run logs to a Windows console whose encoding is often cp1252, and
+    a non-encodable character there is a crash or mojibake in the middle of a 2.7-hour parse.
+    """
+    stamp = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{stamp}] {line}".encode("ascii", "replace").decode("ascii"), flush=True)
 
 
 def run_parse(
@@ -308,7 +429,7 @@ def run_parse(
     all_: bool = False,
     workers: int | None = None,
 ) -> ParseResult:
-    _, rows = read_manifest(repo / cfg.paths.manifest)
+    header, rows = read_manifest(repo / cfg.paths.manifest)
     parseable, skipped = eligible_rows(rows)
     if limit:
         parseable = parseable[:limit]
@@ -316,13 +437,53 @@ def run_parse(
         budget = max(cfg.ingest.confirm_after_units - len(skipped), 0)
         parseable = parseable[:budget]
     n_workers = workers if workers is not None else pool_size(cfg)
+
+    todo = [r for r in parseable if not already_parsed(cfg, repo, r.unit_id)]
+    done_already = [r for r in parseable if already_parsed(cfg, repo, r.unit_id)]
+    _progress(
+        f"parse start: {len(parseable)} units in scope | {len(done_already)} already parsed "
+        f"(reused) | {len(todo)} to parse | {len(skipped)} unfetchable skipped | "
+        f"workers={n_workers} | backend={cfg.parser.pdf_backend} "
+        f"table_mode={cfg.parser.table_mode} do_ocr={cfg.parser.do_ocr}"
+    )
+    for r in done_already:
+        _progress(f"REUSED  {r.unit_id} | already parsed, not re-parsed (resumable)")
+
     t0 = time.perf_counter()
-    if n_workers > 1 and len(parseable) > 1:
-        parses = parse_pool(cfg, repo, parseable, config_path=config_path, workers=n_workers)
+    fresh: list[UnitParse] = []
+    if n_workers > 1 and len(todo) > 1:
+        fresh = parse_pool(cfg, repo, todo, config_path=config_path, workers=n_workers)
+        for u in fresh:
+            _progress(
+                f"{'FAILED ' if u.error else 'PARSED '} {u.unit_id} | {u.pages}p | "
+                f"{u.seconds:.1f}s | chunks={u.n_chunks}" + (f" | {u.error}" if u.error else "")
+            )
     else:
-        converter, chunker = build_converter(cfg), build_chunker(cfg)
-        parses = [parse_unit(cfg, repo, r, converter=converter, chunker=chunker) for r in parseable]
+        converter = chunker = None
+        for i, r in enumerate(todo, 1):
+            if converter is None:
+                converter, chunker = build_converter(cfg), build_chunker(cfg)
+            u = parse_unit(cfg, repo, r, converter=converter, chunker=chunker)
+            fresh.append(u)
+            rate = (u.pages / u.seconds) if u.seconds and u.pages else 0.0
+            _progress(
+                f"{'FAILED ' if u.error else 'PARSED '} [{i}/{len(todo)}] {u.unit_id} | "
+                f"{u.pages}p | {u.seconds:.1f}s | {rate:.3f} p/s | chunks={u.n_chunks}"
+                + (f" | {u.error}" if u.error else "")
+            )
     seconds = time.perf_counter() - t0
-    write_chunks(repo / cfg.paths.chunks, parses)
+
+    # parse_unit set the provenance note on each row object it parsed; persist the manifest so
+    # units parsed on different devices or library versions stay tellable apart (D-032 status).
+    write_manifest(repo / cfg.paths.manifest, header, rows)
+
+    parses = [load_parsed_unit(cfg, repo, r) for r in done_already] + fresh
+    order = {r.unit_id: i for i, r in enumerate(parseable)}
+    parses.sort(key=lambda u: order.get(u.unit_id, 0))
+    n_chunks = write_chunks(repo / cfg.paths.chunks, parses)
     stopped = not all_ and d001_stop_reached(rows, len(parses), len(skipped), cfg)
+    _progress(
+        f"parse done: {len(parses)} units on disk ({len(fresh)} parsed now, "
+        f"{len(done_already)} reused) | {n_chunks} chunks | {seconds:.1f}s this run"
+    )
     return ParseResult(parses, skipped, stopped, seconds, n_workers)

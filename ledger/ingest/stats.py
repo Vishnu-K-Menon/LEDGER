@@ -20,6 +20,7 @@ class Counts:
     distinct_tables: int = 0
     mixed_chunks: int = 0
     table_slices_literal: int = 0  # D-033 literal rule: caption item excluded from "table"
+    caption_only_chunks: int = 0  # D-036: chunks whose non-table items are captions/footnotes
     table_ids: set[str] = field(default_factory=set)
 
     @property
@@ -64,6 +65,10 @@ def _add(c: Counts, r: dict) -> None:
     c.chunks += 1
     if r.get("chunk_type_literal", r["chunk_type"]) == "table":
         c.table_slices_literal += 1
+    elif r["chunk_type"] == "table":
+        # table under D-036, prose under the literal reading: the difference is exactly the
+        # chunks whose only non-table items are captions/footnotes.
+        c.caption_only_chunks += 1
     if r["chunk_type"] == "table":
         c.table_slices += 1
         c.table_ids.update(f"{r['unit_id']}::{t}" for t in r["table_refs"])
@@ -110,14 +115,13 @@ def render(
         f"Parsed {total.units} units, {total.pages} pages, {total.chunks} chunks in {seconds:.1f}s "
         f"({workers} worker(s)). Skipped (UNFETCHABLE, D-034): {skipped or 'none'}.",
         "",
-        "**Two shares, pending the owner's ratification (D-033).** Docling attaches a table's "
-        "caption as its own doc item, so a table small enough not to split arrives as "
-        "`[caption, table]`. D-033's literal wording (\"table iff EVERY doc item is a table "
-        'item") calls that chunk prose; D3 says the caption is part of the table. Primary '
-        f"above is the caption-inclusive reading: **{total.table_chunk_share:.3f}**. Under the "
-        f"literal reading: **{total.table_chunk_share_literal:.3f}** "
-        f"({total.table_slices_literal} of {total.chunks} chunks). Nothing is re-chunked either "
-        "way — this is a counting rule, not a chunking change.",
+        "**Counting rule: D-036.** `chunk_type = table` iff the chunk holds ≥ 1 table item and "
+        "every other doc item is a caption or footnote — Docling emits the caption as its own "
+        "item, so D-033's literal wording counted every unsplit table as prose. Primary above is "
+        f"that rule: **{total.table_chunk_share:.3f}**. The literal reading, printed once for "
+        f"comparison: **{total.table_chunk_share_literal:.3f}** ({total.table_slices_literal} of "
+        f"{total.chunks} chunks). The difference is **{total.caption_only_chunks} caption-only "
+        "chunks**. Nothing is re-chunked either way — this is a counting rule (D-032).",
         "",
         "## Per source",
         "",

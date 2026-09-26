@@ -166,6 +166,81 @@ def test_d001_stop_counts_parsed_plus_skipped(cfg, tmp_path: Path):
     assert d001_stop_reached(rows, 19, 1, cfg)  # 19 parsed + 1 skipped = the 20-unit pilot
 
 
+def test_resumable_unit_is_reused_not_reparsed(cfg, chunker, tmp_path: Path, monkeypatch):
+    """A unit whose document JSON and chunk records both exist is skipped and reused; the parse
+    is never re-run (owner decision 2026-09-25, D-032)."""
+    from ledger.ingest import parse as parse_mod
+    from ledger.ingest.manifest import ManifestHeader, write_manifest
+    from ledger.ingest.parse import already_parsed, load_parsed_unit, run_parse, unit_paths
+
+    row = _row("u-res")
+    write_manifest(
+        tmp_path / "data" / "manifest.jsonl",
+        ManifestHeader(selection_seed=1, snapshot_date="x", frames={}, pilot_composition={}),
+        [row],
+    )
+    doc_p, chunks_p, _ = unit_paths(cfg, tmp_path, "u-res")
+    doc_p.parent.mkdir(parents=True, exist_ok=True)
+    doc_p.write_text('{"name": "u-res"}', encoding="utf-8")
+    recs = chunk_records(row, list(chunker.chunk(dl_doc=_doc_with_table("r", 6))), chunker, cfg)
+    chunks_p.write_text("".join(__import__("json").dumps(r) + "\n" for r in recs), encoding="utf-8")
+    assert already_parsed(cfg, tmp_path, "u-res")
+    assert load_parsed_unit(cfg, tmp_path, row).reused
+
+    def _boom(*a, **k):  # any parse attempt is a failure of the resume rule
+        raise AssertionError("parse_unit called for an already-parsed unit")
+
+    monkeypatch.setattr(parse_mod, "parse_unit", _boom)
+    monkeypatch.setattr(parse_mod, "build_converter", _boom)
+    res = run_parse(cfg, tmp_path, config_path=str(base_cfg_path()), workers=1)
+    assert res.reused == ["u-res"] and not res.fresh
+    assert res.parsed[0].n_chunks == len(recs)
+
+
+def base_cfg_path() -> Path:
+    return Path(__file__).resolve().parent.parent / "configs" / "base.yaml"
+
+
+def test_interrupted_unit_leaves_nothing_behind(cfg, tmp_path: Path, monkeypatch):
+    """Atomic writes: a crash mid-write leaves no document, no chunk file and no .tmp, so the
+    unit is not `already_parsed` and a resumed run redoes exactly it."""
+    from ledger.ingest import parse as parse_mod
+    from ledger.ingest.parse import already_parsed, parse_unit, unit_paths
+
+    row = _row("u-crash")
+    doc_p, chunks_p, meta_p = unit_paths(cfg, tmp_path, "u-crash")
+
+    class _Boom:
+        def convert(self, *a, **k):
+            raise RuntimeError("interrupted mid-parse")
+
+    up = parse_unit(cfg, tmp_path, row, converter=_Boom(), chunker=object())
+    assert up.error and "interrupted" in up.error
+    assert not doc_p.exists() and not chunks_p.exists() and not meta_p.exists()
+    assert not already_parsed(cfg, tmp_path, "u-crash")
+
+    # and a write that dies after the document but before the chunks is still not "parsed"
+    doc_p.parent.mkdir(parents=True, exist_ok=True)
+    parse_mod._atomic_write(doc_p, "{}")
+    assert doc_p.exists() and not already_parsed(cfg, tmp_path, "u-crash")
+    assert not list(doc_p.parent.glob("*.tmp"))
+
+
+def test_provenance_recorded_on_unit_and_row(cfg):
+    """D-032 status: docling version, backend, table_mode, do_ocr, device, seconds, chunks."""
+    from ledger.ingest.parse import parse_provenance, provenance_note
+
+    p = parse_provenance(cfg, backend="pypdfium2", seconds=1.5, n_chunks=3)
+    assert p["docling"] and p["docling_core"] and p["docling_parse"] and p["docling_ibm_models"]
+    assert p["backend"] == "pypdfium2"
+    assert p["table_mode"] == cfg.parser.table_mode
+    assert p["do_ocr"] is False
+    assert p["device"] in {"cpu", "cuda"}
+    assert p["seconds"] == 1.5 and p["n_chunks"] == 3 and p["parsed_at"]
+    note = provenance_note(p)
+    assert note.startswith("parse: docling ") and "device=" in note and "chunks=3" in note
+
+
 def test_do_ocr_validator_refuses_true(base_config_path: Path):
     import yaml
     from pydantic import ValidationError
