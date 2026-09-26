@@ -50,6 +50,15 @@ parser:                               # D2, gated on A1
   audit_tables_n: 10                  # A1
   audit_min_cells: 150
   audit_cell_accuracy_min: 0.95
+  audit_require_units:                # A1 coverage, owner's instruction 2026-09-26: the sheet must
+    govinfo-ERP-2026-table4: 1        # cross-check both ERP granules against download.xlsLink,
+    govinfo-ERP-2026-table22: 1       # two BUDGET tables whose parse logged dropped cells (DOD is
+    govinfo-BUDGET-2026-DOD: 2        # the only unit that did), one CROSSCUT, one STEO, one CBO.
+    govinfo-BUDGET-2026-CROSSCUT: 1   # Keys are unit-id patterns (fnmatch); values = tables wanted.
+    eia-pdf-steo_full: 1              # Remaining slots fill by cell count. Ids here, not in code.
+    cbo-*: 1
+  audit_log_glob: logs/parse_*.log    # where the dropped-cell warnings are read from; PowerShell
+                                      # Tee-Object writes these UTF-16, so the reader sniffs the BOM
 
 chunking:                             # D3 as revised by D-033: HybridChunker at ingest, tokenizer only
   max_tokens: 512                     # the main lever on A6 difficulty under row-splitting (D-033); v1 holds 512

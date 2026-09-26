@@ -35,9 +35,6 @@ def test_help_exits_zero(argv, capsys):
 @pytest.mark.parametrize(
     "argv",
     [
-        ["ingest", "--stage", "parse", "--limit", "20"],
-        ["ingest", "--stage", "parse", "--all", "--confirmed"],
-        ["audit-tables", "--n", "10"],
         ["index"],
         ["loadtest"],
         ["baseline", "--questions", "data/questions_draft.jsonl"],
@@ -54,6 +51,20 @@ def test_help_exits_zero(argv, capsys):
 def test_bodies_not_implemented(argv):
     with pytest.raises(NotImplementedError):
         main(argv)
+
+
+@pytest.mark.parametrize(
+    "argv,handler",
+    [
+        (["ingest", "--stage", "parse", "--limit", "20"], "cmd_ingest"),
+        (["audit-tables", "--n", "10"], "cmd_audit_tables"),
+    ],
+)
+def test_built_commands_are_wired_without_running_them(argv, handler):
+    """T3 built these. Asserting ``NotImplementedError`` here used to make pytest *execute* a real
+    parse and a real audit-tables run - disk writes and GovInfo calls from the test suite."""
+    args = build_parser().parse_args(argv)
+    assert args.func.__name__ == handler
 
 
 def test_matrix_seed_flag_guard():

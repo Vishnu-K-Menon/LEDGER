@@ -85,6 +85,8 @@ class ParserConfig(_Strict):
     audit_tables_n: int = Field(gt=0)
     audit_min_cells: int = Field(gt=0)
     audit_cell_accuracy_min: float = Field(ge=0.0, le=1.0)
+    audit_require_units: dict[str, int] = Field(default_factory=dict)
+    audit_log_glob: str = "logs/parse_*.log"
 
     @field_validator("do_ocr")
     @classmethod

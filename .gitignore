@@ -11,3 +11,4 @@ data/*
 !data/manifest.jsonl
 results/
 reports/
+logs/

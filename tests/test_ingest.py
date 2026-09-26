@@ -138,11 +138,6 @@ def test_all_only_on_parse_stage():
     assert exc.value.code == 2
 
 
-def test_parse_not_built_yet():
-    with pytest.raises(NotImplementedError):
-        main(["ingest", "--stage", "parse", "--limit", "20"])
-
-
 # ---- D-001 stop counts units --------------------------------------------------------------------
 
 

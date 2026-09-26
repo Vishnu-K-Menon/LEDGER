@@ -75,10 +75,10 @@ def cmd_ingest(cfg: Config, args: argparse.Namespace) -> int:
     out.write_text(report + "\n", encoding="utf-8")
     print(report)
     pages = sum(pages_by_unit.values())
-    rate = pages / res.seconds if res.seconds else 0.0
+    fresh_pages = sum(u.pages for u in res.fresh)  # the rate covers THIS run, not reused units
     print(
         f"\nparsed {len(res.parsed) - len(failed)}/{len(res.parsed)} units · {pages} pages · "
-        f"{res.seconds:.1f}s · {rate:.2f} pages/s "
+        f"{res.seconds:.1f}s · {format_rate(fresh_pages, res.seconds)} "
         f"({res.workers} worker(s)) · report {out.relative_to(repo).as_posix()}"
     )
     for u in failed:
@@ -242,7 +242,33 @@ def _validate(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None
         parser.error("seeds other than 1 require --confirm-seed-1-inspected (D-009)")
 
 
+def tolerant_stdio() -> None:
+    """Never let a report character abort a command.
+
+    The A9 report carries ``>=`` as U+2265 and the tables use U+00B7; on a console whose encoding
+    cannot represent them ``print`` raises ``UnicodeEncodeError`` and the run dies after the work
+    is done (the overnight T3 parse ended exactly that way). ``errors="replace"`` substitutes a
+    placeholder instead of raising. The encoding is left alone, and the report *files* are written
+    with an explicit ``encoding="utf-8"``, so nothing on disk is affected.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(errors="replace")
+            except (ValueError, OSError):  # detached or non-reconfigurable stream
+                pass
+
+
+def format_rate(pages: int, seconds: float) -> str:
+    """``pages/s``, or ``n/a`` when nothing was parsed - a resumed run divides by ~0 seconds."""
+    if pages <= 0 or seconds <= 0:
+        return "n/a"
+    return f"{pages / seconds:.2f} pages/s"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
+    tolerant_stdio()
     parser = build_parser()
     args = parser.parse_args(argv)
     _validate(parser, args)
