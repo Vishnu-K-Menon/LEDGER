@@ -342,16 +342,15 @@ def analyse(unit: str, page: int, ti: int, source: str, nums) -> tuple[list[str]
         "intra_max_em": max(intra) if intra else None,
         "px_per_line": px_per_line,
     }
-    overlay(unit, page, ti, cap, bands, cell_tokens, band_col)
+    overlay(unit, page, ti, cap, bands, cell_tokens, band_col, source)
     return lines_md, stats
 
 
-def overlay(unit, page, ti, cap, bands, cell_tokens, band_col) -> None:
+def overlay(unit, page, ti, cap, bands, cell_tokens, band_col, src: str) -> None:
     """Page crop at the table frame's scale: predicted boxes (blue), merged cells (red), bands."""
     import pypdfium2 as pdfium
     from PIL import ImageDraw
 
-    src = next(s for u, p, t, s in TABLES if u == unit)
     pdf = pdfium.PdfDocument(str(REPO / "data" / "raw" / src / f"{unit}.pdf"))
     img = pdf[page - 1].render(scale=SCALE).to_pil().convert("RGB")
     draw = ImageDraw.Draw(img, "RGBA")
@@ -367,7 +366,27 @@ def overlay(unit, page, ti, cap, bands, cell_tokens, band_col) -> None:
     img.crop([int(v) for v in t]).save(OUT / f"grid_vs_boxes_{unit}_p{page}.png")
 
 
+def parse_tables(specs: list[str] | None) -> tuple:
+    """``unit:page:table_index:source`` per table; default = item 4's sec3 and sec4."""
+    if not specs:
+        return TABLES
+    out = []
+    for spec in specs:
+        unit, page, ti, source = spec.split(":")
+        out.append((unit, int(page), int(ti), source))
+    return tuple(out)
+
+
 def main() -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--tables", nargs="*", help="unit:page:table_index:source (item-3 capture)")
+    ap.add_argument(
+        "--out-name", default="grid_vs_boxes", help="report basename in reports/a1_diag"
+    )
+    args = ap.parse_args()
+    tables = parse_tables(args.tables)
     nums = owner_nums((REPO / "reports" / "a1_scripts" / "pdf_recall.py").read_text("utf-8"))
     OUT.mkdir(parents=True, exist_ok=True)
     md = [
@@ -380,12 +399,12 @@ def main() -> int:
         "",
     ]
     all_stats = []
-    for unit, page, ti, source in TABLES:
+    for unit, page, ti, source in tables:
         lines, stats = analyse(unit, page, ti, source, nums)
         md += lines
         all_stats.append(stats)
-    (OUT / "grid_vs_boxes.md").write_text("\n".join(md) + "\n", encoding="utf-8")
-    (OUT / "grid_vs_boxes.json").write_text(json.dumps(all_stats, indent=1), encoding="utf-8")
+    (OUT / f"{args.out_name}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    (OUT / f"{args.out_name}.json").write_text(json.dumps(all_stats, indent=1), encoding="utf-8")
     print("\n".join(md))
     return 0
 
