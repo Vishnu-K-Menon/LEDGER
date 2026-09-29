@@ -98,7 +98,8 @@ def summarise(work: Path, parsed_dir: str, nums) -> str:
         cells = doc["tables"][ti]["data"]["table_cells"]
         body = [c for c in cells if is_body(c)]
         merged_body = sum(1 for c in body if len(nums(c["text"])) > 1)
-        ceiling = len(body) - 2 * merged_body
+        # an upper bound; past 50 % merged it goes negative, which bounds nothing - clamp at 0
+        ceiling = max(0, len(body) - 2 * merged_body)
         body_tot += len(body)
         num_tot += ceiling
         lines.append(
