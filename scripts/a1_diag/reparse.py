@@ -92,6 +92,7 @@ class Call:
 
 STATE = threading.local()
 CALLS: list[Call] = []
+INSTRUMENTATION: dict = {"status": "not installed", "errors": []}
 CURRENT_PAGE = {"page": 0}
 
 
@@ -152,14 +153,20 @@ def install_instrumentation() -> None:
     orig_match = tcm.CellMatcher.match_cells
 
     def multi_table_predict(self, iocr_page, table_bboxes, do_matching=True, *a, **kw):
+        # every capture step is best-effort: another docling version may lay TableFormer out
+        # differently, and a failed capture must never fail the conversion it observes
+        try:
+            max_steps = int(self._config["predict"]["max_steps"])
+        except Exception:  # noqa: BLE001
+            max_steps = 0
         calls = []
         for box in table_bboxes:
             call = Call(
                 page=CURRENT_PAGE["page"],
                 tbl_box_page_img=[float(v) for v in box],  # snapshot: the library rescales in place
-                page_img_size=(float(iocr_page["width"]), float(iocr_page["height"])),
+                page_img_size=(float(iocr_page.get("width", 0)), float(iocr_page.get("height", 0))),
                 tokens=copy.deepcopy(iocr_page.get("tokens", [])),
-                max_steps=int(self._config["predict"]["max_steps"]),
+                max_steps=max_steps,
             )
             calls.append(call)
         STATE.pending = list(calls)  # predict() pops from this copy; `calls` keeps all
@@ -183,15 +190,18 @@ def install_instrumentation() -> None:
             )
         finally:
             STATE.call = None
-        pred = details.get("prediction", {})
-        tag_seq = pred.get("tag_seq") or []
-        rs_seq = pred.get("rs_seq") or []
-        end_id = self._init_data["word_map"]["word_map_tag"]["<end>"]
-        call.tag_seq_len = len(tag_seq)
-        call.rs_seq_len = len(rs_seq)
-        call.cap_hit = bool(tag_seq) and tag_seq[-1] != end_id
-        call.otsl_rows, call.otsl_cols = otsl_shape(rs_seq)
-        call.post = _boxes(details)
+        try:
+            pred = details.get("prediction", {})
+            tag_seq = pred.get("tag_seq") or []
+            rs_seq = pred.get("rs_seq") or []
+            end_id = self._init_data["word_map"]["word_map_tag"]["<end>"]
+            call.tag_seq_len = len(tag_seq)
+            call.rs_seq_len = len(rs_seq)
+            call.cap_hit = bool(tag_seq) and tag_seq[-1] != end_id
+            call.otsl_rows, call.otsl_cols = otsl_shape(rs_seq)
+            call.post = _boxes(details)
+        except Exception as exc:  # noqa: BLE001
+            INSTRUMENTATION["errors"].append(f"predict capture: {exc!r}"[:160])
         return tf_output, details
 
     def match_cells(self, iocr_page, table_bbox, prediction):
@@ -293,8 +303,13 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--config", default="baseline", choices=("baseline", "fast", "wsw", "v2"))
     ap.add_argument("--wsw-factor", type=float, default=None)
+    ap.add_argument(
+        "--label", default=None, help="output name, e.g. docling-2.117.0 (default: the config)"
+    )
     args = ap.parse_args()
-    label = args.config if args.config != "wsw" else f"wsw{args.wsw_factor:g}"
+    label = args.label or (args.config if args.config != "wsw" else f"wsw{args.wsw_factor:g}")
+    # only the corpus configuration under the corpus's own docling must reproduce data/parsed
+    is_reference = label == "baseline"
 
     cfg = load_config()
     out_dir = REPO / "data" / "parsed_a1diag" / label
@@ -318,7 +333,11 @@ def main() -> int:
         if page not in pages[unit]:
             pages[unit].append(page)
 
-    install_instrumentation()
+    try:
+        install_instrumentation()
+        INSTRUMENTATION["status"] = "installed"
+    except Exception as exc:  # noqa: BLE001 - another docling version: report, do not fail
+        INSTRUMENTATION["status"] = f"unavailable ({exc!r})"[:200]
     converter, overrides = make_converter(cfg, args.config, args.wsw_factor)
 
     rows = []
@@ -406,7 +425,14 @@ def main() -> int:
         f"{ver(docling_ibm_models)} · backend `{cfg.parser.pdf_backend}` · table_mode "
         f"`{overrides.get('table_mode', cfg.parser.table_mode)}` · "
         f"overrides {overrides or 'none'} · "
-        f"{sum(len(p) for p in pages.values())} pages in {wall:.0f} s.",
+        f"{sum(len(p) for p in pages.values())} pages in {wall:.0f} s. "
+        f"Instrumentation: {INSTRUMENTATION['status']}"
+        + (
+            f"; capture errors: {INSTRUMENTATION['errors'][:3]}"
+            if INSTRUMENTATION["errors"]
+            else ""
+        )
+        + ".",
         "",
         "Cap hit = the decoder stopped at `max_steps` without emitting `<end>` "
         "(`tablemodel04_rs.py`), so `_get_html_tags` also stripped a real final tag. "
@@ -443,14 +469,12 @@ def main() -> int:
         "",
         f"**Control (A1 tables): {n_ok} of {len(controls)} identical to `data/parsed/`.**"
         + (
-            ""
-            if args.config != "baseline"
-            else (" PASS." if n_ok == len(controls) else " **FAIL - STOP.**")
+            "" if not is_reference else (" PASS." if n_ok == len(controls) else " **FAIL - STOP.**")
         ),
     ]
     report_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))
-    return 0 if (args.config != "baseline" or n_ok == len(controls)) else 1
+    return 0 if (not is_reference or n_ok == len(controls)) else 1
 
 
 if __name__ == "__main__":
