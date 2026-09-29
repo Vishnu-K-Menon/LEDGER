@@ -1,0 +1,23 @@
+{
+ "tag": "ERP-2026 granule xls, held since 2026-09-26 (reports/a1_digits)",
+ "files": [
+  {
+   "url": "held (reports/a1_digits)",
+   "path": "reports/a1_digits/govinfo-ERP-2026-table4.xls",
+   "sha256": "b5958248b1905f0a00f1ec325dc25b6754ecf16e53b86bcf1b5524873206298e",
+   "type": "BIFF/OLE (xls)",
+   "pdf_unit": "govinfo-ERP-2026-table4",
+   "pdf_date_issued": "2026-04-01",
+   "pdf_creation_date": "D:20260408132008-04'00'"
+  },
+  {
+   "url": "held (reports/a1_digits)",
+   "path": "reports/a1_digits/govinfo-ERP-2026-table22.xls",
+   "sha256": "8f5d60342abba02ed3457115cafc50e24daf8f47887282075f15de9dad2a9b84",
+   "type": "BIFF/OLE (xls)",
+   "pdf_unit": "govinfo-ERP-2026-table22",
+   "pdf_date_issued": "2026-04-01",
+   "pdf_creation_date": "D:20260408134211-04'00'"
+  }
+ ]
+}

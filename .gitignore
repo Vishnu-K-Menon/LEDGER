@@ -9,6 +9,12 @@ data/*
 !data/frames/
 !data/sources.yaml
 !data/manifest.jsonl
+# The A1 cell oracle (D-038): publisher files stay local; each snapshot's hash manifest is tracked,
+# because reproducibility rests on the hashes, not on committing EIA's and GovInfo's files.
+!data/oracle/
+data/oracle/**
+!data/oracle/**/
+!data/oracle/**/sources.json
 results/
 reports/
 logs/

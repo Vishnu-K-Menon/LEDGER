@@ -1,0 +1,993 @@
+{
+ "tag": "STEO 2026-09, release 2026-09-09",
+ "endpoint": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+ "note": "undocumented, unversioned JSON endpoint; this snapshot is the mitigation",
+ "files": [
+  {
+   "table": "1",
+   "view": 3,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 3,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v3_Q.json",
+   "sha256": "d69c37e6269cc741edea55fd7e0ba738b630cb78cf968d16dd331c93f92012a0",
+   "bytes": 72129,
+   "fetched_utc": "2026-09-29T23:54:44+00:00",
+   "rows": 27,
+   "series": 22,
+   "periods": 152
+  },
+  {
+   "table": "1",
+   "view": 3,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 3,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v3_A.json",
+   "sha256": "0ae34a5891dc4b7da78a814942e30688687d0d4400718432da844442004e57e3",
+   "bytes": 21229,
+   "fetched_utc": "2026-09-29T23:54:46+00:00",
+   "rows": 27,
+   "series": 22,
+   "periods": 38
+  },
+  {
+   "table": "1",
+   "view": 3,
+   "f": "M",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 3,
+    "f": "M",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v3_M.json",
+   "sha256": "aa05badef51383ada687337aa9944b6d9069e658ce1fe4f1422a0a727044b66d",
+   "bytes": 188340,
+   "fetched_utc": "2026-09-29T23:54:48+00:00",
+   "rows": 27,
+   "series": 22,
+   "periods": 456
+  },
+  {
+   "table": "2",
+   "view": 8,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 8,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v8_Q.json",
+   "sha256": "d0d6bd08ec25d8a1d022c6719cb08580c9e26f949f7c1e869b7d56ea32ac7466",
+   "bytes": 98751,
+   "fetched_utc": "2026-09-29T23:54:50+00:00",
+   "rows": 36,
+   "series": 27,
+   "periods": 216
+  },
+  {
+   "table": "2",
+   "view": 8,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 8,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v8_A.json",
+   "sha256": "ef562a0f6db4f552e4b734f27d28a2faafc68adaa504511ac0fc0e6ae913113e",
+   "bytes": 28879,
+   "fetched_utc": "2026-09-29T23:54:52+00:00",
+   "rows": 36,
+   "series": 27,
+   "periods": 68
+  },
+  {
+   "table": "2",
+   "view": 8,
+   "f": "M",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 8,
+    "f": "M",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v8_M.json",
+   "sha256": "2c58e5a97dff97d792b7ad6a72d421727b37fad1176a449dba0929e52a4f476d",
+   "bytes": 207856,
+   "fetched_utc": "2026-09-29T23:54:54+00:00",
+   "rows": 36,
+   "series": 27,
+   "periods": 648
+  },
+  {
+   "table": "3a",
+   "view": 6,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 6,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v6_Q.json",
+   "sha256": "328f9e43fac675f82383723ab124d9c91605c2d02ac23ffb7e34f83e110e941c",
+   "bytes": 105339,
+   "fetched_utc": "2026-09-29T23:54:56+00:00",
+   "rows": 39,
+   "series": 31,
+   "periods": 152
+  },
+  {
+   "table": "3a",
+   "view": 6,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 6,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v6_A.json",
+   "sha256": "a2210ee52e6f80a7e82196b56f5829981e8c0c2c731251afd6fe7c3971532949",
+   "bytes": 30163,
+   "fetched_utc": "2026-09-29T23:54:58+00:00",
+   "rows": 39,
+   "series": 31,
+   "periods": 38
+  },
+  {
+   "table": "3b",
+   "view": 29,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 29,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v29_Q.json",
+   "sha256": "dfa5b907a1b556b271b544a23f8f18aed44fb73174c77428175ac4b809967f1b",
+   "bytes": 90732,
+   "fetched_utc": "2026-09-29T23:55:00+00:00",
+   "rows": 30,
+   "series": 28,
+   "periods": 140
+  },
+  {
+   "table": "3b",
+   "view": 29,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 29,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v29_A.json",
+   "sha256": "938f2c18c9a3a75febcdf7c867321fb02427786d1bdb622d6737faa83dd2edf4",
+   "bytes": 26068,
+   "fetched_utc": "2026-09-29T23:55:02+00:00",
+   "rows": 30,
+   "series": 28,
+   "periods": 35
+  },
+  {
+   "table": "3c",
+   "view": 7,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 7,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v7_Q.json",
+   "sha256": "f43d8be4ec0121e2962ce122add9e2cda70db9450e72103ef530b04aaf0a4dd3",
+   "bytes": 93312,
+   "fetched_utc": "2026-09-29T23:55:05+00:00",
+   "rows": 32,
+   "series": 29,
+   "periods": 140
+  },
+  {
+   "table": "3c",
+   "view": 7,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 7,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v7_A.json",
+   "sha256": "8964ea7e4859b34249ea37d672f203e71e924020f6fd4ad95bbb1e3bcf403b3d",
+   "bytes": 27105,
+   "fetched_utc": "2026-09-29T23:55:06+00:00",
+   "rows": 32,
+   "series": 29,
+   "periods": 35
+  },
+  {
+   "table": "3d",
+   "view": 30,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 30,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v30_Q.json",
+   "sha256": "a34e1a9d5f349565a399cd43c2065267b9195705542486b2d9c175d421b593c4",
+   "bytes": 109371,
+   "fetched_utc": "2026-09-29T23:55:08+00:00",
+   "rows": 45,
+   "series": 36,
+   "periods": 152
+  },
+  {
+   "table": "3d",
+   "view": 30,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 30,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v30_A.json",
+   "sha256": "db24c8c189a62d27b6cef7931c760e98547a5161d1cf6f2390511d63d530d84e",
+   "bytes": 32685,
+   "fetched_utc": "2026-09-29T23:55:10+00:00",
+   "rows": 45,
+   "series": 36,
+   "periods": 38
+  },
+  {
+   "table": "3e",
+   "view": 31,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 31,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v31_Q.json",
+   "sha256": "b64bc998d4037820a648401fba49fa9db45f9f6971d1a7d83fb59943d700c8d3",
+   "bytes": 83505,
+   "fetched_utc": "2026-09-29T23:55:12+00:00",
+   "rows": 33,
+   "series": 27,
+   "periods": 152
+  },
+  {
+   "table": "3e",
+   "view": 31,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 31,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v31_A.json",
+   "sha256": "8d1467e9b6df69e01fb4af7453eb19ca106351b021edbc717449f69f6e0bbdf7",
+   "bytes": 26839,
+   "fetched_utc": "2026-09-29T23:55:14+00:00",
+   "rows": 33,
+   "series": 27,
+   "periods": 38
+  },
+  {
+   "table": "4a",
+   "view": 9,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 9,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v9_Q.json",
+   "sha256": "d51c628a0ce55214280467aecc534e36c082f2bd1127c634b9dc65525db8c8dd",
+   "bytes": 177485,
+   "fetched_utc": "2026-09-29T23:55:16+00:00",
+   "rows": 63,
+   "series": 55,
+   "periods": 152
+  },
+  {
+   "table": "4a",
+   "view": 9,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 9,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v9_A.json",
+   "sha256": "6bc3831a08b5b86e793fe71ddb6daf948aa9a9cc740590c23417cf766e3dc6c7",
+   "bytes": 51687,
+   "fetched_utc": "2026-09-29T23:55:18+00:00",
+   "rows": 63,
+   "series": 55,
+   "periods": 38
+  },
+  {
+   "table": "4b",
+   "view": 27,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 27,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v27_Q.json",
+   "sha256": "e46dd68f3c533f503090983524af9d84ca61a7bba4c024eda68beaed7e15c1e7",
+   "bytes": 154834,
+   "fetched_utc": "2026-09-29T23:55:20+00:00",
+   "rows": 55,
+   "series": 45,
+   "periods": 152
+  },
+  {
+   "table": "4b",
+   "view": 27,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 27,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v27_A.json",
+   "sha256": "f45ab21aec6afe89f30288fac716740e3a7ad326d684b02255f47251adaba077",
+   "bytes": 45200,
+   "fetched_utc": "2026-09-29T23:55:22+00:00",
+   "rows": 55,
+   "series": 45,
+   "periods": 38
+  },
+  {
+   "table": "4c",
+   "view": 10,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 10,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v10_Q.json",
+   "sha256": "a3e48533aecaa6e40716b5ed03162d56383608e4a828a5ba9b2ec75c27228977",
+   "bytes": 47412,
+   "fetched_utc": "2026-09-29T23:55:24+00:00",
+   "rows": 19,
+   "series": 14,
+   "periods": 208
+  },
+  {
+   "table": "4c",
+   "view": 10,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 10,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v10_A.json",
+   "sha256": "262672ddbcf085f7914cdb677bb5bc2d06fc2130dfde51d3598ae92157aacb79",
+   "bytes": 13819,
+   "fetched_utc": "2026-09-29T23:55:26+00:00",
+   "rows": 19,
+   "series": 14,
+   "periods": 52
+  },
+  {
+   "table": "4d",
+   "view": 11,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 11,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v11_Q.json",
+   "sha256": "72d5aa5d4aef8742d5774d5b22864ae9545a4bcaf9f4caa1731f1ddc0beec111",
+   "bytes": 108306,
+   "fetched_utc": "2026-09-29T23:55:28+00:00",
+   "rows": 49,
+   "series": 46,
+   "periods": 152
+  },
+  {
+   "table": "4d",
+   "view": 11,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 11,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v11_A.json",
+   "sha256": "fdac63ecdee784a4af01fe840d0a14c9a208c60def5846cf522824ffb6cd3ddd",
+   "bytes": 33549,
+   "fetched_utc": "2026-09-29T23:55:30+00:00",
+   "rows": 49,
+   "series": 46,
+   "periods": 38
+  },
+  {
+   "table": "5a",
+   "view": 15,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 15,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v15_Q.json",
+   "sha256": "6cf7d2b3e0611a1047807f72740ba1b0c795a8471aa99a2e48fd36e1cfa5ecd4",
+   "bytes": 105215,
+   "fetched_utc": "2026-09-29T23:55:32+00:00",
+   "rows": 42,
+   "series": 36,
+   "periods": 152
+  },
+  {
+   "table": "5a",
+   "view": 15,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 15,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v15_A.json",
+   "sha256": "bb1c03d3a856fecfb7dda8e658f3832357af47cd05895fad754e15e22bf11410",
+   "bytes": 31534,
+   "fetched_utc": "2026-09-29T23:55:34+00:00",
+   "rows": 42,
+   "series": 36,
+   "periods": 38
+  },
+  {
+   "table": "5b",
+   "view": 16,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 16,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v16_Q.json",
+   "sha256": "dddd3bc5161b3b8ae68b5924bf7d4a8bad8b262c3ec938ae787b1b3fc522f388",
+   "bytes": 103923,
+   "fetched_utc": "2026-09-29T23:55:36+00:00",
+   "rows": 38,
+   "series": 31,
+   "periods": 188
+  },
+  {
+   "table": "5b",
+   "view": 16,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 16,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v16_A.json",
+   "sha256": "8e387eeddfa2eb56c5f189ea4d7b735a73fe9fb50a2796f1fc36708b6a0d8afe",
+   "bytes": 30833,
+   "fetched_utc": "2026-09-29T23:55:38+00:00",
+   "rows": 38,
+   "series": 31,
+   "periods": 61
+  },
+  {
+   "table": "6",
+   "view": 18,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 18,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v18_Q.json",
+   "sha256": "729be9e38c41dff3acf2d0336f8f1440857a20f1168a691f26b3b6a02770c6db",
+   "bytes": 94356,
+   "fetched_utc": "2026-09-29T23:55:40+00:00",
+   "rows": 34,
+   "series": 31,
+   "periods": 152
+  },
+  {
+   "table": "6",
+   "view": 18,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 18,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v18_A.json",
+   "sha256": "e2b557b3f17bcfebea94e4274f5eadb73d2422da4d8763e6609c09622ebccdfc",
+   "bytes": 27481,
+   "fetched_utc": "2026-09-29T23:55:42+00:00",
+   "rows": 34,
+   "series": 31,
+   "periods": 38
+  },
+  {
+   "table": "7a",
+   "view": 19,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 19,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v19_Q.json",
+   "sha256": "fc96f9392f9399bb74b4988f673091b68d8de75753fabf854103abd073459511",
+   "bytes": 120060,
+   "fetched_utc": "2026-09-29T23:55:44+00:00",
+   "rows": 47,
+   "series": 40,
+   "periods": 206
+  },
+  {
+   "table": "7a",
+   "view": 19,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 19,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v19_A.json",
+   "sha256": "dfbd662c59ffe5daf62a5243f109b24020195d9bdfd3d8fbe0bdfb78a3600ced",
+   "bytes": 36124,
+   "fetched_utc": "2026-09-29T23:55:47+00:00",
+   "rows": 47,
+   "series": 40,
+   "periods": 68
+  },
+  {
+   "table": "7b",
+   "view": 20,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 20,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v20_Q.json",
+   "sha256": "a36103e48e6fcd675edfc2cb7fd78e0a02947f21e378e31610e2f311e59873fa",
+   "bytes": 154038,
+   "fetched_utc": "2026-09-29T23:55:48+00:00",
+   "rows": 44,
+   "series": 44,
+   "periods": 152
+  },
+  {
+   "table": "7b",
+   "view": 20,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 20,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v20_A.json",
+   "sha256": "799d831e0ca909a5669aeea762effabb18513aa60b5aad5bdeb00793ddf6336f",
+   "bytes": 43923,
+   "fetched_utc": "2026-09-29T23:55:50+00:00",
+   "rows": 44,
+   "series": 44,
+   "periods": 38
+  },
+  {
+   "table": "7c",
+   "view": 21,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 21,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v21_Q.json",
+   "sha256": "ff224ddc7ab1ed9f568caa4bba42697d95274f785391c0911c40d47447485c13",
+   "bytes": 144976,
+   "fetched_utc": "2026-09-29T23:55:52+00:00",
+   "rows": 44,
+   "series": 40,
+   "periods": 152
+  },
+  {
+   "table": "7c",
+   "view": 21,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 21,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v21_A.json",
+   "sha256": "c2916984f67b7a85988e668462c692eb5895e2f48602761525a9feaa05f3cab1",
+   "bytes": 41221,
+   "fetched_utc": "2026-09-29T23:55:54+00:00",
+   "rows": 44,
+   "series": 40,
+   "periods": 38
+  },
+  {
+   "table": "7d",
+   "view": 22,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 22,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v22_Q.json",
+   "sha256": "9258d6ea991b4db4a177610cad292f4877cb055ed7778edf5fcad4fd366a7201",
+   "bytes": 223078,
+   "fetched_utc": "2026-09-29T23:55:56+00:00",
+   "rows": 126,
+   "series": 114,
+   "periods": 152
+  },
+  {
+   "table": "7d",
+   "view": 22,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 22,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v22_A.json",
+   "sha256": "f72fe14f6ceea59f804d92dd2647355e3bfa6db07e18645a4991eea29f8bbd95",
+   "bytes": 75663,
+   "fetched_utc": "2026-09-29T23:55:58+00:00",
+   "rows": 126,
+   "series": 114,
+   "periods": 38
+  },
+  {
+   "table": "7e",
+   "view": 23,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 23,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v23_Q.json",
+   "sha256": "e6bfff6c80db228444ca0530d30421908966ec9ac5333b61491435d725ddee53",
+   "bytes": 44008,
+   "fetched_utc": "2026-09-29T23:56:00+00:00",
+   "rows": 38,
+   "series": 31,
+   "periods": 72
+  },
+  {
+   "table": "7e",
+   "view": 23,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 23,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v23_A.json",
+   "sha256": "2a8aecf3b33e7eee94d2928c6f9d99be4a00dd1f6daa65ece140b81132e418c0",
+   "bytes": 16325,
+   "fetched_utc": "2026-09-29T23:56:02+00:00",
+   "rows": 38,
+   "series": 31,
+   "periods": 18
+  },
+  {
+   "table": "8a",
+   "view": 24,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 24,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v24_Q.json",
+   "sha256": "befccccc214282d72e9365bab5b93b541c506d4d13a5f40806ad72d9980d9701",
+   "bytes": 122472,
+   "fetched_utc": "2026-09-29T23:56:05+00:00",
+   "rows": 36,
+   "series": 36,
+   "periods": 152
+  },
+  {
+   "table": "8a",
+   "view": 24,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 24,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v24_A.json",
+   "sha256": "1605ae64109961f526af6b84d0742b0f49891ed826ca42fb1f84a7f2b2075b13",
+   "bytes": 34106,
+   "fetched_utc": "2026-09-29T23:56:06+00:00",
+   "rows": 36,
+   "series": 36,
+   "periods": 38
+  },
+  {
+   "table": "9a",
+   "view": 5,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 5,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v5_Q.json",
+   "sha256": "307e85e4567f0e4cd45caa85f7d5cf3e68702e92974ad94384a010aa550ef966",
+   "bytes": 114830,
+   "fetched_utc": "2026-09-29T23:56:08+00:00",
+   "rows": 40,
+   "series": 35,
+   "periods": 152
+  },
+  {
+   "table": "9a",
+   "view": 5,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 5,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v5_A.json",
+   "sha256": "193b705f3b963d3b5d38093a3058861fec76666884e5648de4f4cb1900499e90",
+   "bytes": 33975,
+   "fetched_utc": "2026-09-29T23:56:10+00:00",
+   "rows": 40,
+   "series": 35,
+   "periods": 38
+  },
+  {
+   "table": "9b",
+   "view": 4,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 4,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v4_Q.json",
+   "sha256": "ef6d3955092145244e0abd4422676105022006e5dc25ceeda66c3f47d7aa0907",
+   "bytes": 160231,
+   "fetched_utc": "2026-09-29T23:56:12+00:00",
+   "rows": 50,
+   "series": 45,
+   "periods": 152
+  },
+  {
+   "table": "9b",
+   "view": 4,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 4,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v4_A.json",
+   "sha256": "144c1ab2d16761fbc22a7a452589733bbb1abb8e30ecca374d5f1446cf4c45aa",
+   "bytes": 45616,
+   "fetched_utc": "2026-09-29T23:56:14+00:00",
+   "rows": 50,
+   "series": 45,
+   "periods": 38
+  },
+  {
+   "table": "9c",
+   "view": 28,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 28,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v28_Q.json",
+   "sha256": "2e973382b8ac444554af10968e375f0836f3e4a2bc4d9fa2748cbaba0f985bab",
+   "bytes": 143774,
+   "fetched_utc": "2026-09-29T23:56:16+00:00",
+   "rows": 44,
+   "series": 40,
+   "periods": 152
+  },
+  {
+   "table": "9c",
+   "view": 28,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 28,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v28_A.json",
+   "sha256": "d3cd6f9bbfa01ca816c5ca503779c48a4cf818c9737c87f5f2da1bd7430db763",
+   "bytes": 41167,
+   "fetched_utc": "2026-09-29T23:56:18+00:00",
+   "rows": 44,
+   "series": 40,
+   "periods": 38
+  },
+  {
+   "table": "10a",
+   "view": 32,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 32,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v32_Q.json",
+   "sha256": "665ce86647dbdf514c4e1be92e574d09c44f1855ea6744bbd695f4797e4336db",
+   "bytes": 89739,
+   "fetched_utc": "2026-09-29T23:56:20+00:00",
+   "rows": 87,
+   "series": 66,
+   "periods": 54
+  },
+  {
+   "table": "10a",
+   "view": 32,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 32,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v32_A.json",
+   "sha256": "4980db69d0d0f4213b7af185aaa87da3323339852bf618b0b09c7e57b5ed2ba3",
+   "bytes": 35611,
+   "fetched_utc": "2026-09-29T23:56:22+00:00",
+   "rows": 87,
+   "series": 66,
+   "periods": 13
+  },
+  {
+   "table": "10b",
+   "view": 33,
+   "f": "Q",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 33,
+    "f": "Q",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v33_Q.json",
+   "sha256": "7e0907edef1cb547e2313677af7933a9cf069e6ca6cbed7d2c341dc93ede06ab",
+   "bytes": 56545,
+   "fetched_utc": "2026-09-29T23:56:24+00:00",
+   "rows": 23,
+   "series": 22,
+   "periods": 106
+  },
+  {
+   "table": "10b",
+   "view": 33,
+   "f": "A",
+   "url": "https://www.eia.gov/outlooks/steo/data/browser/data/index.php",
+   "params": {
+    "v": 33,
+    "f": "A",
+    "method": "getData"
+   },
+   "path": "data/oracle/steo/2026-09/v33_A.json",
+   "sha256": "fbc9ea2861064148e245e354f117f03d2ef63fb50687f54c4e8001e1955b94e8",
+   "bytes": 17565,
+   "fetched_utc": "2026-09-29T23:56:26+00:00",
+   "rows": 23,
+   "series": 22,
+   "periods": 26
+  }
+ ],
+ "probes": [
+  {
+   "url": "https://www.eia.gov/outlooks/steo/xls/STEO_q.xlsx",
+   "status": 404
+  },
+  {
+   "url": "https://www.eia.gov/outlooks/steo/xls/STEO_a.xlsx",
+   "status": 404
+  }
+ ],
+ "steo_m_xlsx": {
+  "path": "reports/a1_diag/oracle/src/STEO_m.xlsx",
+  "sha256": "c06a15243b0d972045ecc59cf9376885f68c7c306c581de5d01e6b8ac1a236c5"
+ },
+ "month_check": [
+  {
+   "view": 3,
+   "sheet": "1tab",
+   "equal": 1584,
+   "unequal": 0,
+   "not_in_both": 7776,
+   "examples": []
+  },
+  {
+   "view": 8,
+   "sheet": "2tab",
+   "equal": 1918,
+   "unequal": 0,
+   "not_in_both": 10762,
+   "examples": []
+  }
+ ],
+ "pdf": {
+  "held": {
+   "path": "data/raw/eia/eia-pdf-steo_full.pdf",
+   "sha256": "c7af46960225fac0b8be4cbd0d4d3d886c24f5c6c771ccac3ca33eb0adce271a",
+   "bytes": 6784337
+  },
+  "current": {
+   "url": "https://www.eia.gov/outlooks/steo/pdf/steo_full.pdf",
+   "path": "data/oracle/steo/2026-09/steo_full_current.pdf",
+   "sha256": "c7af46960225fac0b8be4cbd0d4d3d886c24f5c6c771ccac3ca33eb0adce271a",
+   "bytes": 6784337,
+   "fetched_utc": "2026-09-29T23:56:30+00:00"
+  },
+  "identical": true
+ },
+ "http_calls_by_host": {
+  "www.eia.gov": 55
+ }
+}
