@@ -29,11 +29,13 @@ Band class per cell: the 23 anomalous cells from the diagnosis (`F5_dump.md`, cr
 | placeholder (NA / (s)) | 8 | no - page != export; with numeric-but-different |
 | no-digit-at-position | 5 | yes (decode defect) |
 | footnote-fused | 2 | yes |
-| outside | 1 | OWNER RULING NEEDED (see F5_dump.md #20) |
+| outside | 1 | no - numeric-but-different (owner ruling 2026-09-30: #20, flag RF on a different number) |
 | split-token, joined != value (numeric-but-different) | 1 | no - numeric-but-different |
 | split-token, joined == value | 1 | yes (checker geometry) |
 
-Conservative-strict miss set (decode / footnote-fused / empty-band checker geometry / split-token joined = value only): **21** cells = 0.11% of 19,761 (reference bound 0.5 %); 1 cell (#20, `RF4`) awaits a ruling. Numeric-but-different and placeholder cells leave the denominator when clause (b) is applied to admission and are NOT in the miss set.
+Conservative-strict miss set (decode / footnote-fused / empty-band checker geometry / split-token joined = value only): **21** cells = 0.11% of 19,761 (reference bound 0.5 %). #20 (`RF4`) ruled numeric-but-different; #6 / #7 (`EgQ`, `E13Q`) stay in the miss set by the rule's letter (owner, D-039 status 2026-09-30). Numeric-but-different and placeholder cells leave the denominator when clause (b) is applied to admission and are NOT in the miss set.
+
+**Numeric decode (visually verified):** 3.5 p17 M:2026-05, Kerosene Product Supplied, expected 6: crop `f5_crops/20_3.5_M-2026-06.png` (the row above #20) shows "R 6"; the text layer reads `R5`, so the cell is classed numeric-but-different though the page prints the expected value. Decode defects can yield digits; the owner hand-check (29/30 page = text layer) bounds such cells at ≈ 0-10 % of the 579 numeric-but-different (estimate, ≤ ≈ 0.3 % of 19,761).
 
 ## Per table
 

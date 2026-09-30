@@ -304,7 +304,8 @@ def main() -> int:
         "split-token, joined != value (numeric-but-different)": "no - numeric-but-different",
         "numeric-but-different": "no - out of the denominator when clause (b) is applied",
         "placeholder (NA / (s))": "no - page != export; with numeric-but-different",
-        "outside": "OWNER RULING NEEDED (see F5_dump.md #20)",
+        "outside": "no - numeric-but-different (owner ruling 2026-09-30: #20, flag RF on a "
+        "different number)",
     }
     for k, v in Counter(band_classes.values()).most_common():
         lines_md.append(f"| {k} | {v} | {miss[k]} |")
@@ -313,9 +314,17 @@ def main() -> int:
         "",
         f"Conservative-strict miss set (decode / footnote-fused / empty-band checker geometry / "
         f"split-token joined = value only): **{n_miss}** cells = {n_miss / n:.2%} of {n:,} "
-        f"(reference bound 0.5 %); 1 cell (#20, `RF4`) awaits a ruling. Numeric-but-different and "
-        "placeholder cells leave the denominator when clause (b) is applied to admission and are "
-        "NOT in the miss set.",
+        f"(reference bound 0.5 %). #20 (`RF4`) ruled numeric-but-different; #6 / #7 (`EgQ`, "
+        "`E13Q`) stay in the miss set by the rule's letter (owner, D-039 status 2026-09-30). "
+        "Numeric-but-different and placeholder cells leave the denominator when clause (b) is "
+        "applied to admission and are NOT in the miss set.",
+        "",
+        "**Numeric decode (visually verified):** 3.5 p17 M:2026-05, Kerosene Product Supplied, "
+        'expected 6: crop `f5_crops/20_3.5_M-2026-06.png` (the row above #20) shows "R 6"; the '
+        "text layer reads `R5`, so the cell is classed numeric-but-different though the page "
+        "prints the expected value. Decode defects can yield digits; the owner hand-check "
+        "(29/30 page = text layer) bounds such cells at ≈ 0-10 % of the 579 numeric-but-different "
+        "(estimate, ≤ ≈ 0.3 % of 19,761).",
         "",
         "## Per table",
         "",
