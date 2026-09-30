@@ -209,27 +209,52 @@ def header_cells(
         log.append(f"header check: page words for bands {sorted(failing)}")
     nrow = max((h["row"] for h in kept), default=-1) + 1
     page_cells: list[dict] = []
+    stub_phrases: list[list[dict]] = []
     for ln in header_lines:
-        run: list[tuple[tuple[int, ...], dict]] = []
+        # phrases: words one word-space apart (<= 0.6 x size); a spanning group header
+        # ("Hydrocarbon Gas Liquids") spans every band under the whole phrase, not per word
+        phrases: list[list[dict]] = []
         for t in sorted(ln, key=lambda t: t["x0"]):
-            ov = tuple(k for k in sorted(failing) if over(t, bands[k]))
-            if ov:
-                run.append((ov, t))
-        if not run:
-            continue
-        cells_ln: list[dict] = []
-        for ov, t in run:
-            if cells_ln and cells_ln[-1]["key"] == ov:
-                cells_ln[-1]["text"] += " " + t["text"]
+            size = t["bottom"] - t["top"]
+            if phrases and t["x0"] - phrases[-1][-1]["x1"] <= 0.6 * size:
+                phrases[-1].append(t)
             else:
-                cells_ln.append({"key": ov, "text": t["text"]})
+                phrases.append([t])
+        cells_ln: list[dict] = []
+        for ph in phrases:
+            ext = {"x0": min(t["x0"] for t in ph), "x1": max(t["x1"] for t in ph)}
+            if not any(over(ext, b) for b in bands):
+                stub_phrases.append(ph)  # over no band: the stub column's head
+                continue
+            ov = tuple(k for k in sorted(failing) if over(ext, bands[k]))
+            if ov:
+                cells_ln.append({"key": ov, "text": " ".join(t["text"] for t in ph)})
+        if not cells_ln:
+            continue
         for c in cells_ln:
             page_cells.append({"row": nrow, "bands": list(c["key"]), "text": c["text"]})
         nrow += 1
+    # a column head printed over several lines ("Pro-" / "pane") is one cell, as Docling models it:
+    # consecutive page-derived cells over the same bands merge, text in printed order
+    merged_cells: list[dict] = []
+    last_by_key: dict[tuple, dict] = {}
+    for c in page_cells:
+        key = tuple(c["bands"])
+        prev = last_by_key.get(key)
+        if prev is not None and prev["row"] + prev.get("rows", 1) == c["row"]:
+            prev["text"] += " " + c["text"]
+            prev["rows"] = prev.get("rows", 1) + 1
+            continue
+        merged_cells.append(c)
+        last_by_key[key] = c
+        for k in [k for k in last_by_key if k != key and set(k) & set(key)]:
+            del last_by_key[k]  # a different cell over these bands ends the run
+    page_cells = merged_cells
     out = [h for h in kept if h["bands"] != [-1]] + page_cells
     stub = [h for h in kept if h["bands"] == [-1]]
-    if stub_header:
-        text = " ".join(t["text"] for t in sorted(stub_header, key=lambda t: (t["top"], t["x0"])))
+    if stub_phrases:
+        del stub_header  # superseded: the stub head is built from the same phrases as the bands
+        text = " ".join(" ".join(t["text"] for t in ph) for ph in stub_phrases)
         stub = [{"row": 0, "bands": [-1], "text": text}]
     out += stub
     return out, max(nrow, 1 if out else 0), log
@@ -363,8 +388,8 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
     first, last = body_idx[0], body_idx[-1]
     header_region = [t for ln in lines[:first] for t in ln]
 
-    def headed(b: dict) -> bool:
-        return any(t["x1"] > b["x0"] and t["x0"] < b["x1"] for t in header_region)
+    def headed(b: dict) -> bool:  # +-2 pt, as header_cells and over_band
+        return any(t["x1"] > b["x0"] - 2 and t["x0"] < b["x1"] + 2 for t in header_region)
 
     # a thin band right of the first dense band is a sparse column iff a header sits above it
     bands = [b for b in all_bands if b["n"] >= min_n or (b["x0"] > dense[0]["x0"] and headed(b))]
@@ -453,6 +478,8 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
             x0, x1 = bands[min(h["bands"])]["x0"], bands[max(h["bands"])]["x1"]
         hc = cell(fix_text(h["text"]), (x0, 0, x1, 0), h["row"], c0, header=True)
         hc["col_span"], hc["end_col_offset_idx"] = c1 - c0, c1
+        rows_n = h.get("rows", 1)
+        hc["row_span"], hc["end_row_offset_idx"] = rows_n, h["row"] + rows_n
         out_cells.append(hc)
     r = nhead
     for row in rows:
@@ -674,6 +701,15 @@ def tokens_in(chars: list[dict], box: tuple[float, float, float, float]) -> list
             cur.append(c)
         if cur:
             toks.append(tg.make_token(cur))
+        # a lone "(" joins the next token when that one closes it ("( d)" -> "(d)", "( s)")
+        joined: list[dict] = []
+        for t in toks:
+            if joined and joined[-1]["text"] == "(" and t["text"].endswith(")"):
+                p = joined.pop()
+                joined.append(tg.make_token(p["chars"] + t["chars"]))
+            else:
+                joined.append(t)
+        toks = joined
         # spaced leader dots (MER prints ". . . .") arrive as one-glyph tokens: never content
         toks = [
             t

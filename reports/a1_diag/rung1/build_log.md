@@ -65,3 +65,12 @@ are looked at during Part B.
   numbers > 2 %. Spaced leader dots (MER ". . .") now dropped as one-glyph tokens (they had
   tripped the text-column rule on sec3). Now: non-fired 0 mispairings; fired BUDGET/CBO 100
   rebuilt, 1 mispairing (cbo-60786), 50 fallbacks (46 band assertion). Tuning 96.7 %.
+- **05:28-05:35Z headers.** Band-assertion overlap tolerance aligned (+-2 pt). Header phrases:
+  words one word-space apart form a phrase whose band span is its whole extent ("Hydrocarbon Gas
+  Liquids" now spans its 4 columns); the stub head is built from the same phrases (per-word tests
+  had written words twice). Multi-line column heads ("Pro-" / "pane") merge into one cell with a
+  row span, printed order kept. A lone "(" joins a following token that closes it ("( d)").
+  Tuning: strict 1,466 / 1,515 = **96.8 %**, header association sec3 14/15, sec4 14/14 (baseline
+  11/15, 14/14). Fired BUDGET/CBO: 46 fallbacks (mostly continuation pages whose column header
+  is on the previous page - 0 printed header columns - the owner's assertion keeps TableFormer),
+  conservation worse v2 1 table (the footnote cut), v1 11.
