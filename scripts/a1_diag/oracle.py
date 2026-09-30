@@ -660,6 +660,7 @@ def main() -> int:
     steo_doc = json.loads((PARSED / f"{STEO_UNIT}.json").read_text(encoding="utf-8"))
     data_tables = {ti: (page, tid) for ti, page, tid in steo_footnotes.table_pages(steo_doc)}
     steo_detail = []
+    steo_2241_cells: list[dict] = []
     snap_rec = {
         "path": "data/oracle/steo/2026-09",
         "sha256": "see data/oracle/steo/2026-09/sources.json",
@@ -671,13 +672,20 @@ def main() -> int:
             record(STEO_UNIT, ti, None, [], "narrative table (pp3-5): no oracle series", None)
             continue
         page, tid = data_tables[ti]
-        res = steo.admit_table(STEO_UNIT, ti, page, tid, steo_footnotes.view_of(tid))
+        # the oracle: the council's whole-row rule (data/oracle/steo/2026-09/admission_rule.md)
+        res = steo.admit_table_rows(STEO_UNIT, ti, page, tid, steo_footnotes.view_of(tid))
         pg_stub = Page(STEO_UNIT, ti, page, tid)
         record(STEO_UNIT, ti, pg_stub, res["cells"], "", snap_rec)
         steo_detail.append({k: v for k, v in res.items() if k != "cells"})
+        # the superseded 22:41 rule (unit + precision gates), kept only for the comparison
+        old = steo.admit_table_2241(STEO_UNIT, ti, page, tid, steo_footnotes.view_of(tid))
+        steo_2241_cells.extend(old["cells"])
     (OUT / "steo_admission.json").write_text(
         json.dumps(steo_detail, indent=1, default=str), encoding="utf-8"
     )
+    with (OUT / "steo_cells_2241.jsonl").open("w", encoding="utf-8") as fh:
+        for c in steo_2241_cells:
+            fh.write(json.dumps(c) + "\n")
     aeo_doc = json.loads((PARSED / f"{AEO_UNIT}.json").read_text(encoding="utf-8"))
     for ti in range(len(aeo_doc["tables"])):
         record(AEO_UNIT, ti, None, [], "no printed table id; no oracle source", None)

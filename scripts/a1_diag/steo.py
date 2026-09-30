@@ -305,6 +305,13 @@ def data_rows(view: int) -> list[dict]:
         merged["DATA"] = data
         merged["LAST_HISTORICAL_A"] = ann.get("LAST_HISTORICAL")
         out.append(merged)
+    seen = {(r.get("SERIES_ID"), r.get("DESCRIPTION")) for r in q}
+    for key, ann in a.items():  # series served at annual frequency only
+        if key not in seen:
+            merged = dict(ann)
+            merged["LAST_HISTORICAL_A"] = ann.get("LAST_HISTORICAL")
+            merged["LAST_HISTORICAL"] = None
+            out.append(merged)
     return out
 
 
@@ -479,7 +486,7 @@ def stratum(key: str, rec: dict) -> str:
     return "history" if key <= str(lh) else "forecast"
 
 
-def admit_table(unit_id: str, table_index: int, page: int, table_id: str, view: int) -> dict:
+def admit_table_2241(unit_id: str, table_index: int, page: int, table_id: str, view: int) -> dict:
     """Admit the printed cells of one STEO table against the 2026-09 snapshot.
 
     Rows: printed rows mapped to JSON by SERIES_ID (``match_rows``); unserved printed rows and
@@ -615,6 +622,170 @@ def admit_table(unit_id: str, table_index: int, page: int, table_id: str, view: 
             (r["rec"].get("SERIES_ID"), f) for r in served_rows for f in r["minus_flags"]
         ],
         "match_kinds": [r["kind"] for r in per_row if r["status"] != "unserved"],
+    }
+
+
+def half_away(value: Decimal, decimals: int) -> Decimal:
+    """Round half away from zero (Decimal ROUND_HALF_UP) - never Python round()."""
+    return value.quantize(Decimal(1).scaleb(-decimals), rounding=ROUND_HALF_UP)
+
+
+def served_decimal(v) -> Decimal | None:
+    if v is None:
+        return None
+    return v if isinstance(v, Decimal) else Decimal(str(v))
+
+
+def printed_cells(row: PrintedRow) -> dict[str, tuple[Decimal, int]]:
+    """Non-"-" printed cells: period -> (value, printed decimals), parsed from the text layer
+    (thousands separators stripped; "-", U+2212 and parenthesised negatives read as negative)."""
+    out = {}
+    for key, tok in row.values.items():
+        c = orc.canon(tok)
+        if c is not None:
+            out[key] = (Decimal(c), orc.decimals(c))
+    return out
+
+
+def satisfies(cells: dict[str, tuple[Decimal, int]], rec: dict) -> bool:
+    """(a): every printed cell equals the served value rounded half away from zero at the printed
+    decimals."""
+    data = rec.get("DATA") or {}
+    for key, (pv, dec) in cells.items():
+        sv = served_decimal(data.get(key))
+        if sv is None or half_away(sv, dec) != pv:
+            return False
+    return True
+
+
+def series_key(rec: dict) -> str:
+    return rec.get("SERIES_ID") or f"desc:{rec.get('DESCRIPTION')}"
+
+
+def admit_table_rows(unit_id: str, table_index: int, page: int, table_id: str, view: int) -> dict:
+    """The council's whole-row rule (data/oracle/steo/2026-09/admission_rule.md).
+
+    A printed row is admitted iff (a) every non-"-" cell equals a served series rounded half away
+    from zero at the printed decimals, (b) exactly one served series (distinct SERIES_ID) in the
+    view satisfies (a), and (c) the row has >= 1 non-"-" cell and >= 2 distinct values. Units,
+    aliases, PRECISION, n_matched, printed-unit presence and label agreement are recorded columns,
+    never gates.
+    """
+    footnoted, aliases = load_frozen()
+    _cols, agree, rows, _defs = read_table_page(HELD_PDF, page)
+    recs = data_rows(view)
+    row_records, cells_out = [], []
+    for row in rows:
+        cells = printed_cells(row)
+        distinct = len({v for v, _ in cells.values()})
+        sat = {}
+        for rec in recs:
+            if cells and satisfies(cells, rec):
+                sat.setdefault(series_key(rec), rec)
+        n = len(sat)
+        if not cells or distinct < 2:
+            status = "not admitted: content (c)"
+        elif n == 0:
+            status = "not admitted: unmapped (a)"
+        elif n > 1:
+            status = "not admitted: tie (b)"
+        else:
+            status = "admitted"
+        rec = next(iter(sat.values())) if n == 1 else None
+        sid = rec.get("SERIES_ID") if rec else None
+        u_ok, u_how = unit_verdict(row.unit, rec.get("UNITS"), aliases) if rec else (None, None)
+        prec = rec.get("PRECISION") if rec else None
+        label_ok = bool(rec) and (
+            labels_match(row.label, rec) or fuzzy_ratio(row.label, rec) >= FUZZY_MIN
+        )
+        disagreements = []
+        if rec:
+            if not u_ok:
+                disagreements.append("unit")
+            if prec is not None and row.decimals is not None and int(prec) != row.decimals:
+                disagreements.append("precision")
+            if not label_ok:
+                disagreements.append("label")
+        others = [
+            r for k, r in ((series_key(r), r) for r in recs) if rec is None or k != series_key(rec)
+        ]
+        row_records.append(
+            {
+                "label": row.label,
+                "status": status,
+                "series_id": sid,
+                "n_matched": n,
+                "tied_series": sorted(sat) if n > 1 else [],
+                "printed_cells": len(cells),
+                "distinct_values": distinct,
+                "printed_unit": row.unit,
+                "printed_unit_present": row.unit is not None,
+                "served_unit": rec.get("UNITS") if rec else None,
+                "unit_verdict": u_how,
+                "served_precision": prec,
+                "printed_decimals": row.decimals,
+                "label_agrees": label_ok,
+                "metadata_disagreements": disagreements,
+                "footnoted": (table_index, sid) in footnoted if sid else False,
+                "dashes": sorted(row.dashes),
+                "minus_flags": list(row.minus_flags),
+                "dash_served": {
+                    k: str((rec.get("DATA") or {}).get(k))
+                    for k in row.dashes
+                    if rec and (rec.get("DATA") or {}).get(k) is not None
+                },
+            }
+        )
+        for key, tok in row.values.items():
+            if key not in cells:
+                continue
+            pv, dec = cells[key]
+            disc = None
+            if rec is not None:  # does this cell alone rule out every other series in the view?
+                disc = not any(
+                    (sv := served_decimal((o.get("DATA") or {}).get(key))) is not None
+                    and half_away(sv, dec) == pv
+                    for o in others
+                )
+            cells_out.append(
+                {
+                    "unit": unit_id,
+                    "table_index": table_index,
+                    "page": page,
+                    "table_id": table_id,
+                    "family": "STEO",
+                    "series_id": sid,
+                    "row": sid or f"label:{row.label}",
+                    "label": row.label,
+                    "period": key,
+                    "col": key,
+                    "band": key,
+                    "header": key,
+                    "value": orc.canon(tok),
+                    "printed_decimals": dec,
+                    "served": None
+                    if rec is None or (rec.get("DATA") or {}).get(key) is None
+                    else str(rec["DATA"][key]),
+                    "status": status,
+                    "admitted": status == "admitted",
+                    "stratum": stratum(key, rec) if rec else "n/a",
+                    "footnoted": (table_index, sid) in footnoted if sid else False,
+                    "discriminating": disc,
+                    "oracle_file": (
+                        f"data/oracle/steo/2026-09/v{view}_{'Q' if len(key) == 6 else 'A'}.json"
+                    ),
+                }
+            )
+    return {
+        "unit": unit_id,
+        "table_index": table_index,
+        "page": page,
+        "table_id": table_id,
+        "view": view,
+        "normaliser": agree,
+        "rule": "whole-row (admission_rule.md)",
+        "cells": cells_out,
+        "rows": row_records,
     }
 
 

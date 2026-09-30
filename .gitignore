@@ -17,6 +17,7 @@ data/oracle/**
 !data/oracle/**/sources.json
 !data/oracle/**/footnotes.json
 !data/oracle/**/unit_aliases.json
+!data/oracle/**/admission_rule.md
 results/
 reports/
 logs/
