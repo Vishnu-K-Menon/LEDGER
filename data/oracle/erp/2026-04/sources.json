@@ -19,5 +19,38 @@
    "pdf_date_issued": "2026-04-01",
    "pdf_creation_date": "D:20260408134211-04'00'"
   }
- ]
+ ],
+ "edition_check": {
+  "passed": true,
+  "granules": [
+   {
+    "unit": "govinfo-ERP-2026-table4",
+    "mods_url": "https://www.govinfo.gov/metadata/granule/ERP-2026/ERP-2026-table4/mods.xml",
+    "mods_sha256": "2b12499261652bbaa82f3aab38f67ebb1eb7ef713dc296a589135439a40229e9",
+    "date_issued_mods": "2026-04-01",
+    "record_change_date": "2026-05-05",
+    "date_issued_pdf": "2026-04-01",
+    "xls_url": "https://www.govinfo.gov/content/pkg/ERP-2026/xls/ERP-2026-table4.xls",
+    "xls_sha256": "b5958248b1905f0a00f1ec325dc25b6754ecf16e53b86bcf1b5524873206298e",
+    "xls_sha256_held": "b5958248b1905f0a00f1ec325dc25b6754ecf16e53b86bcf1b5524873206298e",
+    "fetched_utc": "2026-09-30T03:58:42+00:00",
+    "edition_equal": true,
+    "xls_identical": true
+   },
+   {
+    "unit": "govinfo-ERP-2026-table22",
+    "mods_url": "https://www.govinfo.gov/metadata/granule/ERP-2026/ERP-2026-table22/mods.xml",
+    "mods_sha256": "615140d772899343f7a623f48482f5265a6893217e39d9e41dad0f382da03d75",
+    "date_issued_mods": "2026-04-01",
+    "record_change_date": "2026-05-05",
+    "date_issued_pdf": "2026-04-01",
+    "xls_url": "https://www.govinfo.gov/content/pkg/ERP-2026/xls/ERP-2026-table22.xls",
+    "xls_sha256": "8f5d60342abba02ed3457115cafc50e24daf8f47887282075f15de9dad2a9b84",
+    "xls_sha256_held": "8f5d60342abba02ed3457115cafc50e24daf8f47887282075f15de9dad2a9b84",
+    "fetched_utc": "2026-09-30T03:58:43+00:00",
+    "edition_equal": true,
+    "xls_identical": true
+   }
+  ]
+ }
 }

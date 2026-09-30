@@ -198,13 +198,21 @@ def main() -> int:
     n = sum(r["cells"] for r in rows)
     s = sum(r["strict"] for r in rows)
     lnt = sum(r["lenient"] for r in rows)
+    rates = [r["strict"] / r["cells"] for r in rows if r["cells"]]
     lines = [
         f"# STEO - parse vs the cell oracle (`{args.parsed_dir}`)",
         "",
         "Whole-row admission, same edition (STEO 2026-09 snapshot vs the September PDF). Never "
         "pooled with MER (per-cell admission, later edition) or ERP.",
         "",
-        f"**STEO strict {s}/{n} = {s / n:.1%} · lenient {lnt / n:.1%}** over {len(rows)} tables.",
+        f"**STEO strict {s}/{n} = {s / n:.1%} · lenient {lnt / n:.1%}** over {len(rows)} tables; "
+        f"row not found {sum(r['missing_row'] for r in rows):,} · column not found "
+        f"{sum(r['missing_col'] for r in rows):,} (both counted as misses). Denominator = the "
+        f"{n:,} admitted oracle cells, fixed. Pass rule is strict only; lenient is not a merge "
+        "detector (steo_power.md).",
+        "",
+        f"Per-table strict: min {min(rates):.1%} · median {st.median(rates):.1%} · max "
+        f"{max(rates):.1%}.",
         "",
         "| table | page | admitted cells | strict | lenient | rows matched | row not found | "
         "column not found | header assoc. |",

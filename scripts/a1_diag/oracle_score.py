@@ -43,6 +43,9 @@ import oracle as orc  # noqa: E402
 
 REPO = orc.REPO
 A1 = {"erp_strict": 0.557, "pdf_ceiling": 0.736, "combined": 0.674}
+# the tuning set (D-038): 3.6 (sec3 p19) and 4.2b (sec4 p5). Reported apart, never in a held-out
+# aggregate. STEO is scored by steo_score.py (whole-row admission); families are never pooled.
+TUNING = {("eia-pdf-sec3", 19), ("eia-pdf-sec4", 5)}
 
 
 def label_keys(label: str, state: dict) -> list[str]:
@@ -210,7 +213,7 @@ def main() -> int:
     args = ap.parse_args()
     parsed = REPO / args.parsed_dir
     cells = [json.loads(line) for line in (orc.OUT / "cells.jsonl").open(encoding="utf-8")]
-    admitted = [c for c in cells if c["admitted"]]
+    admitted = [c for c in cells if c["admitted"] and c.get("family") != "STEO"]
     groups: dict[tuple[str, int], list[dict]] = defaultdict(list)
     for c in admitted:
         groups[(c["unit"], c["table_index"])].append(c)
@@ -232,6 +235,7 @@ def main() -> int:
             table_id=cs[0]["table_id"],
             page=cs[0]["page"],
             source="ERP" if "ERP" in unit else "MER",
+            set="tuning" if (unit, cs[0]["page"]) in TUNING else "held-out",
         )
         # ERP annual rows only - the population A1's 55.7 % was measured on
         if res["source"] == "ERP":
@@ -259,16 +263,19 @@ def main() -> int:
         f"# A1 step 0, item 3 - parse vs the cell oracle (`{args.parsed_dir}`)",
         "",
         "Admitted oracle cells only (item 2, A6). Strict / lenient per erp_compare.py / "
-        "erp_lenient.py; definitions in `scripts/a1_diag/oracle_score.py`.",
+        "erp_lenient.py; definitions in `scripts/a1_diag/oracle_score.py`. MER: per-cell "
+        "admission, later edition; ERP: same edition. Families are never pooled; the tuning "
+        "set is never in a held-out row. Denominator = admitted cells; row/column not found "
+        "count as misses.",
         "",
         "| | tables | oracle cells | strict | lenient | row not found | column not found | "
         "header association |",
         "|---|---|---|---|---|---|---|---|",
     ]
     for name, rs in (
-        ("MER", [r for r in results if r["source"] == "MER"]),
-        ("ERP", [r for r in results if r["source"] == "ERP"]),
-        ("**all**", results),
+        ("MER held-out", [r for r in results if r["source"] == "MER" and r["set"] == "held-out"]),
+        ("ERP held-out", [r for r in results if r["source"] == "ERP" and r["set"] == "held-out"]),
+        ("tuning (3.6, 4.2b)", [r for r in results if r["set"] == "tuning"]),
     ):
         a = agg(rs)
         lines.append(
@@ -280,7 +287,7 @@ def main() -> int:
     erp = [r for r in results if r["source"] == "ERP"]
     ac, as_ = sum(r["annual_cells"] for r in erp), sum(r["annual_strict"] for r in erp)
     ai = sum(r["annual_strict_index"] for r in erp)
-    rates = [r["strict"] / r["cells"] for r in results if r["cells"]]
+    rates = [r["strict"] / r["cells"] for r in results if r["cells"] and r["set"] == "held-out"]
     buckets = Counter(
         ">= 95 %"
         if x >= 0.95
@@ -300,16 +307,17 @@ def main() -> int:
         f"printed position; {ai}/{ac} = {pct(ai, ac)} with erp_compare.py's index pairing "
         "(a missing parsed column shifts every column to its right).",
         "",
-        f"Per-table strict: min {min(rates):.1%} · median {st.median(rates):.1%} · max "
-        f"{max(rates):.1%}; distribution {dict(sorted(buckets.items()))}.",
+        f"Per-table strict, held-out MER + ERP tables: min {min(rates):.1%} · median "
+        f"{st.median(rates):.1%} · max {max(rates):.1%}; distribution "
+        f"{dict(sorted(buckets.items()))}.",
         "",
-        "| table | page | unit | parsed shape | printed cols | mapped | oracle cells | strict | "
-        "lenient | row not found | col not found | header assoc. |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "| set | table | page | unit | parsed shape | printed cols | mapped | oracle cells | "
+        "strict | lenient | row not found | col not found | header assoc. |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in sorted(results, key=lambda r: r["strict"] / r["cells"]):
         lines.append(
-            f"| {r['table_id']} | {r['page']} | `{r['unit']}` | {r['parsed_shape']} | "
+            f"| {r['set']} | {r['table_id']} | {r['page']} | `{r['unit']}` | {r['parsed_shape']} | "
             f"{r['printed_cols']} | {r['mapped_cols']} | {r['cells']} | "
             f"**{pct(r['strict'], r['cells'])}** | {pct(r['lenient'], r['cells'])} | "
             f"{r['missing_row']} | {r['missing_col']} | {r['header_matched']}/{r['header_cols']} |"
