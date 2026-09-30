@@ -176,21 +176,57 @@ def tf_header_rows(tbl: dict, bands: list[dict]) -> tuple[list[dict], list[str]]
 def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict | None, list[str]]:
     log: list[str] = []
     lines = [merge_flags(ln) for ln in lines]
-    body_idx = [i for i, ln in enumerate(lines) if body_values(ln)]
-    if not body_idx:
+    cand = [i for i, ln in enumerate(lines) if body_values(ln)]
+    if not cand:
         return None, ["no body lines"]
+    all_bands = cluster_bands([t for i in cand for t in body_values(lines[i])])
+    # dense bands (>= max(2, 10 % of candidate lines) tokens) define the body; a number outside
+    # them - a title's bill number, a footnote marker, a code inside a label - is text
+    min_n = max(2, -(-len(cand) // 10))
+    dense = [b for b in all_bands if b["n"] >= min_n]
+    if not dense:
+        return None, ["no dense band"]
+
+    def in_bands(t: dict, bands: list[dict]) -> int | None:
+        k = min(range(len(bands)), key=lambda i: abs(bands[i]["right"] - t["x1"]))
+        return k if abs(bands[k]["right"] - t["x1"]) <= 1.5 * bands[k]["tol"] else None
+
+    def prose(ln: list[dict]) -> bool:
+        x_num = dense[0]["x0"] - dense[0]["tol"]
+        words = [
+            t
+            for t in ln
+            if t["x0"] >= x_num
+            and sum(ch.isalpha() for ch in t["text"]) >= 2
+            and t["text"] not in orc.PLACEHOLDERS
+        ]
+        return len(words) >= 2
+
+    body_idx = [
+        i
+        for i in cand
+        if any(in_bands(t, dense) is not None for t in body_values(lines[i]))
+        and not prose(lines[i])
+    ]
+    if not body_idx:
+        return None, ["no body lines in dense bands"]
     first, last = body_idx[0], body_idx[-1]
-    vals = [t for i in body_idx for t in body_values(lines[i])]
-    bands = cluster_bands(vals)
     header_region = [t for ln in lines[:first] for t in ln]
-    printed_cols = sum(
-        1 for b in bands if any(t["x1"] > b["x0"] and t["x0"] < b["x1"] for t in header_region)
-    )
+
+    def headed(b: dict) -> bool:
+        return any(t["x1"] > b["x0"] and t["x0"] < b["x1"] for t in header_region)
+
+    # a thin band right of the first dense band is a sparse column iff a header sits above it
+    bands = [b for b in all_bands if b["n"] >= min_n or (b["x0"] > dense[0]["x0"] and headed(b))]
+    if len(bands) < len(all_bands):
+        log.append(f"{len(all_bands) - len(bands)} thin band(s) without a header taken as text")
+    printed_cols = sum(1 for b in bands if headed(b))
     if opts["assert_bands"] and printed_cols != len(bands):
         return None, [
             f"band assertion: {len(bands)} bands vs {printed_cols} printed header columns"
         ]
     left = min(b["x0"] for b in bands)
+    body_set = set(body_idx)
     # body rows (with wrapped labels and section headers)
     rows: list[dict] = []
     pending: list[dict] = []
@@ -204,15 +240,15 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
     )
     for i in range(first, last + 1):
         ln = lines[i]
-        vals_i = body_values(ln)
-        if not vals_i:
-            text_toks = [t for t in ln if t["x1"] <= left or not is_value(t)]
+        if i not in body_set:
+            text_toks = list(ln)
             nxt = next((k for k in body_idx if k > i), None)
             if (
                 opts["wrap"]
                 and nxt is not None
                 and lines[nxt][0]["top"] - ln[0]["top"] <= 1.5 * leading
-                and not any(is_value(t) for t in ln)
+                and not any(is_value(t) for t in ln[1:])
+                and continues(text_toks, lines[nxt])
             ):
                 pending += text_toks
             else:
@@ -285,6 +321,41 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
     return new, log
 
 
+CONNECTORS = {
+    "and",
+    "or",
+    "of",
+    "for",
+    "the",
+    "to",
+    "in",
+    "on",
+    "by",
+    "with",
+    "excluding",
+    "including",
+    "from",
+    "at",
+    "a",
+    "an",
+}
+
+
+def continues(text_toks: list[dict], nxt: list[dict]) -> bool:
+    """A text-only line is the first part of a wrapped label (not a section header) iff it shows
+    a continuation: it ends with "," "-" "(" "/" or a connector word, or the next line's label
+    starts in lower case. A line ending in ":" is a section header."""
+    if not text_toks:
+        return False
+    last = text_toks[-1]["text"]
+    if last.endswith(":"):
+        return False
+    if last[-1:] in ",-(/–" or last.lower() in CONNECTORS:
+        return True
+    first = nxt[0]["text"] if nxt else ""
+    return first[:1].islower()
+
+
 def tbl_left(tbl: dict) -> float:
     return tbl["prov"][0]["bbox"]["l"]
 
@@ -328,9 +399,81 @@ def grid_of(cells: list[dict], nrows: int, ncols: int) -> list[list[dict]]:
     return grid
 
 
+LEADERS = ".…�\x08"
+
+
 def lines_for(doc: dict, tbl: dict, pdf) -> list[list[dict]]:
     page, box = tg.table_box(doc, tbl)
-    return tg.tokens_in(pdf.pages[page - 1].chars, box)
+    return tokens_in(pdf.pages[page - 1].chars, box)
+
+
+def tokens_in(chars: list[dict], box: tuple[float, float, float, float]) -> list[list[dict]]:
+    """The emitter's own tokeniser (the trigger's is frozen). Differs from ``trigger.tokens_in``
+    in three ways found on the fired BUDGET/CBO tables: an explicit space character breaks a word
+    (these PDFs encode spaces as zero-gap characters); a run of >= 2 leader glyphs - ".", "…",
+    and U+FFFD / U+0008, as BUDGET's leaders decode - is dropped; a year range ("2025-2030") is not
+    split as a negative."""
+    x0, top, x1, bottom = box
+    inside = [
+        c
+        for c in chars
+        if x0 - 1 <= (c["x0"] + c["x1"]) / 2 <= x1 + 1
+        and top - 1 <= (c["top"] + c["bottom"]) / 2 <= bottom + 1
+    ]
+    ink = [c for c in inside if c["text"].strip()]
+    if not ink:
+        return []
+    med = st.median(c["size"] for c in ink)
+    inside = [c for c in inside if not c["text"].strip() or c["size"] >= 0.75 * med]
+    tol = 0.5 * st.median(c["bottom"] - c["top"] for c in ink)
+    lines: list[list[dict]] = []
+    for c in sorted(inside, key=lambda c: (c["top"] + c["bottom"]) / 2):
+        cy = (c["top"] + c["bottom"]) / 2
+        if lines and abs(cy - lines[-1][0]["_cy"]) <= tol:
+            lines[-1].append(c)
+        else:
+            c = dict(c)
+            c["_cy"] = cy
+            lines.append([c])
+            continue
+    out = []
+    for ln in lines:
+        ln = [c for c in sorted(ln, key=lambda c: c["x0"])]
+        toks: list[dict] = []
+        cur: list[dict] = []
+        texts = [c["text"] for c in ln]
+        for i, c in enumerate(ln):
+            ch = texts[i]
+            if not ch.strip():
+                if cur:
+                    toks.append(tg.make_token(cur))
+                cur = []
+                continue
+            if cur and c["x0"] - cur[-1]["x1"] > 0.25 * c["size"]:
+                toks.append(tg.make_token(cur))
+                cur = []
+            in_run = ch in LEADERS and (
+                (i > 0 and texts[i - 1] in LEADERS) or (i + 1 < len(ln) and texts[i + 1] in LEADERS)
+            )
+            if in_run:
+                if cur:
+                    toks.append(tg.make_token(cur))
+                cur = []
+                continue
+            if ch in tg.MINUS and cur and cur[-1]["text"].isdigit():
+                ahead = "".join(texts[i + 1 : i + 5])
+                before = "".join(x["text"] for x in cur[-4:])
+                is_range = tg.YEAR.fullmatch(before) and tg.YEAR.fullmatch(ahead)
+                if not is_range and i + 1 < len(ln) and (ahead[:1].isdigit() or ahead[:1] == "."):
+                    toks.append(tg.make_token(cur))
+                    cur = []
+            cur.append(c)
+        if cur:
+            toks.append(tg.make_token(cur))
+        toks = [t for t in toks if t["text"].strip()]
+        if toks:
+            out.append(toks)
+    return out
 
 
 def build_unit(unit: str, tables: list[int] | None, opts: dict = OPTS) -> tuple[dict, dict]:

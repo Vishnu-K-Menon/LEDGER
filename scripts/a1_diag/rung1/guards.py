@@ -55,13 +55,25 @@ CODE = {"strict": "S", "wrong": "W", "row not found": "R", "column not found": "
 # ---- normalisation -------------------------------------------------------------------------------
 
 
-def norm_words(text: str) -> list[str]:
+LEADER_RUN = "[.…]{2,}"
+# Correction made during Part B (build log 04:54Z): BUDGET's leader glyphs decode as runs of
+# U+FFFD, and Docling prefixes them with U+0008. The A4 definition (LEADER_RUN, "v1") treated only
+# "." / "..." runs as leaders, so every BUDGET stub compared its leader garbage, not its words. The
+# corrected class ("v2") is applied identically to baseline and rung 1; both are reported.
+LEADER_RUN_V2 = "[.…�]{2,}"
+DEFINITION = "v2"
+
+
+def norm_words(text: str, definition: str | None = None) -> list[str]:
+    v2 = (definition or DEFINITION) == "v2"
     t = unicodedata.normalize("NFKC", text or "")
     t = re.sub(r"(?<=\d)�(?=\d)", ".", t)
     t = re.sub(r"(^|\s)(-?)�(?=\d)", r"\1\2.", t)
+    if v2:
+        t = t.replace("\x08", " ")
     out = []
     for w in t.split():
-        for p in re.split(r"[.…]{2,}", w):
+        for p in re.split(LEADER_RUN_V2 if v2 else LEADER_RUN, w):
             for q in re.split(r"(?<=\d)(?=[-−][\d.])", p):
                 if q.strip():
                     out.append(q.strip())
