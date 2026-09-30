@@ -675,7 +675,7 @@ def admit_table_rows(unit_id: str, table_index: int, page: int, table_id: str, v
     _cols, agree, rows, _defs = read_table_page(HELD_PDF, page)
     recs = data_rows(view)
     row_records, cells_out = [], []
-    for row in rows:
+    for row_index, row in enumerate(rows):  # row_index: printed order, recorded column
         cells = printed_cells(row)
         distinct = len({v for v, _ in cells.values()})
         sat = {}
@@ -711,6 +711,7 @@ def admit_table_rows(unit_id: str, table_index: int, page: int, table_id: str, v
         ]
         row_records.append(
             {
+                "row_index": row_index,
                 "label": row.label,
                 "status": status,
                 "series_id": sid,
@@ -756,6 +757,7 @@ def admit_table_rows(unit_id: str, table_index: int, page: int, table_id: str, v
                     "family": "STEO",
                     "series_id": sid,
                     "row": sid or f"label:{row.label}",
+                    "row_index": row_index,
                     "label": row.label,
                     "period": key,
                     "col": key,
