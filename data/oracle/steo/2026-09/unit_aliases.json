@@ -1,0 +1,32 @@
+{
+ "frozen": true,
+ "committed_before_scoring": true,
+ "rule": "A STEO row is admissible only if its served UNITS equal the printed unit string after normalisation, or the two normalised strings are a pair on this CLOSED list; the served PRECISION must also equal the row's printed decimals. 'per' and '/' are never equivalent. Every normalisation or alias hit is logged per row by oracle.py.",
+ "normalisation": [
+  "Unicode NFKC",
+  "U+00A0 (no-break space) -> space",
+  "spaces around hyphens removed",
+  "whitespace collapsed",
+  "case-folded"
+ ],
+ "aliases": [
+  {
+   "printed": "billion kilowatt hours per day",
+   "served": "billion kilowatthours per day",
+   "why": "the same unit; 'kilowatt hours' vs the compound 'kilowatthours'"
+  },
+  {
+   "printed": "index, 2017=100",
+   "served": "index, year 2017=100",
+   "why": "the same index base; the served string inserts 'year'"
+  }
+ ],
+ "considered_and_not_aliased": [
+  {"printed": "million miles/day", "served": "million miles per day", "why": "'per' and '/' are not equivalent (owner's rule)"},
+  {"printed": "billion $2017", "served": "billion chained 2017 dollars - saar", "why": "different wording and an added SAAR qualifier: a judgement, not a string equivalence - the owner's to add"},
+  {"printed": "millions - saar", "served": "millions", "why": "the served string drops the SAAR qualifier"},
+  {"printed": "billion chained 2017 dollars - saar", "served": "billion chained 2012 dollars - saar", "why": "a real conflict: different base year in the served metadata"},
+  {"printed": "billion kilowatthours", "served": "kilowatthours", "why": "a real conflict: the served string drops 'billion'"},
+  {"printed": "million short tons", "served": "tons per hour", "why": "a real conflict"}
+ ]
+}

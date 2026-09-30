@@ -88,27 +88,59 @@ class Column:
 
 @dataclass
 class PrintedRow:
-    label: str
+    label: str  # markers and units stripped; the heading's text when the label is only a unit
     unit: str | None
-    footnote: str | None  # "(a)" etc. on the label
+    label_raw: str = ""
+    own_markers: list[str] = field(default_factory=list)
+    inherited_markers: list[str] = field(default_factory=list)  # from the heading above
+    heading: str = ""
     values: dict[str, str] = field(default_factory=dict)  # period key -> printed token
+    dashes: set[str] = field(default_factory=set)  # period keys printed "-": expected-empty
+    minus_flags: list[str] = field(default_factory=list)  # "-" that could be a sign (guard)
     top: float = 0.0
+
+    @property
+    def markers(self) -> list[str]:
+        return sorted(set(self.own_markers) | set(self.inherited_markers))
+
+    @property
+    def decimals(self) -> int | None:
+        """The row's printed precision: the modal number of decimals of its printed values."""
+        ds = [orc.decimals(orc.canon(t)) for t in self.values.values() if orc.canon(t)]
+        return max(set(ds), key=ds.count) if ds else None
 
 
 def clean_label(text: str) -> tuple[str, str | None]:
+    """The series name: leader dots, footnote markers "(a)" and unit parentheticals removed; a
+    qualifier such as "(excl GOA)" is kept as plain words - it is part of the name."""
     text = re.sub(r"[.…�]{2,}", " ", text)
     foot = re.findall(r"\(([a-z])\)", text)
     text = re.sub(r"\([a-z]\)", " ", text)
     text = re.sub(
-        r"\((?:[^)]*)\)", lambda m: m.group(0) if UNIT_WORDS.search(m.group(0)) else " ", text
+        r"\(([^)]*)\)",
+        lambda m: " " if UNIT_START.match(m.group(1).strip()) else f" {m.group(1)} ",
+        text,
     )
     return re.sub(r"\s+", " ", text).strip(), (foot[-1] if foot else None)
 
 
+UNIT_START = re.compile(
+    r"^\s*(dollars?|cents?|percent|millions?|billions?|thousands?|trillions?|quadrillion|index|"
+    r"degree|gigawatts?|megawatts?|kilowatthours?|terawatthours?|short tons|metric tons|number|"
+    r"cubic|barrels?|gallons?|btu|\$)\b",
+    re.I,
+)
+
+
 def unit_of(text: str) -> str | None:
+    """A printed unit: a parenthetical that STARTS with a quantity word - "(million barrels per
+    day)", "(dollars per gallon)". A descriptive parenthetical that merely mentions one ("(power
+    plants larger than one megawatt)") is not a unit. An ", except ..." clause is cut: it names
+    rows whose unit the page does not state as a string."""
     for m in re.finditer(r"\(([^)]*)\)", text):
-        if UNIT_WORDS.search(m.group(1)):
-            return re.sub(r"\s+", " ", m.group(1)).strip()
+        body = re.sub(r"\s+", " ", m.group(1)).strip()
+        if UNIT_START.match(body):
+            return re.split(r",\s*except\b", body, maxsplit=1)[0].strip()
     return None
 
 
@@ -152,7 +184,19 @@ def period_columns(lines: list[list[dict]]) -> tuple[list[Column], str]:
     return sorted(cols, key=lambda c: c.x), agree
 
 
-def read_table_page(pdf: Path, page_no: int) -> tuple[list[Column], str, list[PrintedRow]]:
+MARK = re.compile(r"\(([a-z])\)")
+DASHES = {"-", "\u2013", "\u2014"}
+
+
+def read_table_page(
+    pdf: Path, page_no: int
+) -> tuple[list[Column], str, list[PrintedRow], dict[str, str]]:
+    """Printed rows (with markers, heading, dashes, minus-guard flags) and footnote definitions.
+
+    A line with < 3 values is a heading: its unit (if any) is inherited by the rows below until the
+    next unit, and its markers by the rows below until the next heading. Footnote definitions
+    ("(a) text", wrapped lines joined) end the table.
+    """
     import pdfplumber
 
     with pdfplumber.open(pdf) as doc:
@@ -162,32 +206,77 @@ def read_table_page(pdf: Path, page_no: int) -> tuple[list[Column], str, list[Pr
     first_col = min(c.x for c in cols)
     pitch = st.median(b.x - a.x for a, b in zip(cols, cols[1:], strict=False))
     rows: list[PrintedRow] = []
+    defs: dict[str, str] = {}
     unit: str | None = None
+    heading, inherited = "", []
+    in_defs, current_def = False, None
     qi = next(
         i for i, ln in enumerate(lines) if sum(bool(QUARTER.match(w["text"])) for w in ln) >= 4
     )
+    for ln in lines[:qi]:  # a unit in the table title ("Table 7b. ... (billion kilowatthours)")
+        title = " ".join(w["text"] for w in ln)
+        if re.match(r"\s*Table\s+\d", title) and unit_of(title):
+            unit = unit_of(title)
     for ln in lines[qi + 1 :]:  # the two period header lines are not data
+        text = " ".join(w["text"] for w in ln)
         label_words = [w for w in ln if w["x1"] < first_col - 0.45 * pitch]
         cells = [w for w in ln if w not in label_words]
-        label_text = " ".join(w["text"] for w in label_words)
-        values = [w for w in cells if orc.canon(w["text"]) is not None or w["text"] in ("-", "NA")]
-        if len(values) < 3:  # a heading line: may set the unit
-            u = unit_of(" ".join(w["text"] for w in ln))
+        values = [
+            w
+            for w in cells
+            if orc.canon(w["text"]) is not None or w["text"] in DASHES or w["text"] == "NA"
+        ]
+        m_def = re.match(r"^\(([a-z])\)\s+(.*)$", text)
+        if m_def and len(values) < 3:
+            in_defs, current_def = True, m_def.group(1)
+            defs[current_def] = m_def.group(2).strip()
+            continue
+        if in_defs:
+            if text.startswith(("Notes:", "Sources:", "EIA completed", "Historical data")):
+                in_defs, current_def = False, None
+            elif current_def and len(values) < 3:
+                defs[current_def] += " " + text.strip()
+            continue
+        if len(values) < 3:  # a heading line
+            u = unit_of(text)
             if u:
                 unit = u
+            heading, inherited = text, MARK.findall(text)
             continue
-        label, foot = clean_label(label_text)
-        own = unit_of(label_text)
+        label_text = " ".join(w["text"] for w in label_words)
+        label, _ = clean_label(label_text)
+        if not label:  # the label is only a unit: the series is named by the heading above
+            label = clean_label(heading)[0]
         row = PrintedRow(
-            re.sub(r"\s*\([^)]*\)", "", label).strip(), own or unit, foot, top=ln[0]["top"]
+            label,
+            unit_of(label_text) or unit,
+            label_raw=label_text.strip(),
+            own_markers=MARK.findall(label_text),
+            inherited_markers=list(inherited),
+            heading=heading,
+            top=ln[0]["top"],
         )
+        taken: dict[str, str] = {}
         for w in values:
             cx = (w["x0"] + w["x1"]) / 2
             col = min(cols, key=lambda c: abs(c.x - cx))
-            if abs(col.x - cx) <= 0.5 * pitch and orc.canon(w["text"]) is not None:
-                row.values[col.key] = w["text"]
+            if abs(col.x - cx) > 0.5 * pitch:
+                continue
+            if w["text"] in DASHES:
+                if col.key in taken:  # a dash sharing a column with a number: sign or no-data?
+                    row.minus_flags.append(col.key)
+                row.dashes.add(col.key)
+                continue
+            if orc.canon(w["text"]) is None:
+                continue
+            if w["text"].startswith(("-", "\u2212")) and w["x0"] < col.x - 0.5 * pitch:
+                row.minus_flags.append(col.key)  # the sign intrudes into the previous column
+            if col.key in row.dashes:
+                row.minus_flags.append(col.key)
+            taken[col.key] = w["text"]
+            row.values[col.key] = w["text"]
         rows.append(row)
-    return cols, agree, rows
+    return cols, agree, rows, defs
 
 
 # ---- the snapshot ------------------------------------------------------------------------------
@@ -199,7 +288,8 @@ def json_rows(view: int, f: str) -> list[dict]:
 
 
 def data_rows(view: int) -> list[dict]:
-    """JSON rows that carry data, in printed order, with Q and A merged."""
+    """JSON rows that carry data, Q and A merged. ``LAST_HISTORICAL`` is the quarterly view's
+    (``YYYY0q``); ``LAST_HISTORICAL_A`` the annual view's (``YYYY``) - the forecast boundaries."""
     q = [r for r in json_rows(view, "Q") if r.get("HAS_DATA")]
     a = {
         (r.get("SERIES_ID"), r.get("DESCRIPTION")): r
@@ -209,9 +299,11 @@ def data_rows(view: int) -> list[dict]:
     out = []
     for r in q:
         merged = dict(r)
+        ann = a.get((r.get("SERIES_ID"), r.get("DESCRIPTION"))) or {}
         data = dict(r.get("DATA") or {})
-        data.update((a.get((r.get("SERIES_ID"), r.get("DESCRIPTION"))) or {}).get("DATA") or {})
+        data.update(ann.get("DATA") or {})
         merged["DATA"] = data
+        merged["LAST_HISTORICAL_A"] = ann.get("LAST_HISTORICAL")
         out.append(merged)
     return out
 
@@ -242,41 +334,106 @@ def labels_match(printed: str, rec: dict) -> bool:
 
 
 def agreement(row: PrintedRow, rec: dict) -> int:
+    """Printed values the served series reproduces, each rounded at the decimals the PAGE prints.
+
+    This identifies the series only. Admission separately requires the printed precision to equal
+    the served PRECISION (7b prints one decimal where the JSON declares two)."""
     data = rec.get("DATA") or {}
-    return sum(
-        1
-        for key, tok in row.values.items()
-        if orc.canon(render(data.get(key), rec.get("PRECISION")) or "") == orc.canon(tok)
-    )
-
-
-def match_rows(rows: list[PrintedRow], recs: list[dict]) -> list[tuple[PrintedRow, dict | None]]:
-    """Each printed row to one JSON data row: labels must match; among matching candidates (labels
-    repeat, and the JSON is not in printed order) the one whose served values agree most with the
-    printed values wins. Each JSON row is used once. Units play no part - they are what's
-    checked."""
-    used: set[int] = set()
-    out = []
-    for row in rows:
-        cands = [
-            (agreement(row, r), -i, i)
-            for i, r in enumerate(recs)
-            if i not in used and labels_match(row.label, r)
-        ]
-        if not cands:
-            out.append((row, None))
-            continue
-        _, _, best = max(cands)
-        used.add(best)
-        out.append((row, recs[best]))
-    return out
+    ok = 0
+    for key, tok in row.values.items():
+        c = orc.canon(tok)
+        if c is not None and orc.canon(render(data.get(key), orc.decimals(c)) or "") == c:
+            ok += 1
+    return ok
 
 
 def render(value, precision) -> str | None:
+    """Served value at the row's PRECISION, Decimal round-half-up (never Python round())."""
     if value is None or precision is None:
         return None
     d = value if isinstance(value, Decimal) else Decimal(str(value))
     return format(d.quantize(Decimal(1).scaleb(-int(precision)), rounding=ROUND_HALF_UP), "f")
+
+
+ABBREV = {"e": "east", "w": "west", "n": "north", "s": "south", "ak": "alaska", "hi": "hawaii"}
+
+
+def expanded(text: str) -> str:
+    """Normalised label with direction abbreviations expanded, "u s" -> "united states", and a
+    trailing plural "s" dropped from longer words (for the fuzzy fallback only)."""
+    t = norm_label(text).replace("u s ", "united states ")
+    if t == "u s" or t.endswith(" u s"):
+        t = t[:-3] + "united states"
+    words = [ABBREV.get(w, w) for w in t.split()]
+    return " ".join(w[:-1] if len(w) > 4 and w.endswith("s") else w for w in words)
+
+
+def fuzzy_ratio(printed: str, rec: dict) -> float:
+    from difflib import SequenceMatcher
+
+    p = expanded(printed)
+    return max(
+        SequenceMatcher(None, p, expanded(rec.get(k) or "")).ratio()
+        for k in ("DESCRIPTION", "CHART_NAME")
+    )
+
+
+FUZZY_MIN = 0.85  # label similarity after expansion
+FUZZY_CONFIRM = 0.8  # share of the row's printed values the served values must reproduce
+LABEL_CONFIRM = 0.5  # the same, for exact and prefix/suffix label matches
+
+
+def match_rows(
+    rows: list[PrintedRow], recs: list[dict]
+) -> list[tuple[PrintedRow, dict | None, str]]:
+    """Each printed row to one JSON data row, by SERIES_ID identity - never by position.
+
+    Labels must match exactly (normalised) or as a prefix/suffix variant; among candidates (labels
+    repeat, and the JSON is not in printed order) the one whose served values agree most with the
+    printed values wins. Failing that, a fuzzy label match (EIA's labels carry typos such as
+    "exluding", "egion"; the page abbreviates "E. N. Central") counts only if the served values
+    reproduce >= 80 % of the row's printed values. **Every** match needs value confirmation: a label
+    alone is not identity (3b's "Non-OPEC total" shares its DESCRIPTION with the unplanned-outages
+    series PADI_NONOPEC), so exact and affix matches need >= 50 %. Each JSON row is used once.
+    Units play no part - they are what's checked. Returns (row, record or None, "exact" | "affix" |
+    "fuzzy" | "none").
+    """
+
+    def is_exact(row: PrintedRow, rec: dict) -> bool:
+        return any(
+            norm_label(row.label) == norm_label(rec.get(k)) for k in ("DESCRIPTION", "CHART_NAME")
+        )
+
+    def need(row: PrintedRow, share: float) -> int:
+        return max(1, int(share * len(row.values) + 0.999))
+
+    # Passes, so a looser match never takes a series an exact label is waiting for ("Rest of Lower
+    # 48 States" would otherwise take "Lower 48 States" as a suffix match first).
+    passes = (
+        ("exact", lambda row, r: is_exact(row, r), LABEL_CONFIRM),
+        ("affix", lambda row, r: labels_match(row.label, r), LABEL_CONFIRM),
+        ("fuzzy", lambda row, r: fuzzy_ratio(row.label, r) >= FUZZY_MIN, FUZZY_CONFIRM),
+    )
+    used: set[int] = set()
+    chosen: dict[int, tuple[int, str]] = {}  # printed row index -> (record index, kind)
+    for kind, test, share in passes:
+        for ri, row in enumerate(rows):
+            if ri in chosen:
+                continue
+            cands = [
+                (agreement(row, r), -i, i)
+                for i, r in enumerate(recs)
+                if i not in used and test(row, r)
+            ]
+            cands = [c for c in cands if c[0] >= need(row, share)]
+            if cands:
+                _, _, best = max(cands)
+                used.add(best)
+                chosen[ri] = (best, kind)
+    return [
+        (row, recs[chosen[ri][0]], chosen[ri][1]) if ri in chosen else (row, None, "none")
+        for ri, row in enumerate(rows)
+    ]
 
 
 # ---- item 2 ------------------------------------------------------------------------------------
@@ -312,11 +469,11 @@ def main() -> int:
 
     out = []
     for name, pdf, pno in (("held steo_full.pdf", HELD_PDF, page), ("tables/pdf/2tab.pdf", tab, 1)):
-        cols, agree, rows = read_table_page(pdf, pno)
+        cols, agree, rows, _defs = read_table_page(pdf, pno)
         recs = data_rows(VIEW_OF_TABLE["2"])
         matched = match_rows(rows, recs)
-        label_miss = [r.label for r, rec in matched if rec is None]
-        pairs = [(r, rec) for r, rec in matched if rec is not None]
+        label_miss = [r.label for r, rec, _k in matched if rec is None]
+        pairs = [(r, rec) for r, rec, _k in matched if rec is not None]
         unit_miss = [
             (r.label, r.unit, rec.get("UNITS"), rec.get("SERIES_ID"))
             for r, rec in pairs
