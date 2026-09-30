@@ -86,7 +86,7 @@ CLAUDE.md is context, not enforced configuration. Anything that must be **blocke
 - Instrumentation is **OpenInference (`llm.*`), not `gen_ai.*`** — chosen *because* `gen_ai.*` is unreleased and still Development as of Aug 2026 (D-014). Do not "upgrade" to `gen_ai.*`; do not set `OTEL_SEMCONV_STABILITY_OPT_IN`. Pins: `openinference-semantic-conventions==0.1.37`, `openinference-instrumentation==0.1.63` (D-018; D-017's 0.1.29 lacked the `evaluations` constant). Verify attribute keys against the pinned package, not from memory.
 - Qwen3-Reranker is a yes/no LM scorer, not a drop-in cross-encoder — use the official scoring snippet or scores are garbage.
 - Sonnet 5's tokenizer produces ~30% more tokens than older models; budget projections must use measured usage from the API, not estimates.
-- Docling is unmeasured on OmniDocBench; the A1 ten-table audit is the only table score this project has for it. Fail A1 → `parser: paddleocr_vl` in config, re-audit.
+- TableFormer merges rows on dense no-leading pages (448 px resize; D-038); the oracle in `scripts/a1_diag/oracle.py` is the parser gate.
 - The L40S reports 44.7 GiB, not 48. Plan residency against 44.7.
 - Batch API results arrive out of order and hours later; the matrix runner must key everything by `(cell, seed, question_id)`, never by position.
 - **OTLP endpoint trap.** Phoenix's startup banner prints `OTLP over HTTP http://localhost:6006/v1/traces`. That value belongs in `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`. `OTEL_EXPORTER_OTLP_ENDPOINT` takes the **base only** (`http://host:6006`); the HTTP exporter appends `/v1/traces` itself. Copying the banner into the base variable produces `/v1/traces/v1/traces` and a `405 Method Not Allowed` on export.
