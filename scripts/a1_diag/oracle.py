@@ -650,20 +650,34 @@ def main() -> int:
             cells, reason = admit(pg, orc, unit, rec["path"])
             record(unit, ti, pg, cells, "; ".join(x for x in (note, reason) if x), rec)
 
-    # STEO: fetched and recorded, not used (monthly-only export vs quarterly/annual print)
-    steo_rec = fetch(
-        fetcher, STEO_URL, SRC / "STEO_m.xlsx", sources, pdf_edition(STEO_UNIT), args.refetch
-    )
+    # STEO: the 2026-09 JSON snapshot (data/oracle/steo/2026-09), admitted cell by cell against
+    # the printed page under the council's rules (steo.admit_table). STEO_m.xlsx (monthly) is kept
+    # as the edition check only.
+    import steo
+    import steo_footnotes
+
+    fetch(fetcher, STEO_URL, SRC / "STEO_m.xlsx", sources, pdf_edition(STEO_UNIT), args.refetch)
     steo_doc = json.loads((PARSED / f"{STEO_UNIT}.json").read_text(encoding="utf-8"))
+    data_tables = {ti: (page, tid) for ti, page, tid in steo_footnotes.table_pages(steo_doc)}
+    steo_detail = []
+    snap_rec = {
+        "path": "data/oracle/steo/2026-09",
+        "sha256": "see data/oracle/steo/2026-09/sources.json",
+        "pdf_date_issued": manifest[STEO_UNIT].get("date_issued"),
+        "release": "STEO 2026-09, release 2026-09-09",
+    }
     for ti in range(len(steo_doc["tables"])):
-        record(
-            STEO_UNIT,
-            ti,
-            None,
-            [],
-            "STEO_m.xlsx holds monthly values; the printed table is quarterly + annual",
-            steo_rec,
-        )
+        if ti not in data_tables:
+            record(STEO_UNIT, ti, None, [], "narrative table (pp3-5): no oracle series", None)
+            continue
+        page, tid = data_tables[ti]
+        res = steo.admit_table(STEO_UNIT, ti, page, tid, steo_footnotes.view_of(tid))
+        pg_stub = Page(STEO_UNIT, ti, page, tid)
+        record(STEO_UNIT, ti, pg_stub, res["cells"], "", snap_rec)
+        steo_detail.append({k: v for k, v in res.items() if k != "cells"})
+    (OUT / "steo_admission.json").write_text(
+        json.dumps(steo_detail, indent=1, default=str), encoding="utf-8"
+    )
     aeo_doc = json.loads((PARSED / f"{AEO_UNIT}.json").read_text(encoding="utf-8"))
     for ti in range(len(aeo_doc["tables"])):
         record(AEO_UNIT, ti, None, [], "no printed table id; no oracle source", None)

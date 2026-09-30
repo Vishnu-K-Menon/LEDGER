@@ -436,6 +436,188 @@ def match_rows(
     ]
 
 
+# ---- admission (item 3; council ruling adopted 2026-09-29) ------------------------------------
+
+
+def norm_unit(u: str | None) -> str | None:
+    """NFKC; U+00A0 -> space; spaces around hyphens removed; whitespace collapsed; case-folded."""
+    import unicodedata
+
+    if u is None:
+        return None
+    u = unicodedata.normalize("NFKC", u).replace(" ", " ")
+    u = re.sub(r"\s*-\s*", "-", u)
+    return re.sub(r"\s+", " ", u).strip().casefold()
+
+
+def load_frozen() -> tuple[dict, dict]:
+    """The frozen footnote list (by table + SERIES_ID) and the closed unit alias list."""
+    foot = json.loads((SNAP / "footnotes.json").read_text("utf-8"))
+    by_row = {(e["table_index"], e["series_id"]): e for e in foot["rows"] if e["series_id"]}
+    aliases = json.loads((SNAP / "unit_aliases.json").read_text("utf-8"))
+    pairs = {(norm_unit(a["printed"]), norm_unit(a["served"])) for a in aliases["aliases"]}
+    return by_row, {"pairs": pairs}
+
+
+def unit_verdict(printed: str | None, served: str | None, aliases: dict) -> tuple[bool, str]:
+    """(ok, how): equal raw, equal after normalisation, an alias pair, or a mismatch."""
+    if printed is not None and printed == served:
+        return True, "equal"
+    p, s = norm_unit(printed), norm_unit(served)
+    if p is not None and p == s:
+        return True, "normalised"
+    if (p, s) in aliases["pairs"]:
+        return True, "alias"
+    return False, "mismatch"
+
+
+def stratum(key: str, rec: dict) -> str:
+    """history / forecast from the row's LAST_HISTORICAL (YYYY0q) or LAST_HISTORICAL_A (YYYY)."""
+    lh = rec.get("LAST_HISTORICAL") if len(key) == 6 else rec.get("LAST_HISTORICAL_A")
+    if not lh:
+        return "unknown"
+    return "history" if key <= str(lh) else "forecast"
+
+
+def admit_table(unit_id: str, table_index: int, page: int, table_id: str, view: int) -> dict:
+    """Admit the printed cells of one STEO table against the 2026-09 snapshot.
+
+    Rows: printed rows mapped to JSON by SERIES_ID (``match_rows``); unserved printed rows and
+    unprinted JSON rows are out of the denominator. Row gates: the unit rule (normalised equality or
+    a CLOSED alias pair) and printed precision == served PRECISION. Cells: admitted iff
+    |printed - served| <= half a printed unit (Decimal, absolute). "-" cells are expected-empty -
+    never values, never zero - and are kept as a separate check. Footnoted rows (frozen list) are
+    admitted and reported as a stratum; one that disagrees with the served values while both
+    neighbours agree is excluded by name (the flip condition).
+    """
+    footnoted, aliases = load_frozen()
+    _cols, agree, rows, _defs = read_table_page(HELD_PDF, page)
+    matched = match_rows(rows, data_rows(view))
+    per_row = []
+    for row, rec, kind in matched:
+        if rec is None:
+            per_row.append(
+                {"row": row, "rec": None, "kind": kind, "cells": [], "status": "unserved"}
+            )
+            continue
+        sid = rec.get("SERIES_ID")
+        u_ok, u_how = unit_verdict(row.unit, rec.get("UNITS"), aliases)
+        prec = rec.get("PRECISION")
+        p_ok = prec is not None and row.decimals is not None and int(prec) == row.decimals
+        cells = []
+        for key, tok in row.values.items():
+            served = (rec.get("DATA") or {}).get(key)
+            printed = Decimal(orc.canon(tok))
+            if not u_ok:
+                status = "excluded: unit"
+            elif not p_ok:
+                status = "excluded: precision"
+            elif served is None:
+                status = "value mismatch: not served"
+            else:
+                half = Decimal(1).scaleb(-int(prec)) / 2
+                status = (
+                    "admitted" if abs(printed - Decimal(str(served))) <= half else "value mismatch"
+                )
+            cells.append(
+                {
+                    "unit": unit_id,
+                    "table_index": table_index,
+                    "page": page,
+                    "table_id": table_id,
+                    "family": "STEO",
+                    "series_id": sid,
+                    "row": sid,
+                    "label": row.label,
+                    "period": key,
+                    "col": key,
+                    "band": key,
+                    "header": key,
+                    "value": orc.canon(tok),
+                    "served": None if served is None else str(served),
+                    "precision": prec,
+                    "status": status,
+                    "admitted": status == "admitted",
+                    "stratum": stratum(key, rec),
+                    "footnoted": (table_index, sid) in footnoted,
+                    "oracle_file": (
+                        f"data/oracle/steo/2026-09/v{view}_{'Q' if len(key) == 6 else 'A'}.json"
+                    ),
+                }
+            )
+        per_row.append(
+            {
+                "row": row,
+                "rec": rec,
+                "kind": kind,
+                "cells": cells,
+                "status": "served",
+                "unit_how": u_how,
+                "printed_unit": row.unit,
+                "served_unit": rec.get("UNITS"),
+                "precision_ok": p_ok,
+                "printed_decimals": row.decimals,
+                "served_precision": prec,
+                "dashes": sorted(row.dashes),
+                "minus_flags": list(row.minus_flags),
+                "footnoted": (table_index, sid) in footnoted,
+            }
+        )
+    # flip condition: a footnoted row that disagrees while both served neighbours agree
+    served_rows = [r for r in per_row if r["status"] == "served"]
+    flipped = []
+    for i, r in enumerate(served_rows):
+        bad = any(c["status"].startswith("value mismatch") for c in r["cells"])
+        if not (r["footnoted"] and bad):
+            continue
+        neigh = [served_rows[j] for j in (i - 1, i + 1) if 0 <= j < len(served_rows)]
+        if neigh and all(
+            not any(c["status"].startswith("value mismatch") for c in n["cells"]) for n in neigh
+        ):
+            r["status"] = "excluded: flip"
+            flipped.append(r["rec"].get("SERIES_ID"))
+    cells = [c for r in served_rows if r["status"] == "served" for c in r["cells"]]
+    expected_empty = [
+        {
+            "series_id": r["rec"].get("SERIES_ID"),
+            "label": r["row"].label,
+            "period": k,
+            "served": None
+            if (r["rec"].get("DATA") or {}).get(k) is None
+            else str(r["rec"]["DATA"][k]),
+        }
+        for r in served_rows
+        for k in r["dashes"]
+    ]
+    return {
+        "unit": unit_id,
+        "table_index": table_index,
+        "page": page,
+        "table_id": table_id,
+        "view": view,
+        "normaliser": agree,
+        "cells": cells,
+        "printed_rows": len(rows),
+        "unserved_rows": [r["row"].label for r in per_row if r["status"] == "unserved"],
+        "flip_excluded": flipped,
+        "unit_hits": [
+            (r["rec"].get("SERIES_ID"), r["unit_how"], r["printed_unit"], r["served_unit"])
+            for r in served_rows
+            if r["unit_how"] in ("normalised", "alias", "mismatch")
+        ],
+        "precision_mismatch_rows": [
+            (r["rec"].get("SERIES_ID"), r["printed_decimals"], r["served_precision"])
+            for r in served_rows
+            if not r["precision_ok"]
+        ],
+        "expected_empty": expected_empty,
+        "minus_flags": [
+            (r["rec"].get("SERIES_ID"), f) for r in served_rows for f in r["minus_flags"]
+        ],
+        "match_kinds": [r["kind"] for r in per_row if r["status"] != "unserved"],
+    }
+
+
 # ---- item 2 ------------------------------------------------------------------------------------
 
 
