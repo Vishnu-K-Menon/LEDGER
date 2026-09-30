@@ -55,7 +55,9 @@ def period_tokens(key: str) -> set[str]:
     return {key[:4], f"q{key[5]}"} if len(key) == 6 else {key}
 
 
-def score_table(parsed: dict, page: int, printed_rows: list[dict], cells: list[dict]) -> dict:
+def score_table(
+    parsed: dict, page: int, printed_rows: list[dict], cells: list[dict], detail: list | None = None
+) -> dict:
     """``parsed``: the TableItem dict; ``printed_rows``: the oracle's row records in printed order
     (``steo_admission.json``); ``cells``: the oracle's admitted cells for this table."""
     cols, _agree, _rows, _defs = steo.read_table_page(steo.HELD_PDF, page)
@@ -130,6 +132,8 @@ def score_table(parsed: dict, page: int, printed_rows: list[dict], cells: list[d
         r = row_of.get(c["row_index"])
         if r is None:
             missing_row += 1
+            if detail is not None:
+                detail.append({"cell": c, "outcome": "row not found", "r": None, "j": None})
             continue
         if r not in pools:
             pools[r] = Counter(
@@ -144,9 +148,21 @@ def score_table(parsed: dict, page: int, printed_rows: list[dict], cells: list[d
         j = col_of.get(c["period"])
         if j is None or j >= len(grid[r]):
             missing_col += 1
+            if detail is not None:
+                detail.append({"cell": c, "outcome": "column not found", "r": r, "j": None})
             continue
-        if orc.canon(grid[r][j].get("text", "").strip()) == c["value"]:
-            strict += 1
+        ok = orc.canon(grid[r][j].get("text", "").strip()) == c["value"]
+        strict += ok
+        if detail is not None:
+            detail.append(
+                {
+                    "cell": c,
+                    "outcome": "strict" if ok else "wrong",
+                    "r": r,
+                    "j": j,
+                    "text": grid[r][j].get("text", ""),
+                }
+            )
     periods = sorted({c["period"] for c in cells})
     matched_headers = sum(
         1 for k in periods if k in col_of and period_tokens(k) <= header.get(col_of[k], set())

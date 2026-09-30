@@ -96,7 +96,9 @@ def cell_x(cell: dict) -> float | None:
     return (bb["l"] + bb["r"]) / 2 if bb else None
 
 
-def score_table(pg: orc.Page, tbl: dict, cells: list[dict]) -> dict:
+def score_table(pg: orc.Page, tbl: dict, cells: list[dict], detail: list | None = None) -> dict:
+    """``detail``, when given, receives one record per oracle cell (outcome, parsed row/column,
+    parsed text); it changes no count and no denominator (rung-1 flip matrix, D-038)."""
     grid = tbl["data"].get("grid") or []
     ncol = max((len(r) for r in grid), default=0)
     # parsed row keys
@@ -144,6 +146,8 @@ def score_table(pg: orc.Page, tbl: dict, cells: list[dict]) -> dict:
         r = row_of.get(cell["row"])
         if r is None:
             missing_row += 1
+            if detail is not None:
+                detail.append({"cell": cell, "outcome": "row not found", "r": None, "j": None})
             continue
         if r not in lenient_pool:
             lenient_pool[r] = Counter(
@@ -158,9 +162,21 @@ def score_table(pg: orc.Page, tbl: dict, cells: list[dict]) -> dict:
         j = col_of_band.get(cell["band"])
         if j is None or j >= len(grid[r]):
             missing_col += 1
+            if detail is not None:
+                detail.append({"cell": cell, "outcome": "column not found", "r": r, "j": None})
             continue
-        if orc.canon(grid[r][j].get("text", "").strip()) == cell["value"]:
-            strict += 1
+        ok = orc.canon(grid[r][j].get("text", "").strip()) == cell["value"]
+        strict += ok
+        if detail is not None:
+            detail.append(
+                {
+                    "cell": cell,
+                    "outcome": "strict" if ok else "wrong",
+                    "r": r,
+                    "j": j,
+                    "text": grid[r][j].get("text", ""),
+                }
+            )
     # header association per oracle column
     oracle_cols = sorted({(c["col"], c["band"], c["header"]) for c in cells})
     matched = 0

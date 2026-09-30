@@ -75,6 +75,14 @@ def bucket(tokens: int) -> str:
 
 
 def main() -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--parsed-dir", default="data/parsed")
+    ap.add_argument("--label", default="", help="suffix for the output files")
+    args = ap.parse_args()
+    parsed = REPO / args.parsed_dir
+    sfx = f"_{args.label}" if args.label else ""
     nums = owner_nums((REPO / "reports" / "a1_scripts" / "pdf_recall.py").read_text("utf-8"))
     sources = unit_sources()
     total = Tally()
@@ -83,7 +91,7 @@ def main() -> int:
     by_bucket: dict[str, Tally] = defaultdict(Tally)
     by_source_bucket: dict[tuple[str, str], Tally] = defaultdict(Tally)
     rows = []
-    for path in sorted(PARSED.glob("*.json")):
+    for path in sorted(parsed.glob("*.json")):
         if path.name.endswith(".meta.json"):
             continue
         unit = path.stem
@@ -127,7 +135,7 @@ def main() -> int:
             )
 
     OUT.mkdir(parents=True, exist_ok=True)
-    with (OUT / "census_tables.csv").open("w", newline="", encoding="utf-8") as fh:
+    with (OUT / f"census_tables{sfx}.csv").open("w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
@@ -185,7 +193,7 @@ def main() -> int:
         "",
         "Per-table rows for all tables: `reports/a1_diag/census_tables.csv`.",
     ]
-    (OUT / "census.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (OUT / f"census{sfx}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))
     return 0
 
