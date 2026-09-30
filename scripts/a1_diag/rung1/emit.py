@@ -341,6 +341,25 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
     ]
     if not body_idx:
         return None, ["no body lines in dense bands"]
+    # safety fallbacks (the text grid assumes numeric columns right of one label): keep
+    # TableFormer's table when that does not hold
+    n_prose = sum(1 for i in cand if prose(lines[i]))
+    if opts.get("safety", True) and n_prose > 0.2 * len(cand):
+        return None, [f"safety: {n_prose}/{len(cand)} candidate lines are prose"]
+    split_stubs = 0
+    for i in body_idx:  # a text column = >= 2 gap-separated stub segments holding words
+        stub_toks = [t for t in lines[i] if t["x1"] <= dense[0]["x0"]]
+        segs: list[list[dict]] = []
+        for t in stub_toks:
+            if segs and t["x0"] - segs[-1][-1]["x1"] <= 2 * (t["bottom"] - t["top"]):
+                segs[-1].append(t)
+            else:
+                segs.append([t])
+        worded = [s for s in segs if any(sum(ch.isalpha() for ch in t["text"]) >= 2 for t in s)]
+        if len(worded) >= 2:
+            split_stubs += 1
+    if opts.get("safety", True) and split_stubs >= 0.3 * len(body_idx):
+        return None, [f"safety: text column ({split_stubs}/{len(body_idx)} stubs split by > 2 em)"]
     first, last = body_idx[0], body_idx[-1]
     header_region = [t for ln in lines[:first] for t in ln]
 
@@ -467,6 +486,18 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
                 cell(fix_text(" ".join(t["text"] for t in toks)), span_box(toks), r, b + 1)
             )
         r += 1
+    numeric_cells = [
+        c
+        for c in out_cells
+        if not c["column_header"]
+        and c["start_col_offset_idx"] > 0
+        and any(is_value({"text": w}) for w in c["text"].split())
+    ]
+    multi = sum(
+        1 for c in numeric_cells if sum(is_value({"text": w}) for w in c["text"].split()) > 1
+    )
+    if opts.get("safety", True) and numeric_cells and multi > 0.02 * len(numeric_cells):
+        return None, [f"safety: {multi}/{len(numeric_cells)} emitted cells hold >= 2 numbers"]
     new = copy.deepcopy(tbl)
     ncol = len(bands) + 1
     new["data"]["table_cells"] = out_cells
@@ -643,7 +674,12 @@ def tokens_in(chars: list[dict], box: tuple[float, float, float, float]) -> list
             cur.append(c)
         if cur:
             toks.append(tg.make_token(cur))
-        toks = [t for t in toks if t["text"].strip()]
+        # spaced leader dots (MER prints ". . . .") arrive as one-glyph tokens: never content
+        toks = [
+            t
+            for t in toks
+            if t["text"].strip() and not all(ch in LEADERS + "·" for ch in t["text"])
+        ]
         if toks:
             out.append(toks)
     return out

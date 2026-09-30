@@ -56,3 +56,12 @@ are looked at during Part B.
   146 "right pairs lost" (read on DOD t123/t456: TableFormer's line codes "0004"/"0799" parsed as
   values, which the audit's wrapped-label window lets pass; artefacts, dropped correctly), 2 rung-1
   mispairings. Clause 4 read literally (C4) still FAILs on 102 tables.
+- **05:20-05:27Z safety fallbacks.** Robustness test on the 553 NON-fired BUDGET/CBO tables (not
+  held-out; they stay byte-identical in the output, so this only probes the emitter): first run
+  136 rung-1 mispairings, concentrated in FCS tables with text columns ("Farm Ownership |
+  Discretionary | 1.27"). Added conservative fallbacks (keep TableFormer's table): prose lines
+  > 20 % of candidates; a text column (>= 30 % of body stubs with >= 2 gap-separated worded
+  segments; a numeric line code "0001" is not a text column); emitted numeric cells with >= 2
+  numbers > 2 %. Spaced leader dots (MER ". . .") now dropped as one-glyph tokens (they had
+  tripped the text-column rule on sec3). Now: non-fired 0 mispairings; fired BUDGET/CBO 100
+  rebuilt, 1 mispairing (cbo-60786), 50 fallbacks (46 band assertion). Tuning 96.7 %.
