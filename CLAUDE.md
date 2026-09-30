@@ -87,6 +87,7 @@ CLAUDE.md is context, not enforced configuration. Anything that must be **blocke
 - Qwen3-Reranker is a yes/no LM scorer, not a drop-in cross-encoder — use the official scoring snippet or scores are garbage.
 - Sonnet 5's tokenizer produces ~30% more tokens than older models; budget projections must use measured usage from the API, not estimates.
 - TableFormer merges rows on dense no-leading pages (448 px resize; D-038); the oracle in `scripts/a1_diag/oracle.py` is the parser gate.
+- Emitter runs on eia/govinfo_erp units only; BUDGET/CBO outputs are hash-pinned (D-039).
 - The L40S reports 44.7 GiB, not 48. Plan residency against 44.7.
 - Batch API results arrive out of order and hours later; the matrix runner must key everything by `(cell, seed, question_id)`, never by position.
 - **OTLP endpoint trap.** Phoenix's startup banner prints `OTLP over HTTP http://localhost:6006/v1/traces`. That value belongs in `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`. `OTEL_EXPORTER_OTLP_ENDPOINT` takes the **base only** (`http://host:6006`); the HTTP exporter appends `/v1/traces` itself. Copying the banner into the base variable produces `/v1/traces/v1/traces` and a `405 Method Not Allowed` on export.
