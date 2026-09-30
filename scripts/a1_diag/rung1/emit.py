@@ -87,6 +87,18 @@ def cluster_bands(tokens: list[dict]) -> list[dict]:
             bands[-1].append(t)
         else:
             bands.append([t])
+    # a centred column's right edges wander with digit count and can split into two clusters whose
+    # x-extents overlap heavily; right-aligned neighbours never overlap that much: merge those
+    merged: list[list[dict]] = []
+    for b in bands:
+        if merged:
+            p = merged[-1]
+            p0, p1 = min(t["x0"] for t in p), max(t["x1"] for t in p)
+            b0, b1 = min(t["x0"] for t in b), max(t["x1"] for t in b)
+            if min(p1, b1) - max(p0, b0) > 0.5 * min(p1 - p0, b1 - b0):
+                p.extend(b)
+                continue
+        merged.append(list(b))
     return [
         {
             "right": st.median(t["x1"] for t in b),
@@ -95,7 +107,7 @@ def cluster_bands(tokens: list[dict]) -> list[dict]:
             "n": len(b),
             "tol": tol,
         }
-        for b in bands
+        for b in merged
     ]
 
 
@@ -598,7 +610,9 @@ def tokens_in(chars: list[dict], box: tuple[float, float, float, float]) -> list
                     toks.append(tg.make_token(cur))
                 cur = []
                 continue
-            if cur and c["x0"] - cur[-1]["x1"] > 0.25 * c["size"]:
+            # 0.15 x size: BUDGET's condensed font sets words 0.24-0.27 x size apart with no space
+            # character (DOD "Operatingforces"); letters inside a word sit at ~0
+            if cur and c["x0"] - cur[-1]["x1"] > 0.15 * c["size"]:
                 toks.append(tg.make_token(cur))
                 cur = []
             in_run = ch in LEADERS and (

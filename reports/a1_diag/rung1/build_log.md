@@ -47,3 +47,12 @@ are looked at during Part B.
   BUDGET/CBO: 47 fallbacks; conservation worse v1 8 tables / v2 1 table (cbo-60786: its
   "* = between zero and $500,000" footnote is cut by the owner's trim rule); label-number pairs
   changed on 104 tables (v1 17,827 pairs, v2 13,085).
+- **05:13-05:19Z.** Centred-column guard (bands whose x-extents overlap > 50 % of the narrower one
+  merge); emitter word-break threshold 0.15 x size (DOD's condensed font sets words 0.24-0.27 x
+  size apart with no space character: "Operatingforces"). New diagnostic `pairs_audit.py`
+  (report only, not a gate): each changed label-number pair on the fired BUDGET/CBO tables checked
+  against the printed line. 102 changed tables: 745 TableFormer mispairings dropped, 1,421 right
+  pairs gained, 5,303 relabelled (same number, placed right both times, label text differs),
+  146 "right pairs lost" (read on DOD t123/t456: TableFormer's line codes "0004"/"0799" parsed as
+  values, which the audit's wrapped-label window lets pass; artefacts, dropped correctly), 2 rung-1
+  mispairings. Clause 4 read literally (C4) still FAILs on 102 tables.

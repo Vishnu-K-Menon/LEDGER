@@ -1,0 +1,778 @@
+{
+"totals": {
+"lost_inconsistent (TableFormer mispairing dropped)": 745,
+"new_inconsistent (rung-1 mispairing)": 2,
+"relabelled (both page-consistent)": 5303,
+"lost_consistent (rung 1 lost a right pair)": 146,
+"new_consistent (a right pair TableFormer lacked)": 1421,
+"tables": 102
+},
+"tables": [
+{
+"unit": "cbo-59848",
+"table_index": 0,
+"lost_inconsistent (TableFormer mispairing dropped)": 1,
+"new_inconsistent (rung-1 mispairing)": 1,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "cbo-60786",
+"table_index": 0,
+"lost_inconsistent (TableFormer mispairing dropped)": 1,
+"new_inconsistent (rung-1 mispairing)": 1,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "cbo-62735",
+"table_index": 0,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 3
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 3,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 12
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 4,
+"relabelled (both page-consistent)": 10,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 5,
+"relabelled (both page-consistent)": 4,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 7,
+"relabelled (both page-consistent)": 10,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 4
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 8,
+"relabelled (both page-consistent)": 1,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 16,
+"relabelled (both page-consistent)": 3,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 19,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 12
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 20,
+"relabelled (both page-consistent)": 7,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 4
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 28,
+"lost_inconsistent (TableFormer mispairing dropped)": 2,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 4
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 29,
+"relabelled (both page-consistent)": 3,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 10
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 31,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 9,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 9
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 32,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 37,
+"lost_inconsistent (TableFormer mispairing dropped)": 8,
+"relabelled (both page-consistent)": 6,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 24
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 38,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 12
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 41,
+"lost_inconsistent (TableFormer mispairing dropped)": 46,
+"relabelled (both page-consistent)": 3,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 63
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 45,
+"lost_inconsistent (TableFormer mispairing dropped)": 141,
+"relabelled (both page-consistent)": 6,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 141
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 46,
+"lost_inconsistent (TableFormer mispairing dropped)": 150,
+"relabelled (both page-consistent)": 26,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 152
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 47,
+"lost_inconsistent (TableFormer mispairing dropped)": 120,
+"relabelled (both page-consistent)": 4,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 136
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 63,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-CROSSCUT",
+"table_index": 79,
+"lost_inconsistent (TableFormer mispairing dropped)": 4,
+"relabelled (both page-consistent)": 4,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 8
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 6,
+"lost_inconsistent (TableFormer mispairing dropped)": 9,
+"relabelled (both page-consistent)": 87,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 32
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 12,
+"relabelled (both page-consistent)": 45,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 13,
+"lost_inconsistent (TableFormer mispairing dropped)": 1,
+"relabelled (both page-consistent)": 83,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 1
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 81,
+"relabelled (both page-consistent)": 70,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 84,
+"lost_inconsistent (TableFormer mispairing dropped)": 14,
+"relabelled (both page-consistent)": 68,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 25
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 91,
+"lost_inconsistent (TableFormer mispairing dropped)": 11,
+"relabelled (both page-consistent)": 89,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 24
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 98,
+"relabelled (both page-consistent)": 37,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 105,
+"lost_inconsistent (TableFormer mispairing dropped)": 1,
+"relabelled (both page-consistent)": 62,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 2
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 106,
+"lost_inconsistent (TableFormer mispairing dropped)": 1,
+"relabelled (both page-consistent)": 52,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 3
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 112,
+"relabelled (both page-consistent)": 81,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 2
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 123,
+"lost_inconsistent (TableFormer mispairing dropped)": 25,
+"relabelled (both page-consistent)": 74,
+"lost_consistent (rung 1 lost a right pair)": 18,
+"new_consistent (a right pair TableFormer lacked)": 33
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 137,
+"lost_inconsistent (TableFormer mispairing dropped)": 4,
+"relabelled (both page-consistent)": 73,
+"lost_consistent (rung 1 lost a right pair)": 4,
+"new_consistent (a right pair TableFormer lacked)": 18
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 144,
+"relabelled (both page-consistent)": 50,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 148,
+"lost_inconsistent (TableFormer mispairing dropped)": 6,
+"relabelled (both page-consistent)": 28,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 149,
+"lost_inconsistent (TableFormer mispairing dropped)": 14,
+"relabelled (both page-consistent)": 83,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 24
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 156,
+"relabelled (both page-consistent)": 9,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 158,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 31,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 163,
+"relabelled (both page-consistent)": 12,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 165,
+"relabelled (both page-consistent)": 25,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 166,
+"lost_inconsistent (TableFormer mispairing dropped)": 8,
+"relabelled (both page-consistent)": 87,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 17
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 169,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 175,
+"relabelled (both page-consistent)": 65,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 4
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 182,
+"relabelled (both page-consistent)": 41,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 211,
+"relabelled (both page-consistent)": 13,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 218,
+"relabelled (both page-consistent)": 31,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 219,
+"lost_inconsistent (TableFormer mispairing dropped)": 21,
+"relabelled (both page-consistent)": 72,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 37
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 221,
+"relabelled (both page-consistent)": 59,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 228,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 53,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 3
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 230,
+"relabelled (both page-consistent)": 97,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 8
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 232,
+"relabelled (both page-consistent)": 37,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 239,
+"lost_inconsistent (TableFormer mispairing dropped)": 6,
+"relabelled (both page-consistent)": 71,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 16
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 245,
+"relabelled (both page-consistent)": 78,
+"lost_consistent (rung 1 lost a right pair)": 4,
+"new_consistent (a right pair TableFormer lacked)": 2
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 257,
+"lost_inconsistent (TableFormer mispairing dropped)": 1,
+"relabelled (both page-consistent)": 65,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 3
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 263,
+"relabelled (both page-consistent)": 44,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 265,
+"relabelled (both page-consistent)": 98,
+"lost_consistent (rung 1 lost a right pair)": 4,
+"new_consistent (a right pair TableFormer lacked)": 22
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 270,
+"relabelled (both page-consistent)": 4,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 1
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 275,
+"relabelled (both page-consistent)": 58,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 280,
+"relabelled (both page-consistent)": 40,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 287,
+"lost_inconsistent (TableFormer mispairing dropped)": 6,
+"relabelled (both page-consistent)": 89,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 26
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 291,
+"lost_inconsistent (TableFormer mispairing dropped)": 10,
+"relabelled (both page-consistent)": 85,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 26
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 293,
+"relabelled (both page-consistent)": 58,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 298,
+"relabelled (both page-consistent)": 37,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 303,
+"relabelled (both page-consistent)": 26,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 306,
+"relabelled (both page-consistent)": 21,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 322,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 5,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 323,
+"relabelled (both page-consistent)": 53,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 2
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 329,
+"lost_inconsistent (TableFormer mispairing dropped)": 6,
+"relabelled (both page-consistent)": 81,
+"lost_consistent (rung 1 lost a right pair)": 4,
+"new_consistent (a right pair TableFormer lacked)": 24
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 330,
+"relabelled (both page-consistent)": 54,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 343,
+"relabelled (both page-consistent)": 41,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 347,
+"lost_inconsistent (TableFormer mispairing dropped)": 6,
+"relabelled (both page-consistent)": 41,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 349,
+"lost_inconsistent (TableFormer mispairing dropped)": 7,
+"relabelled (both page-consistent)": 87,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 16
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 355,
+"relabelled (both page-consistent)": 68,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 368,
+"relabelled (both page-consistent)": 23,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 370,
+"relabelled (both page-consistent)": 32,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 393,
+"lost_inconsistent (TableFormer mispairing dropped)": 2,
+"relabelled (both page-consistent)": 58,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 8
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 394,
+"relabelled (both page-consistent)": 19,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 405,
+"relabelled (both page-consistent)": 22,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 407,
+"lost_inconsistent (TableFormer mispairing dropped)": 6,
+"relabelled (both page-consistent)": 87,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 23
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 416,
+"lost_inconsistent (TableFormer mispairing dropped)": 4,
+"relabelled (both page-consistent)": 62,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 18
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 426,
+"relabelled (both page-consistent)": 18,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 429,
+"relabelled (both page-consistent)": 70,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 10
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 433,
+"lost_inconsistent (TableFormer mispairing dropped)": 2,
+"relabelled (both page-consistent)": 47,
+"lost_consistent (rung 1 lost a right pair)": 2,
+"new_consistent (a right pair TableFormer lacked)": 4
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 436,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 10,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 444,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 51,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 9
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 446,
+"lost_inconsistent (TableFormer mispairing dropped)": 9,
+"relabelled (both page-consistent)": 80,
+"lost_consistent (rung 1 lost a right pair)": 3,
+"new_consistent (a right pair TableFormer lacked)": 25
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 456,
+"lost_inconsistent (TableFormer mispairing dropped)": 18,
+"relabelled (both page-consistent)": 60,
+"lost_consistent (rung 1 lost a right pair)": 5,
+"new_consistent (a right pair TableFormer lacked)": 47
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 463,
+"relabelled (both page-consistent)": 28,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 464,
+"lost_inconsistent (TableFormer mispairing dropped)": 5,
+"relabelled (both page-consistent)": 82,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 16
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 476,
+"lost_inconsistent (TableFormer mispairing dropped)": 3,
+"relabelled (both page-consistent)": 37,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 481,
+"relabelled (both page-consistent)": 27,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 483,
+"relabelled (both page-consistent)": 16,
+"lost_consistent (rung 1 lost a right pair)": 1,
+"new_consistent (a right pair TableFormer lacked)": 0
+},
+{
+"unit": "govinfo-BUDGET-2026-DOD",
+"table_index": 491,
+"lost_inconsistent (TableFormer mispairing dropped)": 7,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2027-BALANCES",
+"table_index": 11,
+"relabelled (both page-consistent)": 0,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 6
+},
+{
+"unit": "govinfo-BUDGET-2027-FCS",
+"table_index": 28,
+"lost_inconsistent (TableFormer mispairing dropped)": 9,
+"relabelled (both page-consistent)": 311,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 45
+},
+{
+"unit": "govinfo-BUDGET-2027-FCS",
+"table_index": 35,
+"lost_inconsistent (TableFormer mispairing dropped)": 10,
+"relabelled (both page-consistent)": 293,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 44
+},
+{
+"unit": "govinfo-BUDGET-2027-FCS",
+"table_index": 37,
+"lost_inconsistent (TableFormer mispairing dropped)": 10,
+"relabelled (both page-consistent)": 308,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 48
+},
+{
+"unit": "govinfo-BUDGET-2027-FCS",
+"table_index": 54,
+"lost_inconsistent (TableFormer mispairing dropped)": 4,
+"relabelled (both page-consistent)": 141,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 24
+},
+{
+"unit": "govinfo-BUDGET-2027-FCS",
+"table_index": 59,
+"lost_inconsistent (TableFormer mispairing dropped)": 4,
+"relabelled (both page-consistent)": 236,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 38
+},
+{
+"unit": "govinfo-BUDGET-2027-FCS",
+"table_index": 76,
+"lost_inconsistent (TableFormer mispairing dropped)": 1,
+"relabelled (both page-consistent)": 271,
+"lost_consistent (rung 1 lost a right pair)": 0,
+"new_consistent (a right pair TableFormer lacked)": 49
+}
+]
+}
