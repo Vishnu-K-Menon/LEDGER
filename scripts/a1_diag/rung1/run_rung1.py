@@ -37,6 +37,19 @@ def fired_list() -> set[tuple[str, int]]:
     return {(u, t) for u, t in json.loads(body)}
 
 
+# D-039: the emitter runs only on these manifest sources; every other unit's tables are copied
+# unchanged (BUDGET/CBO outputs are hash-pinned by tests/test_budget_cbo_pinned.py)
+SCOPE = frozenset({"eia", "govinfo_erp"})
+
+
+def source_of(unit: str) -> str:
+    for line in (REPO / "data" / "manifest.jsonl").read_text(encoding="utf-8").splitlines():
+        rec = json.loads(line) if line.strip() else {}
+        if rec.get("unit_id") == unit:
+            return rec["source"]
+    raise KeyError(f"{unit}: not in data/manifest.jsonl")
+
+
 def run_unit(unit: str, fired: set, covered: set, force: bool) -> dict:
     import pdfplumber
 
@@ -53,9 +66,13 @@ def run_unit(unit: str, fired: set, covered: set, force: bool) -> dict:
     log: dict = {"unit": unit, "tables": {}}
     pdf_path = next((REPO / "data" / "raw").rglob(f"{unit}.pdf"))
     with pdfplumber.open(pdf_path) as pdf:
+        in_scope = source_of(unit) in SCOPE
         for ti, tbl in enumerate(doc.get("tables", [])):
             if (unit, ti) not in fired:
                 log["tables"][ti] = {"status": "not fired"}
+                continue
+            if not in_scope:  # D-039: BUDGET/CBO outputs stay byte-identical (hash-pinned)
+                log["tables"][ti] = {"status": "out of scope (D-039)"}
                 continue
             new, notes = emit.rebuild(tbl, emit.lines_for(doc, tbl, pdf))
             if new is None:

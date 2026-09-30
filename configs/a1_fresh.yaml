@@ -1,0 +1,12 @@
+# D-039 item 3: parse the FRESH held-out units with the current corpus converter, apart from the
+# corpus. Overrides ONLY the four paths the parse stage reads and writes (ledger/ingest/parse.py:
+# 189 parsed_dir, 258 raw_dir, 432/478 manifest, 483 chunks); every parser and chunker setting is
+# inherited unchanged from configs/base.yaml.
+# NOTE (unresolved, see the item-3 report): `ledger ingest --stage parse` also writes
+# `<paths.reports_dir>/a9_pilot.md` (ledger/cli.py); without a reports_dir override the fresh run
+# would overwrite the pilot's reports/a9_pilot.md.
+paths:
+  manifest: data/manifest_fresh.jsonl
+  raw_dir: data/raw_fresh
+  parsed_dir: data/parsed_fresh
+  chunks: data/chunks_fresh.jsonl
