@@ -1,0 +1,47 @@
+{
+ "by_family": {
+  "CBO": {
+   "fallback": 1,
+   "rebuilt": 2,
+   "not fired": 3
+  },
+  "other": {
+   "fallback": 1,
+   "not fired": 2
+  },
+  "MER held-out": {
+   "rebuilt": 36,
+   "fallback": 3,
+   "not fired": 6
+  },
+  "tuning": {
+   "rebuilt": 2
+  },
+  "MER uncovered": {
+   "not fired": 1
+  },
+  "STEO uncovered": {
+   "not fired": 3
+  },
+  "STEO": {
+   "rebuilt": 11,
+   "not fired": 12,
+   "fallback": 3
+  },
+  "BUDGET": {
+   "fallback": 45,
+   "not fired": 550,
+   "rebuilt": 103
+  },
+  "ERP": {
+   "not fired": 1,
+   "rebuilt": 3
+  }
+ },
+ "fallback_reasons": {
+  "safety": 7,
+  "band assertion": 44,
+  "no dense band": 1,
+  "no body lines in dense bands": 1
+ }
+}

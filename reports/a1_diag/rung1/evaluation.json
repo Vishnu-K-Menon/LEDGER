@@ -1,0 +1,2443 @@
+{
+ "families": {
+  "MER held-out": {
+   "admission": "per-cell admission (A6), later edition",
+   "baseline": {
+    "cells": 18246,
+    "strict": 9149,
+    "lenient": 13716,
+    "missing_row": 47,
+    "missing_col": 839,
+    "header_cols": 485,
+    "header_matched": 413,
+    "strict_pct": 50.14,
+    "lenient_pct": 75.17,
+    "header_pct": 85.15
+   },
+   "rung1": {
+    "cells": 18246,
+    "strict": 16187,
+    "lenient": 16962,
+    "missing_row": 16,
+    "missing_col": 49,
+    "header_cols": 485,
+    "header_matched": 434,
+    "strict_pct": 88.72,
+    "lenient_pct": 92.96,
+    "header_pct": 89.48
+   },
+   "flips_value": 9,
+   "flips_character_level": 31,
+   "flip_value_pct": 0.05
+  },
+  "ERP": {
+   "admission": "per-cell admission (A6), same edition",
+   "baseline": {
+    "cells": 2764,
+    "strict": 1522,
+    "lenient": 2200,
+    "missing_row": 0,
+    "missing_col": 67,
+    "header_cols": 44,
+    "header_matched": 41,
+    "strict_pct": 55.07,
+    "lenient_pct": 79.59,
+    "header_pct": 93.18
+   },
+   "rung1": {
+    "cells": 2764,
+    "strict": 2557,
+    "lenient": 2645,
+    "missing_row": 0,
+    "missing_col": 0,
+    "header_cols": 44,
+    "header_matched": 43,
+    "strict_pct": 92.51,
+    "lenient_pct": 95.69,
+    "header_pct": 97.73
+   },
+   "flips_value": 0,
+   "flips_character_level": 0,
+   "flip_value_pct": 0.0
+  },
+  "STEO": {
+   "admission": "whole-row admission, same edition",
+   "baseline": {
+    "cells": 13046,
+    "strict": 11280,
+    "lenient": 11645,
+    "missing_row": 742,
+    "missing_col": 45,
+    "header_cols": 374,
+    "header_matched": 354,
+    "strict_pct": 86.46,
+    "lenient_pct": 89.26,
+    "header_pct": 94.65
+   },
+   "rung1": {
+    "cells": 13046,
+    "strict": 12493,
+    "lenient": 12535,
+    "missing_row": 268,
+    "missing_col": 0,
+    "header_cols": 374,
+    "header_matched": 294,
+    "strict_pct": 95.76,
+    "lenient_pct": 96.08,
+    "header_pct": 78.61
+   },
+   "flips_value": 36,
+   "flips_character_level": 0,
+   "flip_value_pct": 0.28,
+   "pairing_loss_baseline": 274,
+   "pairing_loss_rung1": 93
+  },
+  "tuning": {
+   "admission": "per-cell admission (A6), later edition; tuning set, never held-out",
+   "baseline": {
+    "cells": 1515,
+    "strict": 687,
+    "lenient": 1099,
+    "missing_row": 0,
+    "missing_col": 57,
+    "header_cols": 29,
+    "header_matched": 25,
+    "strict_pct": 45.35,
+    "lenient_pct": 72.54,
+    "header_pct": 86.21
+   },
+   "rung1": {
+    "cells": 1515,
+    "strict": 1466,
+    "lenient": 1467,
+    "missing_row": 0,
+    "missing_col": 0,
+    "header_cols": 29,
+    "header_matched": 28,
+    "strict_pct": 96.77,
+    "lenient_pct": 96.83,
+    "header_pct": 96.55
+   },
+   "flips_value": 0,
+   "flips_character_level": 0,
+   "flip_value_pct": 0.0
+  }
+ },
+ "per_table": {
+  "MER held-out": [
+   {
+    "table": "1.1",
+    "page": 3,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 483,
+    "strict_base": 51.76,
+    "strict": 98.76,
+    "lenient": 98.76,
+    "header": "12/12",
+    "header_base": "10/12",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.2",
+    "page": 5,
+    "unit": "eia-pdf-sec1",
+    "status": "fallback",
+    "cells": 569,
+    "strict_base": 47.8,
+    "strict": 47.8,
+    "lenient": 76.1,
+    "header": "10/13",
+    "header_base": "10/13",
+    "row_nf": 0,
+    "col_nf": 49
+   },
+   {
+    "table": "1.3",
+    "page": 7,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 603,
+    "strict_base": 42.79,
+    "strict": 99.5,
+    "lenient": 99.5,
+    "header": "12/12",
+    "header_base": "10/12",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.4a",
+    "page": 9,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 444,
+    "strict_base": 57.88,
+    "strict": 99.1,
+    "lenient": 99.1,
+    "header": "9/9",
+    "header_base": "7/9",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.4b",
+    "page": 11,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 410,
+    "strict_base": 60.73,
+    "strict": 97.56,
+    "lenient": 97.56,
+    "header": "9/9",
+    "header_base": "8/9",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.4c",
+    "page": 13,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 414,
+    "strict_base": 54.83,
+    "strict": 97.58,
+    "lenient": 97.58,
+    "header": "9/9",
+    "header_base": "8/9",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.5",
+    "page": 15,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 519,
+    "strict_base": 74.76,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "10/10",
+    "header_base": "10/10",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.6",
+    "page": 17,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 192,
+    "strict_base": 53.12,
+    "strict": 97.4,
+    "lenient": 97.4,
+    "header": "7/7",
+    "header_base": "7/7",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.7",
+    "page": 19,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 497,
+    "strict_base": 61.57,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/10",
+    "header_base": "9/10",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.8",
+    "page": 21,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 587,
+    "strict_base": 64.74,
+    "strict": 99.15,
+    "lenient": 99.15,
+    "header": "8/12",
+    "header_base": "12/12",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.9",
+    "page": 22,
+    "unit": "eia-pdf-sec1",
+    "status": "not fired",
+    "cells": 30,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "5/5",
+    "header_base": "5/5",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.10",
+    "page": 23,
+    "unit": "eia-pdf-sec1",
+    "status": "not fired",
+    "cells": 64,
+    "strict_base": 85.94,
+    "strict": 85.94,
+    "lenient": 95.31,
+    "header": "6/6",
+    "header_base": "6/6",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.11",
+    "page": 24,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 488,
+    "strict_base": 48.77,
+    "strict": 99.18,
+    "lenient": 99.18,
+    "header": "10/10",
+    "header_base": "8/10",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.12",
+    "page": 25,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 518,
+    "strict_base": 48.26,
+    "strict": 98.46,
+    "lenient": 98.46,
+    "header": "10/10",
+    "header_base": "8/10",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.13a",
+    "page": 26,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 450,
+    "strict_base": 45.11,
+    "strict": 92.22,
+    "lenient": 92.22,
+    "header": "6/10",
+    "header_base": "3/10",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "1.13b",
+    "page": 27,
+    "unit": "eia-pdf-sec1",
+    "status": "rebuilt",
+    "cells": 554,
+    "strict_base": 46.57,
+    "strict": 93.32,
+    "lenient": 93.32,
+    "header": "11/12",
+    "header_base": "9/12",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "11.1",
+    "page": 3,
+    "unit": "eia-pdf-sec11",
+    "status": "rebuilt",
+    "cells": 644,
+    "strict_base": 65.06,
+    "strict": 96.43,
+    "lenient": 96.58,
+    "header": "12/14",
+    "header_base": "12/14",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "11.2",
+    "page": 5,
+    "unit": "eia-pdf-sec11",
+    "status": "not fired",
+    "cells": 339,
+    "strict_base": 74.34,
+    "strict": 74.34,
+    "lenient": 84.37,
+    "header": "6/8",
+    "header_base": "6/8",
+    "row_nf": 6,
+    "col_nf": 0
+   },
+   {
+    "table": "11.3",
+    "page": 6,
+    "unit": "eia-pdf-sec11",
+    "status": "rebuilt",
+    "cells": 431,
+    "strict_base": 77.73,
+    "strict": 98.38,
+    "lenient": 98.38,
+    "header": "6/11",
+    "header_base": "9/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "11.4",
+    "page": 7,
+    "unit": "eia-pdf-sec11",
+    "status": "rebuilt",
+    "cells": 592,
+    "strict_base": 59.97,
+    "strict": 95.61,
+    "lenient": 95.78,
+    "header": "11/14",
+    "header_base": "12/14",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "11.5",
+    "page": 8,
+    "unit": "eia-pdf-sec11",
+    "status": "not fired",
+    "cells": 436,
+    "strict_base": 55.05,
+    "strict": 55.05,
+    "lenient": 76.61,
+    "header": "9/11",
+    "header_base": "9/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "11.6",
+    "page": 9,
+    "unit": "eia-pdf-sec11",
+    "status": "rebuilt",
+    "cells": 347,
+    "strict_base": 58.21,
+    "strict": 84.73,
+    "lenient": 99.42,
+    "header": "7/8",
+    "header_base": "8/8",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "11.7",
+    "page": 10,
+    "unit": "eia-pdf-sec11",
+    "status": "rebuilt",
+    "cells": 564,
+    "strict_base": 57.98,
+    "strict": 99.47,
+    "lenient": 99.47,
+    "header": "8/11",
+    "header_base": "5/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.1",
+    "page": 3,
+    "unit": "eia-pdf-sec3",
+    "status": "fallback",
+    "cells": 172,
+    "strict_base": 23.84,
+    "strict": 23.84,
+    "lenient": 65.7,
+    "header": "12/13",
+    "header_base": "12/13",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.2",
+    "page": 5,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 328,
+    "strict_base": 22.26,
+    "strict": 92.07,
+    "lenient": 92.07,
+    "header": "12/14",
+    "header_base": "11/14",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.3a",
+    "page": 7,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 263,
+    "strict_base": 21.29,
+    "strict": 92.78,
+    "lenient": 92.78,
+    "header": "12/12",
+    "header_base": "12/12",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.3b",
+    "page": 9,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 279,
+    "strict_base": 26.16,
+    "strict": 84.23,
+    "lenient": 84.59,
+    "header": "10/11",
+    "header_base": "11/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.3c",
+    "page": 10,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 238,
+    "strict_base": 9.66,
+    "strict": 20.59,
+    "lenient": 88.66,
+    "header": "2/9",
+    "header_base": "2/9",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.3d",
+    "page": 11,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 254,
+    "strict_base": 61.42,
+    "strict": 98.82,
+    "lenient": 98.82,
+    "header": "11/11",
+    "header_base": "11/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.3e",
+    "page": 12,
+    "unit": "eia-pdf-sec3",
+    "status": "not fired",
+    "cells": 161,
+    "strict_base": 37.27,
+    "strict": 37.27,
+    "lenient": 70.19,
+    "header": "9/9",
+    "header_base": "9/9",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.31",
+    "page": 13,
+    "unit": "eia-pdf-sec3",
+    "status": "not fired",
+    "cells": 233,
+    "strict_base": 51.5,
+    "strict": 51.5,
+    "lenient": 68.67,
+    "header": "12/12",
+    "header_base": "12/12",
+    "row_nf": 10,
+    "col_nf": 0
+   },
+   {
+    "table": "3.4",
+    "page": 15,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 346,
+    "strict_base": 31.5,
+    "strict": 91.33,
+    "lenient": 91.91,
+    "header": "13/13",
+    "header_base": "10/13",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.5",
+    "page": 17,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 313,
+    "strict_base": 25.88,
+    "strict": 87.54,
+    "lenient": 87.54,
+    "header": "13/15",
+    "header_base": "13/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.7a",
+    "page": 21,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 225,
+    "strict_base": 24.44,
+    "strict": 82.67,
+    "lenient": 83.11,
+    "header": "11/11",
+    "header_base": "9/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.7b",
+    "page": 22,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 277,
+    "strict_base": 26.35,
+    "strict": 83.39,
+    "lenient": 83.39,
+    "header": "10/13",
+    "header_base": "10/13",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.7c",
+    "page": 23,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 295,
+    "strict_base": 37.29,
+    "strict": 92.54,
+    "lenient": 92.54,
+    "header": "13/13",
+    "header_base": "13/13",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.8a",
+    "page": 26,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 476,
+    "strict_base": 39.5,
+    "strict": 92.23,
+    "lenient": 92.44,
+    "header": "11/11",
+    "header_base": "10/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.8b",
+    "page": 27,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 630,
+    "strict_base": 45.4,
+    "strict": 92.22,
+    "lenient": 92.54,
+    "header": "11/13",
+    "header_base": "12/13",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3.8c",
+    "page": 28,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 641,
+    "strict_base": 50.86,
+    "strict": 97.19,
+    "lenient": 97.19,
+    "header": "13/13",
+    "header_base": "13/13",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4.1",
+    "page": 3,
+    "unit": "eia-pdf-sec4",
+    "status": "fallback",
+    "cells": 538,
+    "strict_base": 47.58,
+    "strict": 47.58,
+    "lenient": 64.87,
+    "header": "10/11",
+    "header_base": "10/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4.2a",
+    "page": 4,
+    "unit": "eia-pdf-sec4",
+    "status": "rebuilt",
+    "cells": 751,
+    "strict_base": 41.41,
+    "strict": 98.67,
+    "lenient": 98.67,
+    "header": "13/14",
+    "header_base": "11/14",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4.3",
+    "page": 6,
+    "unit": "eia-pdf-sec4",
+    "status": "rebuilt",
+    "cells": 519,
+    "strict_base": 43.16,
+    "strict": 93.64,
+    "lenient": 93.64,
+    "header": "11/11",
+    "header_base": "10/11",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4.4",
+    "page": 7,
+    "unit": "eia-pdf-sec4",
+    "status": "rebuilt",
+    "cells": 427,
+    "strict_base": 49.18,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "8/8",
+    "header_base": "7/8",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "8.1",
+    "page": 3,
+    "unit": "eia-pdf-sec8",
+    "status": "rebuilt",
+    "cells": 274,
+    "strict_base": 65.33,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "5/5",
+    "header_base": "5/5",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "8.2",
+    "page": 5,
+    "unit": "eia-pdf-sec8",
+    "status": "rebuilt",
+    "cells": 431,
+    "strict_base": 66.36,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "10/10",
+    "header_base": "9/10",
+    "row_nf": 0,
+    "col_nf": 0
+   }
+  ],
+  "ERP": [
+   {
+    "table": "table22 sheet0",
+    "page": 1,
+    "unit": "govinfo-ERP-2026-table22",
+    "status": "not fired",
+    "cells": 566,
+    "strict_base": 63.43,
+    "strict": 63.43,
+    "lenient": 78.98,
+    "header": "10/10",
+    "header_base": "10/10",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "table22 sheet1",
+    "page": 2,
+    "unit": "govinfo-ERP-2026-table22",
+    "status": "rebuilt",
+    "cells": 590,
+    "strict_base": 71.19,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/10",
+    "header_base": "10/10",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "table4 sheet0",
+    "page": 1,
+    "unit": "govinfo-ERP-2026-table4",
+    "status": "rebuilt",
+    "cells": 804,
+    "strict_base": 43.41,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "12/12",
+    "header_base": "10/12",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "table4 sheet1",
+    "page": 2,
+    "unit": "govinfo-ERP-2026-table4",
+    "status": "rebuilt",
+    "cells": 804,
+    "strict_base": 49.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "12/12",
+    "header_base": "11/12",
+    "row_nf": 0,
+    "col_nf": 0
+   }
+  ],
+  "STEO": [
+   {
+    "table": "1",
+    "page": 31,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 330,
+    "strict_base": 90.91,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "2",
+    "page": 32,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 396,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "6/15",
+    "header_base": "14/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3a",
+    "page": 33,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 465,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3b",
+    "page": 34,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 412,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3c",
+    "page": 35,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 332,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3d",
+    "page": 36,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 357,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "3e",
+    "page": 37,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 357,
+    "strict_base": 100.0,
+    "strict": 89.92,
+    "lenient": 89.92,
+    "header": "9/15",
+    "header_base": "12/15",
+    "row_nf": 21,
+    "col_nf": 0
+   },
+   {
+    "table": "4a",
+    "page": 38,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 810,
+    "strict_base": 66.54,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4b",
+    "page": 39,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 645,
+    "strict_base": 66.05,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4c",
+    "page": 40,
+    "unit": "eia-pdf-steo_full",
+    "status": "fallback",
+    "cells": 210,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4d",
+    "page": 41,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 615,
+    "strict_base": 90.41,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "5a",
+    "page": 42,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 495,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "5b",
+    "page": 43,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 465,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "6",
+    "page": 44,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 465,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "7a",
+    "page": 45,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 600,
+    "strict_base": 88.5,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "6/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "7b",
+    "page": 46,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 660,
+    "strict_base": 89.55,
+    "strict": 89.55,
+    "lenient": 91.82,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 30,
+    "col_nf": 0
+   },
+   {
+    "table": "7c",
+    "page": 47,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 600,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "7d",
+    "page": 48,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 825,
+    "strict_base": 58.18,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/15",
+    "header_base": "14/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "7d",
+    "page": 49,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 810,
+    "strict_base": 80.74,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "6/15",
+    "header_base": "8/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "7e",
+    "page": 50,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 315,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "8",
+    "page": 51,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 510,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "9a",
+    "page": 52,
+    "unit": "eia-pdf-steo_full",
+    "status": "fallback",
+    "cells": 495,
+    "strict_base": 94.55,
+    "strict": 94.55,
+    "lenient": 96.77,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "9b",
+    "page": 53,
+    "unit": "eia-pdf-steo_full",
+    "status": "rebuilt",
+    "cells": 675,
+    "strict_base": 85.19,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "9/15",
+    "header_base": "12/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "9c",
+    "page": 54,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 600,
+    "strict_base": 100.0,
+    "strict": 100.0,
+    "lenient": 100.0,
+    "header": "15/15",
+    "header_base": "15/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "10a",
+    "page": 55,
+    "unit": "eia-pdf-steo_full",
+    "status": "fallback",
+    "cells": 448,
+    "strict_base": 7.59,
+    "strict": 7.59,
+    "lenient": 11.16,
+    "header": "2/7",
+    "header_base": "2/7",
+    "row_nf": 210,
+    "col_nf": 0
+   },
+   {
+    "table": "10b",
+    "page": 56,
+    "unit": "eia-pdf-steo_full",
+    "status": "not fired",
+    "cells": 154,
+    "strict_base": 95.45,
+    "strict": 95.45,
+    "lenient": 95.45,
+    "header": "7/7",
+    "header_base": "7/7",
+    "row_nf": 7,
+    "col_nf": 0
+   }
+  ],
+  "tuning": [
+   {
+    "table": "3.6",
+    "page": 19,
+    "unit": "eia-pdf-sec3",
+    "status": "rebuilt",
+    "cells": 721,
+    "strict_base": 42.02,
+    "strict": 93.62,
+    "lenient": 93.76,
+    "header": "14/15",
+    "header_base": "11/15",
+    "row_nf": 0,
+    "col_nf": 0
+   },
+   {
+    "table": "4.2b",
+    "page": 5,
+    "unit": "eia-pdf-sec4",
+    "status": "rebuilt",
+    "cells": 794,
+    "strict_base": 48.36,
+    "strict": 99.62,
+    "lenient": 99.62,
+    "header": "14/14",
+    "header_base": "14/14",
+    "row_nf": 0,
+    "col_nf": 0
+   }
+  ]
+ },
+ "census": {
+  "baseline": {
+   "cbo_manual": {
+    "body": 441,
+    "merged_body": 1,
+    "rate_pct": 0.23
+   },
+   "eia": {
+    "body": 38747,
+    "merged_body": 4807,
+    "rate_pct": 12.41
+   },
+   "govinfo_budget": {
+    "body": 65778,
+    "merged_body": 636,
+    "rate_pct": 0.97
+   },
+   "govinfo_crpt": {
+    "body": 0,
+    "merged_body": 0,
+    "rate_pct": null
+   },
+   "govinfo_erp": {
+    "body": 2451,
+    "merged_body": 470,
+    "rate_pct": 19.18
+   }
+  },
+  "rung1": {
+   "cbo_manual": {
+    "body": 429,
+    "merged_body": 0,
+    "rate_pct": 0.0
+   },
+   "eia": {
+    "body": 43399,
+    "merged_body": 748,
+    "rate_pct": 1.72
+   },
+   "govinfo_budget": {
+    "body": 63028,
+    "merged_body": 344,
+    "rate_pct": 0.55
+   },
+   "govinfo_crpt": {
+    "body": 0,
+    "merged_body": 0,
+    "rate_pct": null
+   },
+   "govinfo_erp": {
+    "body": 2818,
+    "merged_body": 66,
+    "rate_pct": 2.34
+   }
+  }
+ },
+ "owner": {
+  "baseline": {
+   "pdf_tables": {
+    "govinfo-BUDGET-2026-DOD|446": {
+     "page": 94,
+     "recall_pct": 100.0,
+     "hit": 152,
+     "on_page": 152,
+     "ceiling_pct": 88.84
+    },
+    "govinfo-BUDGET-2026-DOD|112": {
+     "page": 27,
+     "recall_pct": 100.0,
+     "hit": 148,
+     "on_page": 148,
+     "ceiling_pct": 98.97
+    },
+    "govinfo-BUDGET-2026-CROSSCUT|45": {
+     "page": 56,
+     "recall_pct": 100.0,
+     "hit": 396,
+     "on_page": 396,
+     "ceiling_pct": 100.0
+    },
+    "eia-pdf-steo_full|10": {
+     "page": 38,
+     "recall_pct": 99.88,
+     "hit": 818,
+     "on_page": 819,
+     "ceiling_pct": 82.04
+    },
+    "cbo-61959|0": {
+     "page": 1,
+     "recall_pct": 100.0,
+     "hit": 187,
+     "on_page": 187,
+     "ceiling_pct": 100.0
+    },
+    "eia-pdf-sec3|10": {
+     "page": 19,
+     "recall_pct": 100.0,
+     "hit": 895,
+     "on_page": 895,
+     "ceiling_pct": 45.88
+    },
+    "eia-pdf-sec11|3": {
+     "page": 7,
+     "recall_pct": 100.0,
+     "hit": 674,
+     "on_page": 674,
+     "ceiling_pct": 74.44
+    },
+    "eia-pdf-sec4|2": {
+     "page": 5,
+     "recall_pct": 100.0,
+     "hit": 868,
+     "on_page": 868,
+     "ceiling_pct": 51.12
+    }
+   },
+   "erp_a1_strict_pct": 55.72
+  },
+  "rung1": {
+   "pdf_tables": {
+    "govinfo-BUDGET-2026-DOD|446": {
+     "page": 94,
+     "recall_pct": 100.0,
+     "hit": 152,
+     "on_page": 152,
+     "ceiling_pct": 100.0
+    },
+    "govinfo-BUDGET-2026-DOD|112": {
+     "page": 27,
+     "recall_pct": 100.0,
+     "hit": 148,
+     "on_page": 148,
+     "ceiling_pct": 100.0
+    },
+    "govinfo-BUDGET-2026-CROSSCUT|45": {
+     "page": 56,
+     "recall_pct": 100.0,
+     "hit": 396,
+     "on_page": 396,
+     "ceiling_pct": 100.0
+    },
+    "eia-pdf-steo_full|10": {
+     "page": 38,
+     "recall_pct": 99.88,
+     "hit": 818,
+     "on_page": 819,
+     "ceiling_pct": 100.0
+    },
+    "cbo-61959|0": {
+     "page": 1,
+     "recall_pct": 100.0,
+     "hit": 187,
+     "on_page": 187,
+     "ceiling_pct": 100.0
+    },
+    "eia-pdf-sec3|10": {
+     "page": 19,
+     "recall_pct": 99.55,
+     "hit": 891,
+     "on_page": 895,
+     "ceiling_pct": 100.0
+    },
+    "eia-pdf-sec11|3": {
+     "page": 7,
+     "recall_pct": 99.7,
+     "hit": 672,
+     "on_page": 674,
+     "ceiling_pct": 100.0
+    },
+    "eia-pdf-sec4|2": {
+     "page": 5,
+     "recall_pct": 100.0,
+     "hit": 868,
+     "on_page": 868,
+     "ceiling_pct": 100.0
+    }
+   },
+   "erp_a1_strict_pct": 77.6
+  }
+ },
+ "bc_baseline_v1_reproduced": true,
+ "bc": {
+  "v1": {
+   "clause3_changed_nonfired": [],
+   "clause4_changed_tables": [
+    {
+     "table": "cbo-60786|0",
+     "pairs_changed": 3
+    },
+    {
+     "table": "cbo-62735|0",
+     "pairs_changed": 7
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|16",
+     "pairs_changed": 250
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|19",
+     "pairs_changed": 232
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|20",
+     "pairs_changed": 232
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|28",
+     "pairs_changed": 256
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|29",
+     "pairs_changed": 238
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|3",
+     "pairs_changed": 224
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|31",
+     "pairs_changed": 230
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|32",
+     "pairs_changed": 256
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|37",
+     "pairs_changed": 476
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|38",
+     "pairs_changed": 508
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|4",
+     "pairs_changed": 234
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|40",
+     "pairs_changed": 178
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|41",
+     "pairs_changed": 283
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|45",
+     "pairs_changed": 624
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|46",
+     "pairs_changed": 554
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|47",
+     "pairs_changed": 292
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|5",
+     "pairs_changed": 232
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|63",
+     "pairs_changed": 123
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|7",
+     "pairs_changed": 230
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|79",
+     "pairs_changed": 298
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|8",
+     "pairs_changed": 252
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|105",
+     "pairs_changed": 128
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|106",
+     "pairs_changed": 109
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|112",
+     "pairs_changed": 166
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|12",
+     "pairs_changed": 91
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|123",
+     "pairs_changed": 224
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|13",
+     "pairs_changed": 170
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|137",
+     "pairs_changed": 172
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|144",
+     "pairs_changed": 101
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|148",
+     "pairs_changed": 62
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|149",
+     "pairs_changed": 204
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|156",
+     "pairs_changed": 19
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|158",
+     "pairs_changed": 65
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|163",
+     "pairs_changed": 25
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|165",
+     "pairs_changed": 51
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|166",
+     "pairs_changed": 201
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|169",
+     "pairs_changed": 3
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|175",
+     "pairs_changed": 137
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|182",
+     "pairs_changed": 85
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|210",
+     "pairs_changed": 19
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|211",
+     "pairs_changed": 27
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|213",
+     "pairs_changed": 22
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|217",
+     "pairs_changed": 31
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|218",
+     "pairs_changed": 65
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|219",
+     "pairs_changed": 205
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|221",
+     "pairs_changed": 119
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|228",
+     "pairs_changed": 113
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|230",
+     "pairs_changed": 205
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|232",
+     "pairs_changed": 76
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|239",
+     "pairs_changed": 167
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|245",
+     "pairs_changed": 162
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|257",
+     "pairs_changed": 136
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|263",
+     "pairs_changed": 96
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|265",
+     "pairs_changed": 222
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|270",
+     "pairs_changed": 9
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|275",
+     "pairs_changed": 118
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|280",
+     "pairs_changed": 81
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|287",
+     "pairs_changed": 213
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|291",
+     "pairs_changed": 207
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|293",
+     "pairs_changed": 118
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|298",
+     "pairs_changed": 76
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|303",
+     "pairs_changed": 53
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|306",
+     "pairs_changed": 44
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|322",
+     "pairs_changed": 13
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|323",
+     "pairs_changed": 110
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|329",
+     "pairs_changed": 196
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|330",
+     "pairs_changed": 114
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|343",
+     "pairs_changed": 84
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|347",
+     "pairs_changed": 88
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|349",
+     "pairs_changed": 199
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|355",
+     "pairs_changed": 138
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|368",
+     "pairs_changed": 47
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|370",
+     "pairs_changed": 65
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|393",
+     "pairs_changed": 128
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|394",
+     "pairs_changed": 39
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|405",
+     "pairs_changed": 45
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|407",
+     "pairs_changed": 205
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|416",
+     "pairs_changed": 148
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|426",
+     "pairs_changed": 38
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|429",
+     "pairs_changed": 152
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|433",
+     "pairs_changed": 102
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|436",
+     "pairs_changed": 28
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|444",
+     "pairs_changed": 117
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|446",
+     "pairs_changed": 197
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|456",
+     "pairs_changed": 190
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|463",
+     "pairs_changed": 57
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|464",
+     "pairs_changed": 186
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|476",
+     "pairs_changed": 77
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|481",
+     "pairs_changed": 55
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|483",
+     "pairs_changed": 33
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|491",
+     "pairs_changed": 13
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|6",
+     "pairs_changed": 217
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|81",
+     "pairs_changed": 142
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|84",
+     "pairs_changed": 176
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|91",
+     "pairs_changed": 215
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|98",
+     "pairs_changed": 76
+    },
+    {
+     "table": "govinfo-BUDGET-2027-BALANCES|11",
+     "pairs_changed": 6
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|28",
+     "pairs_changed": 676
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|35",
+     "pairs_changed": 640
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|37",
+     "pairs_changed": 674
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|54",
+     "pairs_changed": 310
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|59",
+     "pairs_changed": 514
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|76",
+     "pairs_changed": 592
+    }
+   ],
+   "conservation_worse": [
+    {
+     "table": "cbo-60786|0",
+     "base": {
+      "conserved": 118,
+      "excess": 0,
+      "page_words": 118,
+      "share": 1.0
+     },
+     "rung1": {
+      "page_words": 118,
+      "conserved": 112,
+      "excess": 0,
+      "share": 0.949153
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|19",
+     "base": {
+      "conserved": 142,
+      "excess": 249,
+      "page_words": 209,
+      "share": 0.679426
+     },
+     "rung1": {
+      "page_words": 209,
+      "conserved": 132,
+      "excess": 192,
+      "share": 0.631579
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|28",
+     "base": {
+      "conserved": 154,
+      "excess": 299,
+      "page_words": 225,
+      "share": 0.684444
+     },
+     "rung1": {
+      "page_words": 225,
+      "conserved": 137,
+      "excess": 246,
+      "share": 0.608889
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|3",
+     "base": {
+      "conserved": 138,
+      "excess": 249,
+      "page_words": 205,
+      "share": 0.673171
+     },
+     "rung1": {
+      "page_words": 205,
+      "conserved": 128,
+      "excess": 192,
+      "share": 0.62439
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|31",
+     "base": {
+      "conserved": 139,
+      "excess": 253,
+      "page_words": 210,
+      "share": 0.661905
+     },
+     "rung1": {
+      "page_words": 210,
+      "conserved": 128,
+      "excess": 201,
+      "share": 0.609524
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|37",
+     "base": {
+      "conserved": 268,
+      "excess": 225,
+      "page_words": 339,
+      "share": 0.79056
+     },
+     "rung1": {
+      "page_words": 339,
+      "conserved": 256,
+      "excess": 177,
+      "share": 0.755162
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|38",
+     "base": {
+      "conserved": 271,
+      "excess": 251,
+      "page_words": 354,
+      "share": 0.765537
+     },
+     "rung1": {
+      "page_words": 354,
+      "conserved": 269,
+      "excess": 184,
+      "share": 0.759887
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|79",
+     "base": {
+      "conserved": 187,
+      "excess": 288,
+      "page_words": 258,
+      "share": 0.724806
+     },
+     "rung1": {
+      "page_words": 258,
+      "conserved": 169,
+      "excess": 219,
+      "share": 0.655039
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|323",
+     "base": {
+      "conserved": 105,
+      "excess": 111,
+      "page_words": 134,
+      "share": 0.783582
+     },
+     "rung1": {
+      "page_words": 134,
+      "conserved": 105,
+      "excess": 113,
+      "share": 0.783582
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|444",
+     "base": {
+      "conserved": 116,
+      "excess": 137,
+      "page_words": 151,
+      "share": 0.768212
+     },
+     "rung1": {
+      "page_words": 151,
+      "conserved": 116,
+      "excess": 139,
+      "share": 0.768212
+     }
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|76",
+     "base": {
+      "conserved": 316,
+      "excess": 114,
+      "page_words": 364,
+      "share": 0.868132
+     },
+     "rung1": {
+      "page_words": 364,
+      "conserved": 314,
+      "excess": 114,
+      "share": 0.862637
+     }
+    }
+   ],
+   "fired": {
+    "CBO": 3,
+    "CBO fallback": 1,
+    "CBO rebuilt": 2,
+    "BUDGET": 148,
+    "BUDGET fallback": 45,
+    "BUDGET rebuilt": 103
+   }
+  },
+  "v2": {
+   "clause3_changed_nonfired": [],
+   "clause4_changed_tables": [
+    {
+     "table": "cbo-60786|0",
+     "pairs_changed": 3
+    },
+    {
+     "table": "cbo-62735|0",
+     "pairs_changed": 7
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|3",
+     "pairs_changed": 12
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|4",
+     "pairs_changed": 20
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|5",
+     "pairs_changed": 14
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|7",
+     "pairs_changed": 24
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|8",
+     "pairs_changed": 6
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|16",
+     "pairs_changed": 12
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|19",
+     "pairs_changed": 12
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|20",
+     "pairs_changed": 18
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|28",
+     "pairs_changed": 6
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|29",
+     "pairs_changed": 16
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|31",
+     "pairs_changed": 30
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|32",
+     "pairs_changed": 6
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|37",
+     "pairs_changed": 44
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|38",
+     "pairs_changed": 12
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|41",
+     "pairs_changed": 115
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|45",
+     "pairs_changed": 294
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|46",
+     "pairs_changed": 354
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|47",
+     "pairs_changed": 264
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|63",
+     "pairs_changed": 1
+    },
+    {
+     "table": "govinfo-BUDGET-2026-CROSSCUT|79",
+     "pairs_changed": 20
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|6",
+     "pairs_changed": 217
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|12",
+     "pairs_changed": 91
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|13",
+     "pairs_changed": 170
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|81",
+     "pairs_changed": 142
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|84",
+     "pairs_changed": 176
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|91",
+     "pairs_changed": 215
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|98",
+     "pairs_changed": 76
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|105",
+     "pairs_changed": 128
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|106",
+     "pairs_changed": 109
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|112",
+     "pairs_changed": 166
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|123",
+     "pairs_changed": 224
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|137",
+     "pairs_changed": 172
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|144",
+     "pairs_changed": 101
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|148",
+     "pairs_changed": 62
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|149",
+     "pairs_changed": 204
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|156",
+     "pairs_changed": 19
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|158",
+     "pairs_changed": 65
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|163",
+     "pairs_changed": 25
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|165",
+     "pairs_changed": 51
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|166",
+     "pairs_changed": 201
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|169",
+     "pairs_changed": 3
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|175",
+     "pairs_changed": 137
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|182",
+     "pairs_changed": 85
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|210",
+     "pairs_changed": 19
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|211",
+     "pairs_changed": 27
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|213",
+     "pairs_changed": 22
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|217",
+     "pairs_changed": 31
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|218",
+     "pairs_changed": 65
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|219",
+     "pairs_changed": 205
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|221",
+     "pairs_changed": 119
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|228",
+     "pairs_changed": 113
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|230",
+     "pairs_changed": 205
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|232",
+     "pairs_changed": 76
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|239",
+     "pairs_changed": 167
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|245",
+     "pairs_changed": 162
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|257",
+     "pairs_changed": 136
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|263",
+     "pairs_changed": 96
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|265",
+     "pairs_changed": 222
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|270",
+     "pairs_changed": 9
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|275",
+     "pairs_changed": 118
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|280",
+     "pairs_changed": 81
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|287",
+     "pairs_changed": 213
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|291",
+     "pairs_changed": 207
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|293",
+     "pairs_changed": 118
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|298",
+     "pairs_changed": 76
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|303",
+     "pairs_changed": 53
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|306",
+     "pairs_changed": 44
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|322",
+     "pairs_changed": 13
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|323",
+     "pairs_changed": 110
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|329",
+     "pairs_changed": 196
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|330",
+     "pairs_changed": 114
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|343",
+     "pairs_changed": 84
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|347",
+     "pairs_changed": 88
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|349",
+     "pairs_changed": 199
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|355",
+     "pairs_changed": 138
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|368",
+     "pairs_changed": 47
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|370",
+     "pairs_changed": 65
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|393",
+     "pairs_changed": 128
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|394",
+     "pairs_changed": 39
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|405",
+     "pairs_changed": 45
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|407",
+     "pairs_changed": 205
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|416",
+     "pairs_changed": 148
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|426",
+     "pairs_changed": 38
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|429",
+     "pairs_changed": 152
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|433",
+     "pairs_changed": 102
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|436",
+     "pairs_changed": 28
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|444",
+     "pairs_changed": 117
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|446",
+     "pairs_changed": 197
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|456",
+     "pairs_changed": 190
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|463",
+     "pairs_changed": 57
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|464",
+     "pairs_changed": 186
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|476",
+     "pairs_changed": 77
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|481",
+     "pairs_changed": 55
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|483",
+     "pairs_changed": 33
+    },
+    {
+     "table": "govinfo-BUDGET-2026-DOD|491",
+     "pairs_changed": 13
+    },
+    {
+     "table": "govinfo-BUDGET-2027-BALANCES|11",
+     "pairs_changed": 6
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|28",
+     "pairs_changed": 676
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|35",
+     "pairs_changed": 640
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|37",
+     "pairs_changed": 674
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|54",
+     "pairs_changed": 310
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|59",
+     "pairs_changed": 514
+    },
+    {
+     "table": "govinfo-BUDGET-2027-FCS|76",
+     "pairs_changed": 592
+    }
+   ],
+   "conservation_worse": [
+    {
+     "table": "cbo-60786|0",
+     "base": {
+      "page_words": 118,
+      "conserved": 118,
+      "excess": 0,
+      "share": 1.0
+     },
+     "rung1": {
+      "page_words": 118,
+      "conserved": 112,
+      "excess": 0,
+      "share": 0.949153
+     }
+    }
+   ],
+   "fired": {
+    "CBO": 3,
+    "CBO fallback": 1,
+    "CBO rebuilt": 2,
+    "BUDGET": 148,
+    "BUDGET fallback": 45,
+    "BUDGET rebuilt": 103
+   }
+  }
+ }
+}
