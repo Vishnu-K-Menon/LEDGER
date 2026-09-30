@@ -34,7 +34,7 @@ ingest:                               # D-001 / D-032: ingest = parse + chunk (C
   table_chunk_share_band: [0.50, 0.70]
 
 parser:                               # D2, gated on A1
-  name: docling                       # docling | paddleocr_vl (A1 fallback)
+  name: docling                       # docling only; the paddleocr_vl fallback is retired (D-038)
   table_mode: accurate
   do_ocr: false                       # D2 is a TEXT-LAYER parser; Docling defaults OCR on and
                                       # `standard` bundles rapidocr. Blank/graphic pages in FCS and

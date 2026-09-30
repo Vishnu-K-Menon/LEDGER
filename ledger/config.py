@@ -77,7 +77,7 @@ class IngestConfig(_Strict):
 
 
 class ParserConfig(_Strict):
-    name: Literal["docling", "paddleocr_vl"]
+    name: Literal["docling"]  # the paddleocr_vl fallback is retired (D-038; D2 status 2026-09-30)
     table_mode: str
     do_ocr: bool
     pdf_backend: Literal["docling_parse_v4", "pypdfium2"]
@@ -96,7 +96,7 @@ class ParserConfig(_Strict):
         if v is not False:
             raise ValueError(
                 "parser.do_ocr must be false in v1 (D2): Docling is used as a text-layer parser; "
-                "the OCR fallback is a different parser (parser.name: paddleocr_vl) chosen at A1"
+                "the A1 failure is repaired inside the Docling pipeline (D-038), not by OCR"
             )
         return v
 

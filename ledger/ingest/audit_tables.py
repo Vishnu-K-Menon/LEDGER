@@ -350,7 +350,8 @@ def build_sheet(
         "",
         f"**Threshold: >= {cfg.parser.audit_cell_accuracy_min:.0%} of cells correct with header "
         "association.** The verdicts below are the owner's; this sheet reports what the parser "
-        "produced and where to check it. Fail -> `parser: paddleocr_vl`, re-audit.",
+        "produced and where to check it. Fail -> D-038 (row fix inside Docling; the oracle in "
+        "`scripts/a1_diag/oracle.py` is the parser gate).",
         "",
         f"**Dropped cells logged over the whole 19-unit pilot: {pilot_dropped}** "
         f"(every warning listed below). A dropped cell is a PDF text cell that matched no "
