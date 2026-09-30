@@ -25,4 +25,5 @@ reports/*
 !reports/a1_diag/
 reports/a1_diag/*
 !reports/a1_diag/rung1/
+!reports/a1_diag/rung1b/
 logs/
