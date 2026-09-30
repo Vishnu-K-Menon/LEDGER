@@ -1,0 +1,56 @@
+{
+ "tag": "STEO aug26 (archives), admitted against the FROZEN 2026-09 snapshot",
+ "pdf": {
+  "url": "https://www.eia.gov/outlooks/steo/archives/aug26.pdf",
+  "path": "data/raw_fresh/eia/eia-archives-aug26.pdf",
+  "sha256": "f0a23b766d84353794217506db9451071a4e5ac304e05cd0001dd79acd3b57d3",
+  "bytes": 7377951,
+  "pages": 60,
+  "text_layer_ratio": 1.0,
+  "pdf_edition_date": "2026-08-10",
+  "pdf_edition_source": "pdf CreationDate",
+  "fetched_at": "2026-09-30T18:44:25+00:00"
+ },
+ "snapshot": "data/oracle/steo/2026-09 (frozen)",
+ "http_calls_by_host": {
+  "www.eia.gov": 44,
+  "api.govinfo.gov": 16,
+  "www.govinfo.gov": 8
+ },
+ "admission": {
+  "rule": "whole-row (data/oracle/steo/2026-09/admission_rule.md), frozen",
+  "cells_path": "data/oracle/fresh/steo/cells.jsonl",
+  "cells_sha256": "e15425ea54b0ccbc36391877dde5a84ddacfbaefd0e01c96e01314f0800c7d63",
+  "steo_py_sha256": "23add395c98c8d7bc2c779771b2b239990867f4122d546cdde0e2b4dacb2caa0",
+  "admitted_utc": "2026-09-30T18:45:15+00:00",
+  "table_pages": [
+   "1 p33",
+   "2 p34",
+   "3a p35",
+   "3b p36",
+   "3c p37",
+   "3d p38",
+   "3e p39",
+   "4a p40",
+   "4b p41",
+   "4c p42",
+   "4d p43",
+   "5a p44",
+   "5b p45",
+   "6 p46",
+   "7a p47",
+   "7b p48",
+   "7c p49",
+   "7d p50",
+   "7d p51",
+   "7e p52",
+   "8 p53",
+   "9a p54",
+   "9b p55",
+   "9c p56",
+   "10a p57",
+   "10b p58"
+  ],
+  "first_data_page": 33
+ }
+}

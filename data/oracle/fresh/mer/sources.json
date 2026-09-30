@@ -1,0 +1,876 @@
+{
+ "tag": "MER fresh sections (2, 5, 6, 7, 9, 10, 12), PDF editions ['2026-09-10', '2026-09-23', '2026-09-24', '2026-09-28', '2026-09-29'], export releases ['Release Date: September 29, 2026']",
+ "pdfs": {
+  "eia-pdf-sec2": {
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec2.pdf",
+   "path": "data/raw_fresh/eia/eia-pdf-sec2.pdf",
+   "sha256": "71cc4a23cb8acfee49dc8b3c358b5ad71137797e8f30246031b2106015403db5",
+   "bytes": 1134202,
+   "pages": 24,
+   "text_layer_ratio": 1.0,
+   "pdf_edition_date": "2026-09-28",
+   "pdf_edition_source": "pdf CreationDate",
+   "fetched_at": "2026-09-30T18:42:15+00:00"
+  },
+  "eia-pdf-sec5": {
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec5.pdf",
+   "path": "data/raw_fresh/eia/eia-pdf-sec5.pdf",
+   "sha256": "dd0c1f8b8b4f25cb31bf856a85fb00fbbd52674ac7d0b1e0f040e435017d174f",
+   "bytes": 611892,
+   "pages": 6,
+   "text_layer_ratio": 1.0,
+   "pdf_edition_date": "2026-09-10",
+   "pdf_edition_source": "pdf CreationDate",
+   "fetched_at": "2026-09-30T18:42:55+00:00"
+  },
+  "eia-pdf-sec6": {
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec6.pdf",
+   "path": "data/raw_fresh/eia/eia-pdf-sec6.pdf",
+   "sha256": "dd36152305d2a54b68e2569c24cf4c0c56b8f4922536f95c9f240cdd424f8504",
+   "bytes": 481523,
+   "pages": 10,
+   "text_layer_ratio": 1.0,
+   "pdf_edition_date": "2026-09-24",
+   "pdf_edition_source": "pdf CreationDate",
+   "fetched_at": "2026-09-30T18:43:01+00:00"
+  },
+  "eia-pdf-sec7": {
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec7.pdf",
+   "path": "data/raw_fresh/eia/eia-pdf-sec7.pdf",
+   "sha256": "f47861b54586dcdb194250ab291c40c7d0b984cd0ed4764c68033a715d0a90a3",
+   "bytes": 1899059,
+   "pages": 32,
+   "text_layer_ratio": 1.0,
+   "pdf_edition_date": "2026-09-28",
+   "pdf_edition_source": "pdf CreationDate",
+   "fetched_at": "2026-09-30T18:43:09+00:00"
+  },
+  "eia-pdf-sec9": {
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec9.pdf",
+   "path": "data/raw_fresh/eia/eia-pdf-sec9.pdf",
+   "sha256": "ea45c7e329be3087d6d2cc189742c107046262484077bfeaa6545d1f022df36b",
+   "bytes": 951600,
+   "pages": 20,
+   "text_layer_ratio": 1.0,
+   "pdf_edition_date": "2026-09-24",
+   "pdf_edition_source": "pdf CreationDate",
+   "fetched_at": "2026-09-30T18:43:14+00:00"
+  },
+  "eia-pdf-sec10": {
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec10.pdf",
+   "path": "data/raw_fresh/eia/eia-pdf-sec10.pdf",
+   "sha256": "66382083d88895ea9f4599d5df4475e742f0d53a2bcb39dbe44740ddb03d2be2",
+   "bytes": 2230919,
+   "pages": 24,
+   "text_layer_ratio": 1.0,
+   "pdf_edition_date": "2026-09-23",
+   "pdf_edition_source": "pdf CreationDate",
+   "fetched_at": "2026-09-30T18:43:38+00:00"
+  },
+  "eia-pdf-sec12": {
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec12.pdf",
+   "path": "data/raw_fresh/eia/eia-pdf-sec12.pdf",
+   "sha256": "d802728c7b84ee74dc324d70627f44312fd51bafabed517774b54c27a8c6c1d3",
+   "bytes": 2078693,
+   "pages": 40,
+   "text_layer_ratio": 1.0,
+   "pdf_edition_date": "2026-09-29",
+   "pdf_edition_source": "pdf CreationDate",
+   "fetched_at": "2026-09-30T18:44:03+00:00"
+  }
+ },
+ "exports": {
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01A": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01A",
+   "path": "data/oracle/fresh/mer/src/T02.01A.xlsx",
+   "sha256": "9622b348aa15b37d669132827bd05450c7239a9bbc43ed95800bb3b78b47c04d",
+   "bytes": 95461,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:42:20+00:00",
+   "table_id": "2.1a",
+   "table_id_printed": "2.1a",
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.1a  Energy Consumption: Residential, Commercial, and Industrial Sectors",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01B": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01B",
+   "path": "data/oracle/fresh/mer/src/T02.01B.xlsx",
+   "sha256": "f61cbf84e9e8c60d652c5a2367b413299d4e5ef330e4655dbfc86d8d89a6bd0d",
+   "bytes": 77896,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:42:23+00:00",
+   "table_id": "2.1b",
+   "table_id_printed": "2.1b",
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.1b  Energy Consumption: Transportation Sector, Total End-Use Sectors, and Electric Power Sector",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.02": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.02",
+   "path": "data/oracle/fresh/mer/src/T02.02.xlsx",
+   "sha256": "6fe1cca287c89b52db04f20131aa04e482ad6d8ed26a4a036620c742789e2aa9",
+   "bytes": 76328,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:42:25+00:00",
+   "table_id": "2.2",
+   "table_id_printed": "2.2",
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.2 Residential Sector Energy Consumption",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.03": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.03",
+   "path": "data/oracle/fresh/mer/src/T02.03.xlsx",
+   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
+   "bytes": 2803,
+   "type": "HTML (not a spreadsheet)",
+   "fetched_at": "2026-09-30T18:42:40+00:00",
+   "table_id": "2.3",
+   "table_id_printed": "2.3",
+   "pdf_unit": "eia-pdf-sec2"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.04": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.04",
+   "path": "data/oracle/fresh/mer/src/T02.04.xlsx",
+   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
+   "bytes": 2803,
+   "type": "HTML (not a spreadsheet)",
+   "fetched_at": "2026-09-30T18:42:42+00:00",
+   "table_id": "2.4",
+   "table_id_printed": "2.4",
+   "pdf_unit": "eia-pdf-sec2"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.05": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.05",
+   "path": "data/oracle/fresh/mer/src/T02.05.xlsx",
+   "sha256": "63ca1c8dec3e01ae88b4ba89b5c889876853e1db0c96a608c62d62407a635985",
+   "bytes": 60154,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:42:43+00:00",
+   "table_id": "2.5",
+   "table_id_printed": "2.5",
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.5 Transportation Sector Energy Consumption",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.06": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.06",
+   "path": "data/oracle/fresh/mer/src/T02.06.xlsx",
+   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
+   "bytes": 2803,
+   "type": "HTML (not a spreadsheet)",
+   "fetched_at": "2026-09-30T18:42:49+00:00",
+   "table_id": "2.6",
+   "table_id_printed": "2.6",
+   "pdf_unit": "eia-pdf-sec2"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.07": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.07",
+   "path": "data/oracle/fresh/mer/src/T02.07.xlsx",
+   "sha256": "bc2af8900dfccc2254476ccde5eabb86769032a4b388969ed11ebae170dca596",
+   "bytes": 11384,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:42:49+00:00",
+   "table_id": "2.7",
+   "table_id_printed": "2.7",
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.7.  U.S. Government Energy Consumption by Agency, Fiscal Years",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.08": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.08",
+   "path": "data/oracle/fresh/mer/src/T02.08.xlsx",
+   "sha256": "10e55fc726303e6b9a37943272008ffdc83e0c33c89bd489d4ca984c491ef4ff",
+   "bytes": 10920,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:42:51+00:00",
+   "table_id": "2.8",
+   "table_id_printed": "2.8",
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.8.  U.S. Government Energy Consumption by Source, Fiscal Years",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.03": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.03",
+   "path": "data/oracle/fresh/mer/src/T10.03.xlsx",
+   "sha256": "8bf54e48aab6a3fc1e39571ddbe8e842e39661ab71f1d090fbe05ec34b0322db",
+   "bytes": 59526,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:51+00:00",
+   "table_id": "10.3",
+   "table_id_printed": "10.3",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.3 Fuel Ethanol Overview",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.01": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.01",
+   "path": "data/oracle/fresh/mer/src/T05.01.xlsx",
+   "sha256": "b848938531f880bae05eb8423ca80ceeff274e96300288083f550e042ec96142",
+   "bytes": 45088,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:42:57+00:00",
+   "table_id": "5.1",
+   "table_id_printed": "5.1",
+   "pdf_unit": "eia-pdf-sec5",
+   "export_title": "Table 5.1 Crude Oil and Natural Gas Drilling Activity Measurements",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.02": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.02",
+   "path": "data/oracle/fresh/mer/src/T05.02.xlsx",
+   "sha256": "4dbc0a2d5ad8aae2cceffc4fb2b763702a4ed0915c98ce10fc0fde417bcc4843",
+   "bytes": 61010,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:00+00:00",
+   "table_id": "5.2",
+   "table_id_printed": "5.2",
+   "pdf_unit": "eia-pdf-sec5",
+   "export_title": "Table 5.2 Crude Oil and Natural Gas Exploratory and Development Wells"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.01": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.01",
+   "path": "data/oracle/fresh/mer/src/T06.01.xlsx",
+   "sha256": "7d1215da1224aac786dfeda4587ba3927b080fc97621d52247037444c21ae740",
+   "bytes": 60898,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:04+00:00",
+   "table_id": "6.1",
+   "table_id_printed": "6.1",
+   "pdf_unit": "eia-pdf-sec6",
+   "export_title": "Table 6.1 Coal Overview",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.02": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.02",
+   "path": "data/oracle/fresh/mer/src/T06.02.xlsx",
+   "sha256": "84cc5e1138343e2085c9d0fc39a5c82a97c69c74183c7c18c5772cc92abd578c",
+   "bytes": 73108,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:06+00:00",
+   "table_id": "6.2",
+   "table_id_printed": "6.2",
+   "pdf_unit": "eia-pdf-sec6",
+   "export_title": "Table 6.2 Coal Consumption by Sector",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.03": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.03",
+   "path": "data/oracle/fresh/mer/src/T06.03.xlsx",
+   "sha256": "d0270cc64d83bc08f3af718f69803cc6979cfcc5be1b18e66dc95b1a1e197110",
+   "bytes": 56856,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:08+00:00",
+   "table_id": "6.3",
+   "table_id_printed": "6.3",
+   "pdf_unit": "eia-pdf-sec6",
+   "export_title": "Table 6.3 Coal Stocks by Sector",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T07.06": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T07.06",
+   "path": "data/oracle/fresh/mer/src/T07.06.xlsx",
+   "sha256": "22476681121f3747804e0092266923ca0bd38b21de3c2e80db23d08c648050ec",
+   "bytes": 60310,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:12+00:00",
+   "table_id": "7.6",
+   "table_id_printed": "7.6",
+   "pdf_unit": "eia-pdf-sec7",
+   "export_title": "Table 7.6 Electricity End Use and Electric Vehicle Use"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.01": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.01",
+   "path": "data/oracle/fresh/mer/src/T09.01.xlsx",
+   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
+   "bytes": 2803,
+   "type": "HTML (not a spreadsheet)",
+   "fetched_at": "2026-09-30T18:43:18+00:00",
+   "table_id": "9.1",
+   "table_id_printed": "9.1",
+   "pdf_unit": "eia-pdf-sec9"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.02": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.02",
+   "path": "data/oracle/fresh/mer/src/T09.02.xlsx",
+   "sha256": "003eb7123fabe8a030a3ff633855ecb17cf63af27fe83a7c45e9bb8c37ae450d",
+   "bytes": 47837,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:19+00:00",
+   "table_id": "9.2",
+   "table_id_printed": "9.2",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.2 Free on Board Costs of Crude Oil Imports from Selected Countries",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.03": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.03",
+   "path": "data/oracle/fresh/mer/src/T09.03.xlsx",
+   "sha256": "a0871e45d4c3b5838e543304faf569a7a36d35df512c4d3590b51311e0615689",
+   "bytes": 52617,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:21+00:00",
+   "table_id": "9.3",
+   "table_id_printed": "9.3",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.3 Landed Costs of Crude Oil Imports from Selected Countries",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.04": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.04",
+   "path": "data/oracle/fresh/mer/src/T09.04.xlsx",
+   "sha256": "eade2be70c9d4e4a01b0978b675fda51cd24167f0d140bf74c8291b186e8d1f6",
+   "bytes": 40662,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:23+00:00",
+   "table_id": "9.4",
+   "table_id_printed": "9.4",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.4 Retail Motor Gasoline and On-Highway Diesel Fuel Prices",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.05": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.05",
+   "path": "data/oracle/fresh/mer/src/T09.05.xlsx",
+   "sha256": "b8750bd84aa9c38864f2ff26143e97f65b94b11fefdf0243e5ec8f5982af7f2d",
+   "bytes": 28799,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:25+00:00",
+   "table_id": "9.5",
+   "table_id_printed": "9.5",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.5 Refiner Prices of Residual Fuel Oil",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.06": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.06",
+   "path": "data/oracle/fresh/mer/src/T09.06.xlsx",
+   "sha256": "770649e8c45f1c4af6c3529c0234a3f19992dcf4f2291dcbdc85e3c1a5456e0f",
+   "bytes": 32260,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:27+00:00",
+   "table_id": "9.6",
+   "table_id_printed": "9.6",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.6 Refiner Prices of Petroleum Products for Resale",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.07": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.07",
+   "path": "data/oracle/fresh/mer/src/T09.07.xlsx",
+   "sha256": "65a20065d4b8315362265b43d30493cc46375c9facb0585a0e6adbe2c3cec36f",
+   "bytes": 32400,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:29+00:00",
+   "table_id": "9.7",
+   "table_id_printed": "9.7",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.7 Refiner Prices of Petroleum Products to End Users",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.08": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.08",
+   "path": "data/oracle/fresh/mer/src/T09.08.xlsx",
+   "sha256": "a131103d91f97ae31aebb5b24ee784761d3e462b74f4cc70e62645e1b3c1db9a",
+   "bytes": 32954,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:31+00:00",
+   "table_id": "9.8",
+   "table_id_printed": "9.8",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.8 Average Prices of Electricity to Ultimate Customers",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.09": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.09",
+   "path": "data/oracle/fresh/mer/src/T09.09.xlsx",
+   "sha256": "606031cb031e6195e5a924d8d0e926816f8473f7651573bda4769fd955167e01",
+   "bytes": 39675,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:33+00:00",
+   "table_id": "9.9",
+   "table_id_printed": "9.9",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.9 Cost of Fossil-Fuel Receipts at Electric Generating Plants",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.10": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.10",
+   "path": "data/oracle/fresh/mer/src/T09.10.xlsx",
+   "sha256": "9e7e71f6b201824358e36e311543a32b034dc9372790f62ee830e60a7d089dec",
+   "bytes": 48170,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:35+00:00",
+   "table_id": "9.10",
+   "table_id_printed": "9.10",
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.10 Natural Gas Prices",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.01": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.01",
+   "path": "data/oracle/fresh/mer/src/T10.01.xlsx",
+   "sha256": "bcbe958e1ed0112e8708ce395d6263949e4ffd40bf71b30103d8076b66316be5",
+   "bytes": 70885,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:43+00:00",
+   "table_id": "10.1",
+   "table_id_printed": "10.1",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.1 Renewable Energy Production and Consumption by Source",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02A": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02A",
+   "path": "data/oracle/fresh/mer/src/T10.02A.xlsx",
+   "sha256": "703a31b0f7aacaa666097a21ed221353d7d791b9f12b8420cade6858d78f694e",
+   "bytes": 58985,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:45+00:00",
+   "table_id": "10.2a",
+   "table_id_printed": "10.2a",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.2a Renewable Energy Consumption:  Residential and Commercial Sectors",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02B": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02B",
+   "path": "data/oracle/fresh/mer/src/T10.02B.xlsx",
+   "sha256": "ee81a927e2f25356884a342e2a49512df5c94bbaec8675bb7592469f231480d9",
+   "bytes": 51970,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:47+00:00",
+   "table_id": "10.2b",
+   "table_id_printed": "10.2b",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.2b Renewable Energy Consumption:  Industrial Sector",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02C": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02C",
+   "path": "data/oracle/fresh/mer/src/T10.02C.xlsx",
+   "sha256": "d005c28e4bcc1d9849a1861529a5ae87f41545d41525a4759efeedbba2e8a9a9",
+   "bytes": 66506,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:49+00:00",
+   "table_id": "10.2c",
+   "table_id_printed": "10.2c",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.2c Renewable Energy Consumption:  Transportation and Electric Power Sectors",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04A": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04A",
+   "path": "data/oracle/fresh/mer/src/T10.04A.xlsx",
+   "sha256": "bf4a808b08a1f5d162e4c499d38371470870bad7512e5f30099cf3edf43df8fb",
+   "bytes": 39686,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:53+00:00",
+   "table_id": "10.4a",
+   "table_id_printed": "10.4a",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.4a Biodiesel Overview",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04B": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04B",
+   "path": "data/oracle/fresh/mer/src/T10.04B.xlsx",
+   "sha256": "864a4e2e489980506b98497ce58a305fd7e277141c51dc53dad2c9d847a9965f",
+   "bytes": 25549,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:54+00:00",
+   "table_id": "10.4b",
+   "table_id_printed": "10.4b",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.4b Renewable Diesel Fuel Overview",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04C": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04C",
+   "path": "data/oracle/fresh/mer/src/T10.04C.xlsx",
+   "sha256": "fb2be7e9db2983f2465376fd76141b903e3c92a669e60605f7be7d8a3f47ef69",
+   "bytes": 21443,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:56+00:00",
+   "table_id": "10.4c",
+   "table_id_printed": "10.4c",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.4c Other Biofuels Overview",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.05": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.05",
+   "path": "data/oracle/fresh/mer/src/T10.05.xlsx",
+   "sha256": "6624058a3e5faab68c17f1c90ff1198d15cb9923a440b4595ee645d5de8bfb20",
+   "bytes": 42844,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:43:59+00:00",
+   "table_id": "10.5",
+   "table_id_printed": "10.5",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.5  Solar Energy Consumption",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.06": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.06",
+   "path": "data/oracle/fresh/mer/src/T10.06.xlsx",
+   "sha256": "1d398eb71e515fe29212d7b3fe8ff9418c1a55c3a75b3c32ff10ff329e1ae17b",
+   "bytes": 42974,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-09-30T18:44:01+00:00",
+   "table_id": "10.6",
+   "table_id_printed": "10.6",
+   "pdf_unit": "eia-pdf-sec10",
+   "export_title": "Table 10.6  Solar Electricity Net Generation",
+   "release": "Release Date: September 29, 2026"
+  }
+ },
+ "pages": [
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 4,
+   "table_id": "2.1a",
+   "export": "T02.01A",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 5,
+   "table_id": "2.1b",
+   "export": "T02.01B",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 7,
+   "table_id": "2.2",
+   "export": "T02.02",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 9,
+   "table_id": "2.3",
+   "export": null,
+   "title_match": false,
+   "note": "export T02.03 is HTML (not a spreadsheet)"
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 11,
+   "table_id": "2.4",
+   "export": null,
+   "title_match": false,
+   "note": "export T02.04 is HTML (not a spreadsheet)"
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 13,
+   "table_id": "2.5",
+   "export": "T02.05",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 15,
+   "table_id": "2.6",
+   "export": null,
+   "title_match": false,
+   "note": "export T02.06 is HTML (not a spreadsheet)"
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 16,
+   "table_id": "2.7",
+   "export": "T02.07",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 17,
+   "table_id": "2.8",
+   "export": "T02.08",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 20,
+   "table_id": "10.3",
+   "export": null,
+   "title_match": false,
+   "note": "export T10.03 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 22,
+   "table_id": "2.5",
+   "export": "T02.05",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec5",
+   "page": 3,
+   "table_id": "5.1",
+   "export": "T05.01",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec5",
+   "page": 5,
+   "table_id": "5.2",
+   "export": null,
+   "title_match": false,
+   "note": "export T05.02 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 3,
+   "table_id": "6.1",
+   "export": "T06.01",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 4,
+   "table_id": "6.2",
+   "export": "T06.02",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 5,
+   "table_id": "6.3",
+   "export": "T06.03",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 9,
+   "table_id": "6.2",
+   "export": "T06.02",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 10,
+   "table_id": "6.3",
+   "export": "T06.03",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec7",
+   "page": 31,
+   "table_id": "7.6",
+   "export": null,
+   "title_match": false,
+   "note": "export T07.06 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 3,
+   "table_id": "9.1",
+   "export": null,
+   "title_match": false,
+   "note": "export T09.01 is HTML (not a spreadsheet)"
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 4,
+   "table_id": "9.2",
+   "export": "T09.02",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 5,
+   "table_id": "9.3",
+   "export": "T09.03",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 6,
+   "table_id": "9.4",
+   "export": "T09.04",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 7,
+   "table_id": "9.5",
+   "export": "T09.05",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 8,
+   "table_id": "9.6",
+   "export": "T09.06",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 9,
+   "table_id": "9.7",
+   "export": "T09.07",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 11,
+   "table_id": "9.8",
+   "export": "T09.08",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 13,
+   "table_id": "9.9",
+   "export": "T09.09",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 15,
+   "table_id": "9.10",
+   "export": "T09.10",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 18,
+   "table_id": "9.1",
+   "export": null,
+   "title_match": false
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 3,
+   "table_id": "10.1",
+   "export": "T10.01",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 4,
+   "table_id": "10.2a",
+   "export": "T10.02A",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 5,
+   "table_id": "10.2b",
+   "export": "T10.02B",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 6,
+   "table_id": "10.2c",
+   "export": "T10.02C",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 7,
+   "table_id": "10.3",
+   "export": "T10.03",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 8,
+   "table_id": "10.4a",
+   "export": "T10.04A",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 9,
+   "table_id": "10.4b",
+   "export": "T10.04B",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 10,
+   "table_id": "10.4c",
+   "export": "T10.04C",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 11,
+   "table_id": "10.5",
+   "export": "T10.05",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 12,
+   "table_id": "10.6",
+   "export": "T10.06",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 20,
+   "table_id": "10.4a",
+   "export": "T10.04A",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 22,
+   "table_id": "10.4c",
+   "export": "T10.04C",
+   "title_match": true
+  }
+ ],
+ "export_releases": [
+  "Release Date: September 29, 2026"
+ ],
+ "pdf_editions": [
+  "2026-09-10",
+  "2026-09-23",
+  "2026-09-24",
+  "2026-09-28",
+  "2026-09-29"
+ ],
+ "http_calls_by_host": {
+  "www.eia.gov": 44,
+  "api.govinfo.gov": 16,
+  "www.govinfo.gov": 8
+ }
+}
