@@ -74,3 +74,11 @@ are looked at during Part B.
   11/15, 14/14). Fired BUDGET/CBO: 46 fallbacks (mostly continuation pages whose column header
   is on the previous page - 0 printed header columns - the owner's assertion keeps TableFormer),
   conservation worse v2 1 table (the footnote cut), v1 11.
+- **2026-09-30T05:39:00Z BUILD STOPPED (choice C10).** Tuning 1,466 / 1,515 = 96.8 % strict (sec3 93.6 %, sec4
+  99.6 %; header 14/15, 14/14). Every remaining tuning miss read on the two tuning tables is an
+  R/E-flagged cell (the owner's rule keeps the flag with the number; `canon()` rejects it) or a
+  revision-window cell where the page prints a different number from the admitted export value
+  (an A6 oracle limit). Further building would need a signal from held-out tables (forbidden) or
+  would tune to BUDGET quirks that have no oracle; the remaining ~3 h of the box are left unused
+  rather than spent without a correctness signal. The B3 check (2 h 30) does not apply. The
+  emitter is frozen at the commit that carries this line; nothing below is building.

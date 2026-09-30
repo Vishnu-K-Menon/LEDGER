@@ -2,3 +2,4 @@ PART A START (first pre-work commit 4c2e5e5): 2026-09-30T00:33:21-04:00
 RUNG-1 START: 2026-09-30T04:47:18Z
 RUNG-1 HARD STOP (4 h): 2026-09-30T08:47:18Z
 STOP-RULE CHECK (2 h 30): 2026-09-30T07:17:18Z
+RUNG-1 BUILD STOPPED: 2026-09-30T05:39:00Z (elapsed 51 min of 240; stopped early by choice C10 - see build_log.md)
