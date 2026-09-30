@@ -19,5 +19,9 @@ data/oracle/**
 !data/oracle/**/unit_aliases.json
 !data/oracle/**/admission_rule.md
 results/
-reports/
+# reports/ is local, except the rung-1 records of D-038 (morning report, clock, baselines).
+reports/*
+!reports/a1_diag/
+reports/a1_diag/*
+!reports/a1_diag/rung1/
 logs/
