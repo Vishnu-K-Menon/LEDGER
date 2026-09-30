@@ -130,8 +130,127 @@ def span_box(toks: list[dict]) -> tuple[float, float, float, float]:
     )
 
 
+def header_cells(
+    tbl: dict,
+    bands: list[dict],
+    header_lines: list[list[dict]],
+    stub_header: list[dict],
+    use_tf: bool = True,
+    check: bool = True,
+) -> tuple[list[dict], int, list[str]]:
+    """Header cells as {row, bands (band indices, or [-1] for the stub column), text}, spans kept.
+
+    TableFormer's header cells (A2: TableFormer headers) are mapped onto the bands through each
+    TableFormer column's body extent, keeping their spans. Check: a band's header words must equal
+    the page words over that band in the header region (no token more often than on the page).
+    Bands that fail - and every band sharing a TableFormer cell with one - take page-derived cells
+    instead: per header line, consecutive tokens over the same failing bands form one cell spanning
+    them, so a spanning word is written once. Header-region words over no band go to the stub
+    column's header cell, as printed."""
+    log: list[str] = []
+    col_band = tf_col_band(tbl, bands)
+    tcells = [
+        c for c in tbl["data"].get("table_cells") or [] if c.get("column_header") and c.get("text")
+    ]
+    hrows = sorted({c["start_row_offset_idx"] for c in tcells})
+    tf: list[dict] = []
+    if use_tf:
+        for c in tcells:
+            cols = range(c["start_col_offset_idx"], c["end_col_offset_idx"])
+            bset = sorted({col_band[j] for j in cols if j in col_band})
+            if c["start_col_offset_idx"] == 0 or not bset:
+                if c["start_col_offset_idx"] != 0:
+                    log.append(f"TF header cell maps to no band: {c['text']!r}")
+                    continue
+                bset = [-1]
+            tf.append(
+                {"row": hrows.index(c["start_row_offset_idx"]), "bands": bset, "text": c["text"]}
+            )
+    region = [t for ln in header_lines for t in ln]
+
+    def over(t: dict, b: dict) -> bool:
+        return t["x1"] > b["x0"] - 2 and t["x0"] < b["x1"] + 2
+
+    failing: set[int] = set()
+    if check:
+        for k, b in enumerate(bands):
+            pw = Counter(w for t in region if over(t, b) for w in t["text"].split())
+            tw = Counter(w for h in tf if k in h["bands"] for w in h["text"].split())
+            if not (tw and not (tw - pw) and set(tw) == set(pw)):
+                failing.add(k)
+        grew = True
+        while grew:  # a TableFormer cell over a failing band is dropped whole
+            grew = False
+            for h in tf:
+                if (
+                    h["bands"] != [-1]
+                    and set(h["bands"]) & failing
+                    and not set(h["bands"]) <= failing
+                ):
+                    failing |= set(h["bands"])
+                    grew = True
+    else:
+        covered = {k for h in tf for k in h["bands"]}
+        failing = set(range(len(bands))) - covered
+    kept = [h for h in tf if h["bands"] == [-1] or not set(h["bands"]) & failing]
+    if failing:
+        log.append(f"header check: page words for bands {sorted(failing)}")
+    nrow = max((h["row"] for h in kept), default=-1) + 1
+    page_cells: list[dict] = []
+    for ln in header_lines:
+        run: list[tuple[tuple[int, ...], dict]] = []
+        for t in sorted(ln, key=lambda t: t["x0"]):
+            ov = tuple(k for k in sorted(failing) if over(t, bands[k]))
+            if ov:
+                run.append((ov, t))
+        if not run:
+            continue
+        cells_ln: list[dict] = []
+        for ov, t in run:
+            if cells_ln and cells_ln[-1]["key"] == ov:
+                cells_ln[-1]["text"] += " " + t["text"]
+            else:
+                cells_ln.append({"key": ov, "text": t["text"]})
+        for c in cells_ln:
+            page_cells.append({"row": nrow, "bands": list(c["key"]), "text": c["text"]})
+        nrow += 1
+    out = [h for h in kept if h["bands"] != [-1]] + page_cells
+    stub = [h for h in kept if h["bands"] == [-1]]
+    if stub_header:
+        text = " ".join(t["text"] for t in sorted(stub_header, key=lambda t: (t["top"], t["x0"])))
+        stub = [{"row": 0, "bands": [-1], "text": text}]
+    out += stub
+    return out, max(nrow, 1 if out else 0), log
+
+
+def tf_col_band(tbl: dict, bands: list[dict]) -> dict[int, int]:
+    """TableFormer column -> band, by the x-overlap of the column's body cells."""
+    grid = tbl["data"].get("grid") or []
+    ncol = max((len(r) for r in grid), default=0)
+    ext: dict[int, list[float]] = {}
+    for row in grid:
+        for j, c in enumerate(row):
+            if c.get("column_header") or not c.get("bbox") or not c.get("text"):
+                continue
+            b = c["bbox"]
+            e = ext.setdefault(j, [b["l"], b["r"]])
+            e[0], e[1] = min(e[0], b["l"]), max(e[1], b["r"])
+    col_band: dict[int, int] = {}
+    for j in range(1, ncol):
+        if j not in ext:
+            continue
+        lo, hi = ext[j]
+        best = max(
+            range(len(bands)),
+            key=lambda i: min(hi, bands[i]["x1"]) - max(lo, bands[i]["x0"]),
+        )
+        if min(hi, bands[best]["x1"]) - max(lo, bands[best]["x0"]) > 0:
+            col_band.setdefault(j, best)
+    return col_band
+
+
 def tf_header_rows(tbl: dict, bands: list[dict]) -> tuple[list[dict], list[str]]:
-    """TableFormer's column-header rows, each as {band index or -1 (stub): text}."""
+    """(superseded by header_cells; kept for the B1 record) TableFormer's column-header rows."""
     grid = tbl["data"].get("grid") or []
     ncol = max((len(r) for r in grid), default=0)
     # x extent of each TableFormer column from its body cells
@@ -227,6 +346,15 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
         ]
     left = min(b["x0"] for b in bands)
     body_set = set(body_idx)
+
+    def over_band(t: dict) -> bool:  # the same +-2 pt tolerance as header_cells
+        return any(t["x1"] > b["x0"] - 2 and t["x0"] < b["x1"] + 2 for b in bands)
+
+    # the column-header block ends at the last line above the body with a token over a band;
+    # stub-only lines between it and the first body line are section headers, not header text
+    hdr_end = max((i for i in range(first) if any(over_band(t) for t in lines[i])), default=-1)
+    header_region = [t for ln in lines[: hdr_end + 1] for t in ln]
+    stub_header = [t for t in header_region if not over_band(t)]
     # body rows (with wrapped labels and section headers)
     rows: list[dict] = []
     pending: list[dict] = []
@@ -238,7 +366,7 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
         if len(body_idx) > 1
         else 10.0
     )
-    for i in range(first, last + 1):
+    for i in range(hdr_end + 1, last + 1):
         ln = lines[i]
         if i not in body_set:
             text_toks = list(ln)
@@ -265,22 +393,37 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
                 continue
             cells.setdefault(band_of(t, bands), []).append(t)
         rows.append({"stub": stub, "cells": cells})
+    if pending:
+        rows.append({"section": pending})
+    # below the last numeric line: text rows are kept (a CBO summary's "Contains ... mandate? No");
+    # the footer block - from the first Source / Note / footnote / legend line on - is cut
+    for ln in lines[last + 1 :]:
+        if FOOTER.match(ln[0]["text"]) or FOOTER.match(" ".join(t["text"] for t in ln[:2])):
+            log.append(f"footer cut at: {' '.join(t['text'] for t in ln)[:60]!r}")
+            break
+        stub = [t for t in ln if t["x1"] <= left + 0.5]
+        cells = {}
+        for t in ln:
+            if t not in stub:
+                cells.setdefault(band_of(t, bands), []).append(t)
+        rows.append({"stub": stub, "cells": cells} if cells else {"section": list(ln)})
     # emit
     out_cells: list[dict] = []
     r = 0
-    header_rows: list[dict] = []
-    if opts["headers"]:
-        header_rows, hlog = tf_header_rows(tbl, bands)
-        log += hlog
-    if opts["header_check"] and header_rows:
-        header_rows, clog = check_headers(header_rows, header_region, bands)
-        log += clog
-    for hr in header_rows:
-        for key, text in hr.items():
-            c = 0 if key == -1 else key + 1
-            x0, x1 = (bands[key]["x0"], bands[key]["x1"]) if key >= 0 else (tbl_left(tbl), left)
-            out_cells.append(cell(fix_text(text), (x0, 0, x1, 0), r, c, header=True))
-        r += 1
+    hcells, nhead, hlog = header_cells(
+        tbl, bands, lines[: hdr_end + 1], stub_header, opts["headers"], opts["header_check"]
+    )
+    log += hlog
+    for h in hcells:
+        if h["bands"] == [-1]:
+            c0, c1, x0, x1 = 0, 1, tbl_left(tbl), left
+        else:
+            c0, c1 = min(h["bands"]) + 1, max(h["bands"]) + 2
+            x0, x1 = bands[min(h["bands"])]["x0"], bands[max(h["bands"])]["x1"]
+        hc = cell(fix_text(h["text"]), (x0, 0, x1, 0), h["row"], c0, header=True)
+        hc["col_span"], hc["end_col_offset_idx"] = c1 - c0, c1
+        out_cells.append(hc)
+    r = nhead
     for row in rows:
         if "section" in row:
             toks = row["section"]
@@ -321,6 +464,10 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
     return new, log
 
 
+FOOTER = re.compile(
+    r"^(Sources?\b|Notes?\b|NOTES?\b|Footnotes?\b|\*\s*(?:=|[A-Za-z])|†|‡|[a-z]\)|\([a-z0-9]{1,2}\)|"
+    r"\d{1,2}/|\d{1,2}\s+[A-Z]|[A-Z]{1,2}\s?=|\(s\)\s?=|-\s?=|–\s?=|Components may not)"
+)
 CONNECTORS = {
     "and",
     "or",
@@ -394,8 +541,10 @@ def check_headers(header_rows, header_region, bands) -> tuple[list[dict], list[s
 def grid_of(cells: list[dict], nrows: int, ncols: int) -> list[list[dict]]:
     empty = {"text": "", "column_header": False, "row_header": False, "bbox": None}
     grid = [[dict(empty) for _ in range(ncols)] for _ in range(nrows)]
-    for c in cells:
-        grid[c["start_row_offset_idx"]][c["start_col_offset_idx"]] = c
+    for c in cells:  # a spanning cell fills every position it covers, as Docling's grid does
+        for r in range(c["start_row_offset_idx"], c["end_row_offset_idx"]):
+            for j in range(c["start_col_offset_idx"], c["end_col_offset_idx"]):
+                grid[r][j] = c
     return grid
 
 
@@ -461,12 +610,22 @@ def tokens_in(chars: list[dict], box: tuple[float, float, float, float]) -> list
                 cur = []
                 continue
             if ch in tg.MINUS and cur and cur[-1]["text"].isdigit():
-                ahead = "".join(texts[i + 1 : i + 5])
-                before = "".join(x["text"] for x in cur[-4:])
-                is_range = tg.YEAR.fullmatch(before) and tg.YEAR.fullmatch(ahead)
-                if not is_range and i + 1 < len(ln) and (ahead[:1].isdigit() or ahead[:1] == "."):
-                    toks.append(tg.make_token(cur))
-                    cur = []
+                # a fused negative ("-0.02-0.02") splits; a code ("097-0118-0-1-051") or a year
+                # range ("2025-2030") does not: split only with a decimal or comma on either side
+                ahead = ""
+                for x in texts[i + 1 :]:
+                    if not (x.isdigit() or x in ".,"):
+                        break
+                    ahead += x
+                before = ""
+                for x in reversed(cur):
+                    if not (x["text"].isdigit() or x["text"] in ".,"):
+                        break
+                    before = x["text"] + before
+                if ahead[:1].isdigit() or ahead[:1] == ".":
+                    if any(ch2 in ".," for ch2 in before + ahead):
+                        toks.append(tg.make_token(cur))
+                        cur = []
             cur.append(c)
         if cur:
             toks.append(tg.make_token(cur))

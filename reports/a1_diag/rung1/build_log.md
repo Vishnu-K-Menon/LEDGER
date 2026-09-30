@@ -31,3 +31,19 @@ are looked at during Part B.
   Tuning unchanged at 96.7 % after each. Now: 47 fallbacks, 104 changed tables. Many changes are
   corrections (TableFormer welded section headers onto stubs: "252 Space flight...: NASA" ->
   "NASA"); the literal clause-4 guard counts them as FAIL (C4) - not worked around.
+- **05:03-05:12Z headers, trims, guard v2.** (a) Header-region words over no band go to the
+  stub column's header cell; stub-only lines between the column-header block and the first body
+  line are section rows (they were dropped). (b) The minus split applies only with a decimal or
+  comma on either side (account codes "097-0118-0-1-051" and year ranges stay whole). (c) Trim:
+  below the last numeric line only the footer block (Source / Note / footnote marker / legend
+  "X =") is cut; text rows are kept (CBO summary tables' "Contains ... mandate? No"); a CBO "*"
+  followed by a digit is a value placeholder, not a footnote. (d) Header cells are span-aware
+  (TableFormer spans kept via the column->band map; page-derived cells span the failing bands
+  they cover), so a spanning word is written once. (e) **Guard correction v2, second part:** the
+  A4 conservation measure reads page words through the frozen trigger tokenizer, which drops
+  explicit space characters and fuses words on these PDFs ("CharacteristicsofSubsidyReestimates"),
+  so correctly split words counted as excess. v2 reads page words with the space-aware tokenizer.
+  v1 (as committed at f54ac57) and v2 are both reported. Tuning unchanged at 96.7 %. Fired
+  BUDGET/CBO: 47 fallbacks; conservation worse v1 8 tables / v2 1 table (cbo-60786: its
+  "* = between zero and $500,000" footnote is cut by the owner's trim rule); label-number pairs
+  changed on 104 tables (v1 17,827 pairs, v2 13,085).

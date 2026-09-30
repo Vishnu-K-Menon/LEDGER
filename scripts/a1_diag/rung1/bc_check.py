@@ -28,6 +28,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--show", type=int, default=0)
     ap.add_argument("--units", nargs="*")
+    ap.add_argument("--conservation", action="store_true")
     args = ap.parse_args()
     import pdfplumber
 
@@ -50,16 +51,31 @@ def main() -> int:
                 if new is None:
                     tally["fallback"] += 1
                     continue
+                page, box = tg.table_box(doc, tbl)
+                for d in ("v1", "v2"):
+                    pa = guards.label_number_pairs(tbl, d)
+                    pb = guards.label_number_pairs(new, d)
+                    n_ch = sum(((pa - pb) + (pb - pa)).values())
+                    tally[f"changed_tables_{d}"] += n_ch > 0
+                    tally[f"pairs_changed_{d}"] += n_ch
+                    toks = guards.page_tokens(pdf.pages[page - 1].chars, box, d)
+                    ca_d = guards.conservation(tbl, toks, d)
+                    cb_d = guards.conservation(new, toks, d)
+                    tally[f"conservation_worse_{d}"] += (cb_d["share"] or 0) < (
+                        ca_d["share"] or 0
+                    ) or cb_d["excess"] > ca_d["excess"]
                 a, b = guards.label_number_pairs(tbl), guards.label_number_pairs(new)
                 changed = sum(((a - b) + (b - a)).values())
-                tally["changed_tables"] += changed > 0
-                tally["pairs_changed"] += changed
-                page, box = tg.table_box(doc, tbl)
-                ca = guards.conservation(tbl, lines)
-                cb = guards.conservation(new, lines)
-                tally["conservation_worse"] += (cb["share"] or 0) < (ca["share"] or 0) or cb[
-                    "excess"
-                ] > ca["excess"]
+                toks = guards.page_tokens(pdf.pages[page - 1].chars, box, "v2")
+                ca = guards.conservation(tbl, toks)
+                cb = guards.conservation(new, toks)
+                if args.conservation and (
+                    (cb["share"] or 0) < (ca["share"] or 0) or cb["excess"] > ca["excess"]
+                ):
+                    print(
+                        f"{unit} t{ti}: share {ca['share']} -> {cb['share']}, excess "
+                        f"{ca['excess']} -> {cb['excess']}; {log[:1]}"
+                    )
                 if changed and shown < args.show:
                     shown += 1
                     print(f"{unit} t{ti} p{page}: {changed} pair changes; {log[:2]}")

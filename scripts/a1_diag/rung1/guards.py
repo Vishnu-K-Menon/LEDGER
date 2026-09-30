@@ -84,10 +84,12 @@ def strip_flag(tok: str) -> str:
     return tg.FLAG.sub("", tok.strip())
 
 
-def norm_value(text: str) -> list[str]:
+def norm_value(text: str, definition: str | None = None) -> list[str]:
     """Numbers in a cell text after the flip normalisation: flags stripped, fused negatives
     split at character level."""
-    return [v for v in (orc.canon(strip_flag(w)) for w in norm_words(text)) if v is not None]
+    return [
+        v for v in (orc.canon(strip_flag(w)) for w in norm_words(text, definition)) if v is not None
+    ]
 
 
 # ---- per-cell outcomes ---------------------------------------------------------------------------
@@ -141,27 +143,30 @@ def cell_outcomes(parsed_dir: str) -> dict[str, dict]:
 # ---- BUDGET / CBO tables -------------------------------------------------------------------------
 
 
-def label_number_pairs(tbl: dict) -> Counter:
+def label_number_pairs(tbl: dict, definition: str | None = None) -> Counter:
     cells = tbl["data"].get("table_cells") or []
     label: dict[int, str] = {}
     for c in cells:
         if c.get("start_col_offset_idx") == 0:
             for r in range(c["start_row_offset_idx"], c["end_row_offset_idx"]):
-                label[r] = " ".join(norm_words(c.get("text", "")))
+                label[r] = " ".join(norm_words(c.get("text", ""), definition))
     pairs: Counter = Counter()
     for c in cells:
         if c.get("start_col_offset_idx", 0) < 1 or c.get("column_header"):
             continue
-        vals = norm_value(c.get("text", ""))
-        if len(vals) == 1 and len([w for w in norm_words(c.get("text", "")) if tg.numeric(w)]) == 1:
+        vals = norm_value(c.get("text", ""), definition)
+        words = norm_words(c.get("text", ""), definition)
+        if len(vals) == 1 and len([w for w in words if tg.numeric(w)]) == 1:
             pairs[(label.get(c["start_row_offset_idx"], ""), vals[0])] += 1
     return pairs
 
 
-def conservation(tbl: dict, page_tokens: list[list[dict]]) -> dict:
-    page = Counter(w for ln in page_tokens for t in ln for w in norm_words(t["text"]))
+def conservation(tbl: dict, page_tokens: list[list[dict]], definition: str | None = None) -> dict:
+    page = Counter(w for ln in page_tokens for t in ln for w in norm_words(t["text"], definition))
     cellw = Counter(
-        w for c in tbl["data"].get("table_cells") or [] for w in norm_words(c.get("text", ""))
+        w
+        for c in tbl["data"].get("table_cells") or []
+        for w in norm_words(c.get("text", ""), definition)
     )
     conserved = sum((cellw & page).values())
     excess = sum((cellw - page).values())
@@ -174,10 +179,22 @@ def conservation(tbl: dict, page_tokens: list[list[dict]]) -> dict:
     }
 
 
-def bc_tables(parsed_dir: str, tag: str) -> dict[str, dict]:
+def page_tokens(chars: list, box, definition: str) -> list[list[dict]]:
+    """v1 (A4, as committed): the frozen trigger tokenizer, which drops explicit space characters
+    and so fuses words on PDFs that encode spaces as characters. v2 (correction, build log
+    05:12Z): the space-aware emitter tokenizer, which also drops U+FFFD / U+0008 leader runs."""
+    if definition == "v1":
+        return tg.tokens_in(chars, box)
+    import emit
+
+    return emit.tokens_in(chars, box)
+
+
+def bc_tables(parsed_dir: str, tag: str, definition: str = "v1") -> dict[str, dict]:
     import pdfplumber
 
     parsed = REPO / parsed_dir
+    tag = tag if definition == "v1" else f"{tag}_{definition}"
     out = {}
     for path in sorted(parsed.glob("*.json")):
         unit = path.stem
@@ -199,13 +216,15 @@ def bc_tables(parsed_dir: str, tag: str) -> dict[str, dict]:
                         json.dumps(tbl, sort_keys=True).encode("utf-8")
                     ).hexdigest(),
                 }
-                pairs = label_number_pairs(tbl)
+                pairs = label_number_pairs(tbl, definition)
                 rec["pairs"] = sorted([list(k), v] for k, v in pairs.items())
                 if tbl.get("prov"):
                     page, box = tg.table_box(doc, tbl)
                     if page not in chars:
                         chars[page] = p.pages[page - 1].chars
-                    rec["conservation"] = conservation(tbl, tg.tokens_in(chars[page], box))
+                    rec["conservation"] = conservation(
+                        tbl, page_tokens(chars[page], box, definition), definition
+                    )
                 rows[f"{unit}|{ti}"] = rec
         cache.parent.mkdir(parents=True, exist_ok=True)
         cache.write_text(json.dumps(rows), encoding="utf-8")
@@ -229,7 +248,9 @@ def flips(base: dict, new: dict) -> dict[str, Counter]:
             per[fam]["baseline_correct"] += 1
             if nd["outcome"] == "strict":
                 continue
-            if nd["outcome"] == "wrong" and bd["cell"]["value"] in norm_value(nd.get("text", "")):
+            if nd["outcome"] == "wrong" and bd["cell"]["value"] in norm_value(
+                nd.get("text", ""), "v1"
+            ):
                 per[fam]["flip_character_level"] += 1
             else:
                 per[fam]["flip_value"] += 1
@@ -274,7 +295,7 @@ def main() -> int:
     fam = defaultdict(Counter)
     for v in outcomes.values():
         fam[v["family"]].update(v["codes"])
-    bc = bc_tables("data/parsed", "baseline")
+    bc = bc_tables("data/parsed", "baseline", "v1")
     compact = {k: {"family": v["family"], "codes": v["codes"]} for k, v in outcomes.items()}
     body = {
         "cell_outcomes": compact,
