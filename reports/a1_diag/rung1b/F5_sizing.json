@@ -16,7 +16,8 @@
 "expected": "447",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "400"
+"page_prints_in_band": "400",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -29,7 +30,8 @@
 "expected": "171",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "172"
+"page_prints_in_band": "172",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -42,7 +44,8 @@
 "expected": "35.8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "36.0"
+"page_prints_in_band": "36.0",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -55,7 +58,8 @@
 "expected": "835",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "834"
+"page_prints_in_band": "834",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -68,7 +72,8 @@
 "expected": "52",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "50"
+"page_prints_in_band": "50",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -81,7 +86,8 @@
 "expected": "102",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "101"
+"page_prints_in_band": "101",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -94,7 +100,8 @@
 "expected": "-0.034",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.030"
+"page_prints_in_band": "-.030",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -107,7 +114,8 @@
 "expected": "74",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "75"
+"page_prints_in_band": "75",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -120,7 +128,8 @@
 "expected": "20",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -133,7 +142,8 @@
 "expected": "251",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "252"
+"page_prints_in_band": "252",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -146,7 +156,8 @@
 "expected": "20",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -159,7 +170,8 @@
 "expected": "304",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "300"
+"page_prints_in_band": "300",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -172,7 +184,8 @@
 "expected": "220",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "208"
+"page_prints_in_band": "208",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -185,7 +198,8 @@
 "expected": "-0.653",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.637"
+"page_prints_in_band": "-.637",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.12",
@@ -198,7 +212,8 @@
 "expected": "8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "Ra"
+"page_prints_in_band": "Ra",
+"band_class": "no-digit-at-position"
 },
 {
 "table": "3.7c",
@@ -211,7 +226,8 @@
 "expected": "222",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "219"
+"page_prints_in_band": "219",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -224,7 +240,8 @@
 "expected": "0.016",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".015"
+"page_prints_in_band": ".015",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -237,7 +254,8 @@
 "expected": "-10",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-260"
+"page_prints_in_band": "-260",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -250,7 +268,8 @@
 "expected": "47",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "46"
+"page_prints_in_band": "46",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -263,7 +282,8 @@
 "expected": "862",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "794"
+"page_prints_in_band": "794",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -276,7 +296,8 @@
 "expected": "0.311",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".310"
+"page_prints_in_band": ".310",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -289,7 +310,8 @@
 "expected": "70",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "65"
+"page_prints_in_band": "65",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -302,7 +324,8 @@
 "expected": "45",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "44"
+"page_prints_in_band": "44",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -315,7 +338,8 @@
 "expected": "100",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "96"
+"page_prints_in_band": "96",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -328,7 +352,8 @@
 "expected": "227",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "215"
+"page_prints_in_band": "215",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -341,7 +366,8 @@
 "expected": "34",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "36"
+"page_prints_in_band": "36",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -354,7 +380,8 @@
 "expected": "106",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "105"
+"page_prints_in_band": "105",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.2",
@@ -367,7 +394,8 @@
 "expected": "0.799",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".797"
+"page_prints_in_band": ".797",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -380,7 +408,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(s)"
+"page_prints_in_band": "(s)",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "3.3e",
@@ -393,7 +422,8 @@
 "expected": "202",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "200"
+"page_prints_in_band": "200",
+"band_class": "numeric-but-different"
 }
 ],
 "cells": [
@@ -5920,7 +5950,8 @@
 "expected": "0.799",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".797"
+"page_prints_in_band": ".797",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.1",
@@ -5946,7 +5977,8 @@
 "expected": "7.448",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7.416"
+"page_prints_in_band": "7.416",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.1",
@@ -5985,7 +6017,8 @@
 "expected": "7.745",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7.738"
+"page_prints_in_band": "7.738",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.1",
@@ -6648,7 +6681,8 @@
 "expected": "-0.246",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.234"
+"page_prints_in_band": "-.234",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.1",
@@ -6661,7 +6695,8 @@
 "expected": "5.920",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5.916"
+"page_prints_in_band": "5.916",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.1",
@@ -12017,7 +12052,8 @@
 "expected": "2.386",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "2.370"
+"page_prints_in_band": "2.370",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.2",
@@ -12732,7 +12768,8 @@
 "expected": "0.436",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".434"
+"page_prints_in_band": ".434",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.2",
@@ -12745,7 +12782,8 @@
 "expected": "0.799",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".797"
+"page_prints_in_band": ".797",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.2",
@@ -13096,7 +13134,8 @@
 "expected": "0.846",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".845"
+"page_prints_in_band": ".845",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.2",
@@ -13915,7 +13954,8 @@
 "expected": "0.859",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".848"
+"page_prints_in_band": ".848",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.2",
@@ -20337,7 +20377,8 @@
 "expected": "3.053",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3.024"
+"page_prints_in_band": "3.024",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.3",
@@ -20714,7 +20755,8 @@
 "expected": "0.412",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".413"
+"page_prints_in_band": ".413",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.3",
@@ -21819,7 +21861,8 @@
 "expected": "5.920",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5.916"
+"page_prints_in_band": "5.916",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.3",
@@ -26278,7 +26321,8 @@
 "expected": "0.287",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".280"
+"page_prints_in_band": ".280",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4a",
@@ -26733,7 +26777,8 @@
 "expected": "1.500",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1.499"
+"page_prints_in_band": "1.499",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4a",
@@ -28878,7 +28923,8 @@
 "expected": "0.001",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "(s)"
+"page_prints_in_band": "(s)",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "1.4b",
@@ -31023,7 +31069,8 @@
 "expected": "0.003",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".002"
+"page_prints_in_band": ".002",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4b",
@@ -32089,7 +32136,8 @@
 "expected": "0.035",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".031"
+"page_prints_in_band": ".031",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4b",
@@ -32479,7 +32527,8 @@
 "expected": "1.670",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1.643"
+"page_prints_in_band": "1.643",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4b",
@@ -32492,7 +32541,8 @@
 "expected": "0.038",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".037"
+"page_prints_in_band": ".037",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4b",
@@ -32570,7 +32620,8 @@
 "expected": "0.037",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".038"
+"page_prints_in_band": ".038",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4b",
@@ -32635,7 +32686,8 @@
 "expected": "0.039",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".040"
+"page_prints_in_band": ".040",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4b",
@@ -37458,7 +37510,8 @@
 "expected": "-0.034",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.030"
+"page_prints_in_band": "-.030",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -37614,7 +37667,8 @@
 "expected": "-0.642",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.624"
+"page_prints_in_band": "-.624",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -37744,7 +37798,8 @@
 "expected": "-0.035",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.036"
+"page_prints_in_band": "-.036",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -37770,7 +37825,8 @@
 "expected": "-0.842",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R-.837"
+"page_prints_in_band": "R-.837",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -37848,7 +37904,8 @@
 "expected": "-0.035",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.034"
+"page_prints_in_band": "-.034",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -37900,7 +37957,8 @@
 "expected": "-0.653",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.637"
+"page_prints_in_band": "-.637",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -37913,7 +37971,8 @@
 "expected": "-0.033",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.032"
+"page_prints_in_band": "-.032",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -38069,7 +38128,8 @@
 "expected": "-0.036",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.035"
+"page_prints_in_band": "-.035",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -38355,7 +38415,8 @@
 "expected": "0.004",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-.002"
+"page_prints_in_band": "-.002",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.4c",
@@ -45570,7 +45631,8 @@
 "expected": "5.42",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5.41"
+"page_prints_in_band": "5.41",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.6",
@@ -45947,7 +46009,8 @@
 "expected": "5.34",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5.33"
+"page_prints_in_band": "5.33",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.6",
@@ -45960,7 +46023,8 @@
 "expected": "15.64",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "15.63"
+"page_prints_in_band": "15.63",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.6",
@@ -47481,7 +47545,8 @@
 "expected": "5.22",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5.26"
+"page_prints_in_band": "5.26",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.6",
@@ -47598,7 +47663,8 @@
 "expected": "5.49",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "NA"
+"page_prints_in_band": "NA",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "1.6",
@@ -58973,7 +59039,8 @@
 "expected": "17.8",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "17.!;!"
+"page_prints_in_band": "17.!;!",
+"band_class": "no-digit-at-position"
 },
 {
 "table": "1.8",
@@ -59025,7 +59092,8 @@
 "expected": "17.1",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "b17.1"
+"page_prints_in_band": "b17.1",
+"band_class": "footnote-fused"
 },
 {
 "table": "1.8",
@@ -68385,7 +68453,8 @@
 "expected": "58",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R53"
+"page_prints_in_band": "R53",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.11",
@@ -69295,7 +69364,8 @@
 "expected": "163",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "161"
+"page_prints_in_band": "161",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.12",
@@ -74612,7 +74682,8 @@
 "expected": "8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "Ra"
+"page_prints_in_band": "Ra",
+"band_class": "no-digit-at-position"
 },
 {
 "table": "1.12",
@@ -78902,7 +78973,8 @@
 "expected": "62",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "63"
+"page_prints_in_band": "63",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -79422,7 +79494,8 @@
 "expected": "62",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "63"
+"page_prints_in_band": "63",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80592,7 +80665,8 @@
 "expected": "89",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "90"
+"page_prints_in_band": "90",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80696,7 +80770,8 @@
 "expected": "37",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "36"
+"page_prints_in_band": "36",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80735,7 +80810,8 @@
 "expected": "80",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "81"
+"page_prints_in_band": "81",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80748,7 +80824,8 @@
 "expected": "73",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "72"
+"page_prints_in_band": "72",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80774,7 +80851,8 @@
 "expected": "34",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "36"
+"page_prints_in_band": "36",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80787,7 +80865,8 @@
 "expected": "86",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "84"
+"page_prints_in_band": "84",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80826,7 +80905,8 @@
 "expected": "92",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "96"
+"page_prints_in_band": "96",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80878,7 +80958,8 @@
 "expected": "61",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "62"
+"page_prints_in_band": "62",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80891,7 +80972,8 @@
 "expected": "74",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "75"
+"page_prints_in_band": "75",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80904,7 +80986,8 @@
 "expected": "395",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "386"
+"page_prints_in_band": "386",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80917,7 +81000,8 @@
 "expected": "91",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "92"
+"page_prints_in_band": "92",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80930,7 +81014,8 @@
 "expected": "295",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "306"
+"page_prints_in_band": "306",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80956,7 +81041,8 @@
 "expected": "80",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "83"
+"page_prints_in_band": "83",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80969,7 +81055,8 @@
 "expected": "6",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7"
+"page_prints_in_band": "7",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80982,7 +81069,8 @@
 "expected": "31",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "30"
+"page_prints_in_band": "30",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -80995,7 +81083,8 @@
 "expected": "86",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "88"
+"page_prints_in_band": "88",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81008,7 +81097,8 @@
 "expected": "60",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "61"
+"page_prints_in_band": "61",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81021,7 +81111,8 @@
 "expected": "72",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "73"
+"page_prints_in_band": "73",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81060,7 +81151,8 @@
 "expected": "102",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "100"
+"page_prints_in_band": "100",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81073,7 +81165,8 @@
 "expected": "7",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "6"
+"page_prints_in_band": "6",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81099,7 +81192,8 @@
 "expected": "90",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "87"
+"page_prints_in_band": "87",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81125,7 +81219,8 @@
 "expected": "3361",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3,363"
+"page_prints_in_band": "3,363",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81151,7 +81246,8 @@
 "expected": "37",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "36"
+"page_prints_in_band": "36",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81177,7 +81273,8 @@
 "expected": "100",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "96"
+"page_prints_in_band": "96",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81203,7 +81300,8 @@
 "expected": "36",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "37"
+"page_prints_in_band": "37",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81281,7 +81379,8 @@
 "expected": "224",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "232"
+"page_prints_in_band": "232",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81294,7 +81393,8 @@
 "expected": "88",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "86"
+"page_prints_in_band": "86",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81320,7 +81420,8 @@
 "expected": "6",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7"
+"page_prints_in_band": "7",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81398,7 +81499,8 @@
 "expected": "87",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "88"
+"page_prints_in_band": "88",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81502,7 +81604,8 @@
 "expected": "77",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "78"
+"page_prints_in_band": "78",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81606,7 +81709,8 @@
 "expected": "80",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "81"
+"page_prints_in_band": "81",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81710,7 +81814,8 @@
 "expected": "75",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "76"
+"page_prints_in_band": "76",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -81801,7 +81906,8 @@
 "expected": "75",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "76"
+"page_prints_in_band": "76",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13a",
@@ -87313,7 +87419,8 @@
 "expected": "0.092",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".093"
+"page_prints_in_band": ".093",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87326,7 +87433,8 @@
 "expected": "0.047",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".046"
+"page_prints_in_band": ".046",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87339,7 +87447,8 @@
 "expected": "0.311",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".310"
+"page_prints_in_band": ".310",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87456,7 +87565,8 @@
 "expected": "0.043",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".041"
+"page_prints_in_band": ".041",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87521,7 +87631,8 @@
 "expected": "0.083",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".084"
+"page_prints_in_band": ".084",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87534,7 +87645,8 @@
 "expected": "0.052",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".050"
+"page_prints_in_band": ".050",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87547,7 +87659,8 @@
 "expected": "0.280",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".279"
+"page_prints_in_band": ".279",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87560,7 +87673,8 @@
 "expected": "0.014",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".013"
+"page_prints_in_band": ".013",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87573,7 +87687,8 @@
 "expected": "0.047",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".045"
+"page_prints_in_band": ".045",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87599,7 +87714,8 @@
 "expected": "0.005",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".006"
+"page_prints_in_band": ".006",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87612,7 +87728,8 @@
 "expected": "0.016",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".015"
+"page_prints_in_band": ".015",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87625,7 +87742,8 @@
 "expected": "0.415",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".410"
+"page_prints_in_band": ".410",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87638,7 +87756,8 @@
 "expected": "6.4",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "6.3"
+"page_prints_in_band": "6.3",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87664,7 +87783,8 @@
 "expected": "0.077",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".078"
+"page_prints_in_band": ".078",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87677,7 +87797,8 @@
 "expected": "0.017",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".018"
+"page_prints_in_band": ".018",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87690,7 +87811,8 @@
 "expected": "0.049",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".047"
+"page_prints_in_band": ".047",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87755,7 +87877,8 @@
 "expected": "0.076",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".077"
+"page_prints_in_band": ".077",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87768,7 +87891,8 @@
 "expected": "0.081",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".079"
+"page_prints_in_band": ".079",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87794,7 +87918,8 @@
 "expected": "0.051",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".053"
+"page_prints_in_band": ".053",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87963,7 +88088,8 @@
 "expected": "0.074",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".075"
+"page_prints_in_band": ".075",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87976,7 +88102,8 @@
 "expected": "0.101",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".100"
+"page_prints_in_band": ".100",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -87989,7 +88116,8 @@
 "expected": "0.021",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".020"
+"page_prints_in_band": ".020",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88002,7 +88130,8 @@
 "expected": "0.050",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".051"
+"page_prints_in_band": ".051",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88093,7 +88222,8 @@
 "expected": "0.053",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".051"
+"page_prints_in_band": ".051",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88184,7 +88314,8 @@
 "expected": "0.310",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".311"
+"page_prints_in_band": ".311",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88288,7 +88419,8 @@
 "expected": "0.019",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".018"
+"page_prints_in_band": ".018",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88301,7 +88433,8 @@
 "expected": "0.042",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".041"
+"page_prints_in_band": ".041",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88379,7 +88512,8 @@
 "expected": "0.018",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".019"
+"page_prints_in_band": ".019",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88444,7 +88578,8 @@
 "expected": "0.541",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".529"
+"page_prints_in_band": ".529",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88470,7 +88605,8 @@
 "expected": "0.046",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".048"
+"page_prints_in_band": ".048",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88613,7 +88749,8 @@
 "expected": "0.090",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".091"
+"page_prints_in_band": ".091",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88678,7 +88815,8 @@
 "expected": "0.080",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".081"
+"page_prints_in_band": ".081",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88795,7 +88933,8 @@
 "expected": "0.083",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".084"
+"page_prints_in_band": ".084",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88821,7 +88960,8 @@
 "expected": "0.289",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".291"
+"page_prints_in_band": ".291",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88912,7 +89052,8 @@
 "expected": "0.078",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".079"
+"page_prints_in_band": ".079",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88938,7 +89079,8 @@
 "expected": "0.288",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".289"
+"page_prints_in_band": ".289",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -88977,7 +89119,8 @@
 "expected": "0.443",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": ".445"
+"page_prints_in_band": ".445",
+"band_class": "numeric-but-different"
 },
 {
 "table": "1.13b",
@@ -95347,7 +95490,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95438,7 +95582,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(s)"
+"page_prints_in_band": "(s)",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "11.1",
@@ -95477,7 +95622,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95542,7 +95688,8 @@
 "expected": "50",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "49"
+"page_prints_in_band": "49",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95633,7 +95780,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95698,7 +95846,8 @@
 "expected": "23",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "22"
+"page_prints_in_band": "22",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95776,7 +95925,8 @@
 "expected": "193",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "191"
+"page_prints_in_band": "191",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95815,7 +95965,8 @@
 "expected": "49",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "50"
+"page_prints_in_band": "50",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95828,7 +95979,8 @@
 "expected": "7",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "6"
+"page_prints_in_band": "6",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -95984,7 +96136,8 @@
 "expected": "24",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "23"
+"page_prints_in_band": "23",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96153,7 +96306,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96218,7 +96372,8 @@
 "expected": "50",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "49"
+"page_prints_in_band": "49",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96244,7 +96399,8 @@
 "expected": "21",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20"
+"page_prints_in_band": "20",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96270,7 +96426,8 @@
 "expected": "90",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "89"
+"page_prints_in_band": "89",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96283,7 +96440,8 @@
 "expected": "4",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3"
+"page_prints_in_band": "3",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96348,7 +96506,8 @@
 "expected": "54",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "53"
+"page_prints_in_band": "53",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96413,7 +96572,8 @@
 "expected": "3",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96478,7 +96638,8 @@
 "expected": "49",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "48"
+"page_prints_in_band": "48",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96491,7 +96652,8 @@
 "expected": "10",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "9"
+"page_prints_in_band": "9",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -96647,7 +96809,8 @@
 "expected": "91",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "90"
+"page_prints_in_band": "90",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -97388,7 +97551,8 @@
 "expected": "89",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "88"
+"page_prints_in_band": "88",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.1",
@@ -101496,7 +101660,8 @@
 "expected": "35",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "34"
+"page_prints_in_band": "34",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.2",
@@ -106111,7 +106276,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.3",
@@ -106137,7 +106303,8 @@
 "expected": "55",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "54"
+"page_prints_in_band": "54",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.3",
@@ -106982,7 +107149,8 @@
 "expected": "13",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "12"
+"page_prints_in_band": "12",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.3",
@@ -113131,7 +113299,8 @@
 "expected": "30",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "31"
+"page_prints_in_band": "31",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113378,7 +113547,8 @@
 "expected": "25",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "26"
+"page_prints_in_band": "26",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113495,7 +113665,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113573,7 +113744,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113651,7 +113823,8 @@
 "expected": "110",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "109"
+"page_prints_in_band": "109",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113729,7 +113902,8 @@
 "expected": "3",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113755,7 +113929,8 @@
 "expected": "26",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "27"
+"page_prints_in_band": "27",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113781,7 +113956,8 @@
 "expected": "109",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "111"
+"page_prints_in_band": "111",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113820,7 +113996,8 @@
 "expected": "7",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "6"
+"page_prints_in_band": "6",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -113989,7 +114166,8 @@
 "expected": "4",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3"
+"page_prints_in_band": "3",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -114080,7 +114258,8 @@
 "expected": "8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7"
+"page_prints_in_band": "7",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -114171,7 +114350,8 @@
 "expected": "111",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "110"
+"page_prints_in_band": "110",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -114353,7 +114533,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4"
+"page_prints_in_band": "4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -114522,7 +114703,8 @@
 "expected": "26",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "27"
+"page_prints_in_band": "27",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -114613,7 +114795,8 @@
 "expected": "44",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "45"
+"page_prints_in_band": "45",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.4",
@@ -119501,7 +119684,8 @@
 "expected": "34",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "35"
+"page_prints_in_band": "35",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119592,7 +119776,8 @@
 "expected": "32",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "31"
+"page_prints_in_band": "31",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119631,7 +119816,8 @@
 "expected": "4",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3"
+"page_prints_in_band": "3",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119722,7 +119908,8 @@
 "expected": "149",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "148"
+"page_prints_in_band": "148",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119761,7 +119948,8 @@
 "expected": "38",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "37"
+"page_prints_in_band": "37",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119813,7 +120001,8 @@
 "expected": "149",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "148"
+"page_prints_in_band": "148",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119865,7 +120054,8 @@
 "expected": "23",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "22"
+"page_prints_in_band": "22",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119891,7 +120081,8 @@
 "expected": "3",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "2"
+"page_prints_in_band": "2",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119904,7 +120095,8 @@
 "expected": "155",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "154"
+"page_prints_in_band": "154",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119956,7 +120148,8 @@
 "expected": "90",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "89"
+"page_prints_in_band": "89",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -119982,7 +120175,8 @@
 "expected": "156",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "155"
+"page_prints_in_band": "155",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -120021,7 +120215,8 @@
 "expected": "91",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "90"
+"page_prints_in_band": "90",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -120138,7 +120333,8 @@
 "expected": "21",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20"
+"page_prints_in_band": "20",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -120177,7 +120373,8 @@
 "expected": "151",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "150"
+"page_prints_in_band": "150",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -120190,7 +120387,8 @@
 "expected": "157",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "156"
+"page_prints_in_band": "156",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -120255,7 +120453,8 @@
 "expected": "156",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "155"
+"page_prints_in_band": "155",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -120346,7 +120545,8 @@
 "expected": "152",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "151"
+"page_prints_in_band": "151",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -120424,7 +120624,8 @@
 "expected": "158",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "157"
+"page_prints_in_band": "157",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.5",
@@ -122998,7 +123199,8 @@
 "expected": "6",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "11.6",
@@ -123011,7 +123213,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "11.6",
@@ -130135,7 +130338,8 @@
 "expected": "6",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7"
+"page_prints_in_band": "7",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.7",
@@ -130785,7 +130989,8 @@
 "expected": "8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7"
+"page_prints_in_band": "7",
+"band_class": "numeric-but-different"
 },
 {
 "table": "11.7",
@@ -132683,7 +132888,8 @@
 "expected": "428",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "427"
+"page_prints_in_band": "427",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -132878,7 +133084,8 @@
 "expected": "220",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "257"
+"page_prints_in_band": "257",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -132904,7 +133111,8 @@
 "expected": "12762",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "12,757"
+"page_prints_in_band": "12,757",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -133034,7 +133242,8 @@
 "expected": "431",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "430"
+"page_prints_in_band": "430",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -133164,7 +133373,8 @@
 "expected": "20393",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20,396"
+"page_prints_in_band": "20,396",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -133944,7 +134154,8 @@
 "expected": "13530",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "13,437"
+"page_prints_in_band": "13,437",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134061,7 +134272,8 @@
 "expected": "-10",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-260"
+"page_prints_in_band": "-260",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134074,7 +134286,8 @@
 "expected": "935",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "943"
+"page_prints_in_band": "943",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134087,7 +134300,8 @@
 "expected": "437",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E434"
+"page_prints_in_band": "E434",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134100,7 +134314,8 @@
 "expected": "267",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "229"
+"page_prints_in_band": "229",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134113,7 +134328,8 @@
 "expected": "436",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E433"
+"page_prints_in_band": "E433",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134126,7 +134342,8 @@
 "expected": "435",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E434"
+"page_prints_in_band": "E434",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134139,7 +134356,8 @@
 "expected": "7530",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7,472"
+"page_prints_in_band": "7,472",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134152,7 +134370,8 @@
 "expected": "21065",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20,919"
+"page_prints_in_band": "20,919",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134165,7 +134384,8 @@
 "expected": "1340",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,333"
+"page_prints_in_band": "1,333",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134178,7 +134398,8 @@
 "expected": "1062",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,066"
+"page_prints_in_band": "1,066",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134217,7 +134438,8 @@
 "expected": "13447",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "13,424"
+"page_prints_in_band": "13,424",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134243,7 +134465,8 @@
 "expected": "989",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "987"
+"page_prints_in_band": "987",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134256,7 +134479,8 @@
 "expected": "430",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E428"
+"page_prints_in_band": "E428",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134295,7 +134519,8 @@
 "expected": "474",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "461"
+"page_prints_in_band": "461",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134308,7 +134533,8 @@
 "expected": "544",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "567"
+"page_prints_in_band": "567",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134321,7 +134547,8 @@
 "expected": "13810",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "13,657"
+"page_prints_in_band": "13,657",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134347,7 +134574,8 @@
 "expected": "200",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "378"
+"page_prints_in_band": "378",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134867,7 +135095,8 @@
 "expected": "956",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R955"
+"page_prints_in_band": "R955",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.1",
@@ -134906,7 +135135,8 @@
 "expected": "20736",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20,622"
+"page_prints_in_band": "20,622",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137207,7 +137437,8 @@
 "expected": "509",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "508"
+"page_prints_in_band": "508",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137233,7 +137464,8 @@
 "expected": "529",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "526"
+"page_prints_in_band": "526",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137246,7 +137478,8 @@
 "expected": "4737",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "4,740"
+"page_prints_in_band": "4,740",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137298,7 +137531,8 @@
 "expected": "628",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "627"
+"page_prints_in_band": "627",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137324,7 +137558,8 @@
 "expected": "326",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "318"
+"page_prints_in_band": "318",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137350,7 +137585,8 @@
 "expected": "513",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "510"
+"page_prints_in_band": "510",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137428,7 +137664,8 @@
 "expected": "5005",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5,006"
+"page_prints_in_band": "5,006",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137506,7 +137743,8 @@
 "expected": "299",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "298"
+"page_prints_in_band": "298",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137558,7 +137796,8 @@
 "expected": "1995",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,997"
+"page_prints_in_band": "1,997",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137571,7 +137810,8 @@
 "expected": "318",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "316"
+"page_prints_in_band": "316",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137688,7 +137928,8 @@
 "expected": "333",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "331"
+"page_prints_in_band": "331",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -137948,7 +138189,8 @@
 "expected": "9476",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "9,471"
+"page_prints_in_band": "9,471",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -138286,7 +138528,8 @@
 "expected": "307",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "305"
+"page_prints_in_band": "305",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -139157,7 +139400,8 @@
 "expected": "549",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "RE535"
+"page_prints_in_band": "RE535",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.2",
@@ -139170,7 +139414,8 @@
 "expected": "306",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "NA"
+"page_prints_in_band": "NA",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "3.3a",
@@ -141042,7 +141287,8 @@
 "expected": "40.2",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "40.1"
+"page_prints_in_band": "40.1",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141172,7 +141418,8 @@
 "expected": "5.8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5.7"
+"page_prints_in_band": "5.7",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141185,7 +141432,8 @@
 "expected": "37.8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "37.7"
+"page_prints_in_band": "37.7",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141250,7 +141498,8 @@
 "expected": "37.8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "38.2"
+"page_prints_in_band": "38.2",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141263,7 +141512,8 @@
 "expected": "-13.2",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-13.1"
+"page_prints_in_band": "-13.1",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141315,7 +141565,8 @@
 "expected": "-11.1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-10.9"
+"page_prints_in_band": "-10.9",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141341,7 +141592,8 @@
 "expected": "1237",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,229"
+"page_prints_in_band": "1,229",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141367,7 +141619,8 @@
 "expected": "5.9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5.8"
+"page_prints_in_band": "5.8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141380,7 +141633,8 @@
 "expected": "37.9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "37.8"
+"page_prints_in_band": "37.8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141393,7 +141647,8 @@
 "expected": "-13.1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "-13.2"
+"page_prints_in_band": "-13.2",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141471,7 +141726,8 @@
 "expected": "37.7",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "37.9"
+"page_prints_in_band": "37.9",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141640,7 +141896,8 @@
 "expected": "6.3",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "6.4"
+"page_prints_in_band": "6.4",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141731,7 +141988,8 @@
 "expected": "35.8",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "36.0"
+"page_prints_in_band": "36.0",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -141809,7 +142067,8 @@
 "expected": "3.2",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3.3"
+"page_prints_in_band": "3.3",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3a",
@@ -142589,7 +142848,8 @@
 "expected": "20736",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20,622"
+"page_prints_in_band": "20,622",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144331,7 +144591,8 @@
 "expected": "179",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "178"
+"page_prints_in_band": "178",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144357,7 +144618,8 @@
 "expected": "211",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "207"
+"page_prints_in_band": "207",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144370,7 +144632,8 @@
 "expected": "129",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "112"
+"page_prints_in_band": "112",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144422,7 +144685,8 @@
 "expected": "178",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "172"
+"page_prints_in_band": "172",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144448,7 +144712,8 @@
 "expected": "191",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "185"
+"page_prints_in_band": "185",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144461,7 +144726,8 @@
 "expected": "256",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "242"
+"page_prints_in_band": "242",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144513,7 +144779,8 @@
 "expected": "179",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "178"
+"page_prints_in_band": "178",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144526,7 +144793,8 @@
 "expected": "121",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "118"
+"page_prints_in_band": "118",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144552,7 +144820,8 @@
 "expected": "198",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "191"
+"page_prints_in_band": "191",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144604,7 +144873,8 @@
 "expected": "98",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "101"
+"page_prints_in_band": "101",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144630,7 +144900,8 @@
 "expected": "111",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "114"
+"page_prints_in_band": "114",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144643,7 +144914,8 @@
 "expected": "172",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "173"
+"page_prints_in_band": "173",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144656,7 +144928,8 @@
 "expected": "146",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "128"
+"page_prints_in_band": "128",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144682,7 +144955,8 @@
 "expected": "7730",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "7,713"
+"page_prints_in_band": "7,713",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144721,7 +144995,8 @@
 "expected": "104",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "103"
+"page_prints_in_band": "103",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144734,7 +145009,8 @@
 "expected": "162",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "159"
+"page_prints_in_band": "159",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144747,7 +145023,8 @@
 "expected": "158",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "141"
+"page_prints_in_band": "141",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144812,7 +145089,8 @@
 "expected": "94",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "93"
+"page_prints_in_band": "93",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144838,7 +145116,8 @@
 "expected": "106",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "105"
+"page_prints_in_band": "105",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144851,7 +145130,8 @@
 "expected": "158",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "155"
+"page_prints_in_band": "155",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144864,7 +145144,8 @@
 "expected": "98",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "80"
+"page_prints_in_band": "80",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144929,7 +145210,8 @@
 "expected": "100",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "99"
+"page_prints_in_band": "99",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144942,7 +145224,8 @@
 "expected": "124",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "107"
+"page_prints_in_band": "107",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -144994,7 +145277,8 @@
 "expected": "89",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "88"
+"page_prints_in_band": "88",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145020,7 +145304,8 @@
 "expected": "103",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "102"
+"page_prints_in_band": "102",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145085,7 +145370,8 @@
 "expected": "86",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "84"
+"page_prints_in_band": "84",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145111,7 +145397,8 @@
 "expected": "98",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "96"
+"page_prints_in_band": "96",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145124,7 +145411,8 @@
 "expected": "164",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "163"
+"page_prints_in_band": "163",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145189,7 +145477,8 @@
 "expected": "120",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "119"
+"page_prints_in_band": "119",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145202,7 +145491,8 @@
 "expected": "95",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "92"
+"page_prints_in_band": "92",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145228,7 +145518,8 @@
 "expected": "106",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "103"
+"page_prints_in_band": "103",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -145241,7 +145532,8 @@
 "expected": "185",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "179"
+"page_prints_in_band": "179",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -146164,7 +146456,8 @@
 "expected": "127",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E118"
+"page_prints_in_band": "E118",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -146177,7 +146470,8 @@
 "expected": "13",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "NA"
+"page_prints_in_band": "NA",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "3.3b",
@@ -146190,7 +146484,8 @@
 "expected": "105",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "EgQ"
+"page_prints_in_band": "EgQ",
+"band_class": "no-digit-at-position"
 },
 {
 "table": "3.3b",
@@ -146203,7 +146498,8 @@
 "expected": "84",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E77"
+"page_prints_in_band": "E77",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3b",
@@ -146216,7 +146512,8 @@
 "expected": "103",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E13Q"
+"page_prints_in_band": "E13Q",
+"band_class": "no-digit-at-position"
 },
 {
 "table": "3.3c",
@@ -146788,7 +147085,8 @@
 "expected": "36",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "241"
+"page_prints_in_band": "241",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -147022,7 +147320,8 @@
 "expected": "40",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "311"
+"page_prints_in_band": "311",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -147594,7 +147893,8 @@
 "expected": "80",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "297"
+"page_prints_in_band": "297",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -147776,7 +148076,8 @@
 "expected": "223",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "281"
+"page_prints_in_band": "281",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -147945,7 +148246,8 @@
 "expected": "66",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "175"
+"page_prints_in_band": "175",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -148114,7 +148416,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "90"
+"page_prints_in_band": "90",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -148127,7 +148430,8 @@
 "expected": "1237",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,229"
+"page_prints_in_band": "1,229",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -148218,7 +148522,8 @@
 "expected": "7",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "322"
+"page_prints_in_band": "322",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -148556,7 +148861,8 @@
 "expected": "40",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "135"
+"page_prints_in_band": "135",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -148790,7 +149096,8 @@
 "expected": "6",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "137"
+"page_prints_in_band": "137",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -148985,7 +149292,8 @@
 "expected": "16",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "293"
+"page_prints_in_band": "293",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -149102,7 +149410,8 @@
 "expected": "6",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "439"
+"page_prints_in_band": "439",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3c",
@@ -150987,7 +151296,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.3d",
@@ -151182,7 +151492,8 @@
 "expected": "122",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "134"
+"page_prints_in_band": "134",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3d",
@@ -152079,7 +152390,8 @@
 "expected": "1070",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,Q70"
+"page_prints_in_band": "1,Q70",
+"band_class": "no-digit-at-position"
 },
 {
 "table": "3.3d",
@@ -154003,7 +154315,8 @@
 "expected": "115",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "125"
+"page_prints_in_band": "125",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154081,7 +154394,8 @@
 "expected": "251",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "252"
+"page_prints_in_band": "252",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154120,7 +154434,8 @@
 "expected": "765",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "790"
+"page_prints_in_band": "790",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154133,7 +154448,8 @@
 "expected": "202",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "200"
+"page_prints_in_band": "200",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154146,7 +154462,8 @@
 "expected": "726",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "747"
+"page_prints_in_band": "747",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154185,7 +154502,8 @@
 "expected": "803",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "844"
+"page_prints_in_band": "844",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154198,7 +154516,8 @@
 "expected": "97",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "99"
+"page_prints_in_band": "99",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154211,7 +154530,8 @@
 "expected": "853",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "903"
+"page_prints_in_band": "903",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -154224,7 +154544,8 @@
 "expected": "104",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "108"
+"page_prints_in_band": "108",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.3e",
@@ -156590,7 +156911,8 @@
 "expected": "288",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "271"
+"page_prints_in_band": "271",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156603,7 +156925,8 @@
 "expected": "472",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "449"
+"page_prints_in_band": "449",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156616,7 +156939,8 @@
 "expected": "1042",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,043"
+"page_prints_in_band": "1,043",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156629,7 +156953,8 @@
 "expected": "722",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "700"
+"page_prints_in_band": "700",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156642,7 +156967,8 @@
 "expected": "210",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "218"
+"page_prints_in_band": "218",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156655,7 +156981,8 @@
 "expected": "741",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "801"
+"page_prints_in_band": "801",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156668,7 +156995,8 @@
 "expected": "733",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "717"
+"page_prints_in_band": "717",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156681,7 +157009,8 @@
 "expected": "179",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "178"
+"page_prints_in_band": "178",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156694,7 +157023,8 @@
 "expected": "345",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "343"
+"page_prints_in_band": "343",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156707,7 +157037,8 @@
 "expected": "1039",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,026"
+"page_prints_in_band": "1,026",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156720,7 +157051,8 @@
 "expected": "85",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "66"
+"page_prints_in_band": "66",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156733,7 +157065,8 @@
 "expected": "716",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "699"
+"page_prints_in_band": "699",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156759,7 +157092,8 @@
 "expected": "437",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "423"
+"page_prints_in_band": "423",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156772,7 +157106,8 @@
 "expected": "1035",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,033"
+"page_prints_in_band": "1,033",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156785,7 +157120,8 @@
 "expected": "600",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "570"
+"page_prints_in_band": "570",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156798,7 +157134,8 @@
 "expected": "1286",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,282"
+"page_prints_in_band": "1,282",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156824,7 +157161,8 @@
 "expected": "260",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "263"
+"page_prints_in_band": "263",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156850,7 +157188,8 @@
 "expected": "734",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "728"
+"page_prints_in_band": "728",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156863,7 +157202,8 @@
 "expected": "713",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "649"
+"page_prints_in_band": "649",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156876,7 +157216,8 @@
 "expected": "268",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "274"
+"page_prints_in_band": "274",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156902,7 +157243,8 @@
 "expected": "698",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "689"
+"page_prints_in_band": "689",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156915,7 +157257,8 @@
 "expected": "618",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "640"
+"page_prints_in_band": "640",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156941,7 +157284,8 @@
 "expected": "157",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "173"
+"page_prints_in_band": "173",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156967,7 +157311,8 @@
 "expected": "4065",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3,949"
+"page_prints_in_band": "3,949",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156980,7 +157325,8 @@
 "expected": "835",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "834"
+"page_prints_in_band": "834",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -156993,7 +157339,8 @@
 "expected": "699",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "722"
+"page_prints_in_band": "722",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -157006,7 +157353,8 @@
 "expected": "108",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "127"
+"page_prints_in_band": "127",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.31",
@@ -159840,7 +160188,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -159866,7 +160215,8 @@
 "expected": "184",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "185"
+"page_prints_in_band": "185",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -159996,7 +160346,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -160061,7 +160412,8 @@
 "expected": "24",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "25"
+"page_prints_in_band": "25",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -160152,7 +160504,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -160178,7 +160531,8 @@
 "expected": "173",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "174"
+"page_prints_in_band": "174",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -160217,7 +160571,8 @@
 "expected": "24",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "25"
+"page_prints_in_band": "25",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -160282,7 +160637,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -160399,7 +160755,8 @@
 "expected": "62",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "63"
+"page_prints_in_band": "63",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -160412,7 +160769,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -160555,7 +160913,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -160581,7 +160940,8 @@
 "expected": "45",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "44"
+"page_prints_in_band": "44",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -160698,7 +161058,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -160711,7 +161072,8 @@
 "expected": "45",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "44"
+"page_prints_in_band": "44",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -160828,7 +161190,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -160867,7 +161230,8 @@
 "expected": "223",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "222"
+"page_prints_in_band": "222",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -160971,7 +161335,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -161127,7 +161492,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(nothing in the band)"
+"page_prints_in_band": "(nothing in the band)",
+"band_class": "digit-on-other-line"
 },
 {
 "table": "3.4",
@@ -161322,7 +161688,8 @@
 "expected": "219",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "220"
+"page_prints_in_band": "220",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -161439,7 +161806,8 @@
 "expected": "274",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "272"
+"page_prints_in_band": "272",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -162206,7 +162574,8 @@
 "expected": "92",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E91"
+"page_prints_in_band": "E91",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -162219,7 +162588,8 @@
 "expected": "49",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E45"
+"page_prints_in_band": "E45",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.4",
@@ -164572,7 +164942,8 @@
 "expected": "1516",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,484"
+"page_prints_in_band": "1,484",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164624,7 +164995,8 @@
 "expected": "319",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "329"
+"page_prints_in_band": "329",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164637,7 +165009,8 @@
 "expected": "371",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "357"
+"page_prints_in_band": "357",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164650,7 +165023,8 @@
 "expected": "234",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "221"
+"page_prints_in_band": "221",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164702,7 +165076,8 @@
 "expected": "349",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "316"
+"page_prints_in_band": "316",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164715,7 +165090,8 @@
 "expected": "1180",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,167"
+"page_prints_in_band": "1,167",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164728,7 +165104,8 @@
 "expected": "253",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "244"
+"page_prints_in_band": "244",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164754,7 +165131,8 @@
 "expected": "3877",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3,894"
+"page_prints_in_band": "3,894",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164780,7 +165158,8 @@
 "expected": "1112",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,111"
+"page_prints_in_band": "1,111",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164806,7 +165185,8 @@
 "expected": "309",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "295"
+"page_prints_in_band": "295",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164819,7 +165199,8 @@
 "expected": "1170",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,168"
+"page_prints_in_band": "1,168",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164858,7 +165239,8 @@
 "expected": "7",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "6"
+"page_prints_in_band": "6",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164871,7 +165253,8 @@
 "expected": "92",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "96"
+"page_prints_in_band": "96",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164884,7 +165267,8 @@
 "expected": "8921",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8,910"
+"page_prints_in_band": "8,910",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164897,7 +165281,8 @@
 "expected": "251",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "252"
+"page_prints_in_band": "252",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164962,7 +165347,8 @@
 "expected": "91",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "92"
+"page_prints_in_band": "92",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -164975,7 +165361,8 @@
 "expected": "1220",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,222"
+"page_prints_in_band": "1,222",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165014,7 +165401,8 @@
 "expected": "862",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "794"
+"page_prints_in_band": "794",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165079,7 +165467,8 @@
 "expected": "270",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "276"
+"page_prints_in_band": "276",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165092,7 +165481,8 @@
 "expected": "361",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "347"
+"page_prints_in_band": "347",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165144,7 +165534,8 @@
 "expected": "102",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "100"
+"page_prints_in_band": "100",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165157,7 +165548,8 @@
 "expected": "267",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "264"
+"page_prints_in_band": "264",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165170,7 +165562,8 @@
 "expected": "1259",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,247"
+"page_prints_in_band": "1,247",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165209,7 +165602,8 @@
 "expected": "113",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "117"
+"page_prints_in_band": "117",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165261,7 +165655,8 @@
 "expected": "100",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "96"
+"page_prints_in_band": "96",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165274,7 +165669,8 @@
 "expected": "177",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "196"
+"page_prints_in_band": "196",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165339,7 +165735,8 @@
 "expected": "224",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "232"
+"page_prints_in_band": "232",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -165365,7 +165762,8 @@
 "expected": "1167",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1,173"
+"page_prints_in_band": "1,173",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -166210,7 +166608,8 @@
 "expected": "6",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R5"
+"page_prints_in_band": "R5",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -166275,7 +166674,8 @@
 "expected": "11",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "12"
+"page_prints_in_band": "12",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.5",
@@ -166288,7 +166688,8 @@
 "expected": "14",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "RF4"
+"page_prints_in_band": "RF4",
+"band_class": "outside"
 },
 {
 "table": "3.5",
@@ -166301,7 +166702,8 @@
 "expected": "20736",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20,622"
+"page_prints_in_band": "20,622",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -166899,7 +167301,8 @@
 "expected": "63",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "E53"
+"page_prints_in_band": "E53",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -169850,7 +170253,8 @@
 "expected": "290",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "289"
+"page_prints_in_band": "289",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -173776,7 +174180,8 @@
 "expected": "214",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "210"
+"page_prints_in_band": "210",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -173789,7 +174194,8 @@
 "expected": "289",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "285"
+"page_prints_in_band": "285",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -173893,7 +174299,8 @@
 "expected": "19",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "22"
+"page_prints_in_band": "22",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -173906,7 +174313,8 @@
 "expected": "52",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "50"
+"page_prints_in_band": "50",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -173984,7 +174392,8 @@
 "expected": "14",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "13"
+"page_prints_in_band": "13",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174010,7 +174419,8 @@
 "expected": "60",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "58"
+"page_prints_in_band": "58",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174023,7 +174433,8 @@
 "expected": "65",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "63"
+"page_prints_in_band": "63",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174049,7 +174460,8 @@
 "expected": "680",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "672"
+"page_prints_in_band": "672",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174075,7 +174487,8 @@
 "expected": "304",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "300"
+"page_prints_in_band": "300",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174101,7 +174514,8 @@
 "expected": "17",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "18"
+"page_prints_in_band": "18",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174140,7 +174554,8 @@
 "expected": "70",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "65"
+"page_prints_in_band": "65",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174192,7 +174607,8 @@
 "expected": "64",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "60"
+"page_prints_in_band": "60",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174205,7 +174621,8 @@
 "expected": "42",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "39"
+"page_prints_in_band": "39",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174231,7 +174648,8 @@
 "expected": "672",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "686"
+"page_prints_in_band": "686",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174244,7 +174662,8 @@
 "expected": "68",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "60"
+"page_prints_in_band": "60",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174270,7 +174689,8 @@
 "expected": "99",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "91"
+"page_prints_in_band": "91",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174322,7 +174742,8 @@
 "expected": "40",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "45"
+"page_prints_in_band": "45",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174335,7 +174756,8 @@
 "expected": "54",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "56"
+"page_prints_in_band": "56",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174361,7 +174783,8 @@
 "expected": "101",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "100"
+"page_prints_in_band": "100",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174400,7 +174823,8 @@
 "expected": "110",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "103"
+"page_prints_in_band": "103",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174413,7 +174837,8 @@
 "expected": "21",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20"
+"page_prints_in_band": "20",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174439,7 +174864,8 @@
 "expected": "229",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "230"
+"page_prints_in_band": "230",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174491,7 +174917,8 @@
 "expected": "397",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "398"
+"page_prints_in_band": "398",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174543,7 +174970,8 @@
 "expected": "45",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "40"
+"page_prints_in_band": "40",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174647,7 +175075,8 @@
 "expected": "94",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "93"
+"page_prints_in_band": "93",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174686,7 +175115,8 @@
 "expected": "212",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "211"
+"page_prints_in_band": "211",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174738,7 +175168,8 @@
 "expected": "18",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174751,7 +175182,8 @@
 "expected": "24",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "23"
+"page_prints_in_band": "23",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174777,7 +175209,8 @@
 "expected": "46",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "48"
+"page_prints_in_band": "48",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -174842,7 +175275,8 @@
 "expected": "41",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "44"
+"page_prints_in_band": "44",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -175622,7 +176056,8 @@
 "expected": "1359",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R 1,358"
+"page_prints_in_band": "R 1,358",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -175635,7 +176070,8 @@
 "expected": "58",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R57"
+"page_prints_in_band": "R57",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -175648,7 +176084,8 @@
 "expected": "92",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "E 79"
+"page_prints_in_band": "E 79",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.6",
@@ -175661,7 +176098,8 @@
 "expected": "74",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "NA"
+"page_prints_in_band": "NA",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "3.6",
@@ -175674,7 +176112,8 @@
 "expected": "1402",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "NA"
+"page_prints_in_band": "NA",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "3.7a",
@@ -177195,7 +177634,8 @@
 "expected": "363",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "362"
+"page_prints_in_band": "362",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177234,7 +177674,8 @@
 "expected": "263",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "249"
+"page_prints_in_band": "249",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177260,7 +177701,8 @@
 "expected": "165",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "166"
+"page_prints_in_band": "166",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177299,7 +177741,8 @@
 "expected": "227",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "215"
+"page_prints_in_band": "215",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177351,7 +177794,8 @@
 "expected": "295",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "294"
+"page_prints_in_band": "294",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177377,7 +177821,8 @@
 "expected": "171",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "162"
+"page_prints_in_band": "162",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177403,7 +177848,8 @@
 "expected": "171",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "172"
+"page_prints_in_band": "172",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177507,7 +177953,8 @@
 "expected": "222",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "211"
+"page_prints_in_band": "211",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177520,7 +177967,8 @@
 "expected": "4",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "5"
+"page_prints_in_band": "5",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177533,7 +177981,8 @@
 "expected": "392",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "380"
+"page_prints_in_band": "380",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177546,7 +177995,8 @@
 "expected": "107",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "101"
+"page_prints_in_band": "101",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177624,7 +178074,8 @@
 "expected": "101",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "100"
+"page_prints_in_band": "100",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177637,7 +178088,8 @@
 "expected": "84",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "80"
+"page_prints_in_band": "80",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177689,7 +178141,8 @@
 "expected": "131",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "124"
+"page_prints_in_band": "124",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177715,7 +178168,8 @@
 "expected": "230",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "223"
+"page_prints_in_band": "223",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177728,7 +178182,8 @@
 "expected": "68",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "67"
+"page_prints_in_band": "67",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177780,7 +178235,8 @@
 "expected": "135",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "128"
+"page_prints_in_band": "128",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177806,7 +178262,8 @@
 "expected": "222",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "215"
+"page_prints_in_band": "215",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177884,7 +178341,8 @@
 "expected": "156",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "148"
+"page_prints_in_band": "148",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177897,7 +178355,8 @@
 "expected": "102",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "101"
+"page_prints_in_band": "101",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -177949,7 +178408,8 @@
 "expected": "193",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "192"
+"page_prints_in_band": "192",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178027,7 +178487,8 @@
 "expected": "460",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "437"
+"page_prints_in_band": "437",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178053,7 +178514,8 @@
 "expected": "698",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R673"
+"page_prints_in_band": "R673",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178066,7 +178528,8 @@
 "expected": "173",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "164"
+"page_prints_in_band": "164",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178092,7 +178555,8 @@
 "expected": "171",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "170"
+"page_prints_in_band": "170",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178144,7 +178608,8 @@
 "expected": "209",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "208"
+"page_prints_in_band": "208",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178157,7 +178622,8 @@
 "expected": "224",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "213"
+"page_prints_in_band": "213",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178183,7 +178649,8 @@
 "expected": "173",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "172"
+"page_prints_in_band": "172",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178209,7 +178676,8 @@
 "expected": "736",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "698"
+"page_prints_in_band": "698",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178235,7 +178703,8 @@
 "expected": "249",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "236"
+"page_prints_in_band": "236",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178287,7 +178756,8 @@
 "expected": "630",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R598"
+"page_prints_in_band": "R598",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178313,7 +178783,8 @@
 "expected": "220",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "208"
+"page_prints_in_band": "208",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178378,7 +178849,8 @@
 "expected": "200",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R201"
+"page_prints_in_band": "R201",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178391,7 +178863,8 @@
 "expected": "158",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "150"
+"page_prints_in_band": "150",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178443,7 +178916,8 @@
 "expected": "128",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "121"
+"page_prints_in_band": "121",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178508,7 +178982,8 @@
 "expected": "162",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "163"
+"page_prints_in_band": "163",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -178521,7 +178996,8 @@
 "expected": "225",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "21 3"
+"page_prints_in_band": "21 3",
+"band_class": "split-token, joined != value (numeric-but-different)"
 },
 {
 "table": "3.7a",
@@ -178547,7 +179023,8 @@
 "expected": "107",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "102"
+"page_prints_in_band": "102",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7a",
@@ -180601,7 +181078,8 @@
 "expected": "3441",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3,428"
+"page_prints_in_band": "3,428",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180640,7 +181118,8 @@
 "expected": "138",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "139"
+"page_prints_in_band": "139",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180653,7 +181132,8 @@
 "expected": "285",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "295"
+"page_prints_in_band": "295",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180666,7 +181146,8 @@
 "expected": "23",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "22"
+"page_prints_in_band": "22",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180692,7 +181173,8 @@
 "expected": "234",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "221"
+"page_prints_in_band": "221",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180705,7 +181187,8 @@
 "expected": "510",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "520"
+"page_prints_in_band": "520",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180744,7 +181227,8 @@
 "expected": "30",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "27"
+"page_prints_in_band": "27",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180770,7 +181254,8 @@
 "expected": "22",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "20"
+"page_prints_in_band": "20",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180783,7 +181268,8 @@
 "expected": "253",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "244"
+"page_prints_in_band": "244",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180835,7 +181321,8 @@
 "expected": "149",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "153"
+"page_prints_in_band": "153",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180848,7 +181335,8 @@
 "expected": "20",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180861,7 +181349,8 @@
 "expected": "328",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "316"
+"page_prints_in_band": "316",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180900,7 +181389,8 @@
 "expected": "44",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "46"
+"page_prints_in_band": "46",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180952,7 +181442,8 @@
 "expected": "395",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "386"
+"page_prints_in_band": "386",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180965,7 +181456,8 @@
 "expected": "516",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "497"
+"page_prints_in_band": "497",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -180991,7 +181483,8 @@
 "expected": "3247",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3,159"
+"page_prints_in_band": "3,159",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181030,7 +181523,8 @@
 "expected": "308",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "291"
+"page_prints_in_band": "291",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181043,7 +181537,8 @@
 "expected": "14",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "13"
+"page_prints_in_band": "13",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181056,7 +181551,8 @@
 "expected": "497",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "556"
+"page_prints_in_band": "556",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181082,7 +181578,8 @@
 "expected": "627",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "571"
+"page_prints_in_band": "571",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181108,7 +181605,8 @@
 "expected": "38",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "40"
+"page_prints_in_band": "40",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181147,7 +181645,8 @@
 "expected": "425",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "377"
+"page_prints_in_band": "377",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181173,7 +181672,8 @@
 "expected": "708",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "660"
+"page_prints_in_band": "660",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181251,7 +181751,8 @@
 "expected": "49",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "48"
+"page_prints_in_band": "48",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181277,7 +181778,8 @@
 "expected": "17",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "16"
+"page_prints_in_band": "16",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181290,7 +181792,8 @@
 "expected": "497",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "498"
+"page_prints_in_band": "498",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181303,7 +181806,8 @@
 "expected": "447",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "400"
+"page_prints_in_band": "400",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181329,7 +181833,8 @@
 "expected": "698",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "651"
+"page_prints_in_band": "651",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181342,7 +181847,8 @@
 "expected": "54",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "56"
+"page_prints_in_band": "56",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181394,7 +181900,8 @@
 "expected": "47",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "46"
+"page_prints_in_band": "46",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181420,7 +181927,8 @@
 "expected": "149",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "168"
+"page_prints_in_band": "168",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181433,7 +181941,8 @@
 "expected": "20",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181472,7 +181981,8 @@
 "expected": "48",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "49"
+"page_prints_in_band": "49",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181485,7 +181995,8 @@
 "expected": "143",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "142"
+"page_prints_in_band": "142",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181498,7 +182009,8 @@
 "expected": "105",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "99"
+"page_prints_in_band": "99",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181524,7 +182036,8 @@
 "expected": "224",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "232"
+"page_prints_in_band": "232",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181550,7 +182063,8 @@
 "expected": "556",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "607"
+"page_prints_in_band": "607",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181576,7 +182090,8 @@
 "expected": "145",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "144"
+"page_prints_in_band": "144",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181641,7 +182156,8 @@
 "expected": "3606",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "3,657"
+"page_prints_in_band": "3,657",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181732,7 +182248,8 @@
 "expected": "401",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "445"
+"page_prints_in_band": "445",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181758,7 +182275,8 @@
 "expected": "658",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "702"
+"page_prints_in_band": "702",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181862,7 +182380,8 @@
 "expected": "602",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "R592"
+"page_prints_in_band": "R592",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -181888,7 +182407,8 @@
 "expected": "351",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "381"
+"page_prints_in_band": "381",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -182005,7 +182525,8 @@
 "expected": "487",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "510"
+"page_prints_in_band": "510",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -182096,7 +182617,8 @@
 "expected": "378",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "368"
+"page_prints_in_band": "368",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -182122,7 +182644,8 @@
 "expected": "506",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "524"
+"page_prints_in_band": "524",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7b",
@@ -184254,7 +184777,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184345,7 +184869,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184358,7 +184883,8 @@
 "expected": "32",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "30"
+"page_prints_in_band": "30",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184371,7 +184897,8 @@
 "expected": "247",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "245"
+"page_prints_in_band": "245",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184449,7 +184976,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184475,7 +185003,8 @@
 "expected": "263",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "250"
+"page_prints_in_band": "250",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184488,7 +185017,8 @@
 "expected": "223",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "229"
+"page_prints_in_band": "229",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184501,7 +185031,8 @@
 "expected": "13446",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "13,427"
+"page_prints_in_band": "13,427",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184579,7 +185110,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184592,7 +185124,8 @@
 "expected": "48",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "50"
+"page_prints_in_band": "50",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184618,7 +185151,8 @@
 "expected": "247",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "235"
+"page_prints_in_band": "235",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184696,7 +185230,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184787,7 +185322,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184800,7 +185336,8 @@
 "expected": "42",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "44"
+"page_prints_in_band": "44",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184891,7 +185428,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -184995,7 +185533,8 @@
 "expected": "54",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "52"
+"page_prints_in_band": "52",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -185008,7 +185547,8 @@
 "expected": "222",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "219"
+"page_prints_in_band": "219",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -185021,7 +185561,8 @@
 "expected": "207",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "208"
+"page_prints_in_band": "208",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -185099,7 +185640,8 @@
 "expected": "59",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "61"
+"page_prints_in_band": "61",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -185112,7 +185654,8 @@
 "expected": "226",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "228"
+"page_prints_in_band": "228",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -185190,7 +185733,8 @@
 "expected": "52",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "50"
+"page_prints_in_band": "50",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -185398,7 +185942,8 @@
 "expected": "246",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "248"
+"page_prints_in_band": "248",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.7c",
@@ -190923,7 +191468,8 @@
 "expected": "31",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "30"
+"page_prints_in_band": "30",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -190962,7 +191508,8 @@
 "expected": "71",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "67"
+"page_prints_in_band": "67",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191027,7 +191574,8 @@
 "expected": "1",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "(s)"
+"page_prints_in_band": "(s)",
+"band_class": "placeholder (NA / (s))"
 },
 {
 "table": "3.8a",
@@ -191053,7 +191601,8 @@
 "expected": "54",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "51"
+"page_prints_in_band": "51",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191079,7 +191628,8 @@
 "expected": "37",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "36"
+"page_prints_in_band": "36",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191092,7 +191642,8 @@
 "expected": "20",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191157,7 +191708,8 @@
 "expected": "73",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "71"
+"page_prints_in_band": "71",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191183,7 +191735,8 @@
 "expected": "16",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "15"
+"page_prints_in_band": "15",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191222,7 +191775,8 @@
 "expected": "66",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "65"
+"page_prints_in_band": "65",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191235,7 +191789,8 @@
 "expected": "30",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "29"
+"page_prints_in_band": "29",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191248,7 +191803,8 @@
 "expected": "26",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "25"
+"page_prints_in_band": "25",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191339,7 +191895,8 @@
 "expected": "42",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "41"
+"page_prints_in_band": "41",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191365,7 +191922,8 @@
 "expected": "10",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "9"
+"page_prints_in_band": "9",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191378,7 +191936,8 @@
 "expected": "28",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "27"
+"page_prints_in_band": "27",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191404,7 +191963,8 @@
 "expected": "55",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "54"
+"page_prints_in_band": "54",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191430,7 +191990,8 @@
 "expected": "33",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "32"
+"page_prints_in_band": "32",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191456,7 +192017,8 @@
 "expected": "10",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "9"
+"page_prints_in_band": "9",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191495,7 +192057,8 @@
 "expected": "50",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "49"
+"page_prints_in_band": "49",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191534,7 +192097,8 @@
 "expected": "32",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "31"
+"page_prints_in_band": "31",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191586,7 +192150,8 @@
 "expected": "49",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "48"
+"page_prints_in_band": "48",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191664,7 +192229,8 @@
 "expected": "55",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "54"
+"page_prints_in_band": "54",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191690,7 +192256,8 @@
 "expected": "68",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "66"
+"page_prints_in_band": "66",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191716,7 +192283,8 @@
 "expected": "15",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "14"
+"page_prints_in_band": "14",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191781,7 +192349,8 @@
 "expected": "94",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "91"
+"page_prints_in_band": "91",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191807,7 +192376,8 @@
 "expected": "20",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -191885,7 +192455,8 @@
 "expected": "511",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "485"
+"page_prints_in_band": "485",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -192041,7 +192612,8 @@
 "expected": "48",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "46"
+"page_prints_in_band": "46",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -192067,7 +192639,8 @@
 "expected": "101",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "99"
+"page_prints_in_band": "99",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -192093,7 +192666,8 @@
 "expected": "19",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "18"
+"page_prints_in_band": "18",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -192158,7 +192732,8 @@
 "expected": "15",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "14"
+"page_prints_in_band": "14",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8a",
@@ -198645,7 +199220,8 @@
 "expected": "47",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "46"
+"page_prints_in_band": "46",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198658,7 +199234,8 @@
 "expected": "55",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "57"
+"page_prints_in_band": "57",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198762,7 +199339,8 @@
 "expected": "43",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "41"
+"page_prints_in_band": "41",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198775,7 +199353,8 @@
 "expected": "49",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "46"
+"page_prints_in_band": "46",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198840,7 +199419,8 @@
 "expected": "15",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "18"
+"page_prints_in_band": "18",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198866,7 +199446,8 @@
 "expected": "158",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "156"
+"page_prints_in_band": "156",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198879,7 +199460,8 @@
 "expected": "99",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "102"
+"page_prints_in_band": "102",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198892,7 +199474,8 @@
 "expected": "28",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "32"
+"page_prints_in_band": "32",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198918,7 +199501,8 @@
 "expected": "57",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "61"
+"page_prints_in_band": "61",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198931,7 +199515,8 @@
 "expected": "7",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "6"
+"page_prints_in_band": "6",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198983,7 +199568,8 @@
 "expected": "177",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "175"
+"page_prints_in_band": "175",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -198996,7 +199582,8 @@
 "expected": "27",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "23"
+"page_prints_in_band": "23",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199061,7 +199648,8 @@
 "expected": "175",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "173"
+"page_prints_in_band": "173",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199074,7 +199662,8 @@
 "expected": "92",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "89"
+"page_prints_in_band": "89",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199087,7 +199676,8 @@
 "expected": "30",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "27"
+"page_prints_in_band": "27",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199113,7 +199703,8 @@
 "expected": "62",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "59"
+"page_prints_in_band": "59",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199152,7 +199743,8 @@
 "expected": "60",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "56"
+"page_prints_in_band": "56",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199165,7 +199757,8 @@
 "expected": "3",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "2"
+"page_prints_in_band": "2",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199178,7 +199771,8 @@
 "expected": "185",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "188"
+"page_prints_in_band": "188",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199191,7 +199785,8 @@
 "expected": "95",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "92"
+"page_prints_in_band": "92",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199204,7 +199799,8 @@
 "expected": "41",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "35"
+"page_prints_in_band": "35",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199230,7 +199826,8 @@
 "expected": "72",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "66"
+"page_prints_in_band": "66",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199308,7 +199905,8 @@
 "expected": "101",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "100"
+"page_prints_in_band": "100",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199334,7 +199932,8 @@
 "expected": "84",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "78"
+"page_prints_in_band": "78",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199360,7 +199959,8 @@
 "expected": "24",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "23"
+"page_prints_in_band": "23",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199373,7 +199973,8 @@
 "expected": "46",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "47"
+"page_prints_in_band": "47",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199399,7 +200000,8 @@
 "expected": "78",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "84"
+"page_prints_in_band": "84",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199412,7 +200014,8 @@
 "expected": "57",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "61"
+"page_prints_in_band": "61",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199464,7 +200067,8 @@
 "expected": "40",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "34"
+"page_prints_in_band": "34",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199503,7 +200107,8 @@
 "expected": "106",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "100"
+"page_prints_in_band": "100",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199568,7 +200173,8 @@
 "expected": "30",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "28"
+"page_prints_in_band": "28",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199620,7 +200226,8 @@
 "expected": "46",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "47"
+"page_prints_in_band": "47",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199646,7 +200253,8 @@
 "expected": "335",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "336"
+"page_prints_in_band": "336",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199685,7 +200293,8 @@
 "expected": "29",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "33"
+"page_prints_in_band": "33",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199724,7 +200333,8 @@
 "expected": "41",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "24"
+"page_prints_in_band": "24",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199763,7 +200373,8 @@
 "expected": "20",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "19"
+"page_prints_in_band": "19",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199802,7 +200413,8 @@
 "expected": "46",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "48"
+"page_prints_in_band": "48",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199815,7 +200427,8 @@
 "expected": "34",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "40"
+"page_prints_in_band": "40",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199841,7 +200454,8 @@
 "expected": "66",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "72"
+"page_prints_in_band": "72",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199854,7 +200468,8 @@
 "expected": "322",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "335"
+"page_prints_in_band": "335",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199893,7 +200508,8 @@
 "expected": "23",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "22"
+"page_prints_in_band": "22",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -199906,7 +200522,8 @@
 "expected": "37",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "41"
+"page_prints_in_band": "41",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -200010,7 +200627,8 @@
 "expected": "79",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "85"
+"page_prints_in_band": "85",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -200153,7 +200771,8 @@
 "expected": "11",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "15"
+"page_prints_in_band": "15",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -200270,7 +200889,8 @@
 "expected": "56",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "59"
+"page_prints_in_band": "59",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8b",
@@ -202259,7 +202879,8 @@
 "expected": "5",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "d5"
+"page_prints_in_band": "d5",
+"band_class": "footnote-fused"
 },
 {
 "table": "3.8c",
@@ -204716,7 +205337,8 @@
 "expected": "2017",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "2,01 7"
+"page_prints_in_band": "2,01 7",
+"band_class": "split-token, joined == value"
 },
 {
 "table": "3.8c",
@@ -206640,7 +207262,8 @@
 "expected": "289",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "285"
+"page_prints_in_band": "285",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -206666,7 +207289,8 @@
 "expected": "58",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "56"
+"page_prints_in_band": "56",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -206679,7 +207303,8 @@
 "expected": "30",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "32"
+"page_prints_in_band": "32",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -206783,7 +207408,8 @@
 "expected": "51",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "46"
+"page_prints_in_band": "46",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -206796,7 +207422,8 @@
 "expected": "38",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "37"
+"page_prints_in_band": "37",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -206913,7 +207540,8 @@
 "expected": "51",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "49"
+"page_prints_in_band": "49",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207004,7 +207632,8 @@
 "expected": "304",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "300"
+"page_prints_in_band": "300",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207043,7 +207672,8 @@
 "expected": "40",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "38"
+"page_prints_in_band": "38",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207147,7 +207777,8 @@
 "expected": "35",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "32"
+"page_prints_in_band": "32",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207264,7 +207895,8 @@
 "expected": "45",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "47"
+"page_prints_in_band": "47",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207368,7 +208000,8 @@
 "expected": "60",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "57"
+"page_prints_in_band": "57",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207459,7 +208092,8 @@
 "expected": "559",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "560"
+"page_prints_in_band": "560",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207732,7 +208366,8 @@
 "expected": "10",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "9"
+"page_prints_in_band": "9",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207745,7 +208380,8 @@
 "expected": "52",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "51"
+"page_prints_in_band": "51",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -207966,7 +208602,8 @@
 "expected": "9",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "8"
+"page_prints_in_band": "8",
+"band_class": "numeric-but-different"
 },
 {
 "table": "3.8c",
@@ -229156,7 +229793,8 @@
 "expected": "41",
 "outcome": "not on the line",
 "stratum": "row year <= 2023",
-"page_prints_in_band": "0"
+"page_prints_in_band": "0",
+"band_class": "numeric-but-different"
 },
 {
 "table": "4.2b",
@@ -235162,7 +235800,8 @@
 "expected": "0",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "1"
+"page_prints_in_band": "1",
+"band_class": "numeric-but-different"
 },
 {
 "table": "4.2b",
@@ -235565,7 +236204,8 @@
 "expected": "195",
 "outcome": "not on the line",
 "stratum": "row year >= 2024",
-"page_prints_in_band": "194"
+"page_prints_in_band": "194",
+"band_class": "numeric-but-different"
 },
 {
 "table": "4.2b",

@@ -86,7 +86,15 @@ def raw_lines(chars: list[dict], box: tuple[float, float, float, float]) -> list
             text = "".join(c["text"] for c in t)
             text = re.sub(r"[.…�]{2,}", "", text).strip()
             if text and not all(ch in ".…�·" for ch in text):
-                out.append({"text": text, "x0": t[0]["x0"], "x1": t[-1]["x1"]})
+                out.append(
+                    {
+                        "text": text,
+                        "x0": t[0]["x0"],
+                        "x1": t[-1]["x1"],
+                        "top": min(c["top"] for c in t),
+                        "bottom": max(c["bottom"] for c in t),
+                    }
+                )
         if out:
             lines.append(out)
     return lines
@@ -97,9 +105,90 @@ def year_of(key: str) -> int | None:
     return int(m.group(0)) if m else None
 
 
-def main() -> int:
+def row_lines(unit: str, ti: int) -> dict:
+    """One burned MER table: the raw lines inside its bbox, the oracle's bands, and the row key ->
+    line map read as admission reads it (``oracle.read_page``'s rules). Also the page geometry,
+    for the dump."""
     import pdfplumber
 
+    doc = json.loads((REPO / "data" / "parsed" / f"{unit}.json").read_text("utf-8"))
+    pg = orc.read_page(unit, "eia", ti, doc)  # the oracle's own bands for this table
+    prov = doc["tables"][ti]["prov"][0]
+    with pdfplumber.open(REPO / "data" / "raw" / "eia" / f"{unit}.pdf") as pdf:
+        page = pdf.pages[prov["page_no"] - 1]
+        h = page.height
+        bb = prov["bbox"]
+        top, bottom = (
+            (h - bb["t"], h - bb["b"])
+            if bb.get("coord_origin", "BOTTOMLEFT") == "BOTTOMLEFT"
+            else (bb["t"], bb["b"])
+        )
+        box = (bb["l"], top, bb["r"], bottom)
+        chars = list(page.chars)
+        lines = raw_lines(chars, box)
+    bands = pg.bands
+    first = bands[0][0] if bands else float("inf")
+    by_key: dict[str, list[dict]] = {}
+    state: dict = {}
+    seen: set[str] = set()
+    for ln in lines:
+        data = [
+            t
+            for t in ln
+            if orc.canon(t["text"]) is not None
+            and orc.band_index(t, bands) is not None
+            and not (bands and t["x1"] < first)
+        ]
+        label = " ".join(t["text"] for t in ln if not bands or t["x1"] < first - 0.5)
+        key = orc.row_key(label, state) if data else None
+        if key and key in seen:
+            key = None
+        if key:
+            seen.add(key)
+            by_key[key] = ln
+    return {
+        "bands": bands,
+        "first": first,
+        "by_key": by_key,
+        "lines": lines,
+        "page_no": prov["page_no"],
+        "box": box,
+        "chars": chars,
+    }
+
+
+COMMITTED = {
+    "on the line": 19093,
+    "on the line only with a revision flag": 58,
+    "not on the line": 610,
+}  # row line not found: 0
+
+
+def classify_off(off: list[dict]) -> dict[tuple, str]:
+    """Band class of every not-on-the-line cell: the diagnosed class for the 23 anomalous cells
+    (``F5_dump.json``), else numeric-but-different or placeholder (census rule: R / E / RE strip,
+    attached or whitespace-separated)."""
+    import f5_dump
+
+    dumped = {}
+    path = OUT / "F5_dump.json"
+    if path.exists():
+        for d in json.loads(path.read_text(encoding="utf-8")):
+            dumped[(d["table"], d["row"], d["band_prints"], d["expected"])] = d["class"]
+    anomalous = {id(c) for c in f5_dump.anomalous(off)}
+    out = {}
+    for c in off:
+        key = (c["table"], c["row"], c["band"])
+        if id(c) in anomalous:
+            out[key] = dumped[(c["table"], c["row"], c["page_prints_in_band"], c["expected"])]
+            continue
+        toks = f5_dump.tolerant_tokens(c["page_prints_in_band"])
+        placeholder = len(toks) == 1 and (toks[0] in orc.PLACEHOLDERS or toks[0] == "NA")
+        out[key] = "placeholder (NA / (s))" if placeholder else "numeric-but-different"
+    return out
+
+
+def main() -> int:
     cells = [json.loads(x) for x in (orc.OUT / "cells.jsonl").open(encoding="utf-8")]
     groups: dict[tuple[str, int], list[dict]] = defaultdict(list)
     for c in cells:
@@ -108,40 +197,8 @@ def main() -> int:
     results: list[dict] = []
     per_table: dict[str, Counter] = {}
     for (unit, ti), cs in sorted(groups.items()):
-        doc = json.loads((REPO / "data" / "parsed" / f"{unit}.json").read_text("utf-8"))
-        pg = orc.read_page(unit, "eia", ti, doc)  # the oracle's own bands for this table
-        tbl = doc["tables"][ti]
-        prov = tbl["prov"][0]
-        with pdfplumber.open(REPO / "data" / "raw" / "eia" / f"{unit}.pdf") as pdf:
-            page = pdf.pages[prov["page_no"] - 1]
-            h = page.height
-            bb = prov["bbox"]
-            top, bottom = (
-                (h - bb["t"], h - bb["b"])
-                if bb.get("coord_origin", "BOTTOMLEFT") == "BOTTOMLEFT"
-                else (bb["t"], bb["b"])
-            )
-            lines = raw_lines(page.chars, (bb["l"], top, bb["r"], bottom))
-        bands = pg.bands
-        first = bands[0][0] if bands else float("inf")
-        by_key: dict[str, list[dict]] = {}
-        state: dict = {}
-        seen: set[str] = set()
-        for ln in lines:
-            data = [
-                t
-                for t in ln
-                if orc.canon(t["text"]) is not None
-                and orc.band_index(t, bands) is not None
-                and not (bands and t["x1"] < first)
-            ]
-            label = " ".join(t["text"] for t in ln if not bands or t["x1"] < first - 0.5)
-            key = orc.row_key(label, state) if data else None
-            if key and key in seen:
-                key = None
-            if key:
-                seen.add(key)
-                by_key[key] = ln
+        rl = row_lines(unit, ti)
+        bands, first, by_key = rl["bands"], rl["first"], rl["by_key"]
         tid = cs[0]["table_id"]
         t = per_table.setdefault(f"{tid} p{cs[0]['page']} ({unit})", Counter())
         for c in cs:
@@ -186,10 +243,13 @@ def main() -> int:
                 }
             )
     tot = Counter(r["outcome"] for r in results)
+    # the committed totals (5f7e568): regeneration must not move admission
+    assert dict(tot) == COMMITTED, (dict(tot), COMMITTED)
     strata = Counter((r["stratum"], r["outcome"]) for r in results)
     off = [r for r in results if r["outcome"] == "not on the line"]
     sample = random.Random(SEED).sample(off, min(30, len(off))) if off else []
     n = len(results)
+    band_classes = classify_off(off)
     lines_md = [
         "# D-039 item 1 - A6 clause-(b) sizing on the burned pilot MER tables",
         "",
@@ -223,6 +283,40 @@ def main() -> int:
         )
     lines_md += [
         "",
+        "Whitespace-tolerant strip measured read-only: 96 cells on the line → flag only; "
+        "not-on-the-line set identical (610); admitted under the owner fill 19,151 under both. "
+        "The checker keeps its committed single-token strip (D-039 status 2026-09-30).",
+        "",
+        "## Strata of the 610 not-on-the-line cells (D-039 status 2026-09-30)",
+        "",
+        "Band class per cell: the 23 anomalous cells from the diagnosis (`F5_dump.md`, crops "
+        "checked); a single numeric band token after the R / E / RE strip (attached or "
+        "whitespace-separated) = numeric-but-different; NA / (s) = placeholder.",
+        "",
+        "| band class | cells | conservative-strict miss? |",
+        "|---|---|---|",
+    ]
+    miss = {
+        "no-digit-at-position": "yes (decode defect)",
+        "footnote-fused": "yes",
+        "digit-on-other-line": "yes (checker geometry)",
+        "split-token, joined == value": "yes (checker geometry)",
+        "split-token, joined != value (numeric-but-different)": "no - numeric-but-different",
+        "numeric-but-different": "no - out of the denominator when clause (b) is applied",
+        "placeholder (NA / (s))": "no - page != export; with numeric-but-different",
+        "outside": "OWNER RULING NEEDED (see F5_dump.md #20)",
+    }
+    for k, v in Counter(band_classes.values()).most_common():
+        lines_md.append(f"| {k} | {v} | {miss[k]} |")
+    n_miss = sum(1 for v in band_classes.values() if miss[v].startswith("yes"))
+    lines_md += [
+        "",
+        f"Conservative-strict miss set (decode / footnote-fused / empty-band checker geometry / "
+        f"split-token joined = value only): **{n_miss}** cells = {n_miss / n:.2%} of {n:,} "
+        f"(reference bound 0.5 %); 1 cell (#20, `RF4`) awaits a ruling. Numeric-but-different and "
+        "placeholder cells leave the denominator when clause (b) is applied to admission and are "
+        "NOT in the miss set.",
+        "",
         "## Per table",
         "",
         "| table | cells | not on the line | flag only | row not found |",
@@ -239,15 +333,18 @@ def main() -> int:
         "",
         "For each: does the page print the expected value on this row's line? (owner hand-check)",
         "",
-        "| # | table | page | row label (printed) | period | expected | page prints on that line, "
-        "in the cell's band | owner: provably != page? |",
-        "|---|---|---|---|---|---|---|---|",
+        "| # | table | page | row key | row label (printed) | series (period column) | expected | "
+        "page prints on that line, in the cell's band | band class | owner: provably != page? |",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for i, r in enumerate(sample, 1):
         lines_md.append(
-            f"| {i} | {r['table']} | {r['page']} | {r['label']} | {r['period']} | "
-            f"{r['expected']} | {r['page_prints_in_band']} | |"
+            f"| {i} | {r['table']} | {r['page']} | {r['row']} | {r['label']} | {r['period']} | "
+            f"{r['expected']} | {r['page_prints_in_band']} | "
+            f"{band_classes[(r['table'], r['row'], r['band'])]} | |"
         )
+    for r in off:
+        r["band_class"] = band_classes[(r["table"], r["row"], r["band"])]
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "F5_sizing.md").write_text("\n".join(lines_md) + "\n", encoding="utf-8")
     (OUT / "F5_sizing.json").write_text(
