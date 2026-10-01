@@ -254,6 +254,10 @@ def header_cells(
     # lies over a band); the bands whose centres fall in that tile are its bands IF the phrase
     # crosses the midpoint of their hull (a centred head) - otherwise, and for every other phrase,
     # the bands it physically overlaps. Parameter-free; used by the check and the page cells.
+    def centred(ext: dict, ks: set[int]) -> bool:
+        mid = (min(bands[k]["x0"] for k in ks) + max(bands[k]["x1"] for k in ks)) / 2
+        return ext["x0"] <= mid <= ext["x1"]
+
     def phrase_bands(ln: list[dict]) -> list[tuple[list[dict], set[int]]]:
         out = []
         for ph in phrases_of(ln):
@@ -268,12 +272,23 @@ def header_cells(
                 lo = (on[i - 1][1]["x1"] + ext["x0"]) / 2 if i > 0 else float("-inf")
                 hi = (ext["x1"] + on[i + 1][1]["x0"]) / 2 if i + 1 < len(on) else float("inf")
                 tile = {k for k, b in enumerate(bands) if lo <= (b["x0"] + b["x1"]) / 2 <= hi}
-                if len(tile) > len(phys) and phys <= tile:
-                    mid = (
-                        min(bands[k]["x0"] for k in tile) + max(bands[k]["x1"] for k in tile)
-                    ) / 2
-                    if ext["x0"] <= mid <= ext["x1"]:
-                        eff = tile
+                if len(tile) > len(phys) and phys <= tile and centred(ext, tile):
+                    eff = tile
+                else:
+                    # a lone group head on its line ("Petroleum" over four columns, 11.6) has no
+                    # neighbour gaps: TableFormer's span for the same words, if centred on it
+                    words = Counter(w for t in ph for w in t["text"].split())
+                    for h in tf:
+                        hb = set(h["bands"])
+                        if (
+                            hb != {-1}
+                            and len(hb) > len(phys)
+                            and phys <= hb
+                            and Counter(h["text"].split()) == words
+                            and centred(ext, hb)
+                        ):
+                            eff = hb
+                            break
             res.append((ph, eff))
         return res
 
