@@ -1458,5 +1458,51 @@
   "http_calls_by_host": {
    "www.eia.gov": 47
   }
+ },
+ "fresh_set": {
+  "matched_tables": 39,
+  "tables": [
+   "eia-pdf-sec10:10.1",
+   "eia-pdf-sec10:10.2a",
+   "eia-pdf-sec10:10.2b",
+   "eia-pdf-sec10:10.2c",
+   "eia-pdf-sec10:10.3",
+   "eia-pdf-sec10:10.4a",
+   "eia-pdf-sec10:10.4b",
+   "eia-pdf-sec10:10.4c",
+   "eia-pdf-sec10:10.5",
+   "eia-pdf-sec10:10.6",
+   "eia-pdf-sec12:C1",
+   "eia-pdf-sec12:E1",
+   "eia-pdf-sec12:E2",
+   "eia-pdf-sec12:E3",
+   "eia-pdf-sec12:E4",
+   "eia-pdf-sec12:F1",
+   "eia-pdf-sec2:2.1a",
+   "eia-pdf-sec2:2.1b",
+   "eia-pdf-sec2:2.2",
+   "eia-pdf-sec2:2.3",
+   "eia-pdf-sec2:2.4",
+   "eia-pdf-sec2:2.5",
+   "eia-pdf-sec2:2.6",
+   "eia-pdf-sec2:2.7",
+   "eia-pdf-sec2:2.8",
+   "eia-pdf-sec5:5.1",
+   "eia-pdf-sec6:6.1",
+   "eia-pdf-sec6:6.2",
+   "eia-pdf-sec6:6.3",
+   "eia-pdf-sec9:9.1",
+   "eia-pdf-sec9:9.10",
+   "eia-pdf-sec9:9.2",
+   "eia-pdf-sec9:9.3",
+   "eia-pdf-sec9:9.4",
+   "eia-pdf-sec9:9.5",
+   "eia-pdf-sec9:9.6",
+   "eia-pdf-sec9:9.7",
+   "eia-pdf-sec9:9.8",
+   "eia-pdf-sec9:9.9"
+  ],
+  "ruling": "D-039 status 2026-10-01: 39 matched tables (letter-id scan fix + the four formerly-HTML exports T02.03, T02.04, T02.06, T09.01 admitted)",
+  "html_responses_2026-09-30": "overwritten by the 2026-10-01 refetch; failure recorded by type (HTML, not a spreadsheet) and time (18:42Z fetch)"
  }
 }
