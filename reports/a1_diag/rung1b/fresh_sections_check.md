@@ -18,7 +18,7 @@ Fact-finding only (owner, 2026-09-30): no fix, no decision, no admission change.
 
 - Pages: 40, all /Rotate 0, 612x792 portrait. Text tables headed with LETTER ids (page, id, y): [(2, 'A1', 0.4), (19, 'B1', 0.02), (20, 'B2', 0.02), (20, 'B3', 0.36), (22, 'C1', 0.07), (24, 'D1', 0.1), (30, 'E1', 0.02), (31, 'E2', 0.02), (32, 'E3', 0.02), (33, 'E4', 0.02), (36, 'F1', 0.02)]. Image-only pages: [3, 4, 5, 6, 7] (one image of 63-75 % of the page each) in Appendix A (bookmark MER_A; 'Table A6 Sources' on p15).
 - (a) Printed tables: A1, A2, A3, A4, A5, A6, B1, B2, B3, C1, D1, E1, E2, E3, E4, F1 (16); A2-A6 are on the image-only pages (ids INFERRED from the Appendix A bookmarks, the Sources note and the export titles; not read). Exports whose title names the table: A2, A3, A4, A5, A6, C1, E1, E2, E3, E4, F1; workbook returned without a matching title (treated as not found): A1, B1, B2, B3, D1.
-- (b) Why `page_ids` missed them: FORMAT - `orc.TABLE_ID` requires `digits.digits` (e.g. 12.1); appendix tables are 'Table B1.', 'Table E1.' etc. Also C1 and D1 are headed below a title line (y 0.07 / 0.10), so the first-line rule would miss them even with a letter-id pattern; A2-A6 are images. Not rotation.
+- (b) Why `page_ids` missed them: FORMAT - `orc.TABLE_ID` requires `digits.digits` (e.g. 12.1); appendix tables are 'Table B1.', 'Table E1.' etc. `page_ids` tests every top-quarter line (`fresh_oracle.py:81-86`), so C1 and D1 (y 0.07 / 0.10) were missed for the id format alone (corrected, owner, D-039 status 2026-09-30); A2-A6 are images. Not rotation.
 - (c) Exports: see below. Zero-padded tbl forms (TA01 ...) return untitled workbooks.
 
 ### sec13 (burned pilot)

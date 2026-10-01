@@ -264,9 +264,10 @@ def main() -> int:
         f"{', '.join(i for i, v in ex12.items() if v)}; workbook returned without a matching "
         f"title (treated as not found): {', '.join(i for i, v in ex12.items() if not v)}.",
         "- (b) Why `page_ids` missed them: FORMAT - `orc.TABLE_ID` requires `digits.digits` "
-        "(e.g. 12.1); appendix tables are 'Table B1.', 'Table E1.' etc. Also C1 and D1 are "
-        "headed below a title line (y 0.07 / 0.10), so the first-line rule would miss them "
-        "even with a letter-id pattern; A2-A6 are images. Not rotation.",
+        "(e.g. 12.1); appendix tables are 'Table B1.', 'Table E1.' etc. `page_ids` tests "
+        "every top-quarter line (`fresh_oracle.py:81-86`), so C1 and D1 (y 0.07 / 0.10) were "
+        "missed for the id format alone (corrected, owner, D-039 status 2026-09-30); A2-A6 are "
+        "images. Not rotation.",
         "- (c) Exports: see below. Zero-padded tbl forms (TA01 ...) return untitled workbooks.",
         "",
         "### sec13 (burned pilot)",
