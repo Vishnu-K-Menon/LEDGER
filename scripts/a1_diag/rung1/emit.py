@@ -69,6 +69,24 @@ def flag_space(text: str) -> str:
     )
 
 
+def cell_text(toks: list[dict]) -> str:
+    """Rung 1b (fallback cause): one band's tokens as cell text. A number the tokeniser split at a
+    kerning gap around its decimal point or thousands comma ("3 .349", "11 ,459", "-1, 191") is
+    rejoined - two adjacent pieces join with no space when one side of the boundary is the "." /
+    "," and the joined text is a single number (``is_value``). Parameter-free."""
+    out: list[str] = []
+    for t in toks:
+        w = t["text"]
+        if out:
+            a = out[-1]
+            seam = w[:1] in ".," or a[-1:] in ".,"
+            if seam and (a[-1:].isdigit() or a[-1:] in ".,") and is_value({"text": a + w}):
+                out[-1] = a + w
+                continue
+        out.append(w)
+    return " ".join(out)
+
+
 def merge_flags(line: list[dict]) -> list[dict]:
     out: list[dict] = []
     i = 0
@@ -565,7 +583,7 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
         for b, toks in row["cells"].items():
             out_cells.append(
                 cell(
-                    flag_space(fix_text(" ".join(t["text"] for t in toks))),
+                    flag_space(fix_text(cell_text(toks))),
                     span_box(toks),
                     r,
                     b + 1,
