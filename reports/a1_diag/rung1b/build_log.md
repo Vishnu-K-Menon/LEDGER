@@ -180,3 +180,78 @@
 - BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
 - clause-1 recall changed vs data/parsed: none (unchanged on all 8)
 
+### 2026-10-01T23:13:08Z F2: gap tile only on lines with >= 2 phrases over bands (lone heads use TableFormer's span)
+
+| family | cells | strict rung 1 -> 1b | header rung 1 -> 1b | fired before -> after | fell back |
+|---|---|---|---|---|---|
+| MER | 19761 | 89.33 -> **95.0** | 89.88 -> 91.63 | 41 -> 46 | 0 |
+| ERP | 2764 | 92.51 -> **100.0** | 97.73 -> 95.45 | 3 -> 4 | 0 |
+| STEO | 13046 | 95.76 -> **96.77** | 78.61 -> 97.59 | 14 -> 11 | 1 |
+
+- newly fired (7): ['MER 1.10 p23 (rebuilt)', 'MER 11.2 p5 (rebuilt)', 'MER 11.5 p8 (rebuilt)', 'MER 3.3e p12 (rebuilt)', 'MER 3.31 p13 (rebuilt)', 'ERP table22 sheet0 p1 (rebuilt)', 'STEO 7b p46 (rebuilt)']
+- no longer fired (4): ['STEO 2 p32', 'STEO 3e p37', 'STEO 4c p40', 'STEO 5a p42']
+- fired then fell back (1): ['STEO 10a p55']
+- strict FELL vs rung 1 (0): []
+- BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
+- clause-1 recall changed vs data/parsed: none (unchanged on all 8)
+
+### 2026-10-01T23:18:07Z revert: gap-tile restriction to multi-phrase lines (measured worse: MER header 91.83 -> 91.63); back to the lone-head commit
+
+| family | cells | strict rung 1 -> 1b | header rung 1 -> 1b | fired before -> after | fell back |
+|---|---|---|---|---|---|
+| MER | 19761 | 89.33 -> **95.0** | 89.88 -> 91.83 | 41 -> 46 | 0 |
+| ERP | 2764 | 92.51 -> **100.0** | 97.73 -> 95.45 | 3 -> 4 | 0 |
+| STEO | 13046 | 95.76 -> **96.77** | 78.61 -> 97.59 | 14 -> 11 | 1 |
+
+- newly fired (7): ['MER 1.10 p23 (rebuilt)', 'MER 11.2 p5 (rebuilt)', 'MER 11.5 p8 (rebuilt)', 'MER 3.3e p12 (rebuilt)', 'MER 3.31 p13 (rebuilt)', 'ERP table22 sheet0 p1 (rebuilt)', 'STEO 7b p46 (rebuilt)']
+- no longer fired (4): ['STEO 2 p32', 'STEO 3e p37', 'STEO 4c p40', 'STEO 5a p42']
+- fired then fell back (1): ['STEO 10a p55']
+- strict FELL vs rung 1 (0): []
+- BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
+- clause-1 recall changed vs data/parsed: none (unchanged on all 8)
+
+### 2026-10-01T23:20:45Z F2: gap tile only when TableFormer also spans a head with the same words
+
+| family | cells | strict rung 1 -> 1b | header rung 1 -> 1b | fired before -> after | fell back |
+|---|---|---|---|---|---|
+| MER | 19761 | 89.33 -> **95.0** | 89.88 -> 91.05 | 41 -> 46 | 0 |
+| ERP | 2764 | 92.51 -> **100.0** | 97.73 -> 95.45 | 3 -> 4 | 0 |
+| STEO | 13046 | 95.76 -> **96.77** | 78.61 -> 95.19 | 14 -> 11 | 1 |
+
+- newly fired (7): ['MER 1.10 p23 (rebuilt)', 'MER 11.2 p5 (rebuilt)', 'MER 11.5 p8 (rebuilt)', 'MER 3.3e p12 (rebuilt)', 'MER 3.31 p13 (rebuilt)', 'ERP table22 sheet0 p1 (rebuilt)', 'STEO 7b p46 (rebuilt)']
+- no longer fired (4): ['STEO 2 p32', 'STEO 3e p37', 'STEO 4c p40', 'STEO 5a p42']
+- fired then fell back (1): ['STEO 10a p55']
+- strict FELL vs rung 1 (0): []
+- BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
+- clause-1 recall changed vs data/parsed: none (unchanged on all 8)
+
+### 2026-10-01T23:26:10Z F2: lone-head fallback accepts a TableFormer cell whose words are a subset of the phrase
+
+| family | cells | strict rung 1 -> 1b | header rung 1 -> 1b | fired before -> after | fell back |
+|---|---|---|---|---|---|
+| MER | 19761 | 89.33 -> **95.0** | 89.88 -> 91.83 | 41 -> 46 | 0 |
+| ERP | 2764 | 92.51 -> **100.0** | 97.73 -> 95.45 | 3 -> 4 | 0 |
+| STEO | 13046 | 95.76 -> **96.77** | 78.61 -> 97.59 | 14 -> 11 | 1 |
+
+- newly fired (7): ['MER 1.10 p23 (rebuilt)', 'MER 11.2 p5 (rebuilt)', 'MER 11.5 p8 (rebuilt)', 'MER 3.3e p12 (rebuilt)', 'MER 3.31 p13 (rebuilt)', 'ERP table22 sheet0 p1 (rebuilt)', 'STEO 7b p46 (rebuilt)']
+- no longer fired (4): ['STEO 2 p32', 'STEO 3e p37', 'STEO 4c p40', 'STEO 5a p42']
+- fired then fell back (1): ['STEO 10a p55']
+- strict FELL vs rung 1 (0): []
+- BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
+- clause-1 recall changed vs data/parsed: none (unchanged on all 8)
+
+### 2026-10-01T23:33:36Z HOURLY CHECKPOINT 1 (all 19 pilot units emitted)
+
+| family | cells | strict rung 1 -> 1b | header rung 1 -> 1b | fired before -> after | fell back |
+|---|---|---|---|---|---|
+| MER | 19761 | 89.33 -> **95.0** | 89.88 -> 91.83 | 41 -> 46 | 0 |
+| ERP | 2764 | 92.51 -> **100.0** | 97.73 -> 95.45 | 3 -> 4 | 0 |
+| STEO | 13046 | 95.76 -> **96.77** | 78.61 -> 97.59 | 14 -> 11 | 1 |
+
+- newly fired (7): ['MER 1.10 p23 (rebuilt)', 'MER 11.2 p5 (rebuilt)', 'MER 11.5 p8 (rebuilt)', 'MER 3.3e p12 (rebuilt)', 'MER 3.31 p13 (rebuilt)', 'ERP table22 sheet0 p1 (rebuilt)', 'STEO 7b p46 (rebuilt)']
+- no longer fired (4): ['STEO 2 p32', 'STEO 3e p37', 'STEO 4c p40', 'STEO 5a p42']
+- fired then fell back (1): ['STEO 10a p55']
+- strict FELL vs rung 1 (0): []
+- BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
+- clause-1 recall changed vs data/parsed: none (unchanged on all 8)
+
