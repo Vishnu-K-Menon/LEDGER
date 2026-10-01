@@ -1,0 +1,20 @@
+{
+ "note": "D-039 rung 1b: the frozen emitter at RUNG-1B STOP. sha256 of the committed blob text with CRLF -> LF (freeze.digest), plus raw working-copy bytes.",
+ "stop_utc": "2026-10-01T23:35:23Z",
+ "files": {
+  "scripts/a1_diag/rung1/emit.py": {
+   "sha256_lf": "d487bf12bead011fbdac79e9042e55a6f25b8826b4b428f06d88ef7d015d2b17",
+   "sha256_raw": "7ebf908bb6ea0368eb7c65097a40a010bcee9512a76224de56290eb9539ba06c"
+  },
+  "scripts/a1_diag/rung1/run_rung1.py": {
+   "sha256_lf": "8f0109d2eca67cd1fb153178a48d6d1ea497a3741de7a651e9f9c46b8d16a944",
+   "sha256_raw": "8f0109d2eca67cd1fb153178a48d6d1ea497a3741de7a651e9f9c46b8d16a944"
+  },
+  "scripts/a1_diag/rung1/trigger.py": {
+   "sha256_lf": "383c472c4baf106b3003bb3aa86df29587e6c7af9423946b0c21e6f21385ed31",
+   "sha256_raw": "b6eeaba7749c3751e9162b03ef28a0c5a0d8e550b5e821ba2d79ce94f66d72b5"
+  }
+ },
+ "pdfplumber": "0.11.10 (uv run --with pdfplumber)",
+ "part_c_command": "uv run --with pdfplumber python scripts/a1_diag/rung1/run_rung1.py --fired live --covered none --manifest data/manifest_fresh.jsonl --raw data/raw_fresh --parsed data/parsed_fresh --out <tmp> --units <15 units>"
+}

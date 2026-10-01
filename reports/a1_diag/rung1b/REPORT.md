@@ -15,3 +15,8 @@ RUNG-1B START 2026-10-01T22:25:12Z
 - `eval_freeze.json` (parsed_fresh manifest, 48 files; 12 evaluator modules; seed 20260930,
   B 10,000, 95 % percentile CI) — committed with this START line.
 - A4: the D-039 status line (decisions.md:530) contains no "___".
+
+RUNG-1B STOP 2026-10-01T23:35:23Z — reason: the closed fix list is exhausted (every item built and
+measured on the burned tables; residuals are outside the list or have no parameter-free fix — see
+"Part B"). Hours 1.17 of 3 (22:25:12Z → 23:35:23Z). Emitter frozen: `emitter_freeze.json`
+(emit.py, run_rung1.py, trigger.py).
