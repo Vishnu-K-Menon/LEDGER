@@ -60,6 +60,28 @@ def source_of(unit: str) -> str:
     raise KeyError(f"{unit}: not in {MANIFEST}")
 
 
+def merged_body_cells(tbl: dict) -> int:
+    """TableFormer body cells (not a column header, column >= 1) holding >= 2 numbers - the
+    census's merged cell; numbers as the frozen trigger reads them (R / E / RE flag stripped)."""
+    n = 0
+    for c in tbl["data"].get("table_cells") or []:
+        if c.get("column_header") or c["start_col_offset_idx"] < 1:
+            continue
+        if sum(tg.numeric(w) for w in (c.get("text") or "").split()) >= 2:
+            n += 1
+    return n
+
+
+def fires_1b(row: dict, tbl: dict) -> bool:
+    """Rung 1b trigger (D-039 fix list: the false-negative mechanism; ``trigger.py`` unchanged):
+    fires iff TableFormer holds a merged body cell, OR the frozen trigger's numeric-line count !=
+    TableFormer's rows. Counts agree on tables whose merges are offset elsewhere (1.10, 3.3e, 3.31,
+    11.2, 11.5, ERP table22 p1, STEO 7b: merged cells, rows equal, so the frozen rule never fired);
+    a band-count mismatch alone no longer fires (on the burned tables it fired only on STEO tables
+    with no merged cell and equal rows - 2, 3e, 4c, 5a - where a rebuild never helped; 3e broke)."""
+    return merged_body_cells(tbl) > 0 or row["numeric_lines"] != row["tf_rows"]
+
+
 def run_unit(unit: str, fired: set | None, covered: set, force: bool) -> dict:
     import pdfplumber
 
@@ -70,8 +92,14 @@ def run_unit(unit: str, fired: set | None, covered: set, force: bool) -> dict:
     doc = json.loads((emit.PARSED / f"{unit}.json").read_text(encoding="utf-8"))
     # the frozen trigger, fresh (its cache is bypassed): must reproduce A1's fired list
     tg.CACHE.joinpath(f"{unit}.json").unlink(missing_ok=True)
-    fresh = {(r["unit"], r["table_index"]) for r in tg.run_unit(unit, covered) if r["fired"]}
-    if fired is None:  # --fired live: the trigger decides
+    trig = tg.run_unit(unit, covered)
+    fresh = {(r["unit"], r["table_index"]) for r in trig if r["fired"]}
+    if fired is None:  # --fired live: the rung-1b trigger decides
+        fresh = {
+            (r["unit"], r["table_index"])
+            for r in trig
+            if fires_1b(r, doc["tables"][r["table_index"]])
+        }
         fired = fresh
     mine = {x for x in fired if x[0] == unit}
     assert fresh == mine, f"{unit}: trigger no longer reproduces A1's fired list"

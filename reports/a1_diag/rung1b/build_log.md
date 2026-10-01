@@ -90,3 +90,18 @@
 - BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
 - clause-1 recall changed vs data/parsed: none (unchanged on all 8)
 
+### 2026-10-01T22:51:19Z Trigger FN: live rule = merged TF body cell OR numeric lines != TF rows
+
+| family | cells | strict rung 1 -> 1b | header rung 1 -> 1b | fired before -> after | fell back |
+|---|---|---|---|---|---|
+| MER | 19761 | 89.33 -> **91.55** | 89.88 -> 91.25 | 41 -> 46 | 3 |
+| ERP | 2764 | 92.51 -> **100.0** | 97.73 -> 95.45 | 3 -> 4 | 0 |
+| STEO | 13046 | 95.76 -> **96.57** | 78.61 -> 97.59 | 14 -> 11 | 2 |
+
+- newly fired (7): ['MER 1.10 p23 (rebuilt)', 'MER 11.2 p5 (rebuilt)', 'MER 11.5 p8 (rebuilt)', 'MER 3.3e p12 (rebuilt)', 'MER 3.31 p13 (rebuilt)', 'ERP table22 sheet0 p1 (rebuilt)', 'STEO 7b p46 (rebuilt)']
+- no longer fired (4): ['STEO 2 p32', 'STEO 3e p37', 'STEO 4c p40', 'STEO 5a p42']
+- fired then fell back (5): ['MER 1.2 p5', 'MER 3.1 p3', 'MER 4.1 p3', 'STEO 9a p52', 'STEO 10a p55']
+- strict FELL vs rung 1 (0): []
+- BUDGET/CBO pins on data/parsed_rung1b: identical=True changed=0 absent=[]
+- clause-1 recall changed vs data/parsed: none (unchanged on all 8)
+
