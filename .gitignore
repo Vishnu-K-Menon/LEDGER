@@ -19,6 +19,7 @@ data/oracle/**
 !data/oracle/**/unit_aliases.json
 !data/oracle/**/admission_rule.md
 !data/oracle/**/erp_draw.json
+!data/oracle/**/freeze.json
 results/
 # reports/ is local, except the rung-1 records of D-038 (morning report, clock, baselines).
 reports/*

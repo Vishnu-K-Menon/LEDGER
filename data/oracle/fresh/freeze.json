@@ -1,0 +1,81 @@
+{
+ "groups": {
+  "admission": {
+   "data/oracle/fresh/admission/erp_cells.jsonl": "ff14d3804c23781caed1a8902bffcc08a01887ec78feef13822b403e476ece26",
+   "data/oracle/fresh/admission/mer_cells.jsonl": "7319363eabd3ab5adb634759868c8778c98d2e5e8a73a15671746996c22ef10a",
+   "data/oracle/fresh/admission/tables.json": "ecbd2f332d37e87b45386de3d01044560d9f3565118372194ba0c51caeeddd43",
+   "data/oracle/fresh/steo/cells.jsonl": "e15425ea54b0ccbc36391877dde5a84ddacfbaefd0e01c96e01314f0800c7d63"
+  },
+  "builder": {
+   "scripts/a1_diag/rung1b/fresh_admission.py": "98b0dd97036d9c8fa23a9705c9e75f7d27bdab48bfb7970cbc425a28da312013"
+  },
+  "checker": {
+   "scripts/a1_diag/rung1b/f5_dump.py": "ec69efcac8a04b2fdfa710975cdba2feabce84e43dc1ae0e93de96ab79abad28",
+   "scripts/a1_diag/rung1b/f5_sizing.py": "4546733622b1e99084805b50102bbb2358a9b9e0705969e39c3bdbd4c0e76724"
+  },
+  "manifests": {
+   "data/oracle/fresh/erp/sources.json": "284ecea279832d5338b0ec3eea189a38b8d74c5f3a6e110ab43d8b6da8d87285",
+   "data/oracle/fresh/erp_draw.json": "94b4249f8345e6e036c82852e0bf85b90c70ac9912d66ccf98918f5d25b103cc",
+   "data/oracle/fresh/mer/sources.json": "f7f94a9e1f6a2e70d9f2830a9894831e4613ffedecfb2168474ab8041e75a768",
+   "data/oracle/fresh/steo/sources.json": "5d92f809fd1f8ac8cdad74ec538c18863cafde05a2d4de1828bdb850b0fec83f"
+  },
+  "oracle": {
+   "data/oracle/steo/2026-09/admission_rule.md": "1baab3de3fde6d5b2ac5673b3763b7af31945d56073091ba636f72cba20c9716",
+   "scripts/a1_diag/oracle.py": "c8051ae7210d9881fb542b52c8c6d33a7f422f9283fc5e093b4c0a08d8a681e4",
+   "scripts/a1_diag/steo.py": "98c1f4f684d9490c3569bde966674abe91da2d2e93b7a1512643c4c7713883a9"
+  },
+  "scan": {
+   "scripts/a1_diag/rung1b/fresh_oracle.py": "41621d3ada0141bd2d2b6455a4a931bb938ceee40b6620ba72c2f97f2312b157"
+  }
+ },
+ "note": "D-039 fresh oracle freeze; written before any rung-1b output exists; text hashed with CRLF -> LF",
+ "sources": {
+  "data/oracle/fresh/erp/ERP-2026-table10.xls": "87567d105cf826b661a6a006a0cb2af2f4d67157e83745decf575af3c61450c4",
+  "data/oracle/fresh/erp/ERP-2026-table14.xls": "ec9ca42a520a162e77ea4731231fcea7f7cdcdaff5c62a3b40c1b6bad1c38b05",
+  "data/oracle/fresh/erp/ERP-2026-table28.xls": "d0007f0e15426ba798a8b1ca9181cef0b4ff199d3cb372a3ecaf2e5d03db765f",
+  "data/oracle/fresh/erp/ERP-2026-table33.xls": "9e0d11c7b3af727b6d2777c79ba3930bd3f5745f0330fe05c07066849f8677e0",
+  "data/oracle/fresh/erp/ERP-2026-table43.xls": "812bcefc47c4eee92bae2a461de6d556989a83b96d209b275b418ad0d9b32ba4",
+  "data/oracle/fresh/erp/ERP-2026-table52.xls": "60925583f04ff3b54b91b7bf6cdfac8941a9542952091dfafa56639356c670da",
+  "data/oracle/fresh/erp/ERP-2026-table59.xls": "64b9f6070acac5e8e055ab0d15bf6ff328b724477fdcb420722aaee3439926d1",
+  "data/oracle/fresh/erp/ERP-2026-table7.xls": "e05e419b33b080c0b4e5624a487a45aa5772e4117a8bc1e0fe6e478a9cbea867",
+  "data/oracle/fresh/mer/src/T02.01A.xlsx": "d420e7544d6803501e111ecc186558e0fff324d7458efcdd1005b2f79ab31fd4",
+  "data/oracle/fresh/mer/src/T02.01B.xlsx": "bf5f0af48907ec8cf66266a4b9890bafee76a8b504a5395f726aed67c6496dae",
+  "data/oracle/fresh/mer/src/T02.02.xlsx": "e42cf4fe0b99dd37ea8180ab81b2e486b4c09ad6d9c4ebbb169f4e439a158f44",
+  "data/oracle/fresh/mer/src/T02.03.xlsx": "9c26a7514c8659f96677f16e225c7c95a94b65ef4189afe992270e93046f565d",
+  "data/oracle/fresh/mer/src/T02.04.xlsx": "45fb7f1f29d91c3e792cc6542ec23921da0398a34fa79404fcb40f6ea91eedcf",
+  "data/oracle/fresh/mer/src/T02.05.xlsx": "38ef07d681d4419e81da4e93468b4e8a138d00242cce6e02a6b1e0728c924c05",
+  "data/oracle/fresh/mer/src/T02.06.xlsx": "4f1c6152a7707aae05b94d5367d5d3b56e852ab4cadc1a8253efd1afa0bddcf1",
+  "data/oracle/fresh/mer/src/T02.07.xlsx": "dec6a3db30381cf75e2b37b7b3abef627590696d539c7dd5c360ce999642bd7e",
+  "data/oracle/fresh/mer/src/T02.08.xlsx": "57eb0c9cac5b90e3e367c3a2dbcc22787958a806f42ce16f3b265754d069599b",
+  "data/oracle/fresh/mer/src/T05.01.xlsx": "499a968a500df28b035836e1d980f81ec2627fae658a6c355ade30a642ae85e9",
+  "data/oracle/fresh/mer/src/T06.01.xlsx": "91c22e6f362cb85b17180f3dee8b9e65eeb3da1241e45ad05c05d66911866faf",
+  "data/oracle/fresh/mer/src/T06.02.xlsx": "fe14bc31e6bade92dffc16c98a7db9bcd87994171ebec10155a3d26333400b62",
+  "data/oracle/fresh/mer/src/T06.03.xlsx": "e9953c224e909a29211fba497fe85bf040c9a57a03d500e4856790b0f8ed4c68",
+  "data/oracle/fresh/mer/src/T09.01.xlsx": "e5bdd01bb62c86bf7785c93f895c8dce39b6e2afacfdf5c8125c458aec266fc0",
+  "data/oracle/fresh/mer/src/T09.02.xlsx": "a60801b55cc0613570e19e9518c3e6d8241d380f9aced208546e5ce610f0415e",
+  "data/oracle/fresh/mer/src/T09.03.xlsx": "7e4683f1a4668676d71ae65efcb8a33d47b3bd4c5c0f0794a1790cc17a628e48",
+  "data/oracle/fresh/mer/src/T09.04.xlsx": "8246cc2f0350a1651f315b0a79a0d9f2d492396702f1387fc3a119602ccf6412",
+  "data/oracle/fresh/mer/src/T09.05.xlsx": "9a3697acad2446c31d2a12a16aef63b287e8f14e565767a6e86cf29567995efc",
+  "data/oracle/fresh/mer/src/T09.06.xlsx": "70ebf1a0768d1da0d38b2c302c05a6bf48cf0314c585fd6a32207aa75d8785fc",
+  "data/oracle/fresh/mer/src/T09.07.xlsx": "6effd21491c25e65b17c5332947f82ea44ef411824db0832533c348a053557eb",
+  "data/oracle/fresh/mer/src/T09.08.xlsx": "f9375ad5290b7db198bee8c890d770cc56bba42993ab230914dde528901b3e9e",
+  "data/oracle/fresh/mer/src/T09.09.xlsx": "66500bb635505177c9275ec3fbcc4d9b28bfb7d7e150a4a9e12f1446d0ea2867",
+  "data/oracle/fresh/mer/src/T09.10.xlsx": "2790badb64502a774cbbe7f85930841eaf29c99777aa4ca585d01846d27bc0f4",
+  "data/oracle/fresh/mer/src/T10.01.xlsx": "2d00e553fe865029a486cbdeacec26578d86c9cda38d8a391cec4ae38ef088ec",
+  "data/oracle/fresh/mer/src/T10.02A.xlsx": "9bd31b5131f1c8fca3b6cd96d224277c6021bffe7678bff1966d7723d66b9a5a",
+  "data/oracle/fresh/mer/src/T10.02B.xlsx": "2fa5f2909ecc81edf8015ec953613ebfacebbfb40dde90f795b46548f12a7bba",
+  "data/oracle/fresh/mer/src/T10.02C.xlsx": "352dbaeba010e8b5c7a377dc6bd09903b1f42e7788d42dd3c97d715b3aab48e9",
+  "data/oracle/fresh/mer/src/T10.03.xlsx": "093602ba5190acb9e6ccfb89dc2ca7c5ae51a931b89dee225368f6f6b555f522",
+  "data/oracle/fresh/mer/src/T10.04A.xlsx": "1b1ee19131686ada08e62dab59aec2e97ee7afcd6fd5cf32e553ef400ab1a703",
+  "data/oracle/fresh/mer/src/T10.04B.xlsx": "1141ebcac44f48b9e8f779ae06f37064edcd432ddbdc2638d15cb7180ed3d0b8",
+  "data/oracle/fresh/mer/src/T10.04C.xlsx": "0b63b3d3aad4f8b5ddbf806c0fade3260423e1310cbaeb8e36e700d21c5452c5",
+  "data/oracle/fresh/mer/src/T10.05.xlsx": "1f2fa0d67d1cb33bac7710de8f2f52b01d217675f7a69dabc5579c2052a13718",
+  "data/oracle/fresh/mer/src/T10.06.xlsx": "966b3aa1cf76b415c448fb81bb75e239050358463547a3bd1bce2ef7e8f84212",
+  "data/oracle/fresh/mer/src/TC1.xlsx": "7e6876327224638de64125a6afd174f65d695b3148e9180da4e55d8a29ce1743",
+  "data/oracle/fresh/mer/src/TE1.xlsx": "f48ed19c95d61994c990c0a9f7f4993ab85cd40ac123608ad14a286dca82b7fa",
+  "data/oracle/fresh/mer/src/TE2.xlsx": "2d46ae13998a741b14a6eae11d193f6637400e569bc3dfb4d93c71ba4064bc4f",
+  "data/oracle/fresh/mer/src/TE3.xlsx": "ee21510f5df7b79335b187cd204486ce3436bb86de71a9c6823c148e1a6cb767",
+  "data/oracle/fresh/mer/src/TE4.xlsx": "cd3de2eedd0485512044a544f0474009794103b61ad48650a9b433cda2ced07b",
+  "data/oracle/fresh/mer/src/TF1.xlsx": "1b257fbf70d6582bfa4331f77acb4c5b850c871cfe618c2c0ecb453983c53799"
+ }
+}
