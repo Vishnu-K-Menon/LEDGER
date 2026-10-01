@@ -372,6 +372,8 @@ signal to take the escape hatch — decide in week 1, not week 4.
 
 **Status 2026-09-30 (the re-chunk exception is re-scoped by D-038).** The one-time re-chunk exception above now runs **from the post-rung-1 parse**, not from the saved Docling JSON of 2026-09-25: rung 1 (D-038) changes the table structure the chunker reads, so a re-chunk from the pre-fix parse would freeze the merged rows. It is still **one** exception, still run before `ledger index` writes `data/chunk_ids.lock`, and still takes effect only when D-037 is logged. The D-037 draft carries the same wording change and is **not** logged. Body and earlier status unedited.
 
+**Status 2026-10-01 (the re-chunk exception is in force — D-037 logged).** The single exception to "nothing re-chunks T3→T4" now holds under **D-037**: one re-chunk, from the post-rung-1b (post-port) parse, before `ledger index` writes `data/chunk_ids.lock` (D-039 order: rung 1b → production port → re-chunk). The rationale above (never move the share by tuning) is untouched. Body and earlier status lines unedited.
+
 ## D-033 · 2026-09-19 · FIXED · D3 successor: tables are split by rows at `max_tokens` with the header on every slice; `tables_atomic` removed; three `HybridChunker` switches pinned; A6 risk named
 
 **Contradiction.** `docs/architecture.md:43` said "tables atomic (never split; header row serialized with every table chunk)". Docling's `HybridChunker` (docs and source, main @ 2.97.1) "splits chunks only when needed (i.e. oversized w.r.t. tokens)" and its `repeat_table_header` means "table headers are repeated at the beginning of each chunk **when a table spans multiple chunks**" — tables are split at `max_tokens`, by rows, header repeated. There is no atomic switch. D3's own second clause and D17's "top-5 chunks (~2.5k tokens)" (`architecture.md:112`, ≈ 500 tokens per chunk) already presupposed splitting; only "never split" and `configs/base.yaml:37 tables_atomic` — a key the loader validated and nothing read — presupposed the opposite.
@@ -389,6 +391,8 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Status 2026-09-20 (T3 — pins, and two findings the Code paragraph asked for).** **Pins** (exact, verified on PyPI, released 2026-09-15..18): `docling==2.129.0`, `docling-core==2.97.1`, `docling-ibm-models==4.0.3`, `docling-parse==7.20.0`. `docling` is a meta-package over `docling-slim[standard]`, which bundles `rapidocr` — hence `parser.do_ocr: false` with a validator (D2: a text-layer parser; OCR would invent text on exactly the blank pages A1 measures). **(1) `isinstance(item, TableItem)` is not table identity.** A chunk's `meta.doc_items` arrive as base `DocItem` on the un-split path and as `TableItem` on the split path (measured), so an isinstance test silently classifies **every table small enough not to split** as prose — it would have corrupted `table_chunk_share`, the A9 number. Identity now comes from `self_ref`/`label` (`ledger/ingest/parse.py::is_table_item`), with a test. **(2) The caption is its own doc item, so D-033's literal counting rule needs the owner's ruling.** Docling attaches a table's caption as a separate item (`label=caption`), so a small table arrives as `[caption, table]`. D-033's wording — "`chunk_type = table` iff every `meta.doc_items` entry is a table item" — calls that chunk *prose*; D3 says the caption is part of the table ("caption attached"). The code computes **both**: `chunk_type` (caption-inclusive, primary) and `chunk_type_literal`, and the A9 report prints both shares so the ruling can be made on the numbers. No re-chunking is involved either way — this is a counting rule. **(3) The header does travel with every slice, by a stronger mechanism than a repeated header line:** the default chunking serializer emits triplets (`<row label>, <column header> = <value>`), so each cell carries its own column header — which is what makes D-005 chunk-ID citation sound under row-splitting. Body above unedited.
 **Status 2026-09-19.** (1) A6's second failure has one pre-decided answer: after hybrid BM25 and `k_final: 8`, the only lever is corpus composition — `max_tokens` is frozen (D-032); see D-034 §5. (2) `merge_peers: false` enlarges the prose denominator while row-splitting inflates the table numerator, so `table_chunk_share` moves in opposite directions from two switches of this entry; the band is already two-sided (D-001), what was missing is visibility — **the A9 report shows table slices, distinct tables and prose chunks separately, not just the share.** Body above unedited.
 **Status 2026-09-26 (VERIFIED against the installed docling-core 2.97.1: the three pinned switches are inert under the default serializer — line numbers from `.venv`).** `repeat_table_header` and `omit_header_on_overflow` can have no effect while the default table serializer is in use: `get_header_and_body_lines` is defined once, in `.venv/Lib/site-packages/docling_core/transforms/serializer/base.py:81`, and returns `header_lines = []` (`:106`); it is overridden **only** in `serializer/html.py:449` and `serializer/markdown.py:633`. `TripletTableSerializer` (`transforms/chunker/hierarchical_chunker.py:46–108`, installed as the default at `:152`) defines only `_flatten_table_text` (`:50`) and `serialize` (`:69`) — **no override** — and emits a single `". "`-joined line (`:25`, `:95`), so there is no header line to repeat or to omit. A second consequence, measured: `transforms/chunker/hybrid_chunker.py:244` computes `available_length = max_tokens - other_len` and `:256` passes it to `segment`, but the table branch (`:285–315`) builds its `LineBasedTokenChunker` on `self.max_tokens` and ignores `available_length`, so the headings prefix is added on top of a full-budget slice: **5,413 of 6,874 table slices (78.7 %) exceed `max_tokens` 512** (max 557, 15 units), with `overflow <= headings tokens` in every one of them (exact equality in 14; `govinfo-ERP-2026-table4` peaks at exactly 512 because its headings are empty). The T3 tests read the switch values back from config and **never asserted serializer output**, which is why this survived T3. **Successor D-037 is drafted** (markdown table serializer, one pre-freeze re-chunk, the unit prefix applied by LEDGER code post-chunk) and **is logged in the next pass, after the owner's A1 verdict** — it is not in force. Until then the switches stay pinned as written. Body above unedited.
+
+**Status 2026-10-01 (successor logged — D-037).** The table serializer is pinned to markdown (`chunking.table_serializer`, validator naming D-037), under which this entry's three switches act; the T3 switch-value tests are replaced by output assertions; a LEDGER unit/caption prefix is added after chunking; one pre-freeze re-chunk — all in **D-037**. The 2026-09-20 status item (3) — each cell carries its own column header inside the triplet — is superseded by D-037's Defect paragraph (the triplet line is cut at token limits, mid-triplet). Body above unedited.
 
 ## D-034 · 2026-09-19 · FIXED · Corpus sources, unit rule and size procedure — successor to D1 (LOCKED, `docs/architecture.md:31–34`) and D-001
 
@@ -520,3 +524,68 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Status 2026-10-01 (third-revision bug fix of the fresh MER table scan — owner ruling D-039 status 2026-09-30 (2); before any fresh admission exists; body above unedited).** The fresh scan (`scripts/a1_diag/rung1b/fresh_oracle.py` `page_ids`) used `orc.TABLE_ID`, which accepts only digits.digits ids; MER appendix tables are printed "Table B1."-style. Fix: the scan's own pattern also accepts a letter id (`[A-Z][0-9]+`), exports as `xls.php?tbl=T<id>`; parameter-free; `orc.TABLE_ID` (the burned pilot oracle) unchanged; the clause-(b) checker untouched. Rerun of the scan and export match only (PDF headings + export titles; nothing from the parse). **Results under both scans:** v1 scan 29 matched tables; fixed scan **35 attributable to the fix** (+ sec12 C1, E1, E2, E3, E4, F1, as expected; nothing removed). The same rerun also found that **T02.03, T02.04, T02.06 and T09.01 — HTML at the 2026-09-30 18:42Z fetch — are now served as OOXML whose titles match the page headings** (refetched 2026-10-01 03:48Z): 39 matched if they are admitted. That is an export-availability change, not the fix; they were excluded at D-039 status (item-2 rulings) for returning HTML; **their status is the owner's ruling, pending** — no fresh admission is built until it is made. Still unmatched (correctly): sec2 p20 "10.3" and sec10 p24 / sec12 p15 "A6" (notes lines), sec5 5.2, sec7 7.6 (notes line; the table is image-only), sec12 B1, B2, D1 (no titled export).
 
 **Status 2026-10-01 (owner; the four formerly-HTML exports — decided before any fresh admission or rung-1b output exists, from export availability only; body above unedited).** T02.03, T02.04, T02.06 and T09.01 are ADMITTED to the fresh MER set — **39 matched tables**. Reason: they were excluded (D-039 status, item-2 rulings) only because the export endpoint returned HTML at the 2026-09-30 18:42Z fetch, an oracle-acquisition failure; the refetched files (2026-10-01 03:48Z, sha256 in `data/oracle/fresh/mer/sources.json`) are OOXML with "Release Date: September 29, 2026" and titles matching the page headings. Including them restores D-039's "sections entire". Recorded: the original HTML responses were overwritten by the refetch (not inspectable; the failure is recorded by type and time). Also recorded: `page_ids` takes one table id per page, so a second table on a page is not scanned — on the fresh MER pages this affects only sec12 B3 (p20, below B2), which has no titled export (other multi-match pages are notes text, e.g. sec2 p22). The D-038 third-revision status line's "owner ruling pending" is resolved by this line.
+
+## D-037 · 2026-10-01 · FIXED · Table serializer pinned to markdown; one pre-freeze re-chunk to restore D-033's declared semantics and add the unit prefix — successor to D-032 (re-chunk rule) and D-033 (serializer)
+
+Drafted 2026-09-26 (serializer council); amended before logging as listed; logged 2026-10-01.
+
+**Defect (verified from docling-core v2.97.1 source, the pinned version, 2026-09-26).**
+`BaseTableSerializer.get_header_and_body_lines()` returns empty header lines by default and
+`TripletTableSerializer` — the `ChunkingDocSerializer` default D-033 left unpinned — does not
+override it. `HybridChunker.segment()` therefore builds an empty prefix, so
+`repeat_table_header=true` and `omit_header_on_overflow=false` have no effect, and the table —
+serialized as one `". "`-joined line — is cut at token limits, mid-triplet. The pilot's slices are
+packed fragments, not rows; a value can sit in a slice without its row label or column header.
+D-033's T3 tests read switch values back from the chunker and passed; they never asserted output.
+Separately, `TableItem.captions` is empty on every pilot table and only 25.4 % of table slices
+carry a unit phrase (ERP 0/90, FCS 0/1,927); D24's "unit and period recoverable from the same
+chunk" would reject ~¾ of table slices.
+
+**Decision.**
+1. `chunking.table_serializer: markdown`, pinned by a validator naming this entry. Markdown is the
+   serializer under which D-033's three switches act (header/body split implemented). The ground
+   is correctness — restoring the declared frozen-state semantics — not retrieval; sibling-count
+   reduction is a consequence and is not a reason.
+2. One re-chunk, from the post-rung-1b parse (D-039 order: rung 1b → production port → this
+   re-chunk), before `index`. `max_tokens` unchanged at 512. This is the single exception to
+   D-032's "nothing re-chunks T3→T4"; D-032's rationale (never move the share by tuning) is
+   untouched.
+3. Every table slice is prefixed, by LEDGER code after chunking, with its unit/caption line drawn
+   from the nearest preceding caption or bracketed-unit text item on the same page plus the table
+   title. The prefix runs after chunking because `hybrid_chunker.py:314` strips the preamble from
+   segments 2..n; the chunker's own caption path places the caption in slice 0 only.
+   Overflow: the table path budgets 512 for the body and stacks headings on top (78.7 % of pilot
+   slices > 512, max 557); `max_tokens` stays 512 (the A6 sibling lever, not a model limit); the
+   LEDGER prefix stacks likewise; the measured maximum contextualized length is logged.
+4. D-033's tests are replaced by output assertions: every table slice starts with the header row;
+   every table slice contains the prefix; every body line starts with `|`; blank or partial
+   repeated headers counted across all tables and logged. A header is blank when `column_header`
+   flags exist but none starts on row 0 (`markdown.py` `_count_header_rows`); with no flags,
+   row 0 is the header.
+5. A9 re-run; chunk-count and token-weighted shares both logged (D-001 status). A count share
+   outside 50–70 % triggers D-001's remaining-ingest adjustment, not a serializer revisit. The
+   prose-floor measurement is carried, no floor decided: 32.6 % of non-CRPT prose is ≤ 20 tokens.
+   U+FFFD leader-dot characters in table slices are counted at this A9 re-run; a strip is decided
+   only if any are found.
+6. FCS dry run in the re-chunk: rows wider than 512 and slices with a split row, counted.
+7. The 384 caption-only prose chunks are kept as prose; their count is recorded (owner,
+   2026-09-26).
+
+**Rejected.** Keep triplets + prefix only (the pinned D-033 behaviour never runs; boundaries cut
+values from their labels). A pre-freeze paired-recall probe across two indices to choose the
+serializer (D3: budget does not buy retrieval gains; a share-in-band selection condition is D-001
+band-tuning). Waiting on an embedder/reranker preference test (no vendor source; A6 measures it
+once, live). Filling `TableItem.captions` (the chunker strips preamble from segments 2..n; fixes
+one slice per table).
+
+**Code (to be built in the re-chunk pass, not now).** `configs/base.yaml`
+`chunking.table_serializer`; `ledger/config.py::ChunkingConfig` validator; `ledger/ingest/parse.py`
+prefix step; `tests/test_parse.py` output assertions.
+
+**Validation.** Output assertions green on all units; A9 report with both shares, the caption-only
+count and the U+FFFD count; `chunk_ids.lock` written only after; A6 at T5 read against D-033's
+sibling prediction, now on row-aligned slices.
+
+**Revisit trigger.** A rung-2 outcome for any family (a different parse path changes the tables
+this serializes). A docling-core upgrade (header derivation changed in v2.96.0 and v2.97.0 —
+re-run the blank-header count).
