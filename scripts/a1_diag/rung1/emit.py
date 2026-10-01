@@ -157,6 +157,18 @@ def span_box(toks: list[dict]) -> tuple[float, float, float, float]:
     )
 
 
+def phrases_of(ln: list[dict]) -> list[list[dict]]:
+    """Header-line phrases: words one word-space apart (<= 0.6 x size)."""
+    phrases: list[list[dict]] = []
+    for t in sorted(ln, key=lambda t: t["x0"]):
+        size = t["bottom"] - t["top"]
+        if phrases and t["x0"] - phrases[-1][-1]["x1"] <= 0.6 * size:
+            phrases[-1].append(t)
+        else:
+            phrases.append([t])
+    return phrases
+
+
 def header_cells(
     tbl: dict,
     bands: list[dict],
@@ -193,15 +205,51 @@ def header_cells(
             tf.append(
                 {"row": hrows.index(c["start_row_offset_idx"]), "bands": bset, "text": c["text"]}
             )
-    region = [t for ln in header_lines for t in ln]
 
     def over(t: dict, b: dict) -> bool:
         return t["x1"] > b["x0"] - 2 and t["x0"] < b["x1"] + 2
 
+    # rung 1b F2 (spanning-header extent): a head printed once, centred over the bands it spans
+    # ("2025" over four quarters), physically overlaps only some of them. Its extent is taken from
+    # the gaps to its neighbours on the header line (midpoints to the previous / next phrase that
+    # lies over a band); the bands whose centres fall in that tile are its bands IF the phrase
+    # crosses the midpoint of their hull (a centred head) - otherwise, and for every other phrase,
+    # the bands it physically overlaps. Parameter-free; used by the check and the page cells.
+    def phrase_bands(ln: list[dict]) -> list[tuple[list[dict], set[int]]]:
+        out = []
+        for ph in phrases_of(ln):
+            ext = {"x0": min(t["x0"] for t in ph), "x1": max(t["x1"] for t in ph)}
+            out.append((ph, ext, {k for k, b in enumerate(bands) if over(ext, b)}))
+        on = [x for x in out if x[2]]
+        res = []
+        for ph, ext, phys in out:
+            eff = phys
+            if phys:
+                i = next(j for j, x in enumerate(on) if x[0] is ph)
+                lo = (on[i - 1][1]["x1"] + ext["x0"]) / 2 if i > 0 else float("-inf")
+                hi = (ext["x1"] + on[i + 1][1]["x0"]) / 2 if i + 1 < len(on) else float("inf")
+                tile = {k for k, b in enumerate(bands) if lo <= (b["x0"] + b["x1"]) / 2 <= hi}
+                if len(tile) > len(phys) and phys <= tile:
+                    mid = (
+                        min(bands[k]["x0"] for k in tile) + max(bands[k]["x1"] for k in tile)
+                    ) / 2
+                    if ext["x0"] <= mid <= ext["x1"]:
+                        eff = tile
+            res.append((ph, eff))
+        return res
+
+    line_bands = [phrase_bands(ln) for ln in header_lines]
     failing: set[int] = set()
     if check:
-        for k, b in enumerate(bands):
-            pw = Counter(w for t in region if over(t, b) for w in t["text"].split())
+        for k in range(len(bands)):
+            pw = Counter(
+                w
+                for lb in line_bands
+                for ph, eff in lb
+                if k in eff
+                for t in ph
+                for w in t["text"].split()
+            )
             tw = Counter(w for h in tf if k in h["bands"] for w in h["text"].split())
             if not (tw and not (tw - pw) and set(tw) == set(pw)):
                 failing.add(k)
@@ -225,23 +273,14 @@ def header_cells(
     nrow = max((h["row"] for h in kept), default=-1) + 1
     page_cells: list[dict] = []
     stub_phrases: list[list[dict]] = []
-    for ln in header_lines:
-        # phrases: words one word-space apart (<= 0.6 x size); a spanning group header
-        # ("Hydrocarbon Gas Liquids") spans every band under the whole phrase, not per word
-        phrases: list[list[dict]] = []
-        for t in sorted(ln, key=lambda t: t["x0"]):
-            size = t["bottom"] - t["top"]
-            if phrases and t["x0"] - phrases[-1][-1]["x1"] <= 0.6 * size:
-                phrases[-1].append(t)
-            else:
-                phrases.append([t])
+    for lb in line_bands:
+        # a spanning group header ("Hydrocarbon Gas Liquids") is one phrase over all its bands
         cells_ln: list[dict] = []
-        for ph in phrases:
-            ext = {"x0": min(t["x0"] for t in ph), "x1": max(t["x1"] for t in ph)}
-            if not any(over(ext, b) for b in bands):
+        for ph, eff in lb:
+            if not eff:
                 stub_phrases.append(ph)  # over no band: the stub column's head
                 continue
-            ov = tuple(k for k in sorted(failing) if over(ext, bands[k]))
+            ov = tuple(k for k in sorted(failing) if k in eff)
             if ov:
                 cells_ln.append({"key": ov, "text": " ".join(t["text"] for t in ph)})
         if not cells_ln:
