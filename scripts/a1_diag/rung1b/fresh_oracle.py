@@ -69,7 +69,15 @@ def now() -> str:
     return dt.datetime.now(dt.UTC).isoformat(timespec="seconds")
 
 
-def page_ids(pdf_path: Path) -> list[tuple[int, str, str]]:
+# D-038 third-revision bug fix of the scan (D-039 status 2026-09-30, ruling 2): MER appendix tables
+# are printed "Table B1."-style; the scan accepts a letter id ([A-Z][0-9]+) as well as digits.digits
+# (orc.TABLE_ID, which the burned pilot oracle keeps). Parameter-free: dictated by the printed
+# format.
+SCAN_ID_V1 = orc.TABLE_ID
+SCAN_ID = re.compile(r"\s*Table\s+([0-9]+\.[0-9]+[a-z]?|[A-Z][0-9]+)\b")
+
+
+def page_ids(pdf_path: Path, pattern: re.Pattern = SCAN_ID) -> list[tuple[int, str, str]]:
     """(page, printed table id, heading line) from the text layer's page top: the first line
     within the top quarter of the page that starts with 'Table <id>'."""
     import pdfplumber
@@ -80,11 +88,129 @@ def page_ids(pdf_path: Path) -> list[tuple[int, str, str]]:
             words = [w for w in page.extract_words(x_tolerance=1) if w["top"] < page.height / 4]
             for ln in orc.cluster(words):
                 text = " ".join(w["text"] for w in ln)
-                m = orc.TABLE_ID.match(text)
+                m = pattern.match(text)
                 if m:
                     out.append((i, m.group(1), text))
                     break
     return out
+
+
+def export_tbl(table_id: str) -> str:
+    """xls.php ``tbl`` for a printed id: digits.digits via ``orc.mer_tbl``; a letter id as T<id>."""
+    return f"T{table_id}" if re.fullmatch(r"[A-Z][0-9]+", table_id) else orc.mer_tbl(table_id)
+
+
+def candidates(table_id: str) -> list[str]:
+    return [table_id] if re.fullmatch(r"[A-Z][0-9]+", table_id) else orc.id_candidates(table_id)
+
+
+def scan_unit(unit, dest, fetcher, mer, src_dir, releases, pattern=SCAN_ID) -> None:
+    """One section's scan: page headings -> per-table export, title-verified as oracle.py does."""
+    seen_ids: dict[str, dict] = {}
+    for page, tid, heading in page_ids(dest, pattern):
+        if tid in seen_ids:
+            mer["pages"].append(
+                {
+                    "unit": unit,
+                    "page": page,
+                    "table_id": tid,
+                    "export": seen_ids[tid].get("tbl"),
+                    "title_match": seen_ids[tid].get("title_match"),
+                }
+            )
+            continue
+        got: dict = {"tbl": None, "title_match": False, "note": ""}
+        for cand in candidates(tid):
+            tbl = export_tbl(cand)
+            xurl = https(orc.MER_URL.format(tbl=tbl))
+            path = src_dir / f"{tbl}.xlsx"
+            fetcher.download(xurl, path, source="eia")
+            b = path.read_bytes()
+            xrec = {
+                "url": xurl,
+                "path": path.relative_to(REPO).as_posix(),
+                "sha256": hashlib.sha256(b).hexdigest(),
+                "bytes": len(b),
+                "type": orc.sniff(b),
+                "fetched_at": now(),
+                "table_id": cand,
+                "table_id_printed": tid,
+                "pdf_unit": unit,
+            }
+            mer["exports"][xurl] = xrec
+            if not xrec["type"].startswith("OOXML"):
+                got["note"] = f"export {tbl} is {xrec['type']}"
+                continue
+            title = orc.export_title(path)
+            xrec["export_title"] = title
+            pw, ow = orc.title_words(heading), orc.title_words(title)
+            if (pw and ow and len(pw & ow) >= 0.8 * min(len(pw), len(ow))) or (
+                not pw and title.startswith(f"Table {cand} ")
+            ):
+                xrec["release"] = orc.mer_oracle(path).release
+                releases.add(xrec["release"])
+                got = {"tbl": tbl, "title_match": True, "note": ""}
+                break
+            got["note"] = f"export {tbl} title does not match the page heading"
+        seen_ids[tid] = got
+        mer["pages"].append(
+            {
+                "unit": unit,
+                "page": page,
+                "table_id": tid,
+                "export": got["tbl"],
+                "title_match": got["title_match"],
+                "note": got["note"],
+            }
+        )
+
+
+def rescan() -> int:
+    """Rerun ONLY the scan and export match on the PDFs already on disk (no PDF refetch, nothing
+    from the parse); keep the v1 scan's results beside the fixed scan's."""
+    from ledger.config import load_config
+    from ledger.ingest.http import Fetcher
+
+    fetcher = Fetcher(load_config().fetch)
+    path = FRESH / "mer" / "sources.json"
+    mer = json.loads(path.read_text(encoding="utf-8"))
+    mer.setdefault("pages_scan_v1", mer["pages"])
+    v1 = mer["pages_scan_v1"]
+    mer["pages"], releases = [], set(mer.get("export_releases", []))
+    src_dir = FRESH / "mer" / "src"
+    for n in MER_SECTIONS:
+        unit = f"eia-pdf-sec{n}"
+        scan_unit(unit, RAW / "eia" / f"{unit}.pdf", fetcher, mer, src_dir, releases)
+    mer["export_releases"] = sorted(releases)
+
+    def ids(pages):
+        return {(p["unit"], p["table_id"]) for p in pages if p.get("title_match")}
+
+    mer["scan"] = {
+        "fix": "D-038 third-revision bug fix (D-039 status 2026-09-30): letter ids accepted",
+        "pattern_v1": SCAN_ID_V1.pattern,
+        "pattern": SCAN_ID.pattern,
+        "fresh_oracle_py_sha256": sha_file(Path(__file__)),
+        "matched_tables_v1": len(ids(v1)),
+        "matched_tables": len(ids(mer["pages"])),
+        "added": sorted(f"{u}:{t}" for u, t in ids(mer["pages"]) - ids(v1)),
+        "removed": sorted(f"{u}:{t}" for u, t in ids(v1) - ids(mer["pages"])),
+        "rescanned_at": now(),
+        "http_calls_by_host": fetcher.calls_by_host,
+    }
+    path.write_text(json.dumps(mer, indent=1) + "\n", encoding="utf-8")
+    sc = mer["scan"]
+    print(f"matched tables: v1 scan {sc['matched_tables_v1']} -> fixed scan {sc['matched_tables']}")
+    print("added:", sc["added"])
+    print("removed:", sc["removed"])
+    unmatched = [
+        (p["unit"], p["page"], p["table_id"], p.get("note", "")[:45])
+        for p in mer["pages"]
+        if not p.get("title_match")
+    ]
+    print("unmatched pages:", unmatched)
+    print("hosts:", fetcher.calls_by_host)
+    return 0
 
 
 def pdf_record(dest: Path, url: str) -> dict:
@@ -151,63 +277,7 @@ def fetch_all() -> int:
                 notes=["D-039 fresh held-out set (not corpus)"],
             )
         )
-        seen_ids: dict[str, dict] = {}
-        for page, tid, heading in page_ids(dest):
-            if tid in seen_ids:
-                mer["pages"].append(
-                    {
-                        "unit": unit,
-                        "page": page,
-                        "table_id": tid,
-                        "export": seen_ids[tid].get("tbl"),
-                        "title_match": seen_ids[tid].get("title_match"),
-                    }
-                )
-                continue
-            got: dict = {"tbl": None, "title_match": False, "note": ""}
-            for cand in orc.id_candidates(tid):
-                tbl = orc.mer_tbl(cand)
-                xurl = https(orc.MER_URL.format(tbl=tbl))
-                path = src_dir / f"{tbl}.xlsx"
-                fetcher.download(xurl, path, source="eia")
-                b = path.read_bytes()
-                xrec = {
-                    "url": xurl,
-                    "path": path.relative_to(REPO).as_posix(),
-                    "sha256": hashlib.sha256(b).hexdigest(),
-                    "bytes": len(b),
-                    "type": orc.sniff(b),
-                    "fetched_at": now(),
-                    "table_id": cand,
-                    "table_id_printed": tid,
-                    "pdf_unit": unit,
-                }
-                mer["exports"][xurl] = xrec
-                if not xrec["type"].startswith("OOXML"):
-                    got["note"] = f"export {tbl} is {xrec['type']}"
-                    continue
-                title = orc.export_title(path)
-                xrec["export_title"] = title
-                pw, ow = orc.title_words(heading), orc.title_words(title)
-                if (pw and ow and len(pw & ow) >= 0.8 * min(len(pw), len(ow))) or (
-                    not pw and title.startswith(f"Table {cand} ")
-                ):
-                    xrec["release"] = orc.mer_oracle(path).release
-                    releases.add(xrec["release"])
-                    got = {"tbl": tbl, "title_match": True, "note": ""}
-                    break
-                got["note"] = f"export {tbl} title does not match the page heading"
-            seen_ids[tid] = got
-            mer["pages"].append(
-                {
-                    "unit": unit,
-                    "page": page,
-                    "table_id": tid,
-                    "export": got["tbl"],
-                    "title_match": got["title_match"],
-                    "note": got["note"],
-                }
-            )
+        scan_unit(unit, dest, fetcher, mer, src_dir, releases)
     mer["export_releases"] = sorted(releases)
     mer["pdf_editions"] = sorted({r["pdf_edition_date"] for r in mer["pdfs"].values()})
     mer["tag"] = (
@@ -468,7 +538,10 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fetch", action="store_true")
     ap.add_argument("--steo", action="store_true")
+    ap.add_argument("--rescan", action="store_true", help="scan + export match only (bug fix)")
     args = ap.parse_args()
+    if args.rescan:
+        return rescan()
     if args.fetch:
         fetch_all()
     if args.steo:

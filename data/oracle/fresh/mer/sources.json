@@ -83,10 +83,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01A": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01A",
    "path": "data/oracle/fresh/mer/src/T02.01A.xlsx",
-   "sha256": "9622b348aa15b37d669132827bd05450c7239a9bbc43ed95800bb3b78b47c04d",
+   "sha256": "d420e7544d6803501e111ecc186558e0fff324d7458efcdd1005b2f79ab31fd4",
    "bytes": 95461,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:42:20+00:00",
+   "fetched_at": "2026-10-01T03:47:58+00:00",
    "table_id": "2.1a",
    "table_id_printed": "2.1a",
    "pdf_unit": "eia-pdf-sec2",
@@ -96,10 +96,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01B": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.01B",
    "path": "data/oracle/fresh/mer/src/T02.01B.xlsx",
-   "sha256": "f61cbf84e9e8c60d652c5a2367b413299d4e5ef330e4655dbfc86d8d89a6bd0d",
-   "bytes": 77896,
+   "sha256": "bf5f0af48907ec8cf66266a4b9890bafee76a8b504a5395f726aed67c6496dae",
+   "bytes": 77897,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:42:23+00:00",
+   "fetched_at": "2026-10-01T03:48:00+00:00",
    "table_id": "2.1b",
    "table_id_printed": "2.1b",
    "pdf_unit": "eia-pdf-sec2",
@@ -109,10 +109,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.02": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.02",
    "path": "data/oracle/fresh/mer/src/T02.02.xlsx",
-   "sha256": "6fe1cca287c89b52db04f20131aa04e482ad6d8ed26a4a036620c742789e2aa9",
+   "sha256": "e42cf4fe0b99dd37ea8180ab81b2e486b4c09ad6d9c4ebbb169f4e439a158f44",
    "bytes": 76328,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:42:25+00:00",
+   "fetched_at": "2026-10-01T03:48:01+00:00",
    "table_id": "2.2",
    "table_id_printed": "2.2",
    "pdf_unit": "eia-pdf-sec2",
@@ -122,32 +122,36 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.03": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.03",
    "path": "data/oracle/fresh/mer/src/T02.03.xlsx",
-   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
-   "bytes": 2803,
-   "type": "HTML (not a spreadsheet)",
-   "fetched_at": "2026-09-30T18:42:40+00:00",
+   "sha256": "9c26a7514c8659f96677f16e225c7c95a94b65ef4189afe992270e93046f565d",
+   "bytes": 82464,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:48:03+00:00",
    "table_id": "2.3",
    "table_id_printed": "2.3",
-   "pdf_unit": "eia-pdf-sec2"
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.3 Commercial Sector Energy Consumption",
+   "release": "Release Date: September 29, 2026"
   },
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.04": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.04",
    "path": "data/oracle/fresh/mer/src/T02.04.xlsx",
-   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
-   "bytes": 2803,
-   "type": "HTML (not a spreadsheet)",
-   "fetched_at": "2026-09-30T18:42:42+00:00",
+   "sha256": "45fb7f1f29d91c3e792cc6542ec23921da0398a34fa79404fcb40f6ea91eedcf",
+   "bytes": 86068,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:48:06+00:00",
    "table_id": "2.4",
    "table_id_printed": "2.4",
-   "pdf_unit": "eia-pdf-sec2"
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.4 Industrial Sector Energy Consumption",
+   "release": "Release Date: September 29, 2026"
   },
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.05": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.05",
    "path": "data/oracle/fresh/mer/src/T02.05.xlsx",
-   "sha256": "63ca1c8dec3e01ae88b4ba89b5c889876853e1db0c96a608c62d62407a635985",
+   "sha256": "38ef07d681d4419e81da4e93468b4e8a138d00242cce6e02a6b1e0728c924c05",
    "bytes": 60154,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:42:43+00:00",
+   "fetched_at": "2026-10-01T03:48:07+00:00",
    "table_id": "2.5",
    "table_id_printed": "2.5",
    "pdf_unit": "eia-pdf-sec2",
@@ -157,21 +161,23 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.06": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.06",
    "path": "data/oracle/fresh/mer/src/T02.06.xlsx",
-   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
-   "bytes": 2803,
-   "type": "HTML (not a spreadsheet)",
-   "fetched_at": "2026-09-30T18:42:49+00:00",
+   "sha256": "4f1c6152a7707aae05b94d5367d5d3b56e852ab4cadc1a8253efd1afa0bddcf1",
+   "bytes": 78352,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:48:09+00:00",
    "table_id": "2.6",
    "table_id_printed": "2.6",
-   "pdf_unit": "eia-pdf-sec2"
+   "pdf_unit": "eia-pdf-sec2",
+   "export_title": "Table 2.6 Electric Power Sector Energy Consumption",
+   "release": "Release Date: September 29, 2026"
   },
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.07": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.07",
    "path": "data/oracle/fresh/mer/src/T02.07.xlsx",
-   "sha256": "bc2af8900dfccc2254476ccde5eabb86769032a4b388969ed11ebae170dca596",
-   "bytes": 11384,
+   "sha256": "dec6a3db30381cf75e2b37b7b3abef627590696d539c7dd5c360ce999642bd7e",
+   "bytes": 11383,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:42:49+00:00",
+   "fetched_at": "2026-10-01T03:48:11+00:00",
    "table_id": "2.7",
    "table_id_printed": "2.7",
    "pdf_unit": "eia-pdf-sec2",
@@ -181,10 +187,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.08": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T02.08",
    "path": "data/oracle/fresh/mer/src/T02.08.xlsx",
-   "sha256": "10e55fc726303e6b9a37943272008ffdc83e0c33c89bd489d4ca984c491ef4ff",
+   "sha256": "57eb0c9cac5b90e3e367c3a2dbcc22787958a806f42ce16f3b265754d069599b",
    "bytes": 10920,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:42:51+00:00",
+   "fetched_at": "2026-10-01T03:48:13+00:00",
    "table_id": "2.8",
    "table_id_printed": "2.8",
    "pdf_unit": "eia-pdf-sec2",
@@ -194,10 +200,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.03": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.03",
    "path": "data/oracle/fresh/mer/src/T10.03.xlsx",
-   "sha256": "8bf54e48aab6a3fc1e39571ddbe8e842e39661ab71f1d090fbe05ec34b0322db",
-   "bytes": 59526,
+   "sha256": "093602ba5190acb9e6ccfb89dc2ca7c5ae51a931b89dee225368f6f6b555f522",
+   "bytes": 59525,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:51+00:00",
+   "fetched_at": "2026-10-01T03:49:02+00:00",
    "table_id": "10.3",
    "table_id_printed": "10.3",
    "pdf_unit": "eia-pdf-sec10",
@@ -207,10 +213,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.01": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.01",
    "path": "data/oracle/fresh/mer/src/T05.01.xlsx",
-   "sha256": "b848938531f880bae05eb8423ca80ceeff274e96300288083f550e042ec96142",
+   "sha256": "499a968a500df28b035836e1d980f81ec2627fae658a6c355ade30a642ae85e9",
    "bytes": 45088,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:42:57+00:00",
+   "fetched_at": "2026-10-01T03:48:17+00:00",
    "table_id": "5.1",
    "table_id_printed": "5.1",
    "pdf_unit": "eia-pdf-sec5",
@@ -220,10 +226,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.02": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T05.02",
    "path": "data/oracle/fresh/mer/src/T05.02.xlsx",
-   "sha256": "4dbc0a2d5ad8aae2cceffc4fb2b763702a4ed0915c98ce10fc0fde417bcc4843",
+   "sha256": "68a3238f77cac145d7d1275ccfb723cfc6dd2b32a1d65ea285fa9a060cf357e9",
    "bytes": 61010,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:00+00:00",
+   "fetched_at": "2026-10-01T03:48:20+00:00",
    "table_id": "5.2",
    "table_id_printed": "5.2",
    "pdf_unit": "eia-pdf-sec5",
@@ -232,10 +238,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.01": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.01",
    "path": "data/oracle/fresh/mer/src/T06.01.xlsx",
-   "sha256": "7d1215da1224aac786dfeda4587ba3927b080fc97621d52247037444c21ae740",
+   "sha256": "91c22e6f362cb85b17180f3dee8b9e65eeb3da1241e45ad05c05d66911866faf",
    "bytes": 60898,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:04+00:00",
+   "fetched_at": "2026-10-01T03:48:22+00:00",
    "table_id": "6.1",
    "table_id_printed": "6.1",
    "pdf_unit": "eia-pdf-sec6",
@@ -245,10 +251,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.02": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.02",
    "path": "data/oracle/fresh/mer/src/T06.02.xlsx",
-   "sha256": "84cc5e1138343e2085c9d0fc39a5c82a97c69c74183c7c18c5772cc92abd578c",
+   "sha256": "fe14bc31e6bade92dffc16c98a7db9bcd87994171ebec10155a3d26333400b62",
    "bytes": 73108,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:06+00:00",
+   "fetched_at": "2026-10-01T03:48:24+00:00",
    "table_id": "6.2",
    "table_id_printed": "6.2",
    "pdf_unit": "eia-pdf-sec6",
@@ -258,10 +264,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.03": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T06.03",
    "path": "data/oracle/fresh/mer/src/T06.03.xlsx",
-   "sha256": "d0270cc64d83bc08f3af718f69803cc6979cfcc5be1b18e66dc95b1a1e197110",
+   "sha256": "e9953c224e909a29211fba497fe85bf040c9a57a03d500e4856790b0f8ed4c68",
    "bytes": 56856,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:08+00:00",
+   "fetched_at": "2026-10-01T03:48:25+00:00",
    "table_id": "6.3",
    "table_id_printed": "6.3",
    "pdf_unit": "eia-pdf-sec6",
@@ -271,10 +277,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T07.06": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T07.06",
    "path": "data/oracle/fresh/mer/src/T07.06.xlsx",
-   "sha256": "22476681121f3747804e0092266923ca0bd38b21de3c2e80db23d08c648050ec",
-   "bytes": 60310,
+   "sha256": "32ae70e48b4dd28ec4d8ce1edb84190f02347b2fd2a1ae25c6cb2d62aa6e2cbf",
+   "bytes": 60309,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:12+00:00",
+   "fetched_at": "2026-10-01T03:48:27+00:00",
    "table_id": "7.6",
    "table_id_printed": "7.6",
    "pdf_unit": "eia-pdf-sec7",
@@ -283,21 +289,23 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.01": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.01",
    "path": "data/oracle/fresh/mer/src/T09.01.xlsx",
-   "sha256": "cf681062865e66b2169af7430ccafdfa0c5e2f38fdace68debeaeaf07ff73a3b",
-   "bytes": 2803,
-   "type": "HTML (not a spreadsheet)",
-   "fetched_at": "2026-09-30T18:43:18+00:00",
+   "sha256": "e5bdd01bb62c86bf7785c93f895c8dce39b6e2afacfdf5c8125c458aec266fc0",
+   "bytes": 37384,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:48:31+00:00",
    "table_id": "9.1",
    "table_id_printed": "9.1",
-   "pdf_unit": "eia-pdf-sec9"
+   "pdf_unit": "eia-pdf-sec9",
+   "export_title": "Table 9.1 Crude Oil Price Summary",
+   "release": "Release Date: September 29, 2026"
   },
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.02": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.02",
    "path": "data/oracle/fresh/mer/src/T09.02.xlsx",
-   "sha256": "003eb7123fabe8a030a3ff633855ecb17cf63af27fe83a7c45e9bb8c37ae450d",
+   "sha256": "a60801b55cc0613570e19e9518c3e6d8241d380f9aced208546e5ce610f0415e",
    "bytes": 47837,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:19+00:00",
+   "fetched_at": "2026-10-01T03:48:33+00:00",
    "table_id": "9.2",
    "table_id_printed": "9.2",
    "pdf_unit": "eia-pdf-sec9",
@@ -307,10 +315,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.03": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.03",
    "path": "data/oracle/fresh/mer/src/T09.03.xlsx",
-   "sha256": "a0871e45d4c3b5838e543304faf569a7a36d35df512c4d3590b51311e0615689",
+   "sha256": "7e4683f1a4668676d71ae65efcb8a33d47b3bd4c5c0f0794a1790cc17a628e48",
    "bytes": 52617,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:21+00:00",
+   "fetched_at": "2026-10-01T03:48:35+00:00",
    "table_id": "9.3",
    "table_id_printed": "9.3",
    "pdf_unit": "eia-pdf-sec9",
@@ -320,10 +328,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.04": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.04",
    "path": "data/oracle/fresh/mer/src/T09.04.xlsx",
-   "sha256": "eade2be70c9d4e4a01b0978b675fda51cd24167f0d140bf74c8291b186e8d1f6",
-   "bytes": 40662,
+   "sha256": "8246cc2f0350a1651f315b0a79a0d9f2d492396702f1387fc3a119602ccf6412",
+   "bytes": 40663,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:23+00:00",
+   "fetched_at": "2026-10-01T03:48:37+00:00",
    "table_id": "9.4",
    "table_id_printed": "9.4",
    "pdf_unit": "eia-pdf-sec9",
@@ -333,10 +341,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.05": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.05",
    "path": "data/oracle/fresh/mer/src/T09.05.xlsx",
-   "sha256": "b8750bd84aa9c38864f2ff26143e97f65b94b11fefdf0243e5ec8f5982af7f2d",
-   "bytes": 28799,
+   "sha256": "9a3697acad2446c31d2a12a16aef63b287e8f14e565767a6e86cf29567995efc",
+   "bytes": 28800,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:25+00:00",
+   "fetched_at": "2026-10-01T03:48:38+00:00",
    "table_id": "9.5",
    "table_id_printed": "9.5",
    "pdf_unit": "eia-pdf-sec9",
@@ -346,10 +354,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.06": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.06",
    "path": "data/oracle/fresh/mer/src/T09.06.xlsx",
-   "sha256": "770649e8c45f1c4af6c3529c0234a3f19992dcf4f2291dcbdc85e3c1a5456e0f",
-   "bytes": 32260,
+   "sha256": "70ebf1a0768d1da0d38b2c302c05a6bf48cf0314c585fd6a32207aa75d8785fc",
+   "bytes": 32262,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:27+00:00",
+   "fetched_at": "2026-10-01T03:48:41+00:00",
    "table_id": "9.6",
    "table_id_printed": "9.6",
    "pdf_unit": "eia-pdf-sec9",
@@ -359,10 +367,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.07": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.07",
    "path": "data/oracle/fresh/mer/src/T09.07.xlsx",
-   "sha256": "65a20065d4b8315362265b43d30493cc46375c9facb0585a0e6adbe2c3cec36f",
+   "sha256": "6effd21491c25e65b17c5332947f82ea44ef411824db0832533c348a053557eb",
    "bytes": 32400,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:29+00:00",
+   "fetched_at": "2026-10-01T03:48:42+00:00",
    "table_id": "9.7",
    "table_id_printed": "9.7",
    "pdf_unit": "eia-pdf-sec9",
@@ -372,10 +380,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.08": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.08",
    "path": "data/oracle/fresh/mer/src/T09.08.xlsx",
-   "sha256": "a131103d91f97ae31aebb5b24ee784761d3e462b74f4cc70e62645e1b3c1db9a",
-   "bytes": 32954,
+   "sha256": "f9375ad5290b7db198bee8c890d770cc56bba42993ab230914dde528901b3e9e",
+   "bytes": 32955,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:31+00:00",
+   "fetched_at": "2026-10-01T03:48:45+00:00",
    "table_id": "9.8",
    "table_id_printed": "9.8",
    "pdf_unit": "eia-pdf-sec9",
@@ -385,10 +393,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.09": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.09",
    "path": "data/oracle/fresh/mer/src/T09.09.xlsx",
-   "sha256": "606031cb031e6195e5a924d8d0e926816f8473f7651573bda4769fd955167e01",
+   "sha256": "66500bb635505177c9275ec3fbcc4d9b28bfb7d7e150a4a9e12f1446d0ea2867",
    "bytes": 39675,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:33+00:00",
+   "fetched_at": "2026-10-01T03:48:47+00:00",
    "table_id": "9.9",
    "table_id_printed": "9.9",
    "pdf_unit": "eia-pdf-sec9",
@@ -398,10 +406,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.10": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T09.10",
    "path": "data/oracle/fresh/mer/src/T09.10.xlsx",
-   "sha256": "9e7e71f6b201824358e36e311543a32b034dc9372790f62ee830e60a7d089dec",
-   "bytes": 48170,
+   "sha256": "2790badb64502a774cbbe7f85930841eaf29c99777aa4ca585d01846d27bc0f4",
+   "bytes": 48171,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:35+00:00",
+   "fetched_at": "2026-10-01T03:48:49+00:00",
    "table_id": "9.10",
    "table_id_printed": "9.10",
    "pdf_unit": "eia-pdf-sec9",
@@ -411,10 +419,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.01": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.01",
    "path": "data/oracle/fresh/mer/src/T10.01.xlsx",
-   "sha256": "bcbe958e1ed0112e8708ce395d6263949e4ffd40bf71b30103d8076b66316be5",
-   "bytes": 70885,
+   "sha256": "2d00e553fe865029a486cbdeacec26578d86c9cda38d8a391cec4ae38ef088ec",
+   "bytes": 70886,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:43+00:00",
+   "fetched_at": "2026-10-01T03:48:54+00:00",
    "table_id": "10.1",
    "table_id_printed": "10.1",
    "pdf_unit": "eia-pdf-sec10",
@@ -424,10 +432,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02A": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02A",
    "path": "data/oracle/fresh/mer/src/T10.02A.xlsx",
-   "sha256": "703a31b0f7aacaa666097a21ed221353d7d791b9f12b8420cade6858d78f694e",
-   "bytes": 58985,
+   "sha256": "9bd31b5131f1c8fca3b6cd96d224277c6021bffe7678bff1966d7723d66b9a5a",
+   "bytes": 58986,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:45+00:00",
+   "fetched_at": "2026-10-01T03:48:56+00:00",
    "table_id": "10.2a",
    "table_id_printed": "10.2a",
    "pdf_unit": "eia-pdf-sec10",
@@ -437,10 +445,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02B": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02B",
    "path": "data/oracle/fresh/mer/src/T10.02B.xlsx",
-   "sha256": "ee81a927e2f25356884a342e2a49512df5c94bbaec8675bb7592469f231480d9",
-   "bytes": 51970,
+   "sha256": "2fa5f2909ecc81edf8015ec953613ebfacebbfb40dde90f795b46548f12a7bba",
+   "bytes": 51969,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:47+00:00",
+   "fetched_at": "2026-10-01T03:48:58+00:00",
    "table_id": "10.2b",
    "table_id_printed": "10.2b",
    "pdf_unit": "eia-pdf-sec10",
@@ -450,10 +458,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02C": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.02C",
    "path": "data/oracle/fresh/mer/src/T10.02C.xlsx",
-   "sha256": "d005c28e4bcc1d9849a1861529a5ae87f41545d41525a4759efeedbba2e8a9a9",
+   "sha256": "352dbaeba010e8b5c7a377dc6bd09903b1f42e7788d42dd3c97d715b3aab48e9",
    "bytes": 66506,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:49+00:00",
+   "fetched_at": "2026-10-01T03:49:00+00:00",
    "table_id": "10.2c",
    "table_id_printed": "10.2c",
    "pdf_unit": "eia-pdf-sec10",
@@ -463,10 +471,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04A": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04A",
    "path": "data/oracle/fresh/mer/src/T10.04A.xlsx",
-   "sha256": "bf4a808b08a1f5d162e4c499d38371470870bad7512e5f30099cf3edf43df8fb",
-   "bytes": 39686,
+   "sha256": "1b1ee19131686ada08e62dab59aec2e97ee7afcd6fd5cf32e553ef400ab1a703",
+   "bytes": 39685,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:53+00:00",
+   "fetched_at": "2026-10-01T03:49:03+00:00",
    "table_id": "10.4a",
    "table_id_printed": "10.4a",
    "pdf_unit": "eia-pdf-sec10",
@@ -476,10 +484,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04B": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04B",
    "path": "data/oracle/fresh/mer/src/T10.04B.xlsx",
-   "sha256": "864a4e2e489980506b98497ce58a305fd7e277141c51dc53dad2c9d847a9965f",
-   "bytes": 25549,
+   "sha256": "1141ebcac44f48b9e8f779ae06f37064edcd432ddbdc2638d15cb7180ed3d0b8",
+   "bytes": 25550,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:54+00:00",
+   "fetched_at": "2026-10-01T03:49:05+00:00",
    "table_id": "10.4b",
    "table_id_printed": "10.4b",
    "pdf_unit": "eia-pdf-sec10",
@@ -489,10 +497,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04C": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.04C",
    "path": "data/oracle/fresh/mer/src/T10.04C.xlsx",
-   "sha256": "fb2be7e9db2983f2465376fd76141b903e3c92a669e60605f7be7d8a3f47ef69",
-   "bytes": 21443,
+   "sha256": "0b63b3d3aad4f8b5ddbf806c0fade3260423e1310cbaeb8e36e700d21c5452c5",
+   "bytes": 21442,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:56+00:00",
+   "fetched_at": "2026-10-01T03:49:07+00:00",
    "table_id": "10.4c",
    "table_id_printed": "10.4c",
    "pdf_unit": "eia-pdf-sec10",
@@ -502,10 +510,10 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.05": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.05",
    "path": "data/oracle/fresh/mer/src/T10.05.xlsx",
-   "sha256": "6624058a3e5faab68c17f1c90ff1198d15cb9923a440b4595ee645d5de8bfb20",
+   "sha256": "1f2fa0d67d1cb33bac7710de8f2f52b01d217675f7a69dabc5579c2052a13718",
    "bytes": 42844,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:43:59+00:00",
+   "fetched_at": "2026-10-01T03:49:09+00:00",
    "table_id": "10.5",
    "table_id_printed": "10.5",
    "pdf_unit": "eia-pdf-sec10",
@@ -515,18 +523,586 @@
   "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.06": {
    "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=T10.06",
    "path": "data/oracle/fresh/mer/src/T10.06.xlsx",
-   "sha256": "1d398eb71e515fe29212d7b3fe8ff9418c1a55c3a75b3c32ff10ff329e1ae17b",
-   "bytes": 42974,
+   "sha256": "966b3aa1cf76b415c448fb81bb75e239050358463547a3bd1bce2ef7e8f84212",
+   "bytes": 42973,
    "type": "OOXML (xlsx)",
-   "fetched_at": "2026-09-30T18:44:01+00:00",
+   "fetched_at": "2026-10-01T03:49:11+00:00",
    "table_id": "10.6",
    "table_id_printed": "10.6",
    "pdf_unit": "eia-pdf-sec10",
    "export_title": "Table 10.6  Solar Electricity Net Generation",
    "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TA6": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TA6",
+   "path": "data/oracle/fresh/mer/src/TA6.xlsx",
+   "sha256": "7e2f8c06883e55346af9e6a4e01fa41e229430253d7bd78a7ab20345a6934266",
+   "bytes": 10135,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:17+00:00",
+   "table_id": "A6",
+   "table_id_printed": "A6",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": "Table A6: Approximate heat rates for electricity, and heat content of electricity"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TB1": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TB1",
+   "path": "data/oracle/fresh/mer/src/TB1.xlsx",
+   "sha256": "c84cd1d1fafef621802978cfa16983fb6a3f83fcc7574b9c317dce937e9234a1",
+   "bytes": 6113,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:19+00:00",
+   "table_id": "B1",
+   "table_id_printed": "B1",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": ""
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TB2": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TB2",
+   "path": "data/oracle/fresh/mer/src/TB2.xlsx",
+   "sha256": "ceda4908f23cef392903a68c8fe089a0b8904b75c03af8a8b1bf324730a342c0",
+   "bytes": 6112,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:21+00:00",
+   "table_id": "B2",
+   "table_id_printed": "B2",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": ""
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TC1": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TC1",
+   "path": "data/oracle/fresh/mer/src/TC1.xlsx",
+   "sha256": "7e6876327224638de64125a6afd174f65d695b3148e9180da4e55d8a29ce1743",
+   "bytes": 11236,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:23+00:00",
+   "table_id": "C1",
+   "table_id_printed": "C1",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": "Table C1 Population, U.S. Gross Domestic Product, and U.S. Gross Output",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TD1": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TD1",
+   "path": "data/oracle/fresh/mer/src/TD1.xlsx",
+   "sha256": "448e1bf58421a501e9fafe5159835d43a72d94590df7a29451845da52cca873f",
+   "bytes": 6113,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:25+00:00",
+   "table_id": "D1",
+   "table_id_printed": "D1",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": ""
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE1": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE1",
+   "path": "data/oracle/fresh/mer/src/TE1.xlsx",
+   "sha256": "f48ed19c95d61994c990c0a9f7f4993ab85cd40ac123608ad14a286dca82b7fa",
+   "bytes": 77531,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:28+00:00",
+   "table_id": "E1",
+   "table_id_printed": "E1",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": "Table E1. Primary Energy Overview, Fossil Fuel Equivalency Approach",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE2": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE2",
+   "path": "data/oracle/fresh/mer/src/TE2.xlsx",
+   "sha256": "2d46ae13998a741b14a6eae11d193f6637400e569bc3dfb4d93c71ba4064bc4f",
+   "bytes": 81708,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:30+00:00",
+   "table_id": "E2",
+   "table_id_printed": "E2",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": "Table E2. Primary Energy Production by Source, Fossil Fuel Equivalency Approach",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE3": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE3",
+   "path": "data/oracle/fresh/mer/src/TE3.xlsx",
+   "sha256": "ee21510f5df7b79335b187cd204486ce3436bb86de71a9c6823c148e1a6cb767",
+   "bytes": 77170,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:32+00:00",
+   "table_id": "E3",
+   "table_id_printed": "E3",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": "Table E3. Primary Energy Consumption by Source, Fossil Fuel Equivalency Approach",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE4": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TE4",
+   "path": "data/oracle/fresh/mer/src/TE4.xlsx",
+   "sha256": "cd3de2eedd0485512044a544f0474009794103b61ad48650a9b433cda2ced07b",
+   "bytes": 71603,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:34+00:00",
+   "table_id": "E4",
+   "table_id_printed": "E4",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": "Table E4. Renewable Energy Production and Consumption by Source, Fossil Fuel Equivalency Approach",
+   "release": "Release Date: September 29, 2026"
+  },
+  "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TF1": {
+   "url": "https://www.eia.gov/totalenergy/data/browser/xls.php?tbl=TF1",
+   "path": "data/oracle/fresh/mer/src/TF1.xlsx",
+   "sha256": "1b257fbf70d6582bfa4331f77acb4c5b850c871cfe618c2c0ecb453983c53799",
+   "bytes": 23093,
+   "type": "OOXML (xlsx)",
+   "fetched_at": "2026-10-01T03:49:36+00:00",
+   "table_id": "F1",
+   "table_id_printed": "F1",
+   "pdf_unit": "eia-pdf-sec12",
+   "export_title": "Table F1. Electric Vehicle Charging Infrastructure",
+   "release": "Release Date: September 29, 2026"
   }
  },
  "pages": [
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 4,
+   "table_id": "2.1a",
+   "export": "T02.01A",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 5,
+   "table_id": "2.1b",
+   "export": "T02.01B",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 7,
+   "table_id": "2.2",
+   "export": "T02.02",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 9,
+   "table_id": "2.3",
+   "export": "T02.03",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 11,
+   "table_id": "2.4",
+   "export": "T02.04",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 13,
+   "table_id": "2.5",
+   "export": "T02.05",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 15,
+   "table_id": "2.6",
+   "export": "T02.06",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 16,
+   "table_id": "2.7",
+   "export": "T02.07",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 17,
+   "table_id": "2.8",
+   "export": "T02.08",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 20,
+   "table_id": "10.3",
+   "export": null,
+   "title_match": false,
+   "note": "export T10.03 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec2",
+   "page": 22,
+   "table_id": "2.5",
+   "export": "T02.05",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec5",
+   "page": 3,
+   "table_id": "5.1",
+   "export": "T05.01",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec5",
+   "page": 5,
+   "table_id": "5.2",
+   "export": null,
+   "title_match": false,
+   "note": "export T05.02 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 3,
+   "table_id": "6.1",
+   "export": "T06.01",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 4,
+   "table_id": "6.2",
+   "export": "T06.02",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 5,
+   "table_id": "6.3",
+   "export": "T06.03",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 9,
+   "table_id": "6.2",
+   "export": "T06.02",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec6",
+   "page": 10,
+   "table_id": "6.3",
+   "export": "T06.03",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec7",
+   "page": 31,
+   "table_id": "7.6",
+   "export": null,
+   "title_match": false,
+   "note": "export T07.06 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 3,
+   "table_id": "9.1",
+   "export": "T09.01",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 4,
+   "table_id": "9.2",
+   "export": "T09.02",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 5,
+   "table_id": "9.3",
+   "export": "T09.03",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 6,
+   "table_id": "9.4",
+   "export": "T09.04",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 7,
+   "table_id": "9.5",
+   "export": "T09.05",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 8,
+   "table_id": "9.6",
+   "export": "T09.06",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 9,
+   "table_id": "9.7",
+   "export": "T09.07",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 11,
+   "table_id": "9.8",
+   "export": "T09.08",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 13,
+   "table_id": "9.9",
+   "export": "T09.09",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 15,
+   "table_id": "9.10",
+   "export": "T09.10",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec9",
+   "page": 18,
+   "table_id": "9.1",
+   "export": "T09.01",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 3,
+   "table_id": "10.1",
+   "export": "T10.01",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 4,
+   "table_id": "10.2a",
+   "export": "T10.02A",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 5,
+   "table_id": "10.2b",
+   "export": "T10.02B",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 6,
+   "table_id": "10.2c",
+   "export": "T10.02C",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 7,
+   "table_id": "10.3",
+   "export": "T10.03",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 8,
+   "table_id": "10.4a",
+   "export": "T10.04A",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 9,
+   "table_id": "10.4b",
+   "export": "T10.04B",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 10,
+   "table_id": "10.4c",
+   "export": "T10.04C",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 11,
+   "table_id": "10.5",
+   "export": "T10.05",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 12,
+   "table_id": "10.6",
+   "export": "T10.06",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 20,
+   "table_id": "10.4a",
+   "export": "T10.04A",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 22,
+   "table_id": "10.4c",
+   "export": "T10.04C",
+   "title_match": true
+  },
+  {
+   "unit": "eia-pdf-sec10",
+   "page": 24,
+   "table_id": "A6",
+   "export": null,
+   "title_match": false,
+   "note": "export TA6 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 15,
+   "table_id": "A6",
+   "export": null,
+   "title_match": false,
+   "note": "export TA6 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 19,
+   "table_id": "B1",
+   "export": null,
+   "title_match": false,
+   "note": "export TB1 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 20,
+   "table_id": "B2",
+   "export": null,
+   "title_match": false,
+   "note": "export TB2 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 22,
+   "table_id": "C1",
+   "export": "TC1",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 24,
+   "table_id": "D1",
+   "export": null,
+   "title_match": false,
+   "note": "export TD1 title does not match the page heading"
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 25,
+   "table_id": "D1",
+   "export": null,
+   "title_match": false
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 30,
+   "table_id": "E1",
+   "export": "TE1",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 31,
+   "table_id": "E2",
+   "export": "TE2",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 32,
+   "table_id": "E3",
+   "export": "TE3",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 33,
+   "table_id": "E4",
+   "export": "TE4",
+   "title_match": true,
+   "note": ""
+  },
+  {
+   "unit": "eia-pdf-sec12",
+   "page": 36,
+   "table_id": "F1",
+   "export": "TF1",
+   "title_match": true,
+   "note": ""
+  }
+ ],
+ "export_releases": [
+  "Release Date: September 29, 2026"
+ ],
+ "pdf_editions": [
+  "2026-09-10",
+  "2026-09-23",
+  "2026-09-24",
+  "2026-09-28",
+  "2026-09-29"
+ ],
+ "http_calls_by_host": {
+  "www.eia.gov": 44,
+  "api.govinfo.gov": 16,
+  "www.govinfo.gov": 8
+ },
+ "pages_scan_v1": [
   {
    "unit": "eia-pdf-sec2",
    "page": 4,
@@ -858,19 +1434,29 @@
    "title_match": true
   }
  ],
- "export_releases": [
-  "Release Date: September 29, 2026"
- ],
- "pdf_editions": [
-  "2026-09-10",
-  "2026-09-23",
-  "2026-09-24",
-  "2026-09-28",
-  "2026-09-29"
- ],
- "http_calls_by_host": {
-  "www.eia.gov": 44,
-  "api.govinfo.gov": 16,
-  "www.govinfo.gov": 8
+ "scan": {
+  "fix": "D-038 third-revision bug fix (D-039 status 2026-09-30): letter ids accepted",
+  "pattern_v1": "\\s*Table\\s+([0-9]+\\.[0-9]+[a-z]?)\\b",
+  "pattern": "\\s*Table\\s+([0-9]+\\.[0-9]+[a-z]?|[A-Z][0-9]+)\\b",
+  "fresh_oracle_py_sha256": "1df0d4c152edaaedd5ba307031ed89805b23fb98e8c6d77e04c78eb7cbed6d34",
+  "matched_tables_v1": 29,
+  "matched_tables": 39,
+  "added": [
+   "eia-pdf-sec12:C1",
+   "eia-pdf-sec12:E1",
+   "eia-pdf-sec12:E2",
+   "eia-pdf-sec12:E3",
+   "eia-pdf-sec12:E4",
+   "eia-pdf-sec12:F1",
+   "eia-pdf-sec2:2.3",
+   "eia-pdf-sec2:2.4",
+   "eia-pdf-sec2:2.6",
+   "eia-pdf-sec9:9.1"
+  ],
+  "removed": [],
+  "rescanned_at": "2026-10-01T03:49:36+00:00",
+  "http_calls_by_host": {
+   "www.eia.gov": 47
+  }
  }
 }
