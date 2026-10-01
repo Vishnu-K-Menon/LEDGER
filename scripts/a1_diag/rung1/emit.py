@@ -40,6 +40,7 @@ import trigger as tg  # noqa: E402
 
 REPO = orc.REPO
 PARSED = REPO / "data" / "parsed"
+RAW = REPO / "data" / "raw"  # run_rung1.py --raw overrides (path only)
 OUT = REPO / "data" / "parsed_rung1"
 FLAGS = {"R", "E", "RE"}
 OPTS = {"wrap": True, "headers": True, "assert_bands": True, "header_check": True}
@@ -725,7 +726,7 @@ def build_unit(unit: str, tables: list[int] | None, opts: dict = OPTS) -> tuple[
     import pdfplumber
 
     doc = json.loads((PARSED / f"{unit}.json").read_text(encoding="utf-8"))
-    pdf_path = next((REPO / "data" / "raw").rglob(f"{unit}.pdf"))
+    pdf_path = next(RAW.rglob(f"{unit}.pdf"))
     logs: dict = {}
     with pdfplumber.open(pdf_path) as pdf:
         for ti in tables or []:

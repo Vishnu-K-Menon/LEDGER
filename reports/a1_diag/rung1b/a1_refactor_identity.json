@@ -1,0 +1,110 @@
+{
+ "gate": "D-039 status 2026-10-01 (6) / A1: default-path run_rung1.py (--out scratch) on the 10 pilot EIA/ERP units vs data/parsed_rung1/",
+ "command": "uv run --with pdfplumber python scripts/a1_diag/rung1/run_rung1.py --out <scratch> --units <10 units>",
+ "pdfplumber": "0.11.10",
+ "pdfminer.six": "20260107",
+ "files": {
+  "eia-pdf-AEO_Narrative.json": {
+   "scratch": "76473ba8f529bd7147e0fbc4c3ddb51c4e444503f9a1e5b06a4e98c2c38a50c6",
+   "data/parsed_rung1": "76473ba8f529bd7147e0fbc4c3ddb51c4e444503f9a1e5b06a4e98c2c38a50c6",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-AEO_Narrative.json": {
+   "scratch": "44dad5a4d476859308a0a8cefcd7640d78a12c3b60881f0e835009acca55a0ee",
+   "data/parsed_rung1": "44dad5a4d476859308a0a8cefcd7640d78a12c3b60881f0e835009acca55a0ee",
+   "identical": true
+  },
+  "eia-pdf-sec1.json": {
+   "scratch": "bb134924d01210c635300341fbc4de9fa21d869572067002640a367e492ad411",
+   "data/parsed_rung1": "bb134924d01210c635300341fbc4de9fa21d869572067002640a367e492ad411",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-sec1.json": {
+   "scratch": "b124b5f3864e3219ef57e32127c036b1bef3d2f9a4b0a90a736ab873adf0d259",
+   "data/parsed_rung1": "b124b5f3864e3219ef57e32127c036b1bef3d2f9a4b0a90a736ab873adf0d259",
+   "identical": true
+  },
+  "eia-pdf-sec3.json": {
+   "scratch": "3ec09b560290e9acbce442d6e6f2f9828316efefdb1c41d555a88d09916783ab",
+   "data/parsed_rung1": "3ec09b560290e9acbce442d6e6f2f9828316efefdb1c41d555a88d09916783ab",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-sec3.json": {
+   "scratch": "896ebce0c77269dfa4a6a3b151ed1612f7145e1994615a1bea3f5e9125a0d667",
+   "data/parsed_rung1": "896ebce0c77269dfa4a6a3b151ed1612f7145e1994615a1bea3f5e9125a0d667",
+   "identical": true
+  },
+  "eia-pdf-sec4.json": {
+   "scratch": "429227d5ab1157fca3fa267f73f376231a8846b80dbc56782268587de409cbbf",
+   "data/parsed_rung1": "429227d5ab1157fca3fa267f73f376231a8846b80dbc56782268587de409cbbf",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-sec4.json": {
+   "scratch": "91a33e5e97b3b04068794bf06104c456124f2becf03e88af3022fa1909fb494e",
+   "data/parsed_rung1": "91a33e5e97b3b04068794bf06104c456124f2becf03e88af3022fa1909fb494e",
+   "identical": true
+  },
+  "eia-pdf-sec8.json": {
+   "scratch": "bc36db344750f89de8c064e01666995d05935eb91410cbb39426bab92e503913",
+   "data/parsed_rung1": "bc36db344750f89de8c064e01666995d05935eb91410cbb39426bab92e503913",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-sec8.json": {
+   "scratch": "ae6126fdbe312328a1d6aabedeba96f07a05f8c10feaebc8da5b98036d92dd4b",
+   "data/parsed_rung1": "ae6126fdbe312328a1d6aabedeba96f07a05f8c10feaebc8da5b98036d92dd4b",
+   "identical": true
+  },
+  "eia-pdf-sec11.json": {
+   "scratch": "e3331703a5114cce8b63dcf2518315e553ee2f38135f54f5a61e47181bdea81b",
+   "data/parsed_rung1": "e3331703a5114cce8b63dcf2518315e553ee2f38135f54f5a61e47181bdea81b",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-sec11.json": {
+   "scratch": "5bca0ffb902aed8fb73c3d9029f01c43332b42f4e16f6cec32f3a6f9d77d0050",
+   "data/parsed_rung1": "5bca0ffb902aed8fb73c3d9029f01c43332b42f4e16f6cec32f3a6f9d77d0050",
+   "identical": true
+  },
+  "eia-pdf-sec13.json": {
+   "scratch": "9758d74ccd802ee30d349be69590f0fd48c3e8c48d0f79b833c6161c4c03b3fe",
+   "data/parsed_rung1": "9758d74ccd802ee30d349be69590f0fd48c3e8c48d0f79b833c6161c4c03b3fe",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-sec13.json": {
+   "scratch": "45bdce7f3a35b3ca4779872b9484c84ef9fbdbc9a5b3d90c1278539d3fc39622",
+   "data/parsed_rung1": "45bdce7f3a35b3ca4779872b9484c84ef9fbdbc9a5b3d90c1278539d3fc39622",
+   "identical": true
+  },
+  "eia-pdf-steo_full.json": {
+   "scratch": "d9dfb76c8cfcec509fd3e3024f0a407a1b2cef1615d4ae2c033bfd68db4d8662",
+   "data/parsed_rung1": "d9dfb76c8cfcec509fd3e3024f0a407a1b2cef1615d4ae2c033bfd68db4d8662",
+   "identical": true
+  },
+  "_emit_log/eia-pdf-steo_full.json": {
+   "scratch": "a22557b9b72664f4061d8deede45cb2f0ed1b1e0532fd06a0e79941a55d3a743",
+   "data/parsed_rung1": "a22557b9b72664f4061d8deede45cb2f0ed1b1e0532fd06a0e79941a55d3a743",
+   "identical": true
+  },
+  "govinfo-ERP-2026-table4.json": {
+   "scratch": "e3002e8c59bdf45c2d2564297792a280fc8c7e0435aaa79be2946c1bcf01027a",
+   "data/parsed_rung1": "e3002e8c59bdf45c2d2564297792a280fc8c7e0435aaa79be2946c1bcf01027a",
+   "identical": true
+  },
+  "_emit_log/govinfo-ERP-2026-table4.json": {
+   "scratch": "58ddb71763e9937b214ae751e1460347247f0ea57e5b429d0893343ab9a42a58",
+   "data/parsed_rung1": "58ddb71763e9937b214ae751e1460347247f0ea57e5b429d0893343ab9a42a58",
+   "identical": true
+  },
+  "govinfo-ERP-2026-table22.json": {
+   "scratch": "521dd736ee519434613c1012cbd7a42ecaa1ca274e133ffea1dc74a12214ac0b",
+   "data/parsed_rung1": "521dd736ee519434613c1012cbd7a42ecaa1ca274e133ffea1dc74a12214ac0b",
+   "identical": true
+  },
+  "_emit_log/govinfo-ERP-2026-table22.json": {
+   "scratch": "7b0e2fb9e486f120891a78a019c7b3f3ff6472808354cbdad4f9116a46279392",
+   "data/parsed_rung1": "7b0e2fb9e486f120891a78a019c7b3f3ff6472808354cbdad4f9116a46279392",
+   "identical": true
+  }
+ },
+ "differences": [],
+ "verdict": "IDENTICAL"
+}

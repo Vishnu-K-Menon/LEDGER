@@ -33,6 +33,7 @@ import oracle as orc  # noqa: E402
 
 REPO = orc.REPO
 PARSED = REPO / "data" / "parsed"
+RAW = REPO / "data" / "raw"  # run_rung1.py --raw overrides (path only)
 CACHE = REPO / "data" / "parsed_rung1" / "_cache" / "trigger"
 OUT = REPO / "reports" / "a1_diag" / "rung1"
 FLAG = re.compile(r"^(RE|R|E)(?=[\d(.\-−�])|(?<=[\d)])(RE|R|E)$")
@@ -201,7 +202,7 @@ def run_unit(unit: str, covered: set) -> list[dict]:
     import pdfplumber
 
     doc = json.loads((PARSED / f"{unit}.json").read_text(encoding="utf-8"))
-    pdf = next((REPO / "data" / "raw").rglob(f"{unit}.pdf"))
+    pdf = next(RAW.rglob(f"{unit}.pdf"))
     rows = []
     with pdfplumber.open(pdf) as p:
         chars_by_page: dict[int, list] = {}

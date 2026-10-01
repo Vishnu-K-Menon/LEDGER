@@ -7,7 +7,15 @@ so its content is identical by construction (guard clause 3 checks it). Writes
 ``data/parsed_rung1/<unit>.json`` (never ``data/parsed``) and a per-table log; one unit per call
 is allowed (``--units``) so no call runs long; a written unit is skipped unless ``--force``.
 
+Rung 1b (D-039): every input / output path is a flag whose default is the pilot path, so a
+default run is byte-identical to rung 1 (A1 gate). ``--fired pinned`` (default) asserts the
+trigger reproduces A1's committed fired list; ``--fired live`` lets the trigger decide (the
+rung-1b path, used on the burned tables in the build and on the fresh set in Part C).
+``--covered none`` skips the pilot oracle (it only labels families; firing never reads it).
+
     uv run --with pdfplumber python scripts/a1_diag/rung1/run_rung1.py [--units U ...] [--summary]
+        [--manifest data/manifest.jsonl] [--raw data/raw] [--parsed data/parsed]
+        [--out data/parsed_rung1] [--fired pinned|live] [--covered pilot|none]
 """
 
 from __future__ import annotations
@@ -28,6 +36,8 @@ import trigger as tg  # noqa: E402
 REPO = emit.REPO
 OUT = REPO / "data" / "parsed_rung1"
 LOG = OUT / "_emit_log"
+MANIFEST = REPO / "data" / "manifest.jsonl"
+RAW = REPO / "data" / "raw"
 FIRED_SHA = "c43737920c44c7c2bf7084e187dc6f8f6ce21ce63993afd22166698ea3180419"
 
 
@@ -43,14 +53,14 @@ SCOPE = frozenset({"eia", "govinfo_erp"})
 
 
 def source_of(unit: str) -> str:
-    for line in (REPO / "data" / "manifest.jsonl").read_text(encoding="utf-8").splitlines():
+    for line in MANIFEST.read_text(encoding="utf-8").splitlines():
         rec = json.loads(line) if line.strip() else {}
         if rec.get("unit_id") == unit:
             return rec["source"]
-    raise KeyError(f"{unit}: not in data/manifest.jsonl")
+    raise KeyError(f"{unit}: not in {MANIFEST}")
 
 
-def run_unit(unit: str, fired: set, covered: set, force: bool) -> dict:
+def run_unit(unit: str, fired: set | None, covered: set, force: bool) -> dict:
     import pdfplumber
 
     dest = OUT / f"{unit}.json"
@@ -61,10 +71,12 @@ def run_unit(unit: str, fired: set, covered: set, force: bool) -> dict:
     # the frozen trigger, fresh (its cache is bypassed): must reproduce A1's fired list
     tg.CACHE.joinpath(f"{unit}.json").unlink(missing_ok=True)
     fresh = {(r["unit"], r["table_index"]) for r in tg.run_unit(unit, covered) if r["fired"]}
+    if fired is None:  # --fired live: the trigger decides
+        fired = fresh
     mine = {x for x in fired if x[0] == unit}
     assert fresh == mine, f"{unit}: trigger no longer reproduces A1's fired list"
     log: dict = {"unit": unit, "tables": {}}
-    pdf_path = next((REPO / "data" / "raw").rglob(f"{unit}.pdf"))
+    pdf_path = next(RAW.rglob(f"{unit}.pdf"))
     with pdfplumber.open(pdf_path) as pdf:
         in_scope = source_of(unit) in SCOPE
         for ti, tbl in enumerate(doc.get("tables", [])):
@@ -92,9 +104,22 @@ def main() -> int:
     ap.add_argument("--units", nargs="*")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--summary", action="store_true")
+    ap.add_argument("--manifest", default="data/manifest.jsonl")
+    ap.add_argument("--raw", default="data/raw")
+    ap.add_argument("--parsed", default="data/parsed")
+    ap.add_argument("--out", default="data/parsed_rung1")
+    ap.add_argument("--fired", choices=("pinned", "live"), default="pinned")
+    ap.add_argument("--covered", choices=("pilot", "none"), default="pilot")
     args = ap.parse_args()
-    fired = fired_list()
-    covered = tg.covered_tables()
+    global OUT, LOG, MANIFEST, RAW
+    MANIFEST, RAW = REPO / args.manifest, REPO / args.raw
+    OUT = REPO / args.out
+    LOG = OUT / "_emit_log"
+    emit.PARSED = tg.PARSED = REPO / args.parsed
+    emit.RAW = tg.RAW = RAW
+    tg.CACHE = OUT / "_cache" / "trigger"
+    fired = fired_list() if args.fired == "pinned" else None
+    covered = tg.covered_tables() if args.covered == "pilot" else set()
     for unit in args.units or []:
         log = run_unit(unit, fired, covered, args.force)
         c = Counter(v["status"] for v in log["tables"].values())
