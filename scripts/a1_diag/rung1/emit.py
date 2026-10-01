@@ -104,8 +104,29 @@ def merge_flags(line: list[dict]) -> list[dict]:
     return out
 
 
+def in_parenthetical(line: list[dict]) -> set[int]:
+    """Rung 1b (fallback cause): indices of tokens inside an open parenthetical on the line - a
+    unit label "(billion chained 2017 dollars - SAAR)" or "(index, 1982=1.00)" - opened by a token
+    that starts with "(" and holds no ")", closed by a token ending with ")" ON THE SAME LINE (an
+    unclosed "(" - MER 11.5's "( h" placeholder - opens nothing). A balanced token ("(1.2)", "(s)")
+    opens nothing. Such tokens are label text, never body values."""
+    inside: set[int] = set()
+    span: list[int] = []
+    for i, t in enumerate(line):
+        w = t["text"]
+        if span:
+            span.append(i)
+            if w.endswith(")"):
+                inside.update(span)
+                span = []
+        elif w.startswith("(") and ")" not in w:
+            span = [i]
+    return inside
+
+
 def body_values(line: list[dict]) -> list[dict]:
-    vals = [t for t in line[1:] if is_value(t)]
+    paren = in_parenthetical(line)
+    vals = [t for i, t in enumerate(line[1:], 1) if is_value(t) and i not in paren]
     if not vals or all(tg.YEAR.fullmatch(t["text"]) for t in vals):
         return []
     return vals
