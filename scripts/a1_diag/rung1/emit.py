@@ -428,7 +428,17 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
     cand = [i for i, ln in enumerate(lines) if body_values(ln)]
     if not cand:
         return None, ["no body lines"]
-    all_bands = cluster_bands([t for i in cand for t in body_values(lines[i])])
+
+    # rung 1b (11.6): a no-data placeholder right of a body line's first value is column-position
+    # evidence, as in the oracle's own band rule (``oracle.read_page``); a column printed only as
+    # "NA" / "(s)" in some years otherwise has no band and its tokens join a neighbour's cells
+    def evidence(ln: list[dict]) -> list[dict]:
+        vals = body_values(ln)
+        return vals + [
+            t for t in ln[1:] if vals and t["text"] in orc.PLACEHOLDERS and t["x0"] > vals[0]["x0"]
+        ]
+
+    all_bands = cluster_bands([t for i in cand for t in evidence(lines[i])])
     # dense bands (>= max(2, 10 % of candidate lines) tokens) define the body; a number outside
     # them - a title's bill number, a footnote marker, a code inside a label - is text
     min_n = max(2, -(-len(cand) // 10))
