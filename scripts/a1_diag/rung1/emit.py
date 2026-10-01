@@ -55,6 +55,20 @@ def fix_text(t: str) -> str:
     return re.sub(r"(^|\s)(-?)�(?=\d)", r"\1\2.", t)
 
 
+FLAG_LEAD = re.compile(r"^(RE|R|E)(?=[\d(.\-−�])")
+
+
+def flag_space(text: str) -> str:
+    """Rung 1b F1: a revision flag fused to its number ("R1,358", "E1,358" - fused by
+    ``merge_flags`` or by the tokeniser, where the page sets the flag raised beside the number) is
+    emitted with a space, as the page's words read ("R 1,358"); the builder's tests still see the
+    fused token. Body, stub and section cells only; header text is untouched."""
+    return " ".join(
+        FLAG_LEAD.sub(lambda m: m.group(1) + " ", w) if is_value({"text": w}) else w
+        for w in text.split(" ")
+    )
+
+
 def merge_flags(line: list[dict]) -> list[dict]:
     out: list[dict] = []
     i = 0
@@ -489,7 +503,7 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
             if toks:
                 out_cells.append(
                     cell(
-                        fix_text(" ".join(t["text"] for t in toks)),
+                        flag_space(fix_text(" ".join(t["text"] for t in toks))),
                         span_box(toks),
                         r,
                         0,
@@ -502,7 +516,7 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
         if row["stub"]:
             out_cells.append(
                 cell(
-                    fix_text(" ".join(t["text"] for t in row["stub"])),
+                    flag_space(fix_text(" ".join(t["text"] for t in row["stub"]))),
                     span_box(row["stub"]),
                     r,
                     0,
@@ -511,7 +525,12 @@ def rebuild(tbl: dict, lines: list[list[dict]], opts: dict = OPTS) -> tuple[dict
             )
         for b, toks in row["cells"].items():
             out_cells.append(
-                cell(fix_text(" ".join(t["text"] for t in toks)), span_box(toks), r, b + 1)
+                cell(
+                    flag_space(fix_text(" ".join(t["text"] for t in toks))),
+                    span_box(toks),
+                    r,
+                    b + 1,
+                )
             )
         r += 1
     numeric_cells = [

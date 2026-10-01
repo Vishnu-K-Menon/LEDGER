@@ -21,7 +21,7 @@ def test_pin_count() -> None:
     assert len(PINS) == 704
 
 
-@pytest.mark.parametrize("parsed_dir", ["data/parsed", "data/parsed_rung1"])
+@pytest.mark.parametrize("parsed_dir", ["data/parsed", "data/parsed_rung1", "data/parsed_rung1b"])
 def test_budget_cbo_tables_match_pins(parsed_dir: str) -> None:
     root = REPO / parsed_dir
     units = sorted({key.split("|")[0] for key in PINS})
