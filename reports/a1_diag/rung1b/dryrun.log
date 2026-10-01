@@ -1,0 +1,31 @@
+burned oracle cells.jsonl sha256 d7c13b524eb265a26b5f2941a8d30fad1b24306f4a0b7520eff246f577fa738e
+
+(a) identity - data/parsed as baseline and candidate
+[OK] (a) MER held-out: flips 0 / char 0; header 85.15 vs 85.15
+[OK] (a) ERP: flips 0 / char 0; header 93.18 vs 93.18
+[OK] (a) STEO: flips 0 / char 0; header 94.65 vs 94.65
+[OK] (a) tuning: flips 0 / char 0; header 86.21 vs 86.21
+
+(b) baseline section vs step 0 (+-0.1 pp), oracle as frozen at c6c8724
+[OK] (b) run a MER held-out: strict 50.14 (step 0 50.1); header 85.15 (step 0 85.2); 45 tables, 18,246 cells
+[OK] (b) run a ERP: strict 55.07 (step 0 55.1); header 93.18 (step 0 93.2); 4 tables, 2,764 cells
+[OK] (b) run a STEO: strict 86.46 (step 0 86.5); header 94.65 (step 0 94.7); 26 tables, 13,046 cells
+[OK] (b) run c MER held-out: strict 50.14 (step 0 50.1); header 85.15 (step 0 85.2); 45 tables, 18,246 cells
+[OK] (b) run c ERP: strict 55.07 (step 0 55.1); header 93.18 (step 0 93.2); 4 tables, 2,764 cells
+[OK] (b) run c STEO: strict 86.46 (step 0 86.5); header 94.65 (step 0 94.7); 26 tables, 13,046 cells
+
+(c) data/parsed_rung1 as candidate vs 158029a (+-0.1 pp)
+[OK] (c) MER held-out: strict 88.72 (88.7); header 89.48 (89.5); value flips 9 = 0.05 % (0.05); bootstrap CI [83.07, 93.34] over 45 tables
+[OK] (c) ERP: strict 92.51 (92.5); header 97.73 (97.7); value flips 0 = 0.0 % (0.0); bootstrap CI [75.18, 100.0] over 4 tables
+[OK] (c) STEO: strict 95.76 (95.8); header 78.61 (78.6); value flips 36 = 0.28 % (0.28); bootstrap CI [88.13, 99.72] over 26 tables
+[OK] (c) census eia: 1.72 % (rung 1 1.72 %)
+[OK] (c) census govinfo_erp: 2.34 % (rung 1 2.34 %)
+[OK] (c) clause-1 recall eia-pdf-sec3|10: 99.55 % (rung 1 99.55 %)
+[OK] (c) clause-1 recall eia-pdf-sec11|3: 99.7 % (rung 1 99.7 %)
+[OK] (c) bootstrap deterministic: second run byte-identical
+
+(d) assert_frozen() on an altered copy of freeze.json
+[OK] (d) altered copy refused: admission:data/oracle/fresh/admission/erp_cells.jsonl hash zeroed in a temp copy
+[OK] (d) real freeze.json untouched and passing: aebbb543097f457e1aea346b5a14a211918fffdc2ce8c8f72cdd28719da0cc63
+
+VERDICT: ALL CHECKS PASS
