@@ -27,13 +27,16 @@ from pypdf import PdfWriter
 from ledger.config import Config, load_config
 from ledger.ingest.manifest import ManifestHeader, ManifestRow, write_manifest
 from ledger.ingest.parse import (
+    FFFD_IN_NUMBER,
     apply_prefix,
     body_of,
     build_chunker,
     chunk_document,
     d037_output_checks,
+    mark_fffd_bars,
     parse_unit,
     prefix_sources,
+    strip_leader_runs,
     table_headers,
     unit_paths,
 )
@@ -532,3 +535,117 @@ def test_rechunk_script_refuses_parsed_dir_and_drops_a_stale_manifest(
     with pytest.raises(SystemExit, match="not ACTIVE units"):
         mod.rechunk(cfg, out, units=["u-x"], repo=repo, chunker=chunker)  # no saved export
     assert not (out / "MANIFEST.json").exists()  # incomplete is visible as incomplete
+
+
+# ---- item 5: U+FFFD leader strip, the fffd_in_number bar, header_row_cause ----------------------
+
+LEADER = "�" * 40
+
+
+def _fffd_doc(*, rows: int = 6) -> DoclingDocument:
+    """Header row (with a U+FFFD run of its own), then body rows: a label run, a single U+FFFD in
+    a label, a run in a value cell, and a sign+U+FFFD+digit value."""
+    labels = [f"Defense {LEADER}", "Health �", "Energy", "Space", "Labor", "Veterans"]
+    values = ["1,000", "2,000", "5��6", "–�2", "3", "4"]
+    grid = [["Func��tion", "2024", "2025"]]
+    grid += [[labels[i % 6], values[i % 6], "9"] for i in range(rows)]
+    cells = [
+        TableCell(
+            text=t,
+            row_span=1,
+            col_span=1,
+            start_row_offset_idx=r,
+            end_row_offset_idx=r + 1,
+            start_col_offset_idx=c,
+            end_col_offset_idx=c + 1,
+            column_header=(r == 0),
+        )
+        for r, row in enumerate(grid)
+        for c, t in enumerate(row)
+    ]
+    doc = DoclingDocument(name="synthetic")
+    doc.add_page(page_no=1, size=Size(width=612, height=792))
+    doc.add_heading(text=TITLE, prov=_prov(1))
+    doc.add_text(label=DocItemLabel.TEXT, text=UNIT, prov=_prov(1))
+    doc.add_table(data=TableData(num_rows=len(grid), num_cols=3, table_cells=cells), prov=_prov(1))
+    return doc
+
+
+def _first_cells(rec: dict) -> list[str]:
+    rows = [ln for ln in body_of(rec).splitlines() if ln.startswith("|")]
+    return [ln.split("|")[1].strip() for ln in rows]
+
+
+def test_item5_label_run_removed_everything_else_kept(pdf, cfg, chunker):
+    unit = _chunk(_fffd_doc(), pdf, cfg, chunker)
+    (rec,) = _tables(unit.records)
+    first = _first_cells(rec)
+    assert first[0].startswith("Func��tion")  # header row untouched
+    assert "Defense" in first[2] and "�" not in first[2]  # [1] is the separator
+    assert "Health �" in first[3]  # a single U+FFFD in a label is kept
+    assert "5��6" in body_of(rec)  # a run in a value cell is kept
+    assert "–�2" in body_of(rec)  # sign + U+FFFD + digit in a value cell is kept
+    assert rec["fffd_removed"] == 40 and rec["text"].count("�") == 2 + 1 + 2 + 1
+    assert (
+        rec["body_chars"]
+        == len(body_of(rec))
+        == len(rec["text"]) - len(rec["text"].split(body_of(rec))[0])
+    )
+    assert rec["n_tokens"] == chunker.tokenizer.count_tokens(rec["text"])
+
+
+def test_item5_ids_slices_and_item4_outputs_unchanged(pdf, cfg, chunker, monkeypatch):
+    doc = _fffd_doc(rows=60)
+    after = _chunk(doc, pdf, cfg, chunker)
+    from ledger.ingest import parse as parse_mod
+
+    monkeypatch.setattr(parse_mod, "strip_leader_runs", lambda recs, _c: recs)
+    before = _chunk(doc, pdf, cfg, chunker)
+    assert [r["chunk_id"] for r in after.records] == [r["chunk_id"] for r in before.records]
+    assert [r["chunk_type"] for r in after.records] == [r["chunk_type"] for r in before.records]
+    assert len(_tables(after.records)) > 1
+    for k in after.checks:
+        assert after.checks[k] == before.checks[k], (
+            k
+        )  # prefix_integrity stays [], header checks same
+    assert after.checks["prefix_integrity"] == []
+    assert any(
+        r["body_chars"] < b["body_chars"]
+        for r, b in zip(after.records, before.records, strict=True)
+    )
+    # idempotent
+    again = strip_leader_runs(after.records, chunker)
+    assert [r["text"] for r in again] == [r["text"] for r in after.records]
+    assert all(r["fffd_removed"] == 0 for r in _tables(again))
+
+
+def test_item5_prefix_heading_and_prose_untouched(pdf, cfg, chunker):
+    unit = _chunk(_fffd_doc(), pdf, cfg, chunker)
+    (rec,) = _tables(unit.records)
+    assert rec["prefix"] == UNIT and rec["text"].startswith(UNIT + "\n" + TITLE)
+    prose = {"chunk_type": "prose", "text": "a " + LEADER + " b", "body_chars": 40}
+    assert strip_leader_runs([prose], chunker) == [prose]
+
+
+def test_item5_fffd_in_number_bar(pdf, cfg, chunker):
+    assert FFFD_IN_NUMBER.search("| x | –�2 |")
+    assert FFFD_IN_NUMBER.search("| 1�5 |") and FFFD_IN_NUMBER.search("-�1")
+    assert FFFD_IN_NUMBER.search("−�7")
+    assert not FFFD_IN_NUMBER.search("5��6")  # a run is not a number gap
+    assert not FFFD_IN_NUMBER.search("Health � |")
+    (rec,) = _tables(_chunk(_fffd_doc(), pdf, cfg, chunker).records)
+    assert rec["question_source_barred"] == {"barred": True, "reasons": ["fffd_in_number"]}
+    clean = _chunk(_doc(rows=30), pdf, cfg, chunker)
+    assert all(r["question_source_barred"]["barred"] is False for r in _tables(clean.records))
+    assert mark_fffd_bars(clean.records) == clean.records
+
+
+def test_item5_header_row_cause(pdf, cfg, chunker):
+    cap = _chunk(_doc(caption="Table 7. In millions of dollars"), pdf, cfg, chunker)
+    assert cap.checks["header_not_repeated"] == ["tbl-0"]
+    assert {r["header_row_cause"] for r in _tables(cap.records)} == {"caption_on_slice0"}
+    big = _chunk(_doc(rows=40, header_words=160), pdf, cfg, chunker)
+    assert {r["header_row_cause"] for r in _tables(big.records)} == {"header_over_max_tokens"}
+    ok = _chunk(_doc(rows=30), pdf, cfg, chunker)
+    assert {r["header_row_cause"] for r in _tables(ok.records)} == {None}
+    assert all("header_row_cause" not in r for r in ok.records if r["chunk_type"] == "prose")

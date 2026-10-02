@@ -528,6 +528,7 @@ BAR_REASONS = {
     "no_own_title": "D-037 status 2026-10-02, ruling 3 clause 4",
     "header_not_repeated": "D-037 status 2026-10-02, ruling 2",
     "parse_path_fallback": "D-040 pre-T7 sampling rule",
+    "fffd_in_number": "D-037 status 2026-10-02, item 5 (U+FFFD)",
 }
 
 
@@ -553,6 +554,131 @@ def mark_question_source_bars(records: list[dict], checks: dict) -> list[dict]:
             rec["question_source_barred"] = None
         out.append(rec)
     return out
+
+
+# ---- D-037 item 5: U+FFFD (D-037 status 2026-10-02, item 5) ------------------------------------
+
+# a run of >= 2 U+FFFD in a row label is a leader-dot run (CROSSCUT: 2,720 runs, median 143)
+LEADER_RUN = re.compile(r"�{2,}")
+# a sign or digit, one U+FFFD, a digit: possibly a decimal point (ERP-2026-table4, en dash,
+# U+FFFD, "2"); the sign set is U+2212 (minus), U+2013 (en dash), hyphen-minus, or any digit
+FFFD_IN_NUMBER = re.compile(r"[−–\-\d]�\d")
+
+
+def _first_cell_end(line: str) -> int:
+    """Index of the pipe closing a markdown row's first cell (a backslash-escaped pipe is not)."""
+    i = 1
+    while i < len(line):
+        if line[i] == "\\":
+            i += 2
+            continue
+        if line[i] == "|":
+            return i
+        i += 1
+    return len(line)
+
+
+def strip_leader_runs(records: list[dict], chunker: HybridChunker) -> list[dict]:
+    """D-037 item 5 (a): remove runs of >= 2 U+FFFD from the first (row-label) cell of table BODY
+    rows, after chunking. A body row is a pipe line after the header's separator row; header rows,
+    caption/heading/prefix lines, value cells, a single U+FFFD and prose chunks are untouched.
+    Ids, slice boundaries and ``chunk_type`` are unchanged; ``body_chars`` and ``n_tokens`` are
+    recomputed for touched records and ``fffd_removed`` is set on every table record.
+    Idempotent: a second pass removes nothing."""
+    out = []
+    for rec in records:
+        rec = dict(rec)
+        if rec["chunk_type"] == "table":
+            text = rec["text"]
+            cut = len(text) - rec["body_chars"]
+            lines, seen_sep, removed = [], False, 0
+            for ln in text[cut:].splitlines(keepends=True):
+                bare = ln.rstrip("\r\n")
+                if SEPARATOR_ROW.match(bare):
+                    seen_sep = True
+                elif seen_sep and bare.startswith("|"):
+                    end = _first_cell_end(bare)
+                    cell = bare[1:end]
+                    kept = LEADER_RUN.sub("", cell)
+                    if kept != cell:
+                        removed += len(cell) - len(kept)
+                        ln = "|" + kept + ln[end:]
+                lines.append(ln)
+            rec["fffd_removed"] = removed
+            if removed:
+                body = "".join(lines)
+                rec["text"] = text[:cut] + body
+                rec["body_chars"] = len(body)
+                rec["n_tokens"] = chunker.tokenizer.count_tokens(rec["text"])
+        out.append(rec)
+    return out
+
+
+def mark_fffd_bars(records: list[dict]) -> list[dict]:
+    """D-037 item 5 (b): a table slice with a U+FFFD between a sign or digit and a digit is
+    never a question or kappa-sample source (reason ``fffd_in_number``), by criterion."""
+    out = []
+    for rec in records:
+        rec = dict(rec)
+        bar = rec.get("question_source_barred")
+        if rec["chunk_type"] == "table" and bar is not None and FFFD_IN_NUMBER.search(rec["text"]):
+            reasons = list(bar["reasons"])
+            if "fffd_in_number" not in reasons:
+                reasons.append("fffd_in_number")
+            rec["question_source_barred"] = {"barred": True, "reasons": reasons}
+        out.append(rec)
+    return out
+
+
+def header_row_causes(
+    records: list[dict],
+    not_repeated: set[str] | list[str],
+    captioned: set[str],
+    chunker: HybridChunker,
+    max_tokens: int,
+) -> dict[str, str]:
+    """D-037 status 2026-10-02 (the cause of ``header_not_repeated``), per table:
+    ``caption_on_slice0`` when the table carries an attached caption (the chunker puts it above
+    the header on slice 0 only), else ``header_over_max_tokens`` when the header rows on slice 0
+    alone reach ``max_tokens`` (the library emits such a header once). Neither: ``unclassified``
+    (reported, never guessed)."""
+    slice0 = {
+        _table_key(r, {r["item"]}): r
+        for r in records
+        if r["chunk_type"] == "table" and r["slice"] == 0
+    }
+    causes = {}
+    for key in sorted(not_repeated, key=_table_index):
+        if key in captioned:
+            causes[key] = "caption_on_slice0"
+            continue
+        rec = slice0.get(key)
+        head = []
+        for ln in body_of(rec).splitlines(keepends=True) if rec else []:
+            head.append(ln)
+            if SEPARATOR_ROW.match(ln.rstrip("\r\n")):
+                break
+        too_big = bool(head) and chunker.tokenizer.count_tokens("".join(head)) >= max_tokens
+        causes[key] = "header_over_max_tokens" if too_big else "unclassified"
+    return causes
+
+
+def mark_header_row_causes(records: list[dict], causes: dict[str, str]) -> list[dict]:
+    """``header_row_cause`` on every table record (null when its table's header is repeated)."""
+    out = []
+    for rec in records:
+        rec = dict(rec)
+        if rec["chunk_type"] == "table":
+            keys = [rec["item"], *rec["table_refs"]]
+            hit = [causes[k] for k in keys if k in causes]
+            rec["header_row_cause"] = hit[0] if hit else None
+        out.append(rec)
+    return out
+
+
+def captioned_tables(doc_dict: dict) -> set[str]:
+    """Tables of a Docling export dict that carry an attached caption (``TableItem.captions``)."""
+    return {item_key(str(t["self_ref"])) for t in doc_dict.get("tables", []) if t.get("captions")}
 
 
 # ---- the one chunking path (D-037) ---------------------------------------------------------------
@@ -587,15 +713,26 @@ def chunk_document(
     prefix: bool = True,
 ) -> ChunkedUnit:
     """Raw Docling export -> row fix -> DoclingDocument -> HybridChunker (markdown tables) ->
-    chunk records -> unit prefix -> item-4 checks -> question-source bars. ``parse_unit`` and
+    chunk records -> unit prefix -> item-5 leader strip -> item-4 checks -> question-source bars
+    (+ ``fffd_in_number``, ``header_row_cause``). ``parse_unit`` and
     the D-037 re-chunk both call this. ``prefix=False`` annotates without printing (tests)."""
     fixed, log = apply_row_fix(doc_dict, pdf_path, row, cfg)
     doc = DoclingDocument.model_validate(fixed)
     records = chunk_records(row, list(chunker.chunk(dl_doc=doc)), chunker, cfg, fix_log=log)
     sources = prefix_sources(doc)
     records = apply_prefix(records, sources, chunker, print_lines=prefix)
+    records = strip_leader_runs(records, chunker)  # item 5 (a): after the prefix, ids unchanged
     checks = d037_output_checks(records, table_headers(doc, chunker), sources)
     records = mark_question_source_bars(records, checks)
+    records = mark_fffd_bars(records)
+    causes = header_row_causes(
+        records,
+        checks["header_not_repeated"],
+        captioned_tables(fixed),
+        chunker,
+        cfg.chunking.max_tokens,
+    )
+    records = mark_header_row_causes(records, causes)
     return ChunkedUnit(records, log, doc, sources, checks)
 
 
