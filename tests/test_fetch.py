@@ -187,6 +187,40 @@ def test_null_policy_hard_fails_at_fetch(repo: Path, monkeypatch):
         run_fetch(_cfg(repo), repo=repo, fetcher=FakeFetcher())
 
 
+SEC7 = Path(__file__).resolve().parents[1] / "data" / "raw_fresh" / "eia" / "eia-pdf-sec7.pdf"
+
+
+@pytest.mark.skipif(not SEC7.exists(), reason="sec7 is local data (gitignored)")
+def test_image_only_measure_on_sec7():
+    """The sec7 lesson: its data tables are printed as images. The MEASURE (pypdf, 2026-10-02):
+    pages 3,5-7,9-11,13-15,17,19-27 carry 5-6 embedded images and 12-13 text-layer words (the
+    running header/footer); the text pages carry no image and 72-562 words."""
+    from ledger.ingest.fetch import page_measures
+
+    m = page_measures(SEC7)
+    assert len(m) == 32
+    image_pages = [p.page for p in m if p.images]
+    assert image_pages == [3, 5, 6, 7, 9, 10, 11, 13, 14, 15, 17, *range(19, 28)]
+    assert all(p.images in (5, 6) and p.words in (12, 13) for p in m if p.images)
+    assert all(p.words >= 72 for p in m if not p.images and p.page != 1)
+    assert (m[0].images, m[0].words) == (0, 2)
+
+
+def test_image_only_flag_raises_until_the_owner_sets_the_threshold(tmp_path: Path):
+    """D-020 pattern: the config loads with the threshold null; the flag raises at its use site."""
+    from ledger.ingest.fetch import PageMeasure, image_only_pages
+
+    base = load_config()
+    assert base.fetch.image_only_page_max_words is None
+    m = [PageMeasure(1, 6, 12), PageMeasure(2, 0, 200), PageMeasure(3, 1, 400)]
+    with pytest.raises(RuntimeError, match="image_only_page_max_words is null"):
+        image_only_pages(m, base)
+    cfg = base.model_copy(
+        update={"fetch": base.fetch.model_copy(update={"image_only_page_max_words": 20})}
+    )
+    assert image_only_pages(m, cfg) == [1]  # the rule's shape; the value here is a test value
+
+
 def test_erp_self_containment_verdicts():
     texts = [
         "Table B-4. Percentage shares of gross domestic product, 1975-2025\n"

@@ -49,6 +49,47 @@ def _row(**kw) -> ManifestRow:
     return ManifestRow(**kw)
 
 
+# ---- report-level units need a resolvable pdfLink at listing ---------------------------------
+# D-034 status 2026-09-20 (owner decisions closing T2), item (2): the package's pdfLink, or a
+# single granule's as CRPT-118hrpt468 was resolved at fetch (``fetch.resolve_package_pdf``);
+# packages without one are excluded BEFORE the draw (dropping after it is selection on outcome).
+
+
+def report_pdf_link(
+    gi: GovInfo, pkg: Package, granules: list[Granule] | None = None
+) -> tuple[str | None, str]:
+    """(pdfLink or None, how it was resolved). ``pkg`` has had its package summary read."""
+    if pkg.pdf_link:
+        return pkg.pdf_link, "package pdfLink"
+    gs = granules if granules is not None else gi.granules(pkg)
+    if len(gs) != 1:
+        return None, f"no package pdfLink and {len(gs)} granules; not resolvable"
+    g = gs[0]
+    if g.pdf_link is None:
+        gi.granule_summary(g)
+    if not g.pdf_link:
+        return None, f"no package pdfLink; single granule {g.granule_id} has no pdfLink"
+    return g.pdf_link, f"single granule {g.granule_id} pdfLink"
+
+
+def resolvable_reports(
+    gi: GovInfo, pkgs: list[Package], granules: dict[str, list[Granule]] | None = None
+) -> tuple[list[Package], dict[str, tuple[str, str]], list[str]]:
+    """(packages that may be drawn, {package_id: (pdfLink, how)}, excluded-with-reason)."""
+    keep: list[Package] = []
+    links: dict[str, tuple[str, str]] = {}
+    excluded: list[str] = []
+    for p in pkgs:
+        gs = granules.get(p.package_id) if granules is not None else None
+        link, how = report_pdf_link(gi, p, gs)
+        if link:
+            keep.append(p)
+            links[p.package_id] = (link, how)
+        else:
+            excluded.append(f"{p.package_id}: {how}")
+    return keep, links, excluded
+
+
 def run_listing(cfg: Config, *, repo: Path, snapshot_date: str | None = None) -> ListingResult:
     snapshot = snapshot_date or dt.date.today().isoformat()
     seed = cfg.corpus.selection_seed
@@ -199,8 +240,11 @@ def run_listing(cfg: Config, *, repo: Path, snapshot_date: str | None = None) ->
                     for g in granules[pid]
                     if g.granule_class not in NON_CONTENT_CLASSES
                 ]
-                # packages with no granules still contribute themselves as report units
-                pool_reports = [p for p in pkgs if not granules.get(p.package_id)]
+                # packages with no granules still contribute themselves as report units, if
+                # their pdfLink resolves (excluded before the draw otherwise; D-034 status)
+                pool_reports, links, excluded = resolvable_reports(
+                    gi, [p for p in pkgs if not granules.get(p.package_id)], granules
+                )
                 pick_g = draw(
                     pool, n, seeded(seed, source), key=lambda g: (g.package_id, g.granule_id)
                 )
@@ -243,13 +287,16 @@ def run_listing(cfg: Config, *, repo: Path, snapshot_date: str | None = None) ->
                         )
                     )
                 for p in pick_p:
-                    drawn.append(_pkg_row(p, source, snapshot, purl, pnote))
+                    drawn.append(_pkg_row(p, source, snapshot, purl, pnote, links[p.package_id]))
             else:
-                pick_p = draw(pkgs, n, seeded(seed, source), key=lambda p: p.package_id)
+                pool, links, excluded = resolvable_reports(gi, pkgs, granules)
+                pick_p = draw(pool, n, seeded(seed, source), key=lambda p: p.package_id)
                 for p in pick_p:
-                    drawn.append(_pkg_row(p, source, snapshot, purl, pnote))
+                    drawn.append(_pkg_row(p, source, snapshot, purl, pnote, links[p.package_id]))
             candidates = sum(len(v) for v in granules.values()) or len(pkgs)
             extra = {"packages_latest_edition": str(len(pkgs))}
+            if excluded:
+                extra["excluded before the draw (no resolvable pdfLink)"] = "; ".join(excluded)
         except Exception as e:  # noqa: BLE001
             exc.append(f"{type(e).__name__}: {e}")
             candidates, extra = 0, {}
@@ -290,8 +337,13 @@ def run_listing(cfg: Config, *, repo: Path, snapshot_date: str | None = None) ->
             extra["filter_base_rate"] = (
                 f"{len(passed)}/{checked} sampled packages contain a CBO cost estimate"
             )
-            for p in draw(passed, n, seeded(seed, "crpt"), key=lambda p: p.package_id):
-                r = _pkg_row(p, "govinfo_crpt", snapshot, purl, pnote)
+            # the pdfLink rule applies to the filtered pool, before the unit draw (the 40-package
+            # sample is drawn before any summary exists, so it cannot be pre-filtered)
+            pool, links, excluded = resolvable_reports(gi, passed)
+            if excluded:
+                extra["excluded before the draw (no resolvable pdfLink)"] = "; ".join(excluded)
+            for p in draw(pool, n, seeded(seed, "crpt"), key=lambda p: p.package_id):
+                r = _pkg_row(p, "govinfo_crpt", snapshot, purl, pnote, links[p.package_id])
                 r.notes.append(
                     "parse test only (A1): does the GPO-typeset embedded cost estimate "
                     "parse as a table?"
@@ -326,7 +378,14 @@ def run_listing(cfg: Config, *, repo: Path, snapshot_date: str | None = None) ->
     return ListingResult(header, rows, outcomes, fetcher.calls)
 
 
-def _pkg_row(p: Package, source: str, snapshot: str, purl, pnote) -> ManifestRow:
+def _pkg_row(
+    p: Package, source: str, snapshot: str, purl, pnote, link: tuple[str, str]
+) -> ManifestRow:
+    """A report-level row. ``link`` = (pdfLink, how resolved) from ``resolvable_reports``; a row is
+    never written with an unresolved url (D-034 status 2026-09-20, owner item 2)."""
+    url, how = link
+    if not url:
+        raise ValueError(f"{p.package_id}: report-level unit without a resolvable pdfLink")
     return _row(
         unit_id=f"govinfo-{p.package_id}",
         source=source,
@@ -335,13 +394,14 @@ def _pkg_row(p: Package, source: str, snapshot: str, purl, pnote) -> ManifestRow
         fetch_method="govinfo",
         title=p.title,
         date_issued=p.date_issued,
-        url=p.pdf_link,
+        url=url,
         package_id=p.package_id,
         pages=p.pages,
         pages_source="metadata" if p.pages is not None else "unknown",
         snapshot_date=snapshot,
         policy_url=purl,
         policy_note=pnote,
+        notes=[] if how == "package pdfLink" else [f"pdfLink resolved at listing: {how}"],
     )
 
 

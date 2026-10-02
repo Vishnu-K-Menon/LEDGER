@@ -95,6 +95,51 @@ def pdf_pages_and_text_ratio(path: Path) -> tuple[int, float, list[str]]:
     return n, ratio, texts
 
 
+@dataclass
+class PageMeasure:
+    """One page of a raw PDF: embedded-image count and text-layer word count (pypdf, the reader
+    ``text_layer_ratio`` uses). ``None`` = pypdf could not read that part of the page."""
+
+    page: int
+    images: int | None
+    words: int | None
+
+
+def page_measures(path: Path) -> list[PageMeasure]:
+    """The image-only-page MEASURE (the sec7 lesson: a page whose table is printed as an image has
+    images and almost no text layer, yet still counts as 'has text' for ``text_layer_ratio``)."""
+    out = []
+    for i, page in enumerate(PdfReader(str(path)).pages, 1):
+        try:
+            images = len(page.images)
+        except Exception as exc:  # noqa: BLE001 - a broken page is a data fact, not a crash
+            log.warning("%s p%d: image count failed: %s", path.name, i, exc)
+            images = None
+        try:
+            words = len((page.extract_text() or "").split())
+        except Exception as exc:  # noqa: BLE001
+            log.warning("%s p%d: extract_text failed: %s", path.name, i, exc)
+            words = None
+        out.append(PageMeasure(i, images, words))
+    return out
+
+
+def image_only_pages(measures: list[PageMeasure], cfg: Config) -> list[int]:
+    """Pages with >= 1 embedded image and at most ``fetch.image_only_page_max_words`` text-layer
+    words. The threshold is the owner's: while it is null this raises (the D-020 pattern)."""
+    limit = cfg.fetch.image_only_page_max_words
+    if limit is None:
+        raise RuntimeError(
+            "fetch.image_only_page_max_words is null: the image-only page threshold is the "
+            "owner's to set from the measured values (D-020 pattern: the guard is at the use site)"
+        )
+    return [
+        m.page
+        for m in measures
+        if m.images is not None and m.images >= 1 and m.words is not None and m.words <= limit
+    ]
+
+
 def pdf_date(path: Path) -> tuple[str | None, str]:
     """ISO date from PDF metadata (CreationDate, else ModDate) and which one was used."""
     md = PdfReader(str(path)).metadata

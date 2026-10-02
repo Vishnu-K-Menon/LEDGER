@@ -1,0 +1,1477 @@
+{
+ "sec7": [
+  {
+   "page": 1,
+   "images": 0,
+   "words": 2
+  },
+  {
+   "page": 2,
+   "images": 0,
+   "words": 176
+  },
+  {
+   "page": 3,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 4,
+   "images": 0,
+   "words": 216
+  },
+  {
+   "page": 5,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 6,
+   "images": 6,
+   "words": 13
+  },
+  {
+   "page": 7,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 8,
+   "images": 0,
+   "words": 207
+  },
+  {
+   "page": 9,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 10,
+   "images": 6,
+   "words": 13
+  },
+  {
+   "page": 11,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 12,
+   "images": 0,
+   "words": 210
+  },
+  {
+   "page": 13,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 14,
+   "images": 6,
+   "words": 13
+  },
+  {
+   "page": 15,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 16,
+   "images": 0,
+   "words": 128
+  },
+  {
+   "page": 17,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 18,
+   "images": 0,
+   "words": 216
+  },
+  {
+   "page": 19,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 20,
+   "images": 6,
+   "words": 13
+  },
+  {
+   "page": 21,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 22,
+   "images": 5,
+   "words": 13
+  },
+  {
+   "page": 23,
+   "images": 5,
+   "words": 12
+  },
+  {
+   "page": 24,
+   "images": 6,
+   "words": 13
+  },
+  {
+   "page": 25,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 26,
+   "images": 6,
+   "words": 13
+  },
+  {
+   "page": 27,
+   "images": 6,
+   "words": 12
+  },
+  {
+   "page": 28,
+   "images": 0,
+   "words": 562
+  },
+  {
+   "page": 29,
+   "images": 0,
+   "words": 358
+  },
+  {
+   "page": 30,
+   "images": 0,
+   "words": 344
+  },
+  {
+   "page": 31,
+   "images": 0,
+   "words": 283
+  },
+  {
+   "page": 32,
+   "images": 0,
+   "words": 72
+  }
+ ],
+ "pilot": {
+  "cbo-59848": {
+   "pages": 2,
+   "pages_with_images": 2,
+   "pages_with_images_words": [
+    86,
+    320
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": null,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "cbo-60786": {
+   "pages": 2,
+   "pages_with_images": 2,
+   "pages_with_images_words": [
+    50,
+    270
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": null,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "cbo-61959": {
+   "pages": 3,
+   "pages_with_images": 3,
+   "pages_with_images_words": [
+    486,
+    539,
+    596
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": null,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "cbo-62735": {
+   "pages": 5,
+   "pages_with_images": 5,
+   "pages_with_images_words": [
+    78,
+    210,
+    241,
+    364,
+    446
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": null,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "eia-pdf-AEO_Narrative": {
+   "pages": 33,
+   "pages_with_images": 26,
+   "pages_with_images_words": [
+    6,
+    11,
+    11,
+    12,
+    14,
+    147,
+    373,
+    378,
+    386,
+    397,
+    413,
+    422,
+    428,
+    435,
+    442,
+    446,
+    450,
+    457,
+    465,
+    471,
+    481,
+    489,
+    504,
+    537,
+    548,
+    556
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": 66,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "eia-pdf-steo_full": {
+   "pages": 56,
+   "pages_with_images": 25,
+   "pages_with_images_words": [
+    7,
+    48,
+    103,
+    113,
+    148,
+    157,
+    163,
+    168,
+    177,
+    191,
+    194,
+    230,
+    242,
+    242,
+    259,
+    313,
+    314,
+    320,
+    329,
+    358,
+    370,
+    400,
+    418,
+    442,
+    458
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": 108,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "govinfo-BUDGET-2027-BALANCES": {
+   "pages": 25,
+   "pages_with_images": 3,
+   "pages_with_images_words": [
+    12,
+    18,
+    18
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": 99,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "govinfo-BUDGET-2026-DOD": {
+   "pages": 114,
+   "pages_with_images": 1,
+   "pages_with_images_words": [
+    12
+   ],
+   "pages_zero_words": 3,
+   "pages_zero_words_no_images": 3,
+   "min_words_text_pages": 0,
+   "unreadable": 0,
+   "text_layer_ratio": 0.9737
+  },
+  "govinfo-BUDGET-2027-FCS": {
+   "pages": 120,
+   "pages_with_images": 3,
+   "pages_with_images_words": [
+    12,
+    17,
+    17
+   ],
+   "pages_zero_words": 10,
+   "pages_zero_words_no_images": 10,
+   "min_words_text_pages": 0,
+   "unreadable": 0,
+   "text_layer_ratio": 0.9167
+  },
+  "govinfo-BUDGET-2026-CROSSCUT": {
+   "pages": 98,
+   "pages_with_images": 2,
+   "pages_with_images_words": [
+    12,
+    189
+   ],
+   "pages_zero_words": 8,
+   "pages_zero_words_no_images": 8,
+   "min_words_text_pages": 0,
+   "unreadable": 0,
+   "text_layer_ratio": 0.9184
+  },
+  "govinfo-ERP-2026-table4": {
+   "pages": 2,
+   "pages_with_images": 0,
+   "pages_with_images_words": [],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": 1005,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "govinfo-ERP-2026-table22": {
+   "pages": 2,
+   "pages_with_images": 0,
+   "pages_with_images_words": [],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": 859,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  },
+  "govinfo-CRPT-118hrpt468": {
+   "pages": 65,
+   "pages_with_images": 2,
+   "pages_with_images_words": [
+    32,
+    325
+   ],
+   "pages_zero_words": 0,
+   "pages_zero_words_no_images": 0,
+   "min_words_text_pages": 197,
+   "unreadable": 0,
+   "text_layer_ratio": 1.0
+  }
+ },
+ "page_by_page": {
+  "govinfo-BUDGET-2027-FCS": [
+   {
+    "page": 1,
+    "images": 1,
+    "words": 17
+   },
+   {
+    "page": 2,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 3,
+    "images": 1,
+    "words": 17
+   },
+   {
+    "page": 4,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 5,
+    "images": 0,
+    "words": 147
+   },
+   {
+    "page": 6,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 7,
+    "images": 0,
+    "words": 473
+   },
+   {
+    "page": 8,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 9,
+    "images": 0,
+    "words": 415
+   },
+   {
+    "page": 10,
+    "images": 0,
+    "words": 481
+   },
+   {
+    "page": 11,
+    "images": 0,
+    "words": 405
+   },
+   {
+    "page": 12,
+    "images": 0,
+    "words": 349
+   },
+   {
+    "page": 13,
+    "images": 0,
+    "words": 289
+   },
+   {
+    "page": 14,
+    "images": 0,
+    "words": 198
+   },
+   {
+    "page": 15,
+    "images": 0,
+    "words": 330
+   },
+   {
+    "page": 16,
+    "images": 0,
+    "words": 336
+   },
+   {
+    "page": 17,
+    "images": 0,
+    "words": 172
+   },
+   {
+    "page": 18,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 19,
+    "images": 0,
+    "words": 566
+   },
+   {
+    "page": 20,
+    "images": 0,
+    "words": 461
+   },
+   {
+    "page": 21,
+    "images": 0,
+    "words": 369
+   },
+   {
+    "page": 22,
+    "images": 0,
+    "words": 302
+   },
+   {
+    "page": 23,
+    "images": 0,
+    "words": 444
+   },
+   {
+    "page": 24,
+    "images": 0,
+    "words": 511
+   },
+   {
+    "page": 25,
+    "images": 0,
+    "words": 260
+   },
+   {
+    "page": 26,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 27,
+    "images": 0,
+    "words": 478
+   },
+   {
+    "page": 28,
+    "images": 0,
+    "words": 414
+   },
+   {
+    "page": 29,
+    "images": 0,
+    "words": 441
+   },
+   {
+    "page": 30,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 31,
+    "images": 0,
+    "words": 468
+   },
+   {
+    "page": 32,
+    "images": 0,
+    "words": 568
+   },
+   {
+    "page": 33,
+    "images": 0,
+    "words": 470
+   },
+   {
+    "page": 34,
+    "images": 0,
+    "words": 510
+   },
+   {
+    "page": 35,
+    "images": 0,
+    "words": 502
+   },
+   {
+    "page": 36,
+    "images": 0,
+    "words": 451
+   },
+   {
+    "page": 37,
+    "images": 0,
+    "words": 485
+   },
+   {
+    "page": 38,
+    "images": 0,
+    "words": 487
+   },
+   {
+    "page": 39,
+    "images": 0,
+    "words": 512
+   },
+   {
+    "page": 40,
+    "images": 0,
+    "words": 512
+   },
+   {
+    "page": 41,
+    "images": 0,
+    "words": 513
+   },
+   {
+    "page": 42,
+    "images": 0,
+    "words": 505
+   },
+   {
+    "page": 43,
+    "images": 0,
+    "words": 504
+   },
+   {
+    "page": 44,
+    "images": 0,
+    "words": 500
+   },
+   {
+    "page": 45,
+    "images": 0,
+    "words": 470
+   },
+   {
+    "page": 46,
+    "images": 0,
+    "words": 461
+   },
+   {
+    "page": 47,
+    "images": 0,
+    "words": 504
+   },
+   {
+    "page": 48,
+    "images": 0,
+    "words": 497
+   },
+   {
+    "page": 49,
+    "images": 0,
+    "words": 478
+   },
+   {
+    "page": 50,
+    "images": 0,
+    "words": 511
+   },
+   {
+    "page": 51,
+    "images": 0,
+    "words": 502
+   },
+   {
+    "page": 52,
+    "images": 0,
+    "words": 511
+   },
+   {
+    "page": 53,
+    "images": 0,
+    "words": 494
+   },
+   {
+    "page": 54,
+    "images": 0,
+    "words": 447
+   },
+   {
+    "page": 55,
+    "images": 0,
+    "words": 459
+   },
+   {
+    "page": 56,
+    "images": 0,
+    "words": 465
+   },
+   {
+    "page": 57,
+    "images": 0,
+    "words": 390
+   },
+   {
+    "page": 58,
+    "images": 0,
+    "words": 445
+   },
+   {
+    "page": 59,
+    "images": 0,
+    "words": 504
+   },
+   {
+    "page": 60,
+    "images": 0,
+    "words": 409
+   },
+   {
+    "page": 61,
+    "images": 0,
+    "words": 345
+   },
+   {
+    "page": 62,
+    "images": 0,
+    "words": 375
+   },
+   {
+    "page": 63,
+    "images": 0,
+    "words": 416
+   },
+   {
+    "page": 64,
+    "images": 0,
+    "words": 414
+   },
+   {
+    "page": 65,
+    "images": 0,
+    "words": 417
+   },
+   {
+    "page": 66,
+    "images": 0,
+    "words": 474
+   },
+   {
+    "page": 67,
+    "images": 0,
+    "words": 379
+   },
+   {
+    "page": 68,
+    "images": 0,
+    "words": 511
+   },
+   {
+    "page": 69,
+    "images": 0,
+    "words": 395
+   },
+   {
+    "page": 70,
+    "images": 0,
+    "words": 489
+   },
+   {
+    "page": 71,
+    "images": 0,
+    "words": 474
+   },
+   {
+    "page": 72,
+    "images": 0,
+    "words": 456
+   },
+   {
+    "page": 73,
+    "images": 0,
+    "words": 460
+   },
+   {
+    "page": 74,
+    "images": 0,
+    "words": 501
+   },
+   {
+    "page": 75,
+    "images": 0,
+    "words": 608
+   },
+   {
+    "page": 76,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 77,
+    "images": 0,
+    "words": 451
+   },
+   {
+    "page": 78,
+    "images": 0,
+    "words": 510
+   },
+   {
+    "page": 79,
+    "images": 0,
+    "words": 482
+   },
+   {
+    "page": 80,
+    "images": 0,
+    "words": 484
+   },
+   {
+    "page": 81,
+    "images": 0,
+    "words": 506
+   },
+   {
+    "page": 82,
+    "images": 0,
+    "words": 503
+   },
+   {
+    "page": 83,
+    "images": 0,
+    "words": 476
+   },
+   {
+    "page": 84,
+    "images": 0,
+    "words": 496
+   },
+   {
+    "page": 85,
+    "images": 0,
+    "words": 448
+   },
+   {
+    "page": 86,
+    "images": 0,
+    "words": 420
+   },
+   {
+    "page": 87,
+    "images": 0,
+    "words": 457
+   },
+   {
+    "page": 88,
+    "images": 0,
+    "words": 383
+   },
+   {
+    "page": 89,
+    "images": 0,
+    "words": 505
+   },
+   {
+    "page": 90,
+    "images": 0,
+    "words": 483
+   },
+   {
+    "page": 91,
+    "images": 0,
+    "words": 464
+   },
+   {
+    "page": 92,
+    "images": 0,
+    "words": 510
+   },
+   {
+    "page": 93,
+    "images": 0,
+    "words": 482
+   },
+   {
+    "page": 94,
+    "images": 0,
+    "words": 474
+   },
+   {
+    "page": 95,
+    "images": 0,
+    "words": 474
+   },
+   {
+    "page": 96,
+    "images": 0,
+    "words": 459
+   },
+   {
+    "page": 97,
+    "images": 0,
+    "words": 511
+   },
+   {
+    "page": 98,
+    "images": 0,
+    "words": 382
+   },
+   {
+    "page": 99,
+    "images": 0,
+    "words": 510
+   },
+   {
+    "page": 100,
+    "images": 0,
+    "words": 466
+   },
+   {
+    "page": 101,
+    "images": 0,
+    "words": 398
+   },
+   {
+    "page": 102,
+    "images": 0,
+    "words": 512
+   },
+   {
+    "page": 103,
+    "images": 0,
+    "words": 495
+   },
+   {
+    "page": 104,
+    "images": 0,
+    "words": 507
+   },
+   {
+    "page": 105,
+    "images": 0,
+    "words": 504
+   },
+   {
+    "page": 106,
+    "images": 0,
+    "words": 486
+   },
+   {
+    "page": 107,
+    "images": 0,
+    "words": 483
+   },
+   {
+    "page": 108,
+    "images": 0,
+    "words": 451
+   },
+   {
+    "page": 109,
+    "images": 0,
+    "words": 487
+   },
+   {
+    "page": 110,
+    "images": 0,
+    "words": 511
+   },
+   {
+    "page": 111,
+    "images": 0,
+    "words": 511
+   },
+   {
+    "page": 112,
+    "images": 0,
+    "words": 334
+   },
+   {
+    "page": 113,
+    "images": 0,
+    "words": 423
+   },
+   {
+    "page": 114,
+    "images": 0,
+    "words": 374
+   },
+   {
+    "page": 115,
+    "images": 0,
+    "words": 291
+   },
+   {
+    "page": 116,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 117,
+    "images": 0,
+    "words": 407
+   },
+   {
+    "page": 118,
+    "images": 0,
+    "words": 397
+   },
+   {
+    "page": 119,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 120,
+    "images": 1,
+    "words": 12
+   }
+  ],
+  "govinfo-BUDGET-2026-CROSSCUT": [
+   {
+    "page": 1,
+    "images": 0,
+    "words": 14
+   },
+   {
+    "page": 2,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 3,
+    "images": 0,
+    "words": 14
+   },
+   {
+    "page": 4,
+    "images": 0,
+    "words": 156
+   },
+   {
+    "page": 5,
+    "images": 0,
+    "words": 319
+   },
+   {
+    "page": 6,
+    "images": 0,
+    "words": 88
+   },
+   {
+    "page": 7,
+    "images": 0,
+    "words": 6
+   },
+   {
+    "page": 8,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 9,
+    "images": 0,
+    "words": 246
+   },
+   {
+    "page": 10,
+    "images": 0,
+    "words": 276
+   },
+   {
+    "page": 11,
+    "images": 0,
+    "words": 390
+   },
+   {
+    "page": 12,
+    "images": 0,
+    "words": 434
+   },
+   {
+    "page": 13,
+    "images": 0,
+    "words": 424
+   },
+   {
+    "page": 14,
+    "images": 0,
+    "words": 406
+   },
+   {
+    "page": 15,
+    "images": 0,
+    "words": 392
+   },
+   {
+    "page": 16,
+    "images": 0,
+    "words": 426
+   },
+   {
+    "page": 17,
+    "images": 0,
+    "words": 350
+   },
+   {
+    "page": 18,
+    "images": 0,
+    "words": 409
+   },
+   {
+    "page": 19,
+    "images": 0,
+    "words": 411
+   },
+   {
+    "page": 20,
+    "images": 0,
+    "words": 468
+   },
+   {
+    "page": 21,
+    "images": 0,
+    "words": 432
+   },
+   {
+    "page": 22,
+    "images": 0,
+    "words": 438
+   },
+   {
+    "page": 23,
+    "images": 0,
+    "words": 417
+   },
+   {
+    "page": 24,
+    "images": 0,
+    "words": 438
+   },
+   {
+    "page": 25,
+    "images": 0,
+    "words": 396
+   },
+   {
+    "page": 26,
+    "images": 0,
+    "words": 368
+   },
+   {
+    "page": 27,
+    "images": 0,
+    "words": 390
+   },
+   {
+    "page": 28,
+    "images": 0,
+    "words": 433
+   },
+   {
+    "page": 29,
+    "images": 0,
+    "words": 404
+   },
+   {
+    "page": 30,
+    "images": 0,
+    "words": 438
+   },
+   {
+    "page": 31,
+    "images": 0,
+    "words": 399
+   },
+   {
+    "page": 32,
+    "images": 0,
+    "words": 391
+   },
+   {
+    "page": 33,
+    "images": 0,
+    "words": 384
+   },
+   {
+    "page": 34,
+    "images": 0,
+    "words": 390
+   },
+   {
+    "page": 35,
+    "images": 0,
+    "words": 414
+   },
+   {
+    "page": 36,
+    "images": 0,
+    "words": 461
+   },
+   {
+    "page": 37,
+    "images": 0,
+    "words": 415
+   },
+   {
+    "page": 38,
+    "images": 0,
+    "words": 471
+   },
+   {
+    "page": 39,
+    "images": 0,
+    "words": 400
+   },
+   {
+    "page": 40,
+    "images": 0,
+    "words": 468
+   },
+   {
+    "page": 41,
+    "images": 0,
+    "words": 408
+   },
+   {
+    "page": 42,
+    "images": 0,
+    "words": 396
+   },
+   {
+    "page": 43,
+    "images": 0,
+    "words": 196
+   },
+   {
+    "page": 44,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 45,
+    "images": 0,
+    "words": 8
+   },
+   {
+    "page": 46,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 47,
+    "images": 0,
+    "words": 202
+   },
+   {
+    "page": 48,
+    "images": 0,
+    "words": 497
+   },
+   {
+    "page": 49,
+    "images": 0,
+    "words": 522
+   },
+   {
+    "page": 50,
+    "images": 0,
+    "words": 171
+   },
+   {
+    "page": 51,
+    "images": 0,
+    "words": 387
+   },
+   {
+    "page": 52,
+    "images": 0,
+    "words": 621
+   },
+   {
+    "page": 53,
+    "images": 0,
+    "words": 196
+   },
+   {
+    "page": 54,
+    "images": 0,
+    "words": 596
+   },
+   {
+    "page": 55,
+    "images": 0,
+    "words": 239
+   },
+   {
+    "page": 56,
+    "images": 0,
+    "words": 802
+   },
+   {
+    "page": 57,
+    "images": 0,
+    "words": 802
+   },
+   {
+    "page": 58,
+    "images": 0,
+    "words": 750
+   },
+   {
+    "page": 59,
+    "images": 0,
+    "words": 125
+   },
+   {
+    "page": 60,
+    "images": 0,
+    "words": 230
+   },
+   {
+    "page": 61,
+    "images": 0,
+    "words": 306
+   },
+   {
+    "page": 62,
+    "images": 0,
+    "words": 336
+   },
+   {
+    "page": 63,
+    "images": 0,
+    "words": 336
+   },
+   {
+    "page": 64,
+    "images": 0,
+    "words": 336
+   },
+   {
+    "page": 65,
+    "images": 0,
+    "words": 331
+   },
+   {
+    "page": 66,
+    "images": 0,
+    "words": 333
+   },
+   {
+    "page": 67,
+    "images": 0,
+    "words": 325
+   },
+   {
+    "page": 68,
+    "images": 0,
+    "words": 309
+   },
+   {
+    "page": 69,
+    "images": 0,
+    "words": 317
+   },
+   {
+    "page": 70,
+    "images": 0,
+    "words": 314
+   },
+   {
+    "page": 71,
+    "images": 0,
+    "words": 325
+   },
+   {
+    "page": 72,
+    "images": 0,
+    "words": 329
+   },
+   {
+    "page": 73,
+    "images": 0,
+    "words": 325
+   },
+   {
+    "page": 74,
+    "images": 0,
+    "words": 255
+   },
+   {
+    "page": 75,
+    "images": 0,
+    "words": 345
+   },
+   {
+    "page": 76,
+    "images": 0,
+    "words": 346
+   },
+   {
+    "page": 77,
+    "images": 0,
+    "words": 358
+   },
+   {
+    "page": 78,
+    "images": 0,
+    "words": 304
+   },
+   {
+    "page": 79,
+    "images": 0,
+    "words": 352
+   },
+   {
+    "page": 80,
+    "images": 1,
+    "words": 189
+   },
+   {
+    "page": 81,
+    "images": 0,
+    "words": 398
+   },
+   {
+    "page": 82,
+    "images": 0,
+    "words": 272
+   },
+   {
+    "page": 83,
+    "images": 0,
+    "words": 376
+   },
+   {
+    "page": 84,
+    "images": 0,
+    "words": 337
+   },
+   {
+    "page": 85,
+    "images": 0,
+    "words": 406
+   },
+   {
+    "page": 86,
+    "images": 0,
+    "words": 281
+   },
+   {
+    "page": 87,
+    "images": 0,
+    "words": 230
+   },
+   {
+    "page": 88,
+    "images": 0,
+    "words": 462
+   },
+   {
+    "page": 89,
+    "images": 0,
+    "words": 352
+   },
+   {
+    "page": 90,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 91,
+    "images": 0,
+    "words": 4
+   },
+   {
+    "page": 92,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 93,
+    "images": 0,
+    "words": 284
+   },
+   {
+    "page": 94,
+    "images": 0,
+    "words": 301
+   },
+   {
+    "page": 95,
+    "images": 0,
+    "words": 176
+   },
+   {
+    "page": 96,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 97,
+    "images": 0,
+    "words": 0
+   },
+   {
+    "page": 98,
+    "images": 1,
+    "words": 12
+   }
+  ]
+ }
+}
