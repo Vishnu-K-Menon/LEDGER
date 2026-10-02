@@ -296,13 +296,20 @@ def prefix_sources(doc: DoclingDocument) -> dict[str, dict]:
     """Per table (``tbl-N``): D-037 item 3 read literally. Reading order is the document's
     (``iterate_items``, body layer); only items on the table's own page are considered.
 
-    * ``unit``: the nearest preceding caption item or bracketed-unit text item on the page;
+    * ``unit``: the nearest preceding caption item or bracketed-unit text item on the page, not
+      used when another table lies between it and this table (D-037 status 2026-10-02, ruling 3
+      clause 1);
     * ``title``: the nearest preceding title / section-header item on the page;
     * ``category``: caption | bracketed-unit | title only | nothing;
-    * flags: (i) ``table_between`` — another table lies between the unit item and this table;
-      (ii) ``no_title_on_page`` — the page holds no title item at all (a continuation);
-      (iii) ``unit_after_title_only`` — a caption / bracketed-unit item follows the page's title
-      but none precedes the table.
+    * flags: (i) ``table_between`` — a caption / bracketed-unit item precedes on the page beyond
+      another table, so it is not used; (ii) ``no_title_on_page`` — the page holds no title item
+      at all (a continuation); (iii) ``unit_after_title_only`` — a caption / bracketed-unit item
+      follows the page's title but none is used for the table; ``title_table_between`` —
+      another table lies between the title and this table;
+    * ``title_own``: a title precedes on the page with no table between (read literally);
+    * ``own_source``: ``title_own`` or a unit item is used — ruling 3 clause 4's criterion ("no
+      title, caption or bracketed-unit item precedes it on its page, or another table lies
+      between that item and the table"); false -> never a question or kappa-sample source.
 
     Nothing here changes the document; nothing found means no unit line (no fallback)."""
     items = [it for it, _lvl in doc.iterate_items()]
@@ -317,16 +324,21 @@ def prefix_sources(doc: DoclingDocument) -> dict[str, dict]:
         page = _page(tbl)
         on_page = by_page.get(page, []) if page is not None else []
         unit = title = None
-        table_between = False
+        tables_passed = False  # a table lies between the walk's position and this table
+        unit_beyond_table = title_table_between = False
         for _i, it in reversed([(i, it) for i, it in on_page if i < pos]):
             kind = _unit_kind(it)
             if unit is None and kind:
-                unit = (it, kind)
+                if tables_passed:
+                    unit_beyond_table = True  # ruling 3 clause 1: not used
+                else:
+                    unit = (it, kind)
             if title is None and _label(it) in TITLE_LABELS:
                 title = it
-            if unit is None and isinstance(it, TableItem):
-                table_between = True
-            if unit and title:
+                title_table_between = tables_passed
+            if isinstance(it, TableItem):
+                tables_passed = True
+            if title and (unit or unit_beyond_table):
                 break
         titles = [(i, it) for i, it in on_page if _label(it) in TITLE_LABELS]
         title_pos = next((i for i, it in titles if it is title), titles[0][0] if titles else None)
@@ -336,43 +348,64 @@ def prefix_sources(doc: DoclingDocument) -> dict[str, dict]:
             and any(_unit_kind(it) for i, it in on_page if i > title_pos and it is not tbl)
         )
         category = unit[1] if unit else ("title only" if title else "nothing")
+        title_own = title is not None and not title_table_between
         out[item_key(str(tbl.self_ref))] = {
             "page": page,
             "unit": _ref(unit[0]) if unit else None,
             "title": _ref(title) if title else None,
             "category": category,
             "flags": {
-                "table_between": bool(unit) and table_between,
+                "table_between": unit_beyond_table,
                 "no_title_on_page": not titles,
                 "unit_after_title_only": unit_after_title,
+                "title_table_between": title is not None and title_table_between,
             },
+            "title_own": title_own,
+            "own_source": title_own or unit is not None,
         }
     return out
 
 
+def _table_key(rec: dict, by_table: dict | set) -> str:
+    """The table a table record belongs to: its own item, else its lowest table ref."""
+    return rec["item"] if rec["item"] in by_table else min(rec["table_refs"], key=_table_index)
+
+
 def apply_prefix(
-    records: list[dict], sources: dict[str, dict], chunker: HybridChunker
+    records: list[dict],
+    sources: dict[str, dict],
+    chunker: HybridChunker,
+    *,
+    print_lines: bool = True,
 ) -> list[dict]:
-    """Prefix every table slice with its title line and unit/caption line, each the source item's
-    text verbatim. A text transform on finished records: ids, slice boundaries and the chunker's
-    segment are untouched. A slice whose table has no unit item gets no unit line and
-    ``prefix_source: null``."""
+    """Annotate every table slice with its prefix sources and, when ``print_lines``, prefix it
+    with its title line and unit/caption line, each the source item's text verbatim. The title
+    line is not printed when it equals the slice's last heading, which the chunker already
+    prepends (D-037 status 2026-10-02, ruling 3 clause 2). A text transform on finished records:
+    ids, slice boundaries and the chunker's segment are untouched. A slice whose table has no
+    unit item gets no unit line and ``prefix_source: null``."""
     out = []
     for rec in records:
         rec = dict(rec)
         if rec["chunk_type"] == "table":
-            key = (
-                rec["item"] if rec["item"] in sources else min(rec["table_refs"], key=_table_index)
-            )
-            src = sources.get(key)
+            src = sources.get(_table_key(rec, sources))
             lines = []
+            rec["prefix_title_printed"] = False
+            if src:
+                rec["prefix_category"] = src["category"]
+                rec["prefix_flags"] = dict(src["flags"])
+                rec["title_own"] = src["title_own"]
+                rec["own_source"] = src["own_source"]
             if src and src["title"] and src["title"]["text"].strip():
-                lines.append(src["title"]["text"])
-                rec["prefix_title_source"] = src["title"]["ref"]
+                rec["prefix_title_source"] = src["title"]["ref"]  # found, printed or not
+                last = rec["headings"][-1] if rec["headings"] else None
+                if src["title"]["text"] != last:
+                    lines.append(src["title"]["text"])
+                    rec["prefix_title_printed"] = print_lines
             if src and src["unit"] and src["unit"]["text"].strip():
                 lines.append(src["unit"]["text"])
                 rec["prefix_source"] = src["unit"]["ref"]
-            if lines:
+            if lines and print_lines:
                 rec["prefix"] = "\n".join(lines)
                 rec["text"] = rec["prefix"] + "\n" + rec["text"]
                 rec["n_tokens"] = chunker.tokenizer.count_tokens(rec["text"])
@@ -409,21 +442,44 @@ def _header_cells(header: str) -> list[str]:
     return [c.strip() for c in first.strip().strip("|").split("|")] if first else []
 
 
-def d037_output_checks(records: list[dict], headers: dict[str, dict]) -> dict:
-    """D-037 item 4 on finished records: every table slice starts with the header row; every
-    table slice contains the prefix; every body line starts with ``|``; blank or partial repeated
-    headers counted across all tables. Returns the violations (empty lists = pass) and counts."""
-    starts, prefix, pipes = [], [], []
+def d037_output_checks(
+    records: list[dict], headers: dict[str, dict], sources: dict[str, dict]
+) -> dict:
+    """D-037 item 4 on finished records, as amended by D-037 status 2026-10-02 (rulings 2, 3):
+
+    * ``header_row_missing``: table slices that do not start with the header row;
+      ``header_not_repeated``: the tables any of whose slices are in it (ruling 2: listed, barred);
+    * ``unit_line_missing``: the original prefix reading (no caption / bracketed-unit line);
+      reported, not required to be zero (ruling 3 clause 3);
+    * ``prefix_integrity``: slices whose text lacks, verbatim, the unit item or the title item
+      found for their table; must be empty (ruling 3 clause 3);
+    * ``title_printed_by_prefix``: slices / tables where the prefix printed a title (expected 0);
+    * ``body_line_not_pipe``, ``blank_headers``, ``partial_headers``: unchanged."""
+    starts, unit_missing, integrity, pipes, printed = [], [], [], [], []
+    starts_tables: set[str] = set()
+    printed_tables: set[str] = set()
     for rec in records:
         if rec["chunk_type"] != "table":
             continue
-        key = rec["item"] if rec["item"] in headers else min(rec["table_refs"], key=_table_index)
+        key = _table_key(rec, headers)
         header = headers.get(key, {}).get("header", "")
         body = body_of(rec)
         if not header or not body.startswith(header):
             starts.append(rec["chunk_id"])
+            starts_tables.add(key)
         if not (rec.get("prefix_source") and rec.get("prefix") and rec["prefix"] in rec["text"]):
-            prefix.append(rec["chunk_id"])
+            unit_missing.append(rec["chunk_id"])
+        src = sources.get(_table_key(rec, sources)) or {}
+        missing = [
+            part
+            for part in ("unit", "title")
+            if src.get(part) and src[part]["text"].strip() and src[part]["text"] not in rec["text"]
+        ]
+        if missing:
+            integrity.append({"chunk_id": rec["chunk_id"], "missing": missing})
+        if rec.get("prefix_title_printed"):
+            printed.append(rec["chunk_id"])
+            printed_tables.add(key)
         rest = body[len(header) :] if header and body.startswith(header) else body
         bad = [ln for ln in rest.splitlines() if not ln.startswith("|")]
         if bad:
@@ -441,11 +497,62 @@ def d037_output_checks(records: list[dict], headers: dict[str, dict]) -> dict:
     return {
         "table_slices": sum(1 for r in records if r["chunk_type"] == "table"),
         "header_row_missing": starts,
-        "prefix_missing": prefix,
+        "header_not_repeated": sorted(starts_tables, key=_table_index),
+        "unit_line_missing": unit_missing,
+        "prefix_integrity": integrity,
+        "title_printed_by_prefix": {
+            "slices": len(printed),
+            "tables": sorted(printed_tables, key=_table_index),
+        },
         "body_line_not_pipe": pipes,
         "blank_headers": blank,
         "partial_headers": partial,
     }
+
+
+def prefix_category_counts(sources: dict[str, dict]) -> dict:
+    """Per unit: tables per prefix category and per flag, and the own-title criterion."""
+    c: dict[str, int] = {"tables": len(sources)}
+    for s in sources.values():
+        c[s["category"]] = c.get(s["category"], 0) + 1
+        for f, v in s["flags"].items():
+            c[f] = c.get(f, 0) + int(v)
+        c["title_own_false"] = c.get("title_own_false", 0) + int(not s["title_own"])
+        c["own_source_false"] = c.get("own_source_false", 0) + int(not s["own_source"])
+    return c
+
+
+# ---- question-source bars: by criterion, never by name -----------------------------------------
+
+BAR_REASONS = {
+    "no_own_title": "D-037 status 2026-10-02, ruling 3 clause 4",
+    "header_not_repeated": "D-037 status 2026-10-02, ruling 2",
+    "parse_path_fallback": "D-040 pre-T7 sampling rule",
+}
+
+
+def mark_question_source_bars(records: list[dict], checks: dict) -> list[dict]:
+    """Every table record gets ``question_source_barred = {"barred", "reasons"}`` from criteria
+    only: ``own_source`` false; its table in ``header_not_repeated``; ``parse_path = fallback``.
+    D-040's second criterion (oracle strict < 95 %) is not built here; it is deferred to T7.
+    Prose records get null."""
+    not_repeated = set(checks["header_not_repeated"])
+    out = []
+    for rec in records:
+        rec = dict(rec)
+        if rec["chunk_type"] == "table":
+            reasons = []
+            if rec.get("own_source") is False:
+                reasons.append("no_own_title")
+            if any(t in not_repeated for t in [rec["item"], *rec["table_refs"]]):
+                reasons.append("header_not_repeated")
+            if rec.get("parse_path") == "fallback":
+                reasons.append("parse_path_fallback")
+            rec["question_source_barred"] = {"barred": bool(reasons), "reasons": reasons}
+        else:
+            rec["question_source_barred"] = None
+        out.append(rec)
+    return out
 
 
 # ---- the one chunking path (D-037) ---------------------------------------------------------------
@@ -466,6 +573,8 @@ class ChunkedUnit:
     records: list[dict]
     fix_log: dict[int, dict]
     doc: DoclingDocument
+    sources: dict[str, dict]
+    checks: dict
 
 
 def chunk_document(
@@ -478,13 +587,16 @@ def chunk_document(
     prefix: bool = True,
 ) -> ChunkedUnit:
     """Raw Docling export -> row fix -> DoclingDocument -> HybridChunker (markdown tables) ->
-    chunk records -> unit prefix. ``parse_unit`` and the D-037 re-chunk both call this."""
+    chunk records -> unit prefix -> item-4 checks -> question-source bars. ``parse_unit`` and
+    the D-037 re-chunk both call this. ``prefix=False`` annotates without printing (tests)."""
     fixed, log = apply_row_fix(doc_dict, pdf_path, row, cfg)
     doc = DoclingDocument.model_validate(fixed)
     records = chunk_records(row, list(chunker.chunk(dl_doc=doc)), chunker, cfg, fix_log=log)
-    if prefix:
-        records = apply_prefix(records, prefix_sources(doc), chunker)
-    return ChunkedUnit(records, log, doc)
+    sources = prefix_sources(doc)
+    records = apply_prefix(records, sources, chunker, print_lines=prefix)
+    checks = d037_output_checks(records, table_headers(doc, chunker), sources)
+    records = mark_question_source_bars(records, checks)
+    return ChunkedUnit(records, log, doc, sources, checks)
 
 
 def rowfix_json(unit_id: str, fix_log: dict[int, dict]) -> str:

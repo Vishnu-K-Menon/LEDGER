@@ -75,6 +75,7 @@ class FetchResult:
     calls_by_host: dict[str, int]
     rows: list[ManifestRow]
     unfetchable: list[str] = field(default_factory=list)
+    image_only_excluded: list[str] = field(default_factory=list)
 
 
 # ---- pdf measurements ------------------------------------------------------------------------
@@ -138,6 +139,43 @@ def image_only_pages(measures: list[PageMeasure], cfg: Config) -> list[int]:
         for m in measures
         if m.images is not None and m.images >= 1 and m.words is not None and m.words <= limit
     ]
+
+
+def image_only_share(measures: list[PageMeasure], cfg: Config) -> tuple[int, int, float]:
+    """(image-only pages, pages, share) of one unit."""
+    k, n = len(image_only_pages(measures, cfg)), len(measures)
+    return k, n, (k / n if n else 0.0)
+
+
+def image_only_unit(measures: list[PageMeasure], cfg: Config) -> bool:
+    """D-034 status 2026-10-02: a unit with >= ``fetch.image_only_unit_min_share`` image-only
+    pages is excluded at fetch. Raises while either threshold is null (the D-020 pattern)."""
+    share_min = cfg.fetch.image_only_unit_min_share
+    if share_min is None:
+        raise RuntimeError(
+            "fetch.image_only_unit_min_share is null: the image-only unit share is the owner's "
+            "to set (D-020 pattern: the guard is at the use site)"
+        )
+    return image_only_share(measures, cfg)[2] >= share_min
+
+
+def _image_only_check(row: ManifestRow, dest: Path, cfg: Config, notes: list[str]) -> bool:
+    """Measure the unit's pages; note the share; exclude an ACTIVE unit at or above the share
+    through the manifest's exclusion mechanism (status EXCLUDED + status_note, as D-040). A row
+    already EXCLUDED keeps its status and note. Returns True when this call excluded the unit.
+    Idempotent: the note is a ``fetch:`` note, which every run strips before re-adding."""
+    measures = page_measures(dest)
+    k, n, share = image_only_share(measures, cfg)
+    notes.append(f"fetch: image-only pages {k}/{n} = {share:.1%}")
+    if row.status != "ACTIVE" or not image_only_unit(measures, cfg):
+        return False
+    row.status = "EXCLUDED"
+    row.status_note = (
+        f"D-034 status 2026-10-02 (image-only unit): {k}/{n} = {share:.1%} image-only pages "
+        f"(>= 1 image, <= {cfg.fetch.image_only_page_max_words} words) >= "
+        f"{cfg.fetch.image_only_unit_min_share:.0%}; excluded at fetch, no replacement draw"
+    )
+    return True
 
 
 def pdf_date(path: Path) -> tuple[str | None, str]:
@@ -274,6 +312,7 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
     erp_checks: list[ErpCheck] = []
     below: list[str] = []
     unfetchable: list[str] = []
+    image_only: list[str] = []
 
     for row in rows:
         dest = raw_dir / row.source / f"{row.unit_id}.pdf"
@@ -348,6 +387,8 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
                 "flagged for A1/A9"
             )
             below.append(row.unit_id)
+        if _image_only_check(row, dest, cfg, notes):
+            image_only.append(row.unit_id)
         if row.source == "eia" and not row.date_issued:
             d, how = pdf_date(dest)
             row.date_issued = d
@@ -409,6 +450,8 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
             "measured",
             round(ratio, 4),
         )
+        if _image_only_check(pkg_row, dest, cfg, pkg_row.notes):
+            image_only.append(pkg_row.unit_id)
         rows.append(pkg_row)
         outcomes.append(
             UnitOutcome(
@@ -424,7 +467,14 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
 
     write_manifest(manifest_path, header, rows)
     return FetchResult(
-        outcomes, erp_checks, demoted, below, dict(fetcher.calls_by_host), rows, unfetchable
+        outcomes,
+        erp_checks,
+        demoted,
+        below,
+        dict(fetcher.calls_by_host),
+        rows,
+        unfetchable,
+        image_only,
     )
 
 
@@ -450,5 +500,9 @@ def render_fetch_report(res: FetchResult) -> str:
     out.append(f"below text_layer_ratio_min: {res.below_threshold or 'none'}")
     out.append(f"HTTP calls by host: {res.calls_by_host or 'none'}")
     out.append(f"unfetchable (no pdfLink at the source): {res.unfetchable or 'none'}")
+    out.append(
+        f"EXCLUDED as image-only units (D-034 status 2026-10-02): "
+        f"{res.image_only_excluded or 'none'}"
+    )
     out.append(f"manifest units: {len(res.rows)}")
     return "\n".join(out)

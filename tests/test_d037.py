@@ -27,6 +27,7 @@ from pypdf import PdfWriter
 from ledger.config import Config, load_config
 from ledger.ingest.manifest import ManifestHeader, ManifestRow, write_manifest
 from ledger.ingest.parse import (
+    apply_prefix,
     body_of,
     build_chunker,
     chunk_document,
@@ -97,12 +98,19 @@ def _prov(page: int = 1) -> ProvenanceItem:
 
 
 def _table(
-    rows: int, *, header_row: int | None = 0, blank_cell: bool = False, wide: int = 0
+    rows: int,
+    *,
+    header_row: int | None = 0,
+    blank_cell: bool = False,
+    wide: int = 0,
+    header_words: int = 0,
 ) -> TableData:
     cells = []
     for r in range(rows):
         for c in range(4):
-            if r == 0:
+            if r == 0 and header_words:
+                text = f"H{c} " + "word " * header_words
+            elif r == 0:
                 text = "" if (blank_cell and c == 2) else ("Year" if c == 0 else f"Q{c}")
             else:
                 text = f"{1990 + r}" if c == 0 else f"{r}.{c}"
@@ -157,7 +165,10 @@ def _chunk(doc, pdf, cfg, chunker, *, source="cbo_manual", prefix=True):
 
 
 def _checks(unit, chunker):
-    return d037_output_checks(unit.records, table_headers(unit.doc, chunker))
+    """chunk_document computes the item-4 checks; recomputing them must agree."""
+    again = d037_output_checks(unit.records, table_headers(unit.doc, chunker), unit.sources)
+    assert again == unit.checks
+    return unit.checks
 
 
 def _tables(records):
@@ -175,12 +186,16 @@ def test_table_serializer_pinned_to_markdown(base_config_path: Path):
         Config.model_validate(data)
 
 
-def test_compact_tables_null_loads_but_build_chunker_raises(base_config_path: Path):
-    """D-020 pattern: the config loads; the guard is at the use site and names D-037."""
+def test_compact_tables_owner_value_and_null_guard(base_config_path: Path):
+    """D-037 status 2026-10-02 (ruling 1): false. A null still loads and build_chunker raises at
+    the use site, naming D-037 (the D-020 pattern)."""
     cfg = load_config(base_config_path)
-    assert cfg.chunking.markdown_compact_tables is None
+    assert cfg.chunking.markdown_compact_tables is False
+    null = cfg.model_copy(
+        update={"chunking": cfg.chunking.model_copy(update={"markdown_compact_tables": None})}
+    )
     with pytest.raises(RuntimeError, match="D-037"):
-        build_chunker(cfg)
+        build_chunker(null)
 
 
 def test_compact_tables_reaches_the_chunker_table_path(pdf, cfg, chunker):
@@ -201,8 +216,9 @@ def test_item4_all_pass_on_a_clean_titled_unit_table(pdf, cfg, chunker):
     unit = _chunk(_doc(), pdf, cfg, chunker)
     c = _checks(unit, chunker)
     assert c["table_slices"] > 1
-    assert c["header_row_missing"] == []
-    assert c["prefix_missing"] == []
+    assert c["header_row_missing"] == [] and c["header_not_repeated"] == []
+    assert c["unit_line_missing"] == [] and c["prefix_integrity"] == []
+    assert c["title_printed_by_prefix"] == {"slices": 0, "tables": []}
     assert c["body_line_not_pipe"] == []
     assert c["blank_headers"] == [] and c["partial_headers"] == []
 
@@ -218,11 +234,26 @@ def test_item4_header_row_fails_when_a_caption_preamble_leads_slice_0(pdf, cfg, 
     assert body_of(tables[0]).startswith("Table 7. In millions of dollars")
 
 
-def test_item4_prefix_fails_when_the_page_has_no_unit_item(pdf, cfg, chunker):
+def test_unit_line_missing_lists_a_title_only_table_while_integrity_holds(pdf, cfg, chunker):
+    """D-037 status 2026-10-02, ruling 3 (3): the original reading is reported, not required;
+    prefix_integrity (the found title is in the text, via the headings) has no violation."""
     unit = _chunk(_doc(unit=None), pdf, cfg, chunker)
     tables = _tables(unit.records)
     assert all(r["prefix_source"] is None for r in tables)
-    assert _checks(unit, chunker)["prefix_missing"] == [r["chunk_id"] for r in tables]
+    c = _checks(unit, chunker)
+    assert c["unit_line_missing"] == [r["chunk_id"] for r in tables]
+    assert c["prefix_integrity"] == []
+
+
+def test_prefix_integrity_fails_when_a_found_item_is_absent(pdf, cfg, chunker):
+    unit = _chunk(_doc(), pdf, cfg, chunker)
+    rec = dict(_tables(unit.records)[1])
+    rec["text"] = rec["text"].replace(UNIT, "")  # the unit line lives in the prefix, not the body
+    c = d037_output_checks([rec], table_headers(unit.doc, chunker), unit.sources)
+    assert c["prefix_integrity"] == [{"chunk_id": rec["chunk_id"], "missing": ["unit"]}]
+    rec["text"] = rec["text"].replace(TITLE, "")
+    c = d037_output_checks([rec], table_headers(unit.doc, chunker), unit.sources)
+    assert c["prefix_integrity"] == [{"chunk_id": rec["chunk_id"], "missing": ["unit", "title"]}]
 
 
 def test_item4_body_line_check_fails_on_a_non_pipe_line(pdf, cfg, chunker):
@@ -231,7 +262,7 @@ def test_item4_body_line_check_fails_on_a_non_pipe_line(pdf, cfg, chunker):
     extra = ("" if rec["text"].endswith("\n") else "\n") + "stray text"
     rec["text"] += extra
     rec["body_chars"] += len(extra)
-    c = d037_output_checks([rec], table_headers(unit.doc, chunker))
+    c = d037_output_checks([rec], table_headers(unit.doc, chunker), unit.sources)
     assert c["body_line_not_pipe"] == [{"chunk_id": rec["chunk_id"], "lines": 1}]
 
 
@@ -273,10 +304,49 @@ def test_prefix_is_verbatim_and_sourced(pdf, cfg, chunker):
     src = prefix_sources(unit.doc)["tbl-0"]
     assert src["category"] == "bracketed-unit"
     for r in _tables(unit.records):
-        assert r["prefix"] == f"{TITLE}\n{UNIT}"
+        assert r["prefix"] == UNIT  # the title equals the last heading: not printed again
         assert r["text"].startswith(r["prefix"] + "\n")
         assert r["prefix_source"] == src["unit"]["ref"] and src["unit"]["text"] == UNIT
         assert r["prefix_title_source"] == src["title"]["ref"]
+        assert r["prefix_category"] == "bracketed-unit" and r["title_own"] and r["own_source"]
+
+
+def test_title_equal_to_the_last_heading_appears_once(pdf, cfg, chunker):
+    """D-037 status 2026-10-02, ruling 3 (2): the chunker already prepends the heading."""
+    unit = _chunk(_doc(), pdf, cfg, chunker)
+    for r in _tables(unit.records):
+        assert r["headings"][-1] == TITLE
+        assert r["text"].count(TITLE) == 1 and r["prefix_title_printed"] is False
+
+
+def test_a_title_that_differs_from_the_last_heading_is_printed(chunker):
+    rec = {
+        "chunk_id": "u::p1::tbl-0::s0",
+        "chunk_type": "table",
+        "item": "tbl-0",
+        "table_refs": ["tbl-0"],
+        "headings": ["Section 2"],
+        "text": "Section 2\n| a |\n| - |\n| 1 |",
+        "n_tokens": 0,
+        "body_chars": 19,
+        "prefix": None,
+        "prefix_source": None,
+        "prefix_title_source": None,
+    }
+    title = {"ref": "#/texts/9", "label": "title", "text": "Table 9. Outlays", "page": 1}
+    src = {
+        "page": 1,
+        "unit": None,
+        "title": title,
+        "category": "title only",
+        "flags": {},
+        "title_own": True,
+        "own_source": True,
+    }
+    out = apply_prefix([rec], {"tbl-0": src}, chunker)[0]
+    assert out["prefix"] == "Table 9. Outlays" and out["prefix_title_printed"] is True
+    assert out["text"] == "Table 9. Outlays\n" + rec["text"]
+    assert body_of(out) == body_of(rec)
 
 
 def test_prefix_on_off_leaves_ids_boundaries_and_body_identical(pdf, cfg, chunker):
@@ -302,7 +372,7 @@ def test_prefix_parenthesised_unit_is_not_bracketed(pdf, cfg, chunker):
     src = prefix_sources(unit.doc)["tbl-0"]
     assert src["category"] == "title only" and src["unit"] is None
     assert all(r["prefix_source"] is None for r in _tables(unit.records))
-    assert all(r["prefix"] == TITLE for r in _tables(unit.records))
+    assert all(r["prefix"] is None for r in _tables(unit.records))  # title = last heading
 
 
 def test_prefix_never_carries_over_from_another_page(pdf, cfg, chunker):
@@ -319,12 +389,22 @@ def test_prefix_flag_unit_after_title_only(pdf, cfg, chunker):
     assert src["flags"]["unit_after_title_only"]
 
 
-def test_prefix_flag_table_between(pdf, cfg, chunker):
+def test_a_unit_item_with_a_table_between_is_not_used(pdf, cfg, chunker):
+    """D-037 status 2026-10-02, ruling 3 (1); the title with a table between is not the second
+    table's own (clause 4): no own source -> barred."""
     doc = _doc(rows=8)
     doc.add_table(data=_table(8), prov=_prov(1))
-    src = prefix_sources(doc)["tbl-1"]
-    assert src["unit"]["text"] == UNIT and src["flags"]["table_between"]
-    assert not prefix_sources(doc)["tbl-0"]["flags"]["table_between"]
+    srcs = prefix_sources(doc)
+    first, second = srcs["tbl-0"], srcs["tbl-1"]
+    assert first["unit"]["text"] == UNIT and first["title_own"] and first["own_source"]
+    assert not first["flags"]["table_between"]
+    assert second["unit"] is None and second["category"] == "title only"
+    assert second["flags"]["table_between"] and second["flags"]["title_table_between"]
+    assert not second["title_own"] and not second["own_source"]
+    unit = _chunk(doc, pdf, cfg, chunker)
+    recs = [r for r in _tables(unit.records) if r["item"] == "tbl-1"]
+    assert recs and all(r["prefix_source"] is None for r in recs)
+    assert all(r["question_source_barred"]["reasons"] == ["no_own_title"] for r in recs)
 
 
 def test_prefix_never_changes_the_document(pdf, cfg, chunker):
@@ -347,6 +427,44 @@ def test_parse_path_from_the_fix_log(pdf, cfg, chunker):
     fb = _chunk(_doc(rows=30), pdf, cfg, chunker, source="eia")
     assert {r["parse_path"] for r in _tables(fb.records)} == {"fallback"}
     assert all(r["parse_path"] is None for r in fb.records if r["chunk_type"] == "prose")
+
+
+def test_header_not_repeated_lists_a_table_whose_header_alone_exceeds_max_tokens(pdf, cfg, chunker):
+    """D-037 status 2026-10-02, ruling 2 (cbo-62735 tbl-1's case): line_chunker.py emits a header
+    >= max_tokens once and does not repeat it; the table is listed and barred, nothing handled."""
+    unit = _chunk(_doc(rows=40, header_words=160), pdf, cfg, chunker)
+    header = table_headers(unit.doc, chunker)["tbl-0"]["header"]
+    assert chunker.tokenizer.count_tokens(header) >= 512
+    c = _checks(unit, chunker)
+    assert c["header_not_repeated"] == ["tbl-0"] and c["header_row_missing"]
+    for r in _tables(unit.records):
+        assert "header_not_repeated" in r["question_source_barred"]["reasons"]
+
+
+def test_question_source_barred_carries_each_reason(pdf, cfg, chunker):
+    """By criterion only: own source, header repeated, parse path. Prose records carry null."""
+    clean = _chunk(_doc(rows=30), pdf, cfg, chunker, source="cbo_manual")
+    assert all(
+        r["question_source_barred"] == {"barred": False, "reasons": []}
+        for r in _tables(clean.records)
+    )
+    assert all(
+        r["question_source_barred"] is None for r in clean.records if r["chunk_type"] == "prose"
+    )
+    fb = _chunk(_doc(rows=30), pdf, cfg, chunker, source="eia")
+    assert all(
+        r["question_source_barred"] == {"barred": True, "reasons": ["parse_path_fallback"]}
+        for r in _tables(fb.records)
+    )
+    bare = _chunk(_doc(rows=30, title=None, unit=None), pdf, cfg, chunker, source="cbo_manual")
+    assert all(
+        r["question_source_barred"]["reasons"] == ["no_own_title"] for r in _tables(bare.records)
+    )
+    both = _chunk(_doc(rows=30, title=None, unit=None), pdf, cfg, chunker, source="eia")
+    assert all(
+        r["question_source_barred"]["reasons"] == ["no_own_title", "parse_path_fallback"]
+        for r in _tables(both.records)
+    )
 
 
 def _load_script():

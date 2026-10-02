@@ -29,12 +29,12 @@ sys.path.insert(0, str(REPO))
 from ledger.config import Config, load_config  # noqa: E402
 from ledger.ingest.manifest import active_rows, read_manifest  # noqa: E402
 from ledger.ingest.parse import (  # noqa: E402
+    BAR_REASONS,
     _atomic_write,
     build_chunker,
     chunk_document,
-    d037_output_checks,
+    prefix_category_counts,
     rowfix_json,
-    table_headers,
 )
 
 
@@ -103,7 +103,23 @@ def rechunk(
         _atomic_write(rowfix_p, rowfix_json(uid, unit.fix_log))
         files[chunks_p.name] = {"sha256": sha256(chunks_p), "records": len(unit.records)}
         files[rowfix_p.name] = {"sha256": sha256(rowfix_p), "records": len(unit.fix_log)}
-        c = d037_output_checks(unit.records, table_headers(unit.doc, chunker))
+        c = dict(unit.checks)  # item 4 as amended by D-037 status 2026-10-02 (rulings 2, 3)
+        c["prefix_categories"] = prefix_category_counts(unit.sources)
+        tables = [r for r in unit.records if r["chunk_type"] == "table"]
+        c["question_source_barred"] = {
+            "slices": sum(1 for r in tables if r["question_source_barred"]["barred"]),
+            "tables": len({r["item"] for r in tables if r["question_source_barred"]["barred"]}),
+            "slices_by_reason": {
+                why: sum(1 for r in tables if why in r["question_source_barred"]["reasons"])
+                for why in BAR_REASONS
+            },
+            "tables_by_reason": {
+                why: sorted(
+                    {r["item"] for r in tables if why in r["question_source_barred"]["reasons"]}
+                )
+                for why in BAR_REASONS
+            },
+        }
         c["max_n_tokens_table"] = max(
             (r["n_tokens"] for r in unit.records if r["chunk_type"] == "table"), default=0
         )
@@ -141,10 +157,13 @@ def main(argv: list[str] | None = None) -> int:
     for uid, c in body["d037_item4_checks"].items():
         print(
             f"{uid}: table slices {c['table_slices']} | header-row missing "
-            f"{len(c['header_row_missing'])} | prefix missing {len(c['prefix_missing'])} | "
-            f"body lines not '|' {len(c['body_line_not_pipe'])} | blank headers "
-            f"{len(c['blank_headers'])} | partial headers {len(c['partial_headers'])} | "
-            f"max table tokens {c['max_n_tokens_table']}"
+            f"{len(c['header_row_missing'])} (tables {len(c['header_not_repeated'])}) | "
+            f"prefix_integrity {len(c['prefix_integrity'])} | unit line missing "
+            f"{len(c['unit_line_missing'])} | titles printed "
+            f"{c['title_printed_by_prefix']['slices']} | body lines not '|' "
+            f"{len(c['body_line_not_pipe'])} | blank/partial headers {len(c['blank_headers'])}/"
+            f"{len(c['partial_headers'])} | barred slices {c['question_source_barred']['slices']}"
+            f" | max table tokens {c['max_n_tokens_table']}"
         )
     return 0
 
