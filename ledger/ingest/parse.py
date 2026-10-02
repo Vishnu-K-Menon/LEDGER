@@ -15,14 +15,24 @@ interrupted unit leaves neither file. Each unit's provenance — library version
 
 The D-001 stop fires once every row up to ``ingest.confirm_after_units`` has been parsed or
 skipped; ``--all --confirmed`` continues past it.
+
+**One chunking path (D-037).** ``chunk_document`` takes the raw Docling export (a dict), the unit's
+PDF, its manifest row and the config: the row fix (``rows.fix_document``; it rebuilds only
+``parser.row_fix.sources`` tables, BUDGET/CBO pass through) -> ``DoclingDocument`` ->
+``HybridChunker`` with the markdown table serializer -> ``chunk_records`` -> the unit prefix.
+``parse_unit`` calls it after convert + ``export_to_dict``, and the one pre-freeze re-chunk
+(``scripts/rechunk_d037.py``) calls it on the saved export, so both run the same code.
+``<unit>.json`` stays the raw Docling export; the fix log goes beside it as ``<unit>.rowfix.json``.
 """
 
 from __future__ import annotations
 
+import copy
 import datetime as dt
 import json
 import logging
 import os
+import re
 import time
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, field
@@ -30,17 +40,22 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
+import pdfplumber
 from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
 from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling_core.transforms.chunker.hierarchical_chunker import ChunkingDocSerializer
 from docling_core.transforms.chunker.hybrid_chunker import HybridChunker
 from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
-from docling_core.types.doc import TableItem
+from docling_core.transforms.serializer.base import BaseDocSerializer, BaseSerializerProvider
+from docling_core.transforms.serializer.markdown import MarkdownTableSerializer
+from docling_core.types.doc import DoclingDocument, TableItem
 
 from ledger.config import Config, load_config
 from ledger.ingest.manifest import ManifestRow, active_rows, read_manifest, write_manifest
+from ledger.ingest.rows import fix_document
 
 log = logging.getLogger(__name__)
 
@@ -66,8 +81,34 @@ def build_converter(cfg: Config, *, backend: str | None = None) -> DocumentConve
     )
 
 
+class MarkdownTableSerializerProvider(BaseSerializerProvider):
+    """D-037: the library's chunking serializer with the markdown table serializer selected —
+    nothing else changed. It must stay a ``ChunkingDocSerializer``: ``HybridChunker.segment()``
+    takes the header-repeat path only for that class. ``compact_tables`` reaches the table
+    serializer through the doc serializer's params (merged into the item kwargs)."""
+
+    def __init__(self, compact_tables: bool) -> None:
+        self.compact_tables = compact_tables
+
+    def get_serializer(self, doc: DoclingDocument) -> BaseDocSerializer:
+        params = ChunkingDocSerializer.model_fields["params"].default.model_copy(
+            update={"compact_tables": self.compact_tables}
+        )
+        return ChunkingDocSerializer(
+            doc=doc, table_serializer=MarkdownTableSerializer(), params=params
+        )
+
+
 def build_chunker(cfg: Config) -> HybridChunker:
-    """Tokenizer only — no embedding weights are loaded (D-032)."""
+    """Tokenizer only — no embedding weights are loaded (D-032). The table serializer is the
+    pinned markdown one (D-037); ``markdown_compact_tables`` must be set by the owner first."""
+    compact = cfg.chunking.markdown_compact_tables
+    if compact is None:
+        raise RuntimeError(
+            "chunking.markdown_compact_tables is null: padded vs compact markdown columns change "
+            "tokens per row and so slice counts, and D-037 does not pin it - the owner sets it "
+            "before anything is chunked (D-037; guard at the use site, the D-020 pattern)"
+        )
     tokenizer = HuggingFaceTokenizer.from_pretrained(
         model_name=cfg.embedding.model, max_tokens=cfg.chunking.max_tokens
     )
@@ -76,6 +117,7 @@ def build_chunker(cfg: Config) -> HybridChunker:
         merge_peers=cfg.chunking.merge_peers,
         repeat_table_header=cfg.chunking.repeat_table_header,
         omit_header_on_overflow=cfg.chunking.omit_header_on_overflow,
+        serializer_provider=MarkdownTableSerializerProvider(compact),
     )
 
 
@@ -119,8 +161,35 @@ def is_caption_item(it: Any) -> bool:
     return str(getattr(it, "label", "")) in {"caption", "footnote"}
 
 
+# rows.fix_document's per-table status -> the record's ``parse_path`` (D-040's sampling rule keys
+# on ``fallback``)
+PARSE_PATH = {
+    "rebuilt": "rebuilt",
+    "fallback": "fallback",
+    "not fired": "not fired",
+    "out of scope (D-039)": "out of scope",
+}
+
+
+def _table_index(key: str) -> int:
+    return int(key.split("-", 1)[1])
+
+
+def parse_path_of(table_keys: list[str], fix_log: dict[int, dict]) -> str | None:
+    """One chunk's parse path. A chunk holding tables with different paths is ``fallback`` if any
+    of them is (the conservative side of D-040's rule), else the first table's path."""
+    paths = [PARSE_PATH[fix_log[_table_index(k)]["status"]] for k in table_keys]
+    if not paths:
+        return None
+    return "fallback" if "fallback" in paths else paths[0]
+
+
 def chunk_records(
-    unit: ManifestRow, chunks: list[Any], chunker: HybridChunker, cfg: Config
+    unit: ManifestRow,
+    chunks: list[Any],
+    chunker: HybridChunker,
+    cfg: Config,
+    fix_log: dict[int, dict] | None = None,
 ) -> list[dict]:
     out: list[dict] = []
     slice_of: dict[tuple[str, str], int] = {}
@@ -140,6 +209,10 @@ def chunk_records(
         sl = slice_of.get((str(page), key), 0)
         slice_of[(str(page), key)] = sl + 1
         text = chunker.contextualize(chunk=ch) if cfg.chunking.prepend_headings else ch.text
+        table_keys = sorted({item_key(it.self_ref) for it in tbl}, key=_table_index)
+        parse_path = (
+            parse_path_of(table_keys, fix_log) if fix_log is not None and is_table else None
+        )
         out.append(
             {
                 "chunk_id": f"{unit.unit_id}::p{page}::{key}::s{sl}",
@@ -160,9 +233,264 @@ def chunk_records(
                 "captions": [str(getattr(it, "text", "")) for it in items if is_caption_item(it)],
                 "text": text,
                 "n_tokens": chunker.tokenizer.count_tokens(text),
+                # the chunker's own segment is the last ``body_chars`` characters of ``text``
+                # (contextualize and the unit prefix only ever prepend)
+                "body_chars": len(ch.text),
+                "parse_path": parse_path,
+                "parse_path_by_table": (
+                    {k: PARSE_PATH[fix_log[_table_index(k)]["status"]] for k in table_keys}
+                    if fix_log is not None and is_table
+                    else None
+                ),
+                "prefix": None,
+                "prefix_source": None,
+                "prefix_title_source": None,
             }
         )
     return out
+
+
+def body_of(rec: dict) -> str:
+    """The chunker's segment text of a record, without headings or the unit prefix."""
+    return rec["text"][len(rec["text"]) - rec["body_chars"] :]
+
+
+# ---- the unit prefix (D-037 item 3) -------------------------------------------------------------
+
+# a text item whose whole text is one square-bracketed phrase: "[Percent of nominal GDP]"
+BRACKETED = re.compile(r"^\[[^\[\]]+\]$")
+TITLE_LABELS = {"section_header", "title"}
+
+
+def _label(it: Any) -> str:
+    return str(getattr(getattr(it, "label", ""), "value", getattr(it, "label", "")))
+
+
+def _page(it: Any) -> int | None:
+    prov = getattr(it, "prov", None) or []
+    return int(prov[0].page_no) if prov else None
+
+
+def _unit_kind(it: Any) -> str | None:
+    """``caption`` | ``bracketed-unit`` | None — D-037 item 3's two kinds of source item."""
+    if isinstance(it, TableItem) or _label(it) == "table":
+        return None
+    if _label(it) == "caption":
+        return "caption"
+    text = str(getattr(it, "text", "") or "").strip()
+    if text and BRACKETED.match(text):
+        return "bracketed-unit"
+    return None
+
+
+def _ref(it: Any) -> dict:
+    return {
+        "ref": str(it.self_ref),
+        "label": _label(it),
+        "text": str(getattr(it, "text", "") or ""),
+        "page": _page(it),
+    }
+
+
+def prefix_sources(doc: DoclingDocument) -> dict[str, dict]:
+    """Per table (``tbl-N``): D-037 item 3 read literally. Reading order is the document's
+    (``iterate_items``, body layer); only items on the table's own page are considered.
+
+    * ``unit``: the nearest preceding caption item or bracketed-unit text item on the page;
+    * ``title``: the nearest preceding title / section-header item on the page;
+    * ``category``: caption | bracketed-unit | title only | nothing;
+    * flags: (i) ``table_between`` — another table lies between the unit item and this table;
+      (ii) ``no_title_on_page`` — the page holds no title item at all (a continuation);
+      (iii) ``unit_after_title_only`` — a caption / bracketed-unit item follows the page's title
+      but none precedes the table.
+
+    Nothing here changes the document; nothing found means no unit line (no fallback)."""
+    items = [it for it, _lvl in doc.iterate_items()]
+    by_page: dict[int, list[tuple[int, Any]]] = {}
+    for i, it in enumerate(items):
+        if _page(it) is not None:
+            by_page.setdefault(_page(it), []).append((i, it))
+    out: dict[str, dict] = {}
+    for pos, tbl in enumerate(items):
+        if not isinstance(tbl, TableItem):
+            continue
+        page = _page(tbl)
+        on_page = by_page.get(page, []) if page is not None else []
+        unit = title = None
+        table_between = False
+        for _i, it in reversed([(i, it) for i, it in on_page if i < pos]):
+            kind = _unit_kind(it)
+            if unit is None and kind:
+                unit = (it, kind)
+            if title is None and _label(it) in TITLE_LABELS:
+                title = it
+            if unit is None and isinstance(it, TableItem):
+                table_between = True
+            if unit and title:
+                break
+        titles = [(i, it) for i, it in on_page if _label(it) in TITLE_LABELS]
+        title_pos = next((i for i, it in titles if it is title), titles[0][0] if titles else None)
+        unit_after_title = (
+            unit is None
+            and title_pos is not None
+            and any(_unit_kind(it) for i, it in on_page if i > title_pos and it is not tbl)
+        )
+        category = unit[1] if unit else ("title only" if title else "nothing")
+        out[item_key(str(tbl.self_ref))] = {
+            "page": page,
+            "unit": _ref(unit[0]) if unit else None,
+            "title": _ref(title) if title else None,
+            "category": category,
+            "flags": {
+                "table_between": bool(unit) and table_between,
+                "no_title_on_page": not titles,
+                "unit_after_title_only": unit_after_title,
+            },
+        }
+    return out
+
+
+def apply_prefix(
+    records: list[dict], sources: dict[str, dict], chunker: HybridChunker
+) -> list[dict]:
+    """Prefix every table slice with its title line and unit/caption line, each the source item's
+    text verbatim. A text transform on finished records: ids, slice boundaries and the chunker's
+    segment are untouched. A slice whose table has no unit item gets no unit line and
+    ``prefix_source: null``."""
+    out = []
+    for rec in records:
+        rec = dict(rec)
+        if rec["chunk_type"] == "table":
+            key = (
+                rec["item"] if rec["item"] in sources else min(rec["table_refs"], key=_table_index)
+            )
+            src = sources.get(key)
+            lines = []
+            if src and src["title"] and src["title"]["text"].strip():
+                lines.append(src["title"]["text"])
+                rec["prefix_title_source"] = src["title"]["ref"]
+            if src and src["unit"] and src["unit"]["text"].strip():
+                lines.append(src["unit"]["text"])
+                rec["prefix_source"] = src["unit"]["ref"]
+            if lines:
+                rec["prefix"] = "\n".join(lines)
+                rec["text"] = rec["prefix"] + "\n" + rec["text"]
+                rec["n_tokens"] = chunker.tokenizer.count_tokens(rec["text"])
+        out.append(rec)
+    return out
+
+
+# ---- D-037 item 4: output assertions ------------------------------------------------------------
+
+SEPARATOR_ROW = re.compile(r"^\|(\s*:?-+:?\s*\|)+\s*$")
+
+
+def table_headers(doc: DoclingDocument, chunker: HybridChunker) -> dict[str, dict]:
+    """Per table: the header lines the markdown serializer emits (what every slice must start
+    with), and the D-037 blank-header test from the column_header flags."""
+    ser = chunker.serializer_provider.get_serializer(doc=doc)
+    out = {}
+    for it, _lvl in doc.iterate_items():
+        if not isinstance(it, TableItem):
+            continue
+        text = ser.serialize(item=it).text
+        header_lines, _ = ser.table_serializer.get_header_and_body_lines(table_text=text)
+        flags = [c for c in it.data.table_cells if c.column_header]
+        out[item_key(str(it.self_ref))] = {
+            "header": "".join(header_lines),
+            # D-037: blank when column_header flags exist but none starts on row 0
+            "blank_by_flags": bool(flags) and not any(c.start_row_offset_idx == 0 for c in flags),
+        }
+    return out
+
+
+def _header_cells(header: str) -> list[str]:
+    first = header.splitlines()[0] if header else ""
+    return [c.strip() for c in first.strip().strip("|").split("|")] if first else []
+
+
+def d037_output_checks(records: list[dict], headers: dict[str, dict]) -> dict:
+    """D-037 item 4 on finished records: every table slice starts with the header row; every
+    table slice contains the prefix; every body line starts with ``|``; blank or partial repeated
+    headers counted across all tables. Returns the violations (empty lists = pass) and counts."""
+    starts, prefix, pipes = [], [], []
+    for rec in records:
+        if rec["chunk_type"] != "table":
+            continue
+        key = rec["item"] if rec["item"] in headers else min(rec["table_refs"], key=_table_index)
+        header = headers.get(key, {}).get("header", "")
+        body = body_of(rec)
+        if not header or not body.startswith(header):
+            starts.append(rec["chunk_id"])
+        if not (rec.get("prefix_source") and rec.get("prefix") and rec["prefix"] in rec["text"]):
+            prefix.append(rec["chunk_id"])
+        rest = body[len(header) :] if header and body.startswith(header) else body
+        bad = [ln for ln in rest.splitlines() if not ln.startswith("|")]
+        if bad:
+            pipes.append({"chunk_id": rec["chunk_id"], "lines": len(bad)})
+    blank = sorted(
+        k
+        for k, h in headers.items()
+        if h["blank_by_flags"] or (h["header"] and not any(_header_cells(h["header"])))
+    )
+    partial = sorted(
+        k
+        for k, h in headers.items()
+        if k not in blank and h["header"] and not all(_header_cells(h["header"]))
+    )
+    return {
+        "table_slices": sum(1 for r in records if r["chunk_type"] == "table"),
+        "header_row_missing": starts,
+        "prefix_missing": prefix,
+        "body_line_not_pipe": pipes,
+        "blank_headers": blank,
+        "partial_headers": partial,
+    }
+
+
+# ---- the one chunking path (D-037) ---------------------------------------------------------------
+
+
+def apply_row_fix(
+    doc_dict: dict, pdf_path: Path, row: ManifestRow, cfg: Config
+) -> tuple[dict, dict[int, dict]]:
+    """The row fix on a copy of the raw Docling export (the export itself is never changed)."""
+    fixed = copy.deepcopy(doc_dict)
+    with pdfplumber.open(pdf_path) as pdf:
+        log = fix_document(fixed, pdf, row.source, cfg.parser.row_fix)
+    return fixed, log
+
+
+@dataclass
+class ChunkedUnit:
+    records: list[dict]
+    fix_log: dict[int, dict]
+    doc: DoclingDocument
+
+
+def chunk_document(
+    doc_dict: dict,
+    pdf_path: Path,
+    row: ManifestRow,
+    cfg: Config,
+    *,
+    chunker: HybridChunker,
+    prefix: bool = True,
+) -> ChunkedUnit:
+    """Raw Docling export -> row fix -> DoclingDocument -> HybridChunker (markdown tables) ->
+    chunk records -> unit prefix. ``parse_unit`` and the D-037 re-chunk both call this."""
+    fixed, log = apply_row_fix(doc_dict, pdf_path, row, cfg)
+    doc = DoclingDocument.model_validate(fixed)
+    records = chunk_records(row, list(chunker.chunk(dl_doc=doc)), chunker, cfg, fix_log=log)
+    if prefix:
+        records = apply_prefix(records, prefix_sources(doc), chunker)
+    return ChunkedUnit(records, log, doc)
+
+
+def rowfix_json(unit_id: str, fix_log: dict[int, dict]) -> str:
+    """``<unit>.rowfix.json``: the same bytes as the port gate's emit log
+    (``scripts/a1_diag/rung1b/port_parity.py``), so the two can be compared by hash."""
+    return json.dumps({"unit": unit_id, "tables": fix_log})
 
 
 # ---- one unit --------------------------------------------------------------------------------
@@ -188,6 +516,11 @@ def unit_paths(cfg: Config, repo: Path, unit_id: str) -> tuple[Path, Path, Path]
     """(docling document json, chunk records jsonl, parse provenance json) for one unit."""
     d = repo / cfg.paths.parsed_dir
     return d / f"{unit_id}.json", d / f"{unit_id}.chunks.jsonl", d / f"{unit_id}.meta.json"
+
+
+def rowfix_path(cfg: Config, repo: Path, unit_id: str) -> Path:
+    """The row fix's per-table log, beside the raw export (D-037; D-040 keys on it)."""
+    return repo / cfg.paths.parsed_dir / f"{unit_id}.rowfix.json"
 
 
 def already_parsed(cfg: Config, repo: Path, unit_id: str) -> bool:
@@ -259,13 +592,15 @@ def parse_unit(
     t0 = time.perf_counter()
     try:
         result = converter.convert(pdf)
-        doc = result.document
-        records = chunk_records(row, list(chunker.chunk(dl_doc=doc)), chunker, cfg)
+        doc_dict = result.document.export_to_dict()
+        unit = chunk_document(doc_dict, pdf, row, cfg, chunker=chunker)
+        records = unit.records
         seconds = time.perf_counter() - t0
         prov = parse_provenance(cfg, backend=backend_name, seconds=seconds, n_chunks=len(records))
         # Document first, then chunks: `already_parsed` requires both, so a crash between the two
-        # leaves the unit un-parsed rather than half-parsed.
-        _atomic_write(doc_path, json.dumps(doc.export_to_dict(), ensure_ascii=False))
+        # leaves the unit un-parsed rather than half-parsed. `<unit>.json` is the RAW export.
+        _atomic_write(doc_path, json.dumps(doc_dict, ensure_ascii=False))
+        _atomic_write(rowfix_path(cfg, repo, row.unit_id), rowfix_json(row.unit_id, unit.fix_log))
         _atomic_write(
             chunks_path, "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records)
         )

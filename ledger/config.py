@@ -155,6 +155,22 @@ class ChunkingConfig(_Strict):
     omit_header_on_overflow: bool
     merge_peers: bool
     prepend_headings: bool
+    # D-037: markdown is the serializer under which D-033's switches act (header/body split)
+    table_serializer: str
+    # docling-core 2.97.1 MarkdownParams.compact_tables: padded (false) vs minimal (true) columns.
+    # It changes tokens per row, so slice counts; D-037 does not pin it and the owner has not ruled.
+    # Null loads; build_chunker raises at the use site until it is set (the D-020 pattern).
+    markdown_compact_tables: bool | None = None
+
+    @field_validator("table_serializer")
+    @classmethod
+    def _markdown_tables(cls, v: str) -> str:
+        if v != "markdown":
+            raise ValueError(
+                "chunking.table_serializer must be 'markdown' (D-037): under the default triplet "
+                "serializer the header switches never act and slices cut values from their labels"
+            )
+        return v
 
     # D-033: the three HybridChunker switches that decide whether a table slice keeps its
     # header (unit, period) and stays unmixed with prose. Pinned; a later library default flip
@@ -343,6 +359,10 @@ class FetchConfig(_Strict):
     gate_spot_check_n: int = Field(gt=0)
     gate_min_text_chars: int = Field(gt=0)
     pilot_eia_mer_sections: int = Field(ge=0)
+    # Image-only page flag (the sec7 lesson): a page with >= 1 embedded image and at most this many
+    # text-layer words. The owner has not chosen the value: null loads, and the flag function
+    # raises at its use site until it is set (the D-020 pattern).
+    image_only_page_max_words: int | None = Field(default=None, ge=0)
 
 
 class TracingConfig(_Strict):

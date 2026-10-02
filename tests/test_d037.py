@@ -1,0 +1,416 @@
+"""D-037: markdown table serializer, the one chunking path, the unit prefix, item 4's output
+assertions. Synthetic documents built here only (no pilot data, no network: the tokenizer is the
+cached embedder tokenizer, as in test_parse.py). Every test runs under both values of
+``chunking.markdown_compact_tables`` — the owner has not chosen one."""
+
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+
+import pytest
+import yaml
+from docling_core.types.doc import (
+    BoundingBox,
+    CoordOrigin,
+    DocItemLabel,
+    DoclingDocument,
+    ProvenanceItem,
+    Size,
+    TableCell,
+    TableData,
+)
+from pydantic import ValidationError
+from pypdf import PdfWriter
+
+from ledger.config import Config, load_config
+from ledger.ingest.manifest import ManifestHeader, ManifestRow, write_manifest
+from ledger.ingest.parse import (
+    body_of,
+    build_chunker,
+    chunk_document,
+    d037_output_checks,
+    parse_unit,
+    prefix_sources,
+    table_headers,
+    unit_paths,
+)
+
+pytestmark = pytest.mark.parse
+
+REPO = Path(__file__).resolve().parents[1]
+TITLE = "Table B-4. Percent changes in real gross domestic product"
+UNIT = "[Percent change, fourth quarter to fourth quarter]"
+
+
+# ---- fixtures ----------------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module", params=[False, True], ids=["padded", "compact"])
+def cfg(base_config_path: Path, request) -> Config:
+    base = load_config(base_config_path)
+    return base.model_copy(
+        update={
+            "chunking": base.chunking.model_copy(update={"markdown_compact_tables": request.param})
+        }
+    )
+
+
+@pytest.fixture(scope="module")
+def chunker(cfg):
+    return build_chunker(cfg)
+
+
+@pytest.fixture(scope="module")
+def pdf(tmp_path_factory) -> Path:
+    """A blank page: the row fix finds no text-layer lines (an in-scope table falls back)."""
+    p = tmp_path_factory.mktemp("pdf") / "blank.pdf"
+    w = PdfWriter()
+    w.add_blank_page(612, 792)
+    w.add_blank_page(612, 792)
+    w.write(str(p))
+    return p
+
+
+def _row(uid: str = "u1", source: str = "cbo_manual") -> ManifestRow:
+    return ManifestRow(
+        unit_id=uid,
+        source=source,
+        parent_series="X",
+        unit_kind="report",
+        fetch_method="direct",
+        title="t",
+        date_issued=None,
+        url="https://example.invalid/x.pdf",
+        sha256="a" * 64,
+        snapshot_date="2026-10-01",
+    )
+
+
+def _prov(page: int = 1) -> ProvenanceItem:
+    return ProvenanceItem(
+        page_no=page,
+        bbox=BoundingBox(l=50, t=700, r=550, b=100, coord_origin=CoordOrigin.BOTTOMLEFT),
+        charspan=(0, 0),
+    )
+
+
+def _table(
+    rows: int, *, header_row: int | None = 0, blank_cell: bool = False, wide: int = 0
+) -> TableData:
+    cells = []
+    for r in range(rows):
+        for c in range(4):
+            if r == 0:
+                text = "" if (blank_cell and c == 2) else ("Year" if c == 0 else f"Q{c}")
+            else:
+                text = f"{1990 + r}" if c == 0 else f"{r}.{c}"
+            if wide and r == 3 and c == 1:
+                text = "word " * wide
+            cells.append(
+                TableCell(
+                    text=text,
+                    row_span=1,
+                    col_span=1,
+                    start_row_offset_idx=r,
+                    end_row_offset_idx=r + 1,
+                    start_col_offset_idx=c,
+                    end_col_offset_idx=c + 1,
+                    column_header=(header_row is not None and r == header_row),
+                )
+            )
+    return TableData(num_rows=rows, num_cols=4, table_cells=cells)
+
+
+def _doc(
+    rows: int = 300,
+    *,
+    title: str | None = TITLE,
+    unit: str | None = UNIT,
+    caption: str | None = None,
+    unit_page: int = 1,
+    table_page: int = 1,
+    unit_after_table: bool = False,
+    **table_kw,
+) -> DoclingDocument:
+    doc = DoclingDocument(name="synthetic")
+    doc.add_page(page_no=1, size=Size(width=612, height=792))
+    doc.add_page(page_no=2, size=Size(width=612, height=792))
+    if title:
+        doc.add_heading(text=title, prov=_prov(1))
+    if unit and not unit_after_table:
+        doc.add_text(label=DocItemLabel.TEXT, text=unit, prov=_prov(unit_page))
+    kw = {}
+    if caption:
+        kw["caption"] = doc.add_text(label=DocItemLabel.CAPTION, text=caption, prov=_prov(1))
+    doc.add_table(data=_table(rows, **table_kw), prov=_prov(table_page), **kw)
+    if unit and unit_after_table:
+        doc.add_text(label=DocItemLabel.TEXT, text=unit, prov=_prov(unit_page))
+    return doc
+
+
+def _chunk(doc, pdf, cfg, chunker, *, source="cbo_manual", prefix=True):
+    return chunk_document(
+        doc.export_to_dict(), pdf, _row(source=source), cfg, chunker=chunker, prefix=prefix
+    )
+
+
+def _checks(unit, chunker):
+    return d037_output_checks(unit.records, table_headers(unit.doc, chunker))
+
+
+def _tables(records):
+    return [r for r in records if r["chunk_type"] == "table"]
+
+
+# ---- 1.2 config ----------------------------------------------------------------------------------
+
+
+def test_table_serializer_pinned_to_markdown(base_config_path: Path):
+    data = yaml.safe_load(base_config_path.read_text("utf-8"))
+    assert data["chunking"]["table_serializer"] == "markdown"
+    data["chunking"]["table_serializer"] = "triplet"
+    with pytest.raises(ValidationError, match="D-037"):
+        Config.model_validate(data)
+
+
+def test_compact_tables_null_loads_but_build_chunker_raises(base_config_path: Path):
+    """D-020 pattern: the config loads; the guard is at the use site and names D-037."""
+    cfg = load_config(base_config_path)
+    assert cfg.chunking.markdown_compact_tables is None
+    with pytest.raises(RuntimeError, match="D-037"):
+        build_chunker(cfg)
+
+
+def test_compact_tables_reaches_the_chunker_table_path(pdf, cfg, chunker):
+    """The setting is visible in what the chunker emits (padded vs minimal separator row)."""
+    unit = _chunk(_doc(), pdf, cfg, chunker)
+    body = body_of(_tables(unit.records)[1])
+    sep = body.splitlines()[1]
+    if cfg.chunking.markdown_compact_tables:
+        assert sep == "| - | - | - | - |"
+    else:
+        assert sep.startswith("|---") and " - " not in sep
+
+
+# ---- 1.4 item 4: each assertion passes on a clean table and fails on a fixture -------------------
+
+
+def test_item4_all_pass_on_a_clean_titled_unit_table(pdf, cfg, chunker):
+    unit = _chunk(_doc(), pdf, cfg, chunker)
+    c = _checks(unit, chunker)
+    assert c["table_slices"] > 1
+    assert c["header_row_missing"] == []
+    assert c["prefix_missing"] == []
+    assert c["body_line_not_pipe"] == []
+    assert c["blank_headers"] == [] and c["partial_headers"] == []
+
+
+def test_item4_header_row_fails_when_a_caption_preamble_leads_slice_0(pdf, cfg, chunker):
+    """Fixture that fails 'every table slice starts with the header row': with a caption the
+    chunker puts the caption before the header in slice 0 and strips it from slices 1..n
+    (hybrid_chunker.py segment(), the preamble path). Recorded, not handled."""
+    unit = _chunk(_doc(caption="Table 7. In millions of dollars"), pdf, cfg, chunker)
+    tables = _tables(unit.records)
+    c = _checks(unit, chunker)
+    assert c["header_row_missing"] == [tables[0]["chunk_id"]]
+    assert body_of(tables[0]).startswith("Table 7. In millions of dollars")
+
+
+def test_item4_prefix_fails_when_the_page_has_no_unit_item(pdf, cfg, chunker):
+    unit = _chunk(_doc(unit=None), pdf, cfg, chunker)
+    tables = _tables(unit.records)
+    assert all(r["prefix_source"] is None for r in tables)
+    assert _checks(unit, chunker)["prefix_missing"] == [r["chunk_id"] for r in tables]
+
+
+def test_item4_body_line_check_fails_on_a_non_pipe_line(pdf, cfg, chunker):
+    unit = _chunk(_doc(), pdf, cfg, chunker)
+    rec = dict(_tables(unit.records)[1])
+    extra = ("" if rec["text"].endswith("\n") else "\n") + "stray text"
+    rec["text"] += extra
+    rec["body_chars"] += len(extra)
+    c = d037_output_checks([rec], table_headers(unit.doc, chunker))
+    assert c["body_line_not_pipe"] == [{"chunk_id": rec["chunk_id"], "lines": 1}]
+
+
+def test_item4_blank_header_counted(pdf, cfg, chunker):
+    """D-037: blank when column_header flags exist but none starts on row 0."""
+    unit = _chunk(_doc(rows=30, header_row=1), pdf, cfg, chunker)
+    c = _checks(unit, chunker)
+    assert c["blank_headers"] == ["tbl-0"]
+
+
+def test_item4_partial_header_counted(pdf, cfg, chunker):
+    unit = _chunk(_doc(rows=30, blank_cell=True), pdf, cfg, chunker)
+    c = _checks(unit, chunker)
+    assert c["partial_headers"] == ["tbl-0"] and c["blank_headers"] == []
+
+
+def test_wide_row_with_header_kept_is_recorded_not_handled(pdf, cfg, chunker):
+    """D-033's open question: a single row wider than max_tokens with the header kept. RECORDS
+    what the pinned docling-core 2.97.1 emits (line_chunker.py chunk_text: the row is cut at the
+    token limit, ``"\\n" + take`` closes the slice, the next slice is the header + the rest of the
+    row). No handling is added; a library change flips this test."""
+    unit = _chunk(_doc(rows=10, wide=700), pdf, cfg, chunker)
+    tables = _tables(unit.records)
+    c = _checks(unit, chunker)
+    assert len(tables) >= 2
+    assert c["header_row_missing"] == []  # the header is kept on every slice
+    assert c["body_line_not_pipe"], "the cut row continues on a line that is not a table row"
+    header = table_headers(unit.doc, chunker)["tbl-0"]["header"]
+    cont = body_of(tables[1])[len(header) :]
+    assert not cont.startswith("|")  # slice 1 resumes mid-row under the repeated header
+    assert all(chunker.tokenizer.count_tokens(body_of(r)) <= 512 for r in tables)
+
+
+# ---- 1.3 the prefix ----------------------------------------------------------------------------
+
+
+def test_prefix_is_verbatim_and_sourced(pdf, cfg, chunker):
+    unit = _chunk(_doc(), pdf, cfg, chunker)
+    src = prefix_sources(unit.doc)["tbl-0"]
+    assert src["category"] == "bracketed-unit"
+    for r in _tables(unit.records):
+        assert r["prefix"] == f"{TITLE}\n{UNIT}"
+        assert r["text"].startswith(r["prefix"] + "\n")
+        assert r["prefix_source"] == src["unit"]["ref"] and src["unit"]["text"] == UNIT
+        assert r["prefix_title_source"] == src["title"]["ref"]
+
+
+def test_prefix_on_off_leaves_ids_boundaries_and_body_identical(pdf, cfg, chunker):
+    on = _chunk(_doc(), pdf, cfg, chunker, prefix=True).records
+    off = _chunk(_doc(), pdf, cfg, chunker, prefix=False).records
+    assert [r["chunk_id"] for r in on] == [r["chunk_id"] for r in off]
+    assert [r["body_chars"] for r in on] == [r["body_chars"] for r in off]
+    assert [body_of(r) for r in on] == [body_of(r) for r in off]
+    for a, b in zip(on, off, strict=True):
+        assert a["text"] == (a["prefix"] + "\n" + b["text"] if a["prefix"] else b["text"])
+
+
+def test_prefix_caption_item_is_a_unit_source(pdf, cfg, chunker):
+    unit = _chunk(_doc(unit=None, caption="Table 7. In millions of dollars"), pdf, cfg, chunker)
+    src = prefix_sources(unit.doc)["tbl-0"]
+    assert src["category"] == "caption"
+    assert src["unit"]["text"] == "Table 7. In millions of dollars"
+
+
+def test_prefix_parenthesised_unit_is_not_bracketed(pdf, cfg, chunker):
+    """Read literally: only square-bracketed text items qualify; nothing is invented."""
+    unit = _chunk(_doc(unit="(In millions of dollars)"), pdf, cfg, chunker)
+    src = prefix_sources(unit.doc)["tbl-0"]
+    assert src["category"] == "title only" and src["unit"] is None
+    assert all(r["prefix_source"] is None for r in _tables(unit.records))
+    assert all(r["prefix"] == TITLE for r in _tables(unit.records))
+
+
+def test_prefix_never_carries_over_from_another_page(pdf, cfg, chunker):
+    unit = _chunk(_doc(title=None, unit_page=1, table_page=2), pdf, cfg, chunker)
+    src = prefix_sources(unit.doc)["tbl-0"]
+    assert src["category"] == "nothing" and src["flags"]["no_title_on_page"]
+    assert all(r["prefix"] is None and r["prefix_source"] is None for r in _tables(unit.records))
+
+
+def test_prefix_flag_unit_after_title_only(pdf, cfg, chunker):
+    unit = _chunk(_doc(unit_after_table=True), pdf, cfg, chunker)
+    src = prefix_sources(unit.doc)["tbl-0"]
+    assert src["category"] == "title only"
+    assert src["flags"]["unit_after_title_only"]
+
+
+def test_prefix_flag_table_between(pdf, cfg, chunker):
+    doc = _doc(rows=8)
+    doc.add_table(data=_table(8), prov=_prov(1))
+    src = prefix_sources(doc)["tbl-1"]
+    assert src["unit"]["text"] == UNIT and src["flags"]["table_between"]
+    assert not prefix_sources(doc)["tbl-0"]["flags"]["table_between"]
+
+
+def test_prefix_never_changes_the_document(pdf, cfg, chunker):
+    doc = _doc()
+    before = json.dumps(doc.export_to_dict(), sort_keys=True)
+    unit = _chunk(doc, pdf, cfg, chunker)
+    assert json.dumps(unit.doc.export_to_dict(), sort_keys=True) == before
+    assert all(not t.captions for t in unit.doc.tables)
+
+
+# ---- 1.1 parse_path and the one path -------------------------------------------------------------
+
+
+def test_parse_path_from_the_fix_log(pdf, cfg, chunker):
+    """BUDGET/CBO pass through (D-039); an in-scope table that cannot be rebuilt is ``fallback``
+    (a blank page has no body lines)."""
+    out = _chunk(_doc(rows=30), pdf, cfg, chunker, source="cbo_manual")
+    assert {r["parse_path"] for r in _tables(out.records)} == {"out of scope"}
+    assert out.fix_log == {0: {"status": "out of scope (D-039)"}}
+    fb = _chunk(_doc(rows=30), pdf, cfg, chunker, source="eia")
+    assert {r["parse_path"] for r in _tables(fb.records)} == {"fallback"}
+    assert all(r["parse_path"] is None for r in fb.records if r["chunk_type"] == "prose")
+
+
+def _load_script():
+    spec = importlib.util.spec_from_file_location("rechunk_d037", REPO / "scripts/rechunk_d037.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _tmp_repo(tmp_path: Path, pdf: Path, row: ManifestRow) -> Path:
+    repo = tmp_path / "repo"
+    write_manifest(
+        repo / "data" / "manifest.jsonl",
+        ManifestHeader(selection_seed=1, snapshot_date="x", frames={}, pilot_composition={}),
+        [row],
+    )
+    raw = repo / "data" / "raw" / row.source
+    raw.mkdir(parents=True)
+    (raw / f"{row.unit_id}.pdf").write_bytes(pdf.read_bytes())
+    return repo
+
+
+@pytest.mark.parametrize("source", ["cbo_manual", "eia"])
+def test_parse_unit_and_rechunk_script_emit_identical_records(
+    tmp_path: Path, pdf, cfg, chunker, source
+):
+    doc = _doc(rows=120)
+    row = _row("u-same", source=source)
+    repo = _tmp_repo(tmp_path, pdf, row)
+
+    class _FakeConverter:
+        def convert(self, _path):
+            return type("R", (), {"document": doc})()
+
+    up = parse_unit(cfg, repo, row, converter=_FakeConverter(), chunker=chunker)
+    assert up.error is None, up.error
+    doc_p, chunks_p, _ = unit_paths(cfg, repo, "u-same")
+    assert json.loads(doc_p.read_text("utf-8")) == json.loads(
+        json.dumps(doc.export_to_dict(), ensure_ascii=False)
+    )  # <unit>.json is the raw export, never the fixed document
+
+    body = _load_script().rechunk(
+        cfg, tmp_path / "out", units=["u-same"], repo=repo, chunker=chunker
+    )
+    assert (tmp_path / "out" / "u-same.chunks.jsonl").read_bytes() == chunks_p.read_bytes()
+    assert (tmp_path / "out" / "u-same.rowfix.json").read_bytes() == (
+        repo / "data" / "parsed" / "u-same.rowfix.json"
+    ).read_bytes()
+    assert set(body["files"]) == {"u-same.chunks.jsonl", "u-same.rowfix.json"}
+    assert (tmp_path / "out" / "MANIFEST.json").exists()
+
+
+def test_rechunk_script_refuses_parsed_dir_and_drops_a_stale_manifest(
+    tmp_path: Path, pdf, cfg, chunker
+):
+    row = _row("u-x")
+    repo = _tmp_repo(tmp_path, pdf, row)
+    mod = _load_script()
+    for bad in (repo / "data" / "parsed", repo / "data" / "parsed" / "sub", repo / "data" / "raw"):
+        with pytest.raises(SystemExit, match="refused"):
+            mod.rechunk(cfg, bad, units=["u-x"], repo=repo, chunker=chunker)
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "MANIFEST.json").write_text("{}", encoding="utf-8")
+    with pytest.raises(SystemExit, match="not ACTIVE units"):
+        mod.rechunk(cfg, out, units=["u-x"], repo=repo, chunker=chunker)  # no saved export
+    assert not (out / "MANIFEST.json").exists()  # incomplete is visible as incomplete

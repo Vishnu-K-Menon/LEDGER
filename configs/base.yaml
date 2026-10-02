@@ -101,6 +101,11 @@ chunking:                             # D3 as revised by D-033: HybridChunker at
   omit_header_on_overflow: false      # a slice must never drop its header (unit/period); validator refuses true (D-033)
   merge_peers: false                  # never merge a table slice with prose; validator refuses true (D-033)
   prepend_headings: true              # embed chunker.contextualize(chunk): headings + captions prepended
+  table_serializer: markdown          # D-037: the serializer under which the three switches act; validator refuses others
+  markdown_compact_tables: null       # docling-core MarkdownParams.compact_tables (false = padded columns, the
+                                      # library default; true = minimal whitespace). Changes tokens per row and so
+                                      # slice counts; D-037 does not pin it - OWNER RULING PENDING. build_chunker
+                                      # raises while null (D-020 pattern: config loads, the guard is at the use site)
 
 embedding:                            # D4, size gated on A8
   model: Qwen/Qwen3-Embedding-4B
@@ -216,6 +221,8 @@ fetch:                                # T2 fetcher (D-034). Nothing here is hard
   gate_spot_check_n: 3                # granule self-containment spot-check per source
   gate_min_text_chars: 1000           # a txtLink rendition shorter than this is a stub: unjudgeable
   pilot_eia_mer_sections: 6           # eia 8 = 6 MER sections + STEO + AEO
+  image_only_page_max_words: null     # image-only page flag (sec7 lesson): >= 1 embedded image and <= this many
+                                      # text-layer words. OWNER RULING PENDING; the flag raises while null
 
 tracing:                              # D29 / D-014. Endpoint comes ONLY from OTEL_EXPORTER_OTLP_ENDPOINT.
   enabled: true

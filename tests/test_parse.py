@@ -63,9 +63,16 @@ def _doc_with_table(
     return doc
 
 
-@pytest.fixture(scope="module")
-def cfg(base_config_path: Path):
-    return load_config(base_config_path)
+@pytest.fixture(scope="module", params=[False, True], ids=["padded", "compact"])
+def cfg(base_config_path: Path, request):
+    """``chunking.markdown_compact_tables`` is null in base.yaml until the owner rules (D-037);
+    tests pass an explicit value and cover both."""
+    base = load_config(base_config_path)
+    return base.model_copy(
+        update={
+            "chunking": base.chunking.model_copy(update={"markdown_compact_tables": request.param})
+        }
+    )
 
 
 @pytest.fixture(scope="module")
@@ -73,12 +80,8 @@ def chunker(cfg):
     return build_chunker(cfg)
 
 
-def test_chunker_switches_read_back(chunker, cfg):
-    """D-033: the three pinned switches are what the constructed chunker actually carries."""
-    assert chunker.repeat_table_header is cfg.chunking.repeat_table_header is True
-    assert chunker.omit_header_on_overflow is cfg.chunking.omit_header_on_overflow is False
-    assert chunker.merge_peers is cfg.chunking.merge_peers is False
-    assert chunker.tokenizer.get_max_tokens() == cfg.chunking.max_tokens == 512
+# D-033's switch read-back test is replaced by D-037 item 4's output assertions
+# (tests/test_d037.py): the switches read back correctly and still never acted (D-037 Defect).
 
 
 def test_item_key_is_content_derived():
@@ -123,9 +126,9 @@ def test_headings_and_captions_on_every_slice(chunker, cfg):
 
 
 def test_header_travels_with_every_overflowing_slice(chunker, cfg):
-    """D-033's premise: the column header never leaves a slice. The default chunking serializer
-    emits triplets (`<row label>, <column header> = <value>`), so each cell carries its own
-    header — stronger than a repeated header line, and what makes D-005 chunk-ID citation sound."""
+    """D-033's premise: the column header never leaves a slice. Under the markdown table
+    serializer (D-037) the header row is repeated on every slice; the triplet reasoning this test
+    was first written under is superseded (D-033 status 2026-10-01)."""
     doc = _doc_with_table("hdr", rows=400)
     recs = chunk_records(_row("u3"), list(chunker.chunk(dl_doc=doc)), chunker, cfg)
     table_recs = [r for r in recs if r["chunk_type"] == "table"]
