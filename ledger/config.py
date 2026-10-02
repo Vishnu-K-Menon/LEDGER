@@ -76,6 +76,49 @@ class IngestConfig(_Strict):
         return v
 
 
+class RowTokenConfig(_Strict):
+    """A text-layer tokeniser of the row fix (D-038 / D-039; frozen values, port parity)."""
+
+    box_margin_pt: float = Field(
+        ge=0
+    )  # a char belongs to the table if its centre is inside +- this
+    superscript_size_ratio: float = Field(
+        gt=0, le=1
+    )  # chars smaller than this x median are dropped
+    line_tol_height_ratio: float = Field(gt=0)  # line grouping: |dy| <= this x median char height
+    gap_size_ratio: float = Field(gt=0)  # a token breaks on an x-gap > this x char size
+
+
+class RowFixConfig(_Strict):
+    """D-038 rung 1 / D-039 rung 1b: the text-layer row fix (ledger/ingest/rows.py). Every value is
+    the frozen rung-1b emitter's (reports/a1_diag/rung1b/emitter_freeze.json); the port is gated on
+    byte-identical output, so a change here re-opens the parity gate."""
+
+    sources: list[str]  # D-039: the emitter runs only on these manifest sources
+    trigger: RowTokenConfig  # the frozen D-038 trigger's tokeniser (counts only)
+    tokens: RowTokenConfig  # the emitter's own tokeniser
+    merged_cell_min_numbers: int = Field(ge=2)  # live trigger: a TF body cell this full is merged
+    flag_merge_gap_char_widths: float = Field(gt=0)  # a lone R/E flag joins the next number
+    band_overlap_merge_ratio: float = Field(gt=0, le=1)  # centred-column split clusters merge
+    dense_band_min_tokens: int = Field(ge=1)  # a dense band holds >= max(this, ...) tokens
+    dense_band_line_divisor: int = Field(ge=1)  # ... and >= ceil(candidate lines / this)
+    in_band_tol_multiple: float = Field(gt=0)  # a value is in a band within this x band tolerance
+    word_min_alpha: int = Field(ge=1)  # a token with this many letters is a word
+    prose_min_words: int = Field(ge=1)  # a line with this many words right of the stub is prose
+    prose_safety_share: float = Field(gt=0, le=1)  # fallback if prose lines exceed this share
+    text_column_gap_em: float = Field(gt=0)  # stub segments split by more than this many em
+    text_column_min_segments: int = Field(ge=2)  # worded stub segments that make a text column
+    text_column_safety_share: float = Field(gt=0, le=1)  # fallback if split stubs reach this share
+    header_tolerance_pt: float = Field(ge=0)  # header-word / band x-overlap tolerance
+    phrase_gap_size_ratio: float = Field(gt=0)  # header words this close (x size) are one phrase
+    default_leading_pt: float = Field(gt=0)  # line pitch when a table has one body line
+    wrap_leading_multiple: float = Field(gt=0)  # a wrapped label sits within this x leading
+    stub_left_tolerance_pt: float = Field(
+        ge=0
+    )  # stub = tokens ending left of the first band + this
+    multi_number_safety_share: float = Field(gt=0, le=1)  # fallback if this share of cells hold 2+
+
+
 class ParserConfig(_Strict):
     name: Literal["docling"]  # the paddleocr_vl fallback is retired (D-038; D2 status 2026-09-30)
     table_mode: str
@@ -87,6 +130,7 @@ class ParserConfig(_Strict):
     audit_cell_accuracy_min: float = Field(ge=0.0, le=1.0)
     audit_require_units: dict[str, int] = Field(default_factory=dict)
     audit_log_glob: str = "logs/parse_*.log"
+    row_fix: RowFixConfig  # D-038 / D-039: the text-layer row fix (production port)
 
     @field_validator("do_ocr")
     @classmethod

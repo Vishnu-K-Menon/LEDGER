@@ -24,6 +24,10 @@ dependencies = [
     "docling-core==2.97.1",
     "docling-ibm-models==4.0.3",
     "docling-parse==7.20.0",
+    # D-039 production port (ledger/ingest/rows.py): the row fix reads the PDF text layer with
+    # the exact versions the frozen rung-1b emitter ran under (port parity gate).
+    "pdfplumber==0.11.10",
+    "pdfminer-six==20260107",
 ]
 
 [project.scripts]

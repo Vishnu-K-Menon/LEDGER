@@ -1,0 +1,50 @@
+{
+ "run1": {
+  "keys_compared": [
+   "baseline",
+   "bootstrap",
+   "budget_cbo_pins",
+   "census_by_source",
+   "clause1_recall",
+   "denominators_asserted",
+   "erp_excluded",
+   "families",
+   "mode",
+   "per_table",
+   "sec7_rows_dropped",
+   "steo_tableitems_on_page",
+   "table_lists"
+  ],
+  "differing_keys": [],
+  "ignored": [
+   "candidate",
+   "integrity",
+   "pilot_candidate"
+  ]
+ },
+ "run2": {
+  "keys_compared": [
+   "baseline",
+   "bootstrap",
+   "budget_cbo_pins",
+   "census_by_source",
+   "clause1_recall",
+   "denominators_asserted",
+   "erp_excluded",
+   "families",
+   "mode",
+   "per_table",
+   "sec7_rows_dropped",
+   "steo_tableitems_on_page",
+   "table_lists"
+  ],
+  "differing_keys": [],
+  "ignored": [
+   "candidate",
+   "integrity",
+   "pilot_candidate"
+  ]
+ },
+ "run1_equals_run2_bytes": true,
+ "verdict": "REPRODUCED"
+}

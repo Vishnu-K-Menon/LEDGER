@@ -1,0 +1,442 @@
+{
+ "gate": "D-039 status 2026-10-01 port gate: ledger/ingest/rows.py vs the frozen emitter",
+ "config": "configs/base.yaml parser.row_fix",
+ "pilot_units": 19,
+ "fresh_units": 16,
+ "burned_tables_checked": 77,
+ "burned_tables_differing": [],
+ "budget_cbo_pins": {
+  "identical": true,
+  "pins": 704,
+  "absent_units": [],
+  "changed": 0
+ },
+ "files": {
+  "pilot": {
+   "cbo-59848.json": {
+    "port": "ad372d54cea2a0b38013c1387724f3994a0068d341db2de526a7e001a46f2274",
+    "frozen": "ad372d54cea2a0b38013c1387724f3994a0068d341db2de526a7e001a46f2274",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/cbo-59848.json": {
+    "port": "3a406b77e4151dcb7c45c12632a0648ebafd8b7e19819e5347857f33e1f86b90",
+    "frozen": "3a406b77e4151dcb7c45c12632a0648ebafd8b7e19819e5347857f33e1f86b90",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "cbo-60786.json": {
+    "port": "0bb2359d110ddea4ad4595f44b712d3029c003272296bcc91a2d1a33c1196be2",
+    "frozen": "0bb2359d110ddea4ad4595f44b712d3029c003272296bcc91a2d1a33c1196be2",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/cbo-60786.json": {
+    "port": "93698238533970c9c292e379a59067d5a063296a0c64e2145d58f0abd2761008",
+    "frozen": "93698238533970c9c292e379a59067d5a063296a0c64e2145d58f0abd2761008",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "cbo-61959.json": {
+    "port": "b034c493fe4bddc8c9573e35ddc21b4103ab21df36f65c5b9bd9b31bfb3a7803",
+    "frozen": "b034c493fe4bddc8c9573e35ddc21b4103ab21df36f65c5b9bd9b31bfb3a7803",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/cbo-61959.json": {
+    "port": "d9531af8904f59bf5b185e43f17216953901bafc5d70f335cbb86bbc5baa32e3",
+    "frozen": "d9531af8904f59bf5b185e43f17216953901bafc5d70f335cbb86bbc5baa32e3",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "cbo-62735.json": {
+    "port": "91176f471afb77cf507b27898f40b74937aad31766ce5cb569f2b9cc4454fd4a",
+    "frozen": "91176f471afb77cf507b27898f40b74937aad31766ce5cb569f2b9cc4454fd4a",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/cbo-62735.json": {
+    "port": "41ff4a5cef3ee0e34d814a7b2dc1a2e8e141d5fc2442495fe098428b05e70dbd",
+    "frozen": "41ff4a5cef3ee0e34d814a7b2dc1a2e8e141d5fc2442495fe098428b05e70dbd",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-AEO_Narrative.json": {
+    "port": "76473ba8f529bd7147e0fbc4c3ddb51c4e444503f9a1e5b06a4e98c2c38a50c6",
+    "frozen": "76473ba8f529bd7147e0fbc4c3ddb51c4e444503f9a1e5b06a4e98c2c38a50c6",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-AEO_Narrative.json": {
+    "port": "44dad5a4d476859308a0a8cefcd7640d78a12c3b60881f0e835009acca55a0ee",
+    "frozen": "44dad5a4d476859308a0a8cefcd7640d78a12c3b60881f0e835009acca55a0ee",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-sec1.json": {
+    "port": "dd408c79cd1a14bc7ea477a7bc81ca5cf9b4d3b650234ac4439d7737976fe093",
+    "frozen": "dd408c79cd1a14bc7ea477a7bc81ca5cf9b4d3b650234ac4439d7737976fe093",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-sec1.json": {
+    "port": "8d7a8a8edcda57cd6d801c4883c0e0e2da8fc04b32216acfc9cc63f3293c7197",
+    "frozen": "8d7a8a8edcda57cd6d801c4883c0e0e2da8fc04b32216acfc9cc63f3293c7197",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-sec11.json": {
+    "port": "3e2ec7d31b4efae08cb83d759e985ed005f8c62b27e404152fa6a2f0a8594170",
+    "frozen": "3e2ec7d31b4efae08cb83d759e985ed005f8c62b27e404152fa6a2f0a8594170",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-sec11.json": {
+    "port": "6d9cd104c816a95b357704b9f33fdfccebde19cac512493f9a97bd9be24733ff",
+    "frozen": "6d9cd104c816a95b357704b9f33fdfccebde19cac512493f9a97bd9be24733ff",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-sec13.json": {
+    "port": "9758d74ccd802ee30d349be69590f0fd48c3e8c48d0f79b833c6161c4c03b3fe",
+    "frozen": "9758d74ccd802ee30d349be69590f0fd48c3e8c48d0f79b833c6161c4c03b3fe",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-sec13.json": {
+    "port": "45bdce7f3a35b3ca4779872b9484c84ef9fbdbc9a5b3d90c1278539d3fc39622",
+    "frozen": "45bdce7f3a35b3ca4779872b9484c84ef9fbdbc9a5b3d90c1278539d3fc39622",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-sec3.json": {
+    "port": "0bd43e3b328419c3c79e8ae3475e368fb785896708421d15adf6807b94c7d04b",
+    "frozen": "0bd43e3b328419c3c79e8ae3475e368fb785896708421d15adf6807b94c7d04b",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-sec3.json": {
+    "port": "1ced79fa757ce534375c910ec9a34eecad3e46a847690ad07ffe7746b5a888c4",
+    "frozen": "1ced79fa757ce534375c910ec9a34eecad3e46a847690ad07ffe7746b5a888c4",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-sec4.json": {
+    "port": "a20196147615f756f0eae4c1aadf2a46113e4f5356ea01ad1752c70d19378422",
+    "frozen": "a20196147615f756f0eae4c1aadf2a46113e4f5356ea01ad1752c70d19378422",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-sec4.json": {
+    "port": "cf9fe8ebdc80c30d978b6cf947042db7e69f137a5ed7401fcb437d887b0bc650",
+    "frozen": "cf9fe8ebdc80c30d978b6cf947042db7e69f137a5ed7401fcb437d887b0bc650",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-sec8.json": {
+    "port": "61d648b6a05c8602c5e785fb796bf136c71a7d77b1311c102747a94573ce85b3",
+    "frozen": "61d648b6a05c8602c5e785fb796bf136c71a7d77b1311c102747a94573ce85b3",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-sec8.json": {
+    "port": "ae6126fdbe312328a1d6aabedeba96f07a05f8c10feaebc8da5b98036d92dd4b",
+    "frozen": "ae6126fdbe312328a1d6aabedeba96f07a05f8c10feaebc8da5b98036d92dd4b",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "eia-pdf-steo_full.json": {
+    "port": "f567b81bf3e1d60623a3bde4ffc5396d799aae4ed2e8b3430c5b8598dc88de79",
+    "frozen": "f567b81bf3e1d60623a3bde4ffc5396d799aae4ed2e8b3430c5b8598dc88de79",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/eia-pdf-steo_full.json": {
+    "port": "466af2cd3958f3babc988a3c7db2a23b8fa9a084e5e202146f6a1bc8377b6aeb",
+    "frozen": "466af2cd3958f3babc988a3c7db2a23b8fa9a084e5e202146f6a1bc8377b6aeb",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "govinfo-BUDGET-2026-CROSSCUT.json": {
+    "port": "22aa73e6963b67f9a31d466ea7d589887315911e860dc664a68b327cb56334f9",
+    "frozen": "22aa73e6963b67f9a31d466ea7d589887315911e860dc664a68b327cb56334f9",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/govinfo-BUDGET-2026-CROSSCUT.json": {
+    "port": "60f5b2cd2e981cf505a4609680bb7dc655551fc3f0b365e2d8872ef00993f39e",
+    "frozen": "60f5b2cd2e981cf505a4609680bb7dc655551fc3f0b365e2d8872ef00993f39e",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "govinfo-BUDGET-2026-DOD.json": {
+    "port": "98ddf1969a6661b24d81d4dfda3e1835a327f282a920ce36f74ca8b27aa53753",
+    "frozen": "98ddf1969a6661b24d81d4dfda3e1835a327f282a920ce36f74ca8b27aa53753",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/govinfo-BUDGET-2026-DOD.json": {
+    "port": "faaafd2e33413eb63529051fe07e6aa9607f144dbd2e6f6c5117b6e7deb25b41",
+    "frozen": "faaafd2e33413eb63529051fe07e6aa9607f144dbd2e6f6c5117b6e7deb25b41",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "govinfo-BUDGET-2027-BALANCES.json": {
+    "port": "fbcee37153ad84c6ef9c6bc87094dbd2f1e5736f8f80ed4d58160b9b5de79678",
+    "frozen": "fbcee37153ad84c6ef9c6bc87094dbd2f1e5736f8f80ed4d58160b9b5de79678",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/govinfo-BUDGET-2027-BALANCES.json": {
+    "port": "97fad9769c00005e37fd7a8128dd0d5c721a927fde97cf4dcf4e314002d78ea7",
+    "frozen": "97fad9769c00005e37fd7a8128dd0d5c721a927fde97cf4dcf4e314002d78ea7",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "govinfo-BUDGET-2027-FCS.json": {
+    "port": "37a7595b55169c31d3949f110fcd481c6bf81175eb5a3abaa409e4c28034d289",
+    "frozen": "37a7595b55169c31d3949f110fcd481c6bf81175eb5a3abaa409e4c28034d289",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/govinfo-BUDGET-2027-FCS.json": {
+    "port": "6df09f07d4ba4bba3c082bfaf04f39365f11fc03c14bc30779c157a7e1b5c0ec",
+    "frozen": "6df09f07d4ba4bba3c082bfaf04f39365f11fc03c14bc30779c157a7e1b5c0ec",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "govinfo-CRPT-118hrpt468.json": {
+    "port": "002e0c4823a87170d12dfe8c99f6f87fa52de64d8a81146d5c7833ee8ad02509",
+    "frozen": "002e0c4823a87170d12dfe8c99f6f87fa52de64d8a81146d5c7833ee8ad02509",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/govinfo-CRPT-118hrpt468.json": {
+    "port": "89b0d63afc8fc55cce8af1aacd20353e80a53359bbbb543868193e159ae0d61c",
+    "frozen": "89b0d63afc8fc55cce8af1aacd20353e80a53359bbbb543868193e159ae0d61c",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "govinfo-ERP-2026-table22.json": {
+    "port": "d7aabc33fd83d515e28dd4258d6d1efe35d851e35e95c30a879afd7d46159c5c",
+    "frozen": "d7aabc33fd83d515e28dd4258d6d1efe35d851e35e95c30a879afd7d46159c5c",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table22.json": {
+    "port": "b5d6363b58fd5ba56996723f4677b8e1b462cdf4283a6c7dcadf9893aaaf9813",
+    "frozen": "b5d6363b58fd5ba56996723f4677b8e1b462cdf4283a6c7dcadf9893aaaf9813",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "govinfo-ERP-2026-table4.json": {
+    "port": "f3baa01e7e0fc7ac44825e83182dd8bb4fc789c35baf8e2b420f0a671885c9a4",
+    "frozen": "f3baa01e7e0fc7ac44825e83182dd8bb4fc789c35baf8e2b420f0a671885c9a4",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table4.json": {
+    "port": "112e865a931bcada17ec5a612eb194cef6fc99905117dcb1eab79991ba78cf0b",
+    "frozen": "112e865a931bcada17ec5a612eb194cef6fc99905117dcb1eab79991ba78cf0b",
+    "identical": true,
+    "frozen_dir": "parsed_rung1b"
+   }
+  },
+  "fresh": {
+   "eia-archives-aug26.json": {
+    "port": "d670d6aa6a61d9eaaa6008e0a75f0155725a94786066de8bb368a513e13332fe",
+    "frozen": "d670d6aa6a61d9eaaa6008e0a75f0155725a94786066de8bb368a513e13332fe",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/eia-archives-aug26.json": {
+    "port": "7eefe492fd5fcbf31034e583a2f8e3d0d049c440be347c5561a673966440dd0c",
+    "frozen": "7eefe492fd5fcbf31034e583a2f8e3d0d049c440be347c5561a673966440dd0c",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "eia-pdf-sec10.json": {
+    "port": "bce9c8557f433743ec669c27a1046872bb53c0bb0cac016a54bb61a041cb944f",
+    "frozen": "bce9c8557f433743ec669c27a1046872bb53c0bb0cac016a54bb61a041cb944f",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/eia-pdf-sec10.json": {
+    "port": "c476d92eebe3e2a7561c80c96e85422efe7e173b9f778366a6eef9d04e1eebf3",
+    "frozen": "c476d92eebe3e2a7561c80c96e85422efe7e173b9f778366a6eef9d04e1eebf3",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "eia-pdf-sec12.json": {
+    "port": "189a6c2dbbbcb8657a459ae5ac03e444a254e709445dd84991ee5babcc57f2ff",
+    "frozen": "189a6c2dbbbcb8657a459ae5ac03e444a254e709445dd84991ee5babcc57f2ff",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/eia-pdf-sec12.json": {
+    "port": "ee188cc6e9d453b57001e3b1d75ccb68ebb64ad9d7edab1cfabbdf69c4536522",
+    "frozen": "ee188cc6e9d453b57001e3b1d75ccb68ebb64ad9d7edab1cfabbdf69c4536522",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "eia-pdf-sec2.json": {
+    "port": "52afbdf2cc621f349a00137c26efde915475ab91419c3290dcf22097edb0401b",
+    "frozen": "52afbdf2cc621f349a00137c26efde915475ab91419c3290dcf22097edb0401b",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/eia-pdf-sec2.json": {
+    "port": "51d065b025e07514d0cd2d56fc2b16e9009c9757067c39853ce0bfa351330d22",
+    "frozen": "51d065b025e07514d0cd2d56fc2b16e9009c9757067c39853ce0bfa351330d22",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "eia-pdf-sec5.json": {
+    "port": "1b2e87837c55aed77b8c293b712fbac5483ad129adc53b2889471a53e2ae5108",
+    "frozen": "1b2e87837c55aed77b8c293b712fbac5483ad129adc53b2889471a53e2ae5108",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/eia-pdf-sec5.json": {
+    "port": "811ad022dc41511f115328a40cd21adead37fdab0a64269ee2c0f89866c59617",
+    "frozen": "811ad022dc41511f115328a40cd21adead37fdab0a64269ee2c0f89866c59617",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "eia-pdf-sec6.json": {
+    "port": "0bd2152695bc102cd7af44afe125fb4d1636d08298513dc992df50fcb883abbc",
+    "frozen": "0bd2152695bc102cd7af44afe125fb4d1636d08298513dc992df50fcb883abbc",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/eia-pdf-sec6.json": {
+    "port": "c1d653426350972708e9878773019a37c831cc94764c127a84fe336b3e88cfe8",
+    "frozen": "c1d653426350972708e9878773019a37c831cc94764c127a84fe336b3e88cfe8",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "eia-pdf-sec7.json": {
+    "port": "c35eb3a6239839150e50c9c57fed7f7dc359a799ba5ff3015dba3f1cf2623bfe",
+    "frozen": "c35eb3a6239839150e50c9c57fed7f7dc359a799ba5ff3015dba3f1cf2623bfe",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b_sec7ref"
+   },
+   "_emit_log/eia-pdf-sec7.json": {
+    "port": "7dde582e4741ebbcac8d1c40126ea5a9f0ddff9c09b38aeedce5cac82bce8bf8",
+    "frozen": "7dde582e4741ebbcac8d1c40126ea5a9f0ddff9c09b38aeedce5cac82bce8bf8",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b_sec7ref"
+   },
+   "eia-pdf-sec9.json": {
+    "port": "6d31e11cb21ff588526c90cb3e22c60ac108e91fda0afc78da14cac667b98ad0",
+    "frozen": "6d31e11cb21ff588526c90cb3e22c60ac108e91fda0afc78da14cac667b98ad0",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/eia-pdf-sec9.json": {
+    "port": "3f13efc5826e034225b6649a3e5fdeca5a0962b71306d8114f2a42f0485025d9",
+    "frozen": "3f13efc5826e034225b6649a3e5fdeca5a0962b71306d8114f2a42f0485025d9",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table10.json": {
+    "port": "8d91e68051e43a669df58629cb45469d07f7213db8022c152b561b8cc634dd1f",
+    "frozen": "8d91e68051e43a669df58629cb45469d07f7213db8022c152b561b8cc634dd1f",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table10.json": {
+    "port": "03a49b4af0af7487bb14124c4174a22a628a425f19add1e3d1826c960a439bb6",
+    "frozen": "03a49b4af0af7487bb14124c4174a22a628a425f19add1e3d1826c960a439bb6",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table14.json": {
+    "port": "4ddb3af280951b01b685c51fa33a3af56c0b150047067c64d229942a8cf1e5ed",
+    "frozen": "4ddb3af280951b01b685c51fa33a3af56c0b150047067c64d229942a8cf1e5ed",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table14.json": {
+    "port": "c7a834b46be48214cc2618827f73c4cf9fe50a3aa4ac7638c5e30ada498bb220",
+    "frozen": "c7a834b46be48214cc2618827f73c4cf9fe50a3aa4ac7638c5e30ada498bb220",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table28.json": {
+    "port": "c0584b14a5ae11441325d3c467742902b4720c5c36e96d12c6e45286ee792405",
+    "frozen": "c0584b14a5ae11441325d3c467742902b4720c5c36e96d12c6e45286ee792405",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table28.json": {
+    "port": "9260510fc2592a293580e2ce206f554542c434f1351e14421d81fe379a356b33",
+    "frozen": "9260510fc2592a293580e2ce206f554542c434f1351e14421d81fe379a356b33",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table33.json": {
+    "port": "124cd0033d74422a2dbddc7e4f939b7ed4361b723c14410b9eb2411b982fe6b5",
+    "frozen": "124cd0033d74422a2dbddc7e4f939b7ed4361b723c14410b9eb2411b982fe6b5",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table33.json": {
+    "port": "bc7e54648c9655f0c8b7dd4d0c6916d7dec1df8092ab1c35857d46fa01a96957",
+    "frozen": "bc7e54648c9655f0c8b7dd4d0c6916d7dec1df8092ab1c35857d46fa01a96957",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table43.json": {
+    "port": "984de45eadad45e87e5565357e68e94c1be4d6c2cf59a2b1a408db9fc7a2518e",
+    "frozen": "984de45eadad45e87e5565357e68e94c1be4d6c2cf59a2b1a408db9fc7a2518e",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table43.json": {
+    "port": "a7733624c4f53fb67c00eeffd556e073b04e6f317e4ffddb8ad28d18b20a544e",
+    "frozen": "a7733624c4f53fb67c00eeffd556e073b04e6f317e4ffddb8ad28d18b20a544e",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table52.json": {
+    "port": "2395dca415beab505d2566e1f5554f7243f25bcc61b666efb25ea0cc2a07fced",
+    "frozen": "2395dca415beab505d2566e1f5554f7243f25bcc61b666efb25ea0cc2a07fced",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table52.json": {
+    "port": "3149e820a8162710fccc32201063dffc8958941cf2d9962b2ec154f5e01f990b",
+    "frozen": "3149e820a8162710fccc32201063dffc8958941cf2d9962b2ec154f5e01f990b",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table59.json": {
+    "port": "4aa3cae9091c26b659bf3d5de08d777bcc4f40599170e4bbb00fb84010c874d7",
+    "frozen": "4aa3cae9091c26b659bf3d5de08d777bcc4f40599170e4bbb00fb84010c874d7",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table59.json": {
+    "port": "8c253e002ae426794093dc641e9132f8da1814ae673d37062520aa8d4a112c5f",
+    "frozen": "8c253e002ae426794093dc641e9132f8da1814ae673d37062520aa8d4a112c5f",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "govinfo-ERP-2026-table7.json": {
+    "port": "9fda30861dc9cc21fee47b673219cd68bc82e6e0ca514cc0bce5c8ccc4a2278c",
+    "frozen": "9fda30861dc9cc21fee47b673219cd68bc82e6e0ca514cc0bce5c8ccc4a2278c",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   },
+   "_emit_log/govinfo-ERP-2026-table7.json": {
+    "port": "ee0894239f2eb89121afe2bf13b9dd6e242576df9f2bdadba520a2414b864365",
+    "frozen": "ee0894239f2eb89121afe2bf13b9dd6e242576df9f2bdadba520a2414b864365",
+    "identical": true,
+    "frozen_dir": "parsed_fresh_rung1b"
+   }
+  }
+ },
+ "differences": [],
+ "verdict": "IDENTICAL"
+}

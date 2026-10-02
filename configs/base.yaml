@@ -59,6 +59,38 @@ parser:                               # D2, gated on A1
     cbo-*: 1
   audit_log_glob: logs/parse_*.log    # where the dropped-cell warnings are read from; PowerShell
                                       # Tee-Object writes these UTF-16, so the reader sniffs the BOM
+  row_fix:                            # D-038 rung 1 / D-039 rung 1b, ported to ledger/ingest/rows.py.
+                                      # Every value is the FROZEN rung-1b emitter's (emitter_freeze.json);
+                                      # the port is gated on byte-identical output - a change re-opens it.
+    sources: [eia, govinfo_erp]       # D-039: emitter scope; BUDGET/CBO tables pass through byte-identical
+    trigger:                          # the frozen D-038 trigger's tokeniser (its counts feed the live rule)
+      box_margin_pt: 1
+      superscript_size_ratio: 0.75
+      line_tol_height_ratio: 0.5
+      gap_size_ratio: 0.25
+    tokens:                           # the emitter's own tokeniser
+      box_margin_pt: 1
+      superscript_size_ratio: 0.75
+      line_tol_height_ratio: 0.5
+      gap_size_ratio: 0.15            # BUDGET's condensed font sets words 0.24-0.27 x size apart
+    merged_cell_min_numbers: 2        # live trigger: fire iff a TF body cell holds this many numbers OR lines != TF rows
+    flag_merge_gap_char_widths: 1.5
+    band_overlap_merge_ratio: 0.5
+    dense_band_min_tokens: 2
+    dense_band_line_divisor: 10       # dense = >= max(2, ceil(candidate lines / 10)) tokens
+    in_band_tol_multiple: 1.5
+    word_min_alpha: 2
+    prose_min_words: 2
+    prose_safety_share: 0.2
+    text_column_gap_em: 2
+    text_column_min_segments: 2
+    text_column_safety_share: 0.3
+    header_tolerance_pt: 2
+    phrase_gap_size_ratio: 0.6
+    default_leading_pt: 10.0
+    wrap_leading_multiple: 1.5
+    stub_left_tolerance_pt: 0.5
+    multi_number_safety_share: 0.02
 
 chunking:                             # D3 as revised by D-033: HybridChunker at ingest, tokenizer only
   max_tokens: 512                     # the main lever on A6 difficulty under row-splitting (D-033); v1 holds 512
