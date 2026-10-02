@@ -1,0 +1,79 @@
+{
+ "unit": "govinfo-ERP-2026-table4",
+ "settings": {
+  "compact_false": {
+   "fixed": {
+    "chunks": 52,
+    "table_slices": 46,
+    "per_table": {
+     "tbl-0": 23,
+     "tbl-1": 23
+    },
+    "parse_path": [
+     "rebuilt"
+    ],
+    "prefix_sources": [
+     "#/texts/2",
+     "#/texts/6"
+    ],
+    "max_n_tokens_table": 481,
+    "item4": {
+     "table_slices": 46,
+     "header_row_missing": [],
+     "prefix_missing": [],
+     "body_line_not_pipe": [],
+     "blank_headers": [],
+     "partial_headers": [],
+     "max_n_tokens_table": 481,
+     "max_n_tokens_all": 481
+    }
+   },
+   "unfixed_in_memory": {
+    "chunks": 45,
+    "table_slices": 39,
+    "per_table": {
+     "tbl-0": 20,
+     "tbl-1": 19
+    }
+   },
+   "manifest": "data\\rechunk_smoke\\compact_false\\MANIFEST.json"
+  },
+  "compact_true": {
+   "fixed": {
+    "chunks": 38,
+    "table_slices": 32,
+    "per_table": {
+     "tbl-0": 16,
+     "tbl-1": 16
+    },
+    "parse_path": [
+     "rebuilt"
+    ],
+    "prefix_sources": [
+     "#/texts/2",
+     "#/texts/6"
+    ],
+    "max_n_tokens_table": 518,
+    "item4": {
+     "table_slices": 32,
+     "header_row_missing": [],
+     "prefix_missing": [],
+     "body_line_not_pipe": [],
+     "blank_headers": [],
+     "partial_headers": [],
+     "max_n_tokens_table": 518,
+     "max_n_tokens_all": 518
+    }
+   },
+   "unfixed_in_memory": {
+    "chunks": 40,
+    "table_slices": 34,
+    "per_table": {
+     "tbl-0": 18,
+     "tbl-1": 16
+    }
+   },
+   "manifest": "data\\rechunk_smoke\\compact_true\\MANIFEST.json"
+  }
+ }
+}
