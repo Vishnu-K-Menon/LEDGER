@@ -6,9 +6,8 @@ text: STEO and AEO cite "Monthly Energy Review".
 The manifest is tracked, so its checks run in CI; the data artifacts are gitignored and each check
 skips when its artifact is absent (D-028: CI is pytest + ruff).
 
-``chunks.jsonl`` before the one re-chunk (D-037) is the old pilot chunking, which still holds the
-MER units: until ``chunk_ids.lock`` exists the chunk check is an expected failure with that reason;
-from the lock on (the index is frozen, D24) it is a hard assertion."""
+``chunks.jsonl`` is the post-re-chunk pilot (D-037, 2026-10-02), rebuilt from the 13 ACTIVE units
+only; the chunk check is a hard assertion (the pre-re-chunk expected failure is removed)."""
 
 from __future__ import annotations
 
@@ -73,11 +72,6 @@ def test_mer_absent_from_chunks() -> None:
             r = json.loads(line)
             if _is_mer(r.get("unit_id"), r.get("parent_series")):
                 hits.add(r.get("unit_id"))
-    if hits and not (REPO / CFG.paths.chunk_ids_lock).exists():
-        pytest.xfail(
-            f"pre-re-chunk chunks.jsonl still holds {len(hits)} MER units; D-040 removes them at "
-            "the one re-chunk (D-037), before chunk IDs freeze - a hard failure from the lock on"
-        )
     assert not hits, f"MER units in {CFG.paths.chunks}: {sorted(hits)}"
 
 
