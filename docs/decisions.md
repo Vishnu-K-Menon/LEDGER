@@ -619,6 +619,8 @@ re-run the blank-header count).
 
 **Status 2026-10-02 (owner; item 5 — U+FFFD).** Found: 368,815 U+FFFD in table slices (f4b6a12). (a) Runs of ≥ 2 consecutive U+FFFD in the row-label (first) cell of a table body row are leader dots — CROSSCUT 2,720 runs, median 143 characters (re-chunk report, f4b6a12); a seeded sample of 10 was checked against the PDF text layer (none at a digit position; seed 20261002) — and are removed from chunk text after chunking. Chunk ids and slice boundaries are unchanged; header rows, prefix and heading lines and prose chunks are untouched. (b) U+FFFD anywhere else is kept and counted. A table slice with a U+FFFD between a sign or digit and a digit (ERP-2026-table4: 16 in 11 slices, e.g. `–�2`, possibly a decimal point) is never a question or κ-sample source (`question_source_barred` reason `fffd_in_number`), by criterion. The same transform and bar apply to every later unit through `parse.chunk_document`.
 
+**Status 2026-10-02 (owner; fill, item 5 strip at 98688ad).** U+FFFD removed: 368,799; kept: 16; fffd_in_number: 11 slices / 2 tables; token-weighted share 0.878 (was 0.886); max contextualized table-slice length 561 tokens (was 561); chunk-count share unchanged at 0.490.
+
 ## D-040 · 2026-10-01 · FIXED · v1 corpus composition without MER — successor to D-034 (sources) and D1; MER deferred to v2 under the D-039 failure branch
 
 **Decision.** EIA = STEO (Sept 2026 edition, rung-1b output, 10a known-wrong) + AEO; GovInfo ERP (rung-1b output); BUDGET; CBO. MER units are marked EXCLUDED in `data/manifest.jsonl` (rows kept, never deleted); moved out of `data/parsed/` (to `data/parsed_excluded/`) before the re-chunk; `source_mix` in config. Floor rechecked at the full-corpus mix: ≥ 25 units / ≥ 3 sources: ___ / ___.
