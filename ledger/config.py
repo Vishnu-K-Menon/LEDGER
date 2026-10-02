@@ -61,6 +61,9 @@ class CorpusConfig(_Strict):
     min_units: int = Field(gt=0)  # D-034 floor: >= 25 units
     min_sources: int = Field(gt=0)  # D-034 floor: >= 3 sources
     selection_seed: int
+    # D-040: units of these parent series are EXCLUDED from v1 (manifest rows kept); the key
+    # test_mer_absent checks provenance on, never text
+    excluded_parent_series: list[str]
 
 
 class IngestConfig(_Strict):

@@ -28,6 +28,8 @@ corpus:                               # D-034 (succeeds D1 / D-001): 20-unit PIL
   min_units: 25                       # D-034 floor, fixed now
   min_sources: 3
   selection_seed: 20260920            # seeded stratified draw (convention); same seed -> same draw
+  excluded_parent_series:             # D-040: MER is EXCLUDED from v1 (rows kept, marked EXCLUDED in the
+    - Monthly Energy Review           # manifest; parse moved to data/parsed_excluded/); v2 path in D-040
 
 ingest:                               # D-001 / D-032: ingest = parse + chunk (CPU), so the share is a chunk share
   confirm_after_units: 20             # one manifest row = one unit (granule or report); stops here until confirmed

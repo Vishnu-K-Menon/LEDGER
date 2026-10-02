@@ -40,7 +40,7 @@ from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTok
 from docling_core.types.doc import TableItem
 
 from ledger.config import Config, load_config
-from ledger.ingest.manifest import ManifestRow, read_manifest, write_manifest
+from ledger.ingest.manifest import ManifestRow, active_rows, read_manifest, write_manifest
 
 log = logging.getLogger(__name__)
 
@@ -430,7 +430,11 @@ def run_parse(
     workers: int | None = None,
 ) -> ParseResult:
     header, rows = read_manifest(repo / cfg.paths.manifest)
-    parseable, skipped = eligible_rows(rows)
+    # D-040: EXCLUDED rows are never parsed or chunked (their parse moved to
+    # data/parsed_excluded/, so "already parsed" would otherwise re-parse them); the manifest is
+    # still written back with every row
+    active = active_rows(rows)
+    parseable, skipped = eligible_rows(active)
     if limit:
         parseable = parseable[:limit]
     if not all_:
@@ -481,7 +485,7 @@ def run_parse(
     order = {r.unit_id: i for i, r in enumerate(parseable)}
     parses.sort(key=lambda u: order.get(u.unit_id, 0))
     n_chunks = write_chunks(repo / cfg.paths.chunks, parses)
-    stopped = not all_ and d001_stop_reached(rows, len(parses), len(skipped), cfg)
+    stopped = not all_ and d001_stop_reached(active, len(parses), len(skipped), cfg)
     _progress(
         f"parse done: {len(parses)} units on disk ({len(fresh)} parsed now, "
         f"{len(done_already)} reused) | {n_chunks} chunks | {seconds:.1f}s this run"

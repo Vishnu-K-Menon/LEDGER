@@ -51,6 +51,10 @@ class ManifestRow(BaseModel):
     policy_url: str | None = None
     policy_note: str | None = None
     notes: list[str] = Field(default_factory=list)
+    # D-040: a unit removed from the corpus keeps its row (never deleted) and is marked EXCLUDED;
+    # every stage works on the active rows only
+    status: Literal["ACTIVE", "EXCLUDED"] = "ACTIVE"
+    status_note: str | None = None
 
 
 def write_manifest(path: Path, header: ManifestHeader, rows: list[ManifestRow]) -> None:
@@ -66,6 +70,11 @@ def read_manifest(path: Path) -> tuple[ManifestHeader, list[ManifestRow]]:
     header = ManifestHeader.model_validate_json(lines[0])
     rows = [ManifestRow.model_validate_json(ln) for ln in lines[1:]]
     return header, rows
+
+
+def active_rows(rows: list[ManifestRow]) -> list[ManifestRow]:
+    """The corpus: rows not marked EXCLUDED (D-040). Excluded rows stay in the file."""
+    return [r for r in rows if r.status != "EXCLUDED"]
 
 
 def unit_count(rows: list[ManifestRow]) -> int:
