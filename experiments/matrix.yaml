@@ -1,0 +1,19 @@
+# T14 matrix template (D26). NOT wired to any submission yet.
+# Cells: docs/evaluation.md:58 - rows no-repair, delete, rewrite, re_retrieve(1), each x
+# decomposition {claimify, sentence_split} = 8 cells; re_retrieve(2) and re_retrieve(3) (the graft
+# cells) claimify only = 2 cells; total 10. `delete-all` is computed from the no-repair run
+# (no API calls) and is not a cell.
+# Seeds: [1, 2] - D-035 status 2026-10-01 (cut 3 taken, seeds 3 -> 2). One seed at a time (D-009);
+# seeds after the first need --confirm-seed-1-inspected.
+seeds: [1, 2]
+cells:
+  - {id: no_repair__claimify, arm: no_repair, decomposition: claimify}
+  - {id: no_repair__sentence_split, arm: no_repair, decomposition: sentence_split}
+  - {id: delete__claimify, arm: delete, decomposition: claimify}
+  - {id: delete__sentence_split, arm: delete, decomposition: sentence_split}
+  - {id: rewrite__claimify, arm: rewrite, decomposition: claimify}
+  - {id: rewrite__sentence_split, arm: rewrite, decomposition: sentence_split}
+  - {id: re_retrieve1__claimify, arm: re_retrieve, decomposition: claimify, max_iter: 1}
+  - {id: re_retrieve1__sentence_split, arm: re_retrieve, decomposition: sentence_split, max_iter: 1}
+  - {id: re_retrieve2__claimify, arm: re_retrieve, decomposition: claimify, max_iter: 2}
+  - {id: re_retrieve3__claimify, arm: re_retrieve, decomposition: claimify, max_iter: 3}
