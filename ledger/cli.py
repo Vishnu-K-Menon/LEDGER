@@ -66,11 +66,13 @@ def cmd_ingest(cfg: Config, args: argparse.Namespace) -> int:
         by_source,
         by_unit,
         band=cfg.ingest.table_chunk_share_band,
-        skipped=res.skipped,
+        skipped=[u for u in res.skipped if u not in res.pending],
         seconds=res.seconds,
         workers=res.workers,
+        pending=res.pending,
     )
-    out = repo / cfg.paths.reports_dir / "a9_pilot.md"
+    # an INTERIM run (units pending) never overwrites the pilot A9 report
+    out = repo / cfg.paths.reports_dir / ("a9_interim.md" if res.pending else "a9_pilot.md")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(report + "\n", encoding="utf-8")
     print(report)

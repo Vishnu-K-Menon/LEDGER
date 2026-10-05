@@ -958,6 +958,9 @@ class ParseResult:
     stopped: bool
     seconds: float
     workers: int
+    # ACTIVE rows whose raw file is absent (a CBO unit the owner has not downloaded yet): skipped,
+    # reported, never parsed and never an error. ``skipped`` still holds them (D-001 counts them).
+    pending: list[str] = field(default_factory=list)
 
     @property
     def reused(self) -> list[str]:
@@ -1019,6 +1022,21 @@ def run_parse(
     # still written back with every row
     active = active_rows(rows)
     parseable, skipped = eligible_rows(active)
+    # D-034 status 2026-10-04: a row whose raw PDF is absent is PENDING, not a failure.
+    # No sha256 and not UNFETCHABLE = never fetched (CBO awaiting the owner); a sha256 but no raw
+    # file and nothing parsed = raw data not on this machine. Neither is parsed, neither aborts.
+    pending = [
+        r.unit_id for r in active if not r.sha256 and not any("UNFETCHABLE" in n for n in r.notes)
+    ]
+    absent = [
+        r
+        for r in parseable
+        if not already_parsed(cfg, repo, r.unit_id)
+        and not (repo / cfg.paths.raw_dir / r.source / f"{r.unit_id}.pdf").exists()
+    ]
+    pending += [r.unit_id for r in absent]
+    parseable = [r for r in parseable if r not in absent]
+    skipped = skipped + [r.unit_id for r in absent]
     if limit:
         parseable = parseable[:limit]
     if not all_:
@@ -1036,6 +1054,8 @@ def run_parse(
     )
     for r in done_already:
         _progress(f"REUSED  {r.unit_id} | already parsed, not re-parsed (resumable)")
+    for uid in pending:
+        _progress(f"PENDING (raw file absent) {uid} | skipped, no chunks written for it")
 
     t0 = time.perf_counter()
     fresh: list[UnitParse] = []
@@ -1074,4 +1094,4 @@ def run_parse(
         f"parse done: {len(parses)} units on disk ({len(fresh)} parsed now, "
         f"{len(done_already)} reused) | {n_chunks} chunks | {seconds:.1f}s this run"
     )
-    return ParseResult(parses, skipped, stopped, seconds, n_workers)
+    return ParseResult(parses, skipped, stopped, seconds, n_workers, pending)

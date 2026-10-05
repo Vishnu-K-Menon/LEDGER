@@ -224,6 +224,8 @@ fetch:                                # T2 fetcher (D-034). Nothing here is hard
   image_only_unit_min_share: 0.25     # a unit with >= this share of image-only pages is EXCLUDED at fetch, share
                                       # recorded, no replacement draw. OWNER, D-034 status 2026-10-02 (the sec7
                                       # lesson); both raise at the use site if null (D-020 pattern)
+  budget_page_cap: 200                # BUDGET unit with measured pages > this is EXCLUDED at fetch, no replacement.
+                                      # OWNER, D-034 status 2026-10-04 (1) (the draw took volumes < 200 by metadata pages)
 
 tracing:                              # D29 / D-014. Endpoint comes ONLY from OTEL_EXPORTER_OTLP_ENDPOINT.
   enabled: true

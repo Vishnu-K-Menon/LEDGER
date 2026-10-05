@@ -94,6 +94,7 @@ def render(
     skipped: list[str],
     seconds: float,
     workers: int,
+    pending: list[str] | None = None,
 ) -> str:
     lo, hi = band
     branch = (
@@ -106,9 +107,20 @@ def render(
         "prose chunks | table share |"
     )
     sep = "|---|---|---|---|---|---|---|---|"
+    interim = (
+        [
+            f"**INTERIM — not the A9 measurement.** {len(pending)} unit(s) are still pending "
+            f"({', '.join(pending)}); the full-corpus A9 is measured only after they are parsed "
+            "(owner, 2026-10-04). Do not log this share in decisions.md.",
+            "",
+        ]
+        if pending
+        else []
+    )
     lines = [
         "# A9 — pilot chunk statistics (D-001, D-033)",
         "",
+        *interim,
         f"`table_chunk_share` = **{total.table_chunk_share:.3f}** · "
         f"band {lo:.2f}–{hi:.2f} · **{branch}**",
         "",

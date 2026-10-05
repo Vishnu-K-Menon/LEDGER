@@ -365,6 +365,9 @@ class FetchConfig(_Strict):
     # functions that use them raise (the D-020 pattern).
     image_only_page_max_words: int | None = Field(default=None, ge=0)
     image_only_unit_min_share: float | None = Field(default=None, ge=0.0, le=1.0)
+    # D-034 status 2026-10-04 (1): a BUDGET unit whose measured pages exceed this is EXCLUDED at
+    # fetch, no replacement draw (the owner's cap; package-metadata pages are < 200 for the draw)
+    budget_page_cap: int = Field(gt=0)
 
 
 class TracingConfig(_Strict):

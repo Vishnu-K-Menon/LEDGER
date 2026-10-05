@@ -254,3 +254,44 @@ def test_do_ocr_validator_refuses_true(base_config_path: Path):
     data["parser"]["do_ocr"] = True
     with pytest.raises(ValidationError, match="do_ocr must be false"):
         Config.model_validate(data)
+
+
+def test_pending_rows_are_reported_and_skipped_not_raised(
+    cfg, chunker, tmp_path: Path, monkeypatch
+):
+    """D-034 status 2026-10-04: an ACTIVE row whose raw file is absent (a CBO unit the owner has not
+    downloaded: no sha256; or a sha256 with no raw file here) is skipped and reported PENDING; the
+    run completes, parseable rows are parsed, and no chunks are written for the pending rows."""
+    import json
+
+    from ledger.ingest import parse as parse_mod
+    from ledger.ingest.manifest import ManifestHeader, write_manifest
+    from ledger.ingest.parse import UnitParse, run_parse
+
+    ok, pend, gone = _row("u-ok"), _row("cbo-pending", sha=None), _row("u-gone")
+    write_manifest(
+        tmp_path / "data" / "manifest.jsonl",
+        ManifestHeader(selection_seed=1, snapshot_date="x", frames={}, pilot_composition={}),
+        [ok, pend, gone],
+    )
+    raw = tmp_path / cfg.paths.raw_dir / ok.source
+    raw.mkdir(parents=True)
+    (raw / "u-ok.pdf").write_bytes(b"%PDF-1.4")  # present; u-gone has none
+    recs = chunk_records(ok, list(chunker.chunk(dl_doc=_doc_with_table("p", 6))), chunker, cfg)
+    seen: list[str] = []
+
+    def _parse_unit(cfg_, repo_, row, **k):
+        seen.append(row.unit_id)
+        return UnitParse(row.unit_id, 2, len(recs), 1, 1, 0.1, records=recs)
+
+    monkeypatch.setattr(parse_mod, "parse_unit", _parse_unit)
+    monkeypatch.setattr(parse_mod, "build_converter", lambda cfg_: object())
+    monkeypatch.setattr(parse_mod, "build_chunker", lambda cfg_: object())
+    res = run_parse(cfg, tmp_path, config_path=str(base_cfg_path()), all_=True, workers=1)
+    assert seen == ["u-ok"] and [u.unit_id for u in res.parsed] == ["u-ok"]
+    assert res.pending == ["cbo-pending", "u-gone"]
+    written = [
+        json.loads(ln)["unit_id"]
+        for ln in (tmp_path / cfg.paths.chunks).read_text(encoding="utf-8").splitlines()
+    ]
+    assert set(written) == {"u-ok"}  # nothing for the pending rows

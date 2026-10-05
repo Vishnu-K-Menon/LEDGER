@@ -126,7 +126,7 @@ def test_fetch_fills_fields_and_makes_no_cbo_calls(repo: Path, monkeypatch):
     assert "www.cbo.gov" not in f.calls_by_host and f.calls_by_host == {"api.govinfo.gov": 2}
     # blank pages have no text layer -> below threshold: noted, not dropped
     assert set(res.below_threshold) == {"cbo-1", "govinfo-B", "govinfo-ERP-2026-table4"}
-    assert len(rows) == 3 and not res.erp_demoted
+    assert len(rows) == 3 and not res.erp_excluded and not res.pending
 
 
 def test_fetch_is_idempotent(repo: Path, monkeypatch):
@@ -144,23 +144,83 @@ def test_fetch_is_idempotent(repo: Path, monkeypatch):
     assert {o.action for o in res2.outcomes} == {"reused"}
 
 
-def test_erp_fail_demotes_without_redraw(repo: Path, monkeypatch):
+def test_erp_fail_excludes_that_granule_alone(repo: Path, monkeypatch):
+    """D-034 status 2026-10-04 (2): a FAIL excludes the failing granule only, no replacement; the
+    other granules and every other source are untouched (no demotion, no package PDF)."""
+    monkeypatch.setenv("GOVINFO_API_KEY", "k")
+    path = repo / "data" / "manifest.jsonl"
+    header, rows = read_manifest(path)
+    rows.append(
+        _row(
+            "govinfo-ERP-2026-table9",
+            "govinfo_erp",
+            "granule",
+            package_id="ERP-2026",
+            pages=6,
+            pages_source="estimated",
+        )
+    )
+    write_manifest(path, header, rows)
+
+    def check(uid, title, texts):
+        bad = uid.endswith("table9")
+        return ErpCheck(uid, "pass", "pass", "fail" if bad else "pass", "pass", {})
+
+    monkeypatch.setattr(fetch_mod, "erp_self_containment", check)
+    f = FakeFetcher()
+    res = run_fetch(_cfg(repo), repo=repo, fetcher=f)
+    _, rows = read_manifest(path)
+    by = {r.unit_id: r for r in rows}
+    assert res.erp_excluded == ["govinfo-ERP-2026-table9"]
+    bad = by["govinfo-ERP-2026-table9"]
+    assert bad.status == "EXCLUDED" and "this granule excluded alone" in bad.status_note
+    assert by["govinfo-ERP-2026-table4"].status == "ACTIVE"
+    assert not any(r.unit_id == "govinfo-ERP-2026" for r in rows)  # no package-level unit
+    assert not any(u.endswith("/packages/ERP-2026/pdf") for u in f.urls)  # nothing replaced
+
+
+def test_pending_cbo_row_does_not_abort_and_only_scopes_the_run(repo: Path, monkeypatch):
+    """A CBO row the owner has not downloaded yet stays pending; the rest of the run completes and
+    the manifest is written. ``only`` leaves every other row byte-identical."""
     monkeypatch.setenv("GOVINFO_API_KEY", "k")
     monkeypatch.setattr(
         fetch_mod,
         "erp_self_containment",
-        lambda uid, t, texts: ErpCheck(
-            uid, "pass", "pass", "fail", "pass", {"carry_in": "continued"}
-        ),
+        lambda uid, t, texts: ErpCheck(uid, "pass", "pass", "pass", "pass", {}),
     )
-    f = FakeFetcher()
-    res = run_fetch(_cfg(repo), repo=repo, fetcher=f)
-    header, rows = read_manifest(repo / "data" / "manifest.jsonl")
-    assert res.erp_demoted
-    erp = [r for r in rows if r.source == "govinfo_erp"]
-    assert len(erp) == 1 and erp[0].unit_kind == "report" and erp[0].unit_id == "govinfo-ERP-2026"
-    assert erp[0].url.endswith("/packages/ERP-2026/pdf") and erp[0].pages_source == "measured"
-    assert header.pilot_composition == {"x": 3}  # intended mix unchanged
+    path = repo / "data" / "manifest.jsonl"
+    header, rows = read_manifest(path)
+    rows.append(_row("cbo-2", "cbo_manual", date="2026-01-01"))
+    write_manifest(path, header, rows)
+    before = path.read_text(encoding="utf-8").splitlines()
+    res = run_fetch(_cfg(repo), repo=repo, fetcher=FakeFetcher(), only={"cbo-2", "govinfo-B"})
+    assert res.pending == ["cbo-2"]
+    after = path.read_text(encoding="utf-8").splitlines()
+    assert [after[i] for i in (0, 1, 3)] == [before[i] for i in (0, 1, 3)]  # outside `only`
+    _, new_rows = read_manifest(path)
+    by = {r.unit_id: r for r in new_rows}
+    assert by["cbo-2"].sha256 is None and by["cbo-2"].pages_source == "unknown"
+    assert any("PENDING" in n for n in by["cbo-2"].notes)
+    assert by["govinfo-B"].sha256 and by["cbo-1"].sha256 is None  # cbo-1 was out of scope
+    # a date mismatch for a file that IS listed still raises (test below)
+
+
+def test_budget_over_page_cap_is_excluded_without_replacement(repo: Path, monkeypatch):
+    monkeypatch.setenv("GOVINFO_API_KEY", "k")
+    monkeypatch.setattr(
+        fetch_mod,
+        "erp_self_containment",
+        lambda uid, t, texts: ErpCheck(uid, "pass", "pass", "pass", "pass", {}),
+    )
+    cfg = _cfg(repo)
+    cap = cfg.fetch.budget_page_cap
+    res = run_fetch(cfg, repo=repo, fetcher=FakeFetcher(pages=cap + 1), only={"govinfo-B"})
+    _, rows = read_manifest(repo / "data" / "manifest.jsonl")
+    b = next(r for r in rows if r.unit_id == "govinfo-B")
+    assert res.over_page_cap == ["govinfo-B"] and b.status == "EXCLUDED"
+    assert "no replacement" in b.status_note
+    res2 = run_fetch(cfg, repo=repo, fetcher=FakeFetcher(pages=cap), only={"govinfo-B"})
+    assert res2.over_page_cap == []
 
 
 def test_manual_missing_row_or_file_or_date_mismatch(repo: Path, monkeypatch):

@@ -4,9 +4,12 @@ Per manifest unit: obtain the PDF (GovInfo / EIA over HTTP through ``Fetcher``; 
 ``data/manual/cbo/`` — cbo.gov is never fetched by script), then fill ``sha256``, ``pages``
 (measured with pypdf, ``pages_source`` -> ``measured``), ``text_layer_ratio``, the policy fields
 from ``sources.yaml``, and for EIA ``date_issued`` from the PDF metadata. ERP granule units run
-the self-containment check (owner decision 2, 2026-09-20); any FAIL demotes ERP to report-level
-with no replacement draw. The manifest is rewritten in place; a second run re-hashes and skips
-downloads whose sha256 already matches.
+the self-containment check (owner decision 2, 2026-09-20). Full corpus (D-034 status 2026-10-04
+(2)): a FAIL excludes THAT granule alone (status EXCLUDED + status_note, no replacement), replacing
+the whole-source demotion of 2026-09-20 (2), whose pilot granules passed and are untouched. The
+manifest is rewritten in place; a second run re-hashes and skips downloads whose sha256 already
+matches. ``only`` limits the run to the named units; every other row passes through unchanged.
+A CBO row whose PDF the owner has not yet downloaded stays pending (no ``sources.csv`` row yet).
 """
 
 from __future__ import annotations
@@ -70,12 +73,14 @@ class UnitOutcome:
 class FetchResult:
     outcomes: list[UnitOutcome]
     erp_checks: list[ErpCheck]
-    erp_demoted: bool
+    erp_excluded: list[str]
     below_threshold: list[str]
     calls_by_host: dict[str, int]
     rows: list[ManifestRow]
     unfetchable: list[str] = field(default_factory=list)
     image_only_excluded: list[str] = field(default_factory=list)
+    pending: list[str] = field(default_factory=list)
+    over_page_cap: list[str] = field(default_factory=list)
 
 
 # ---- pdf measurements ------------------------------------------------------------------------
@@ -298,7 +303,13 @@ def _source_key(row: ManifestRow) -> str:
     return "govinfo" if row.source.startswith("govinfo") else row.source
 
 
-def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> FetchResult:
+def run_fetch(
+    cfg: Config,
+    *,
+    repo: Path,
+    fetcher: Fetcher | None = None,
+    only: set[str] | None = None,
+) -> FetchResult:
     manifest_path = repo / "data" / "manifest.jsonl"
     header, rows = read_manifest(manifest_path)
     sources = load_sources(
@@ -313,8 +324,13 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
     below: list[str] = []
     unfetchable: list[str] = []
     image_only: list[str] = []
+    erp_excluded: list[str] = []
+    pending: list[str] = []
+    over_cap: list[str] = []
 
     for row in rows:
+        if only is not None and row.unit_id not in only:
+            continue  # passes through unchanged
         dest = raw_dir / row.source / f"{row.unit_id}.pdf"
         before = f"{row.pages} ({row.pages_source})"
         notes = [n for n in row.notes if not n.startswith("fetch:")]
@@ -327,9 +343,15 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
             fname = f"{row.unit_id}.pdf"
             mrow = manual_rows.get(fname)
             if mrow is None:
-                raise RuntimeError(
-                    f"{row.unit_id}: no row in data/manual/cbo/sources.csv for {fname}"
+                # the owner has not downloaded this one yet: pending, not an error (a row for a
+                # file that is present, or a date mismatch, still raises)
+                notes.append("fetch: PENDING owner fetch (no row in data/manual/cbo/sources.csv)")
+                row.notes = notes
+                pending.append(row.unit_id)
+                outcomes.append(
+                    UnitOutcome(row.unit_id, "pending", before, "—", None, row.date_issued, notes)
                 )
+                continue
             if mrow["date_issued"] != row.date_issued:
                 raise RuntimeError(
                     f"{row.unit_id}: sources.csv date_issued {mrow['date_issued']!r} != manifest "
@@ -389,6 +411,19 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
             below.append(row.unit_id)
         if _image_only_check(row, dest, cfg, notes):
             image_only.append(row.unit_id)
+        if (
+            row.source == "govinfo_budget"
+            and row.status == "ACTIVE"
+            and row.pages > cfg.fetch.budget_page_cap
+        ):
+            # D-034 status 2026-10-04 (1): a BUDGET volume with measured pages over the cap is
+            # excluded at fetch, no replacement (CLIMATE had no metadata pages)
+            row.status = "EXCLUDED"
+            row.status_note = (
+                f"D-034 status 2026-10-04 (1): measured {row.pages} pages > page cap "
+                f"{cfg.fetch.budget_page_cap}; excluded at fetch, no replacement draw"
+            )
+            over_cap.append(row.unit_id)
         if row.source == "eia" and not row.date_issued:
             d, how = pdf_date(dest)
             row.date_issued = d
@@ -401,6 +436,18 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
                 f"title={chk.title_present} header={chk.header_row} carry_in={chk.no_carry_in} "
                 f"run_off={chk.no_run_off}"
             )
+            if chk.failed and row.status == "ACTIVE":
+                bad = [
+                    k
+                    for k in ("title_present", "header_row", "no_carry_in", "no_run_off")
+                    if getattr(chk, k) == "fail"
+                ]
+                row.status = "EXCLUDED"
+                row.status_note = (
+                    f"D-034 status 2026-10-04 (2): ERP self-containment FAIL ({', '.join(bad)}); "
+                    "this granule excluded alone, no replacement draw"
+                )
+                erp_excluded.append(row.unit_id)
         row.notes = notes
         outcomes.append(
             UnitOutcome(
@@ -414,67 +461,18 @@ def run_fetch(cfg: Config, *, repo: Path, fetcher: Fetcher | None = None) -> Fet
             )
         )
 
-    # ---- owner decision 2: any ERP FAIL -> report-level, no replacement draw --------------------
-    demoted = any(c.failed for c in erp_checks)
-    if demoted:
-        gran = [r for r in rows if r.source == "govinfo_erp" and r.unit_kind == "granule"]
-        pkg_id = gran[0].package_id if gran else "ERP-2026"
-        rows = [r for r in rows if not (r.source == "govinfo_erp" and r.unit_kind == "granule")]
-        pkg_url = f"{cfg.fetch.govinfo_base_url.rstrip('/')}/packages/{pkg_id}/pdf"
-        pol = sources.get("govinfo")
-        pkg_row = ManifestRow(
-            unit_id=f"govinfo-{pkg_id}",
-            source="govinfo_erp",
-            parent_series=gran[0].parent_series if gran else "ERP",
-            unit_kind="report",
-            fetch_method="govinfo",
-            title=gran[0].parent_series if gran else "ERP",
-            date_issued=gran[0].date_issued if gran else None,
-            url=pkg_url,
-            package_id=pkg_id,
-            snapshot_date=header.snapshot_date,
-            policy_url=pol.policy_url if pol else None,
-            policy_note=pol.policy_note if pol else None,
-            notes=[
-                "fetch: ERP demoted to report-level — a granule failed self-containment "
-                "(owner decision 2, 2026-09-20); no replacement draw"
-            ],
-        )
-        dest = raw_dir / "govinfo_erp" / f"{pkg_row.unit_id}.pdf"
-        api_key = api_key or govinfo_api_key()
-        fetcher.download(pkg_url, dest, source="govinfo", params={"api_key": api_key})
-        pkg_row.sha256 = sha256_of(dest)
-        pages, ratio, _ = pdf_pages_and_text_ratio(dest)
-        pkg_row.pages, pkg_row.pages_source, pkg_row.text_layer_ratio = (
-            pages,
-            "measured",
-            round(ratio, 4),
-        )
-        if _image_only_check(pkg_row, dest, cfg, pkg_row.notes):
-            image_only.append(pkg_row.unit_id)
-        rows.append(pkg_row)
-        outcomes.append(
-            UnitOutcome(
-                pkg_row.unit_id,
-                "downloaded",
-                "— (demotion)",
-                f"{pages} (measured)",
-                pkg_row.text_layer_ratio,
-                pkg_row.date_issued,
-                pkg_row.notes,
-            )
-        )
-
     write_manifest(manifest_path, header, rows)
     return FetchResult(
         outcomes,
         erp_checks,
-        demoted,
+        erp_excluded,
         below,
         dict(fetcher.calls_by_host),
         rows,
         unfetchable,
         image_only,
+        pending,
+        over_cap,
     )
 
 
@@ -496,7 +494,9 @@ def render_fetch_report(res: FetchResult) -> str:
         )
         for k, v in c.evidence.items():
             out.append(f"    {k}: {v}")
-    out.append(f"ERP demoted to report-level: {res.erp_demoted}")
+    out.append(f"ERP granules EXCLUDED by a self-containment FAIL: {res.erp_excluded or 'none'}")
+    out.append(f"BUDGET units over the page cap (EXCLUDED): {res.over_page_cap or 'none'}")
+    out.append(f"CBO pending owner fetch: {res.pending or 'none'}")
     out.append(f"below text_layer_ratio_min: {res.below_threshold or 'none'}")
     out.append(f"HTTP calls by host: {res.calls_by_host or 'none'}")
     out.append(f"unfetchable (no pdfLink at the source): {res.unfetchable or 'none'}")
