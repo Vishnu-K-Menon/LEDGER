@@ -7,7 +7,7 @@
 
 > **Status, 6 October 2026: in progress.** Built and measured: the document pipeline (fetch, parse, table repair, chunking), tracing, tests and CI. Designed, not yet built: retrieval, answer generation and the claim-checking loop. Next update when the checker pilot result is in.
 
-## In 30 seconds
+## Project In 30 seconds
 
 - **What it is.** A retrieval-augmented generation (RAG) system over US federal budget and energy publications. The design splits each answer into single-fact claims, checks each claim against the retrieved text with a small local model, and repairs the claims that fail.
 - **Measured so far.** Docling, the PDF parser, was merging rows in dense tables. A fix that rebuilds those tables from the PDF's own text was scored once, on tables it had never seen, against a 95% bar set in advance. Exact-cell accuracy rose from 30.5% to 100% in one document family and from 54% and 89% to 94.95% and 94.4% in two others, both just under the bar. Of those two, the densest was removed from version 1 rather than lowering the bar.
