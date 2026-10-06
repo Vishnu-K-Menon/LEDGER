@@ -1,4 +1,4 @@
-# LEDGER
+# LEDGER (Loop with Evidence-Decomposed Grounding and Error Repair)
 **Question answering over US federal statistical and budget publications, designed to check every claim in its own answer against the retrieved source text before showing it.**
 
 [![ci](https://github.com/Vishnu-K-Menon/LEDGER/actions/workflows/ci.yml/badge.svg)](https://github.com/Vishnu-K-Menon/LEDGER/actions/workflows/ci.yml)
