@@ -88,3 +88,45 @@ def test_prose_and_untouched_table_records_pass_through():
     (out,) = strip_leader_runs([clean], CHUNKER)
     assert out["text"] == clean["text"] and out["n_tokens"] == clean["n_tokens"]
     assert out["fffd_removed"] == 0 and "u0008_removed" not in out
+
+
+# ---- 2026-10-06: U+0008 removal and the digit guard ------------------------------------------
+
+
+def test_remove_backspaces_from_table_and_prose_records_only_that_changes():
+    from ledger.ingest.parse import remove_backspaces
+
+    table = _rec([f"| 1 | Lone {BS} backspace | 3 |", f"| 2 | Orphan{BS} | 4 |"])
+    table["text"] = table["text"].replace("Section 1", f"Sec{BS}tion 1")  # head region too
+    prose = {"chunk_id": "u::p1::txt-1::s0", "chunk_type": "prose", "slice": 0, "n_tokens": 1}
+    prose["text"] = f"Intro {BS}text here{BS}"
+    prose["body_chars"] = len(prose["text"])
+    out = remove_backspaces([table, prose], CHUNKER)
+    t, p = out
+    assert BS not in t["text"] and BS not in p["text"]
+    assert p["text"] == "Intro text here" and p["body_chars"] == len(p["text"])
+    assert t["text"].count("\n") == table["text"].count("\n")
+    assert _body(t) == _body(table).replace(BS, "") and t["body_chars"] == len(_body(t))
+    assert t["text"].startswith(PREFIX.replace("Section 1", "Section 1"))
+    for rec, orig in ((t, table), (p, prose)):
+        assert rec["n_tokens"] == CHUNKER.tokenizer.count_tokens(rec["text"])
+        assert {k for k in rec if rec[k] != orig.get(k)} <= {"text", "body_chars", "n_tokens"}
+        assert rec["chunk_id"] == orig["chunk_id"] and rec["chunk_type"] == orig["chunk_type"]
+    clean = _rec(["| 1 | fine | 2 |"])
+    assert remove_backspaces([clean], CHUNKER) == [clean]  # untouched record unchanged
+
+
+def test_digit_guard_keeps_a_run_between_digits_but_not_a_leader_run():
+    rows = [
+        f"| 1 | 5{F}{F}6 | 2 |",
+        f"| 2 | 5 {F * 3} 6 | 2 |",  # spaces ignored
+        f"| 3 | Label {BS}{F * 20} | 3,080 |",  # a leader run after a label is still removed
+        f"| 4 | 7{F * 2} | x |",  # digit on one side only: removed
+    ]
+    (rec,) = strip_leader_runs([_rec(rows)], CHUNKER)
+    body = _body(rec)
+    assert f"| 1 | 5{F}{F}6 | 2 |" in body and f"| 2 | 5 {F * 3} 6 | 2 |" in body
+    assert "| 3 | Label  | 3,080 |" in body and "| 4 | 7 | x |" in body
+    assert rec["fffd_removed"] == 20 + 2
+    again = strip_leader_runs([rec], CHUNKER)[0]
+    assert again["text"] == rec["text"]  # idempotent with the guard

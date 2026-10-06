@@ -567,7 +567,7 @@ FFFD_IN_NUMBER = re.compile(r"[−–\-\d]�\d")
 
 # D-037 status 2026-10-06 (item 5 extended): a U+0008 in the same cell before a removed run, with
 # only whitespace between, goes with the run (Docling emits "label \x08" then the leader dots).
-BS_LEADER_RUN = re.compile(r"\x08\s*�{2,}")
+BS_LEADER_RUN = re.compile(r"(\x08\s*)?(�{2,})")
 
 
 def _unescaped_pipes(line: str) -> list[int]:
@@ -583,17 +583,32 @@ def _unescaped_pipes(line: str) -> list[int]:
     return out
 
 
+def _digit_guarded(cell: str, start: int, end: int) -> bool:
+    """D-037 status 2026-10-06 (digit guard): a run with a digit immediately on both sides,
+    ignoring spaces (and a U+0008 before the run), could stand for characters inside a number."""
+    left = cell[:start].rstrip(" \t\x08")
+    right = cell[end:].lstrip(" \t")
+    return left[-1:].isdigit() and right[:1].isdigit()
+
+
+def _strip_cell(cell: str) -> str:
+    def repl(m: re.Match) -> str:
+        return m.group(0) if _digit_guarded(cell, m.start(2), m.end(2)) else ""
+
+    return BS_LEADER_RUN.sub(repl, cell)
+
+
 def _strip_row_cells(bare: str) -> tuple[str, int, int]:
-    """One body row with leader runs removed from EVERY cell; returns (row, U+FFFD, U+0008
-    removed). Text outside the cells (before the first pipe, after the last) is untouched."""
+    """One body row with leader runs removed from EVERY cell (a digit-guarded run is kept);
+    returns (row, U+FFFD, U+0008 removed). Text outside the cells (before the first pipe, after
+    the last) is untouched."""
     pipes = _unescaped_pipes(bare)
     if len(pipes) < 2:
         return bare, 0, 0
     out, n_f, n_b = bare[: pipes[0] + 1], 0, 0
     for a, b in zip(pipes, pipes[1:], strict=False):
         cell = bare[a + 1 : b]
-        kept = BS_LEADER_RUN.sub("", cell)
-        kept = LEADER_RUN.sub("", kept)
+        kept = _strip_cell(cell)
         n_f += cell.count("�") - kept.count("�")
         n_b += cell.count("\x08") - kept.count("\x08")
         out += kept + "|"
@@ -603,11 +618,12 @@ def _strip_row_cells(bare: str) -> tuple[str, int, int]:
 def strip_leader_runs(records: list[dict], chunker: HybridChunker) -> list[dict]:
     """D-037 item 5 (a), extended by D-037 status 2026-10-06: remove runs of >= 2 U+FFFD from every
     cell of table BODY rows, after chunking, with a U+0008 in the same cell before a removed run
-    (only whitespace between). A body row is a pipe line after the header's separator row; header
-    rows, caption/heading/prefix lines, a single U+FFFD and prose chunks are untouched. Ids, slice
-    boundaries and ``chunk_type`` are unchanged; ``body_chars`` and ``n_tokens`` are recomputed
-    for touched records, ``fffd_removed`` is set on every table record and ``u0008_removed`` only
-    on a record that lost one. Idempotent: a second pass removes nothing."""
+    (only whitespace between), except a run with a digit on both sides (digit guard). A body row is
+    a pipe line after the header's separator row; header rows, caption/heading/prefix lines, a
+    single U+FFFD and prose chunks are untouched. Ids, slice boundaries and ``chunk_type`` are
+    unchanged; ``body_chars`` and ``n_tokens`` are recomputed for touched records,
+    ``fffd_removed`` is set on every table record and ``u0008_removed`` only on a record that lost
+    one. Idempotent: a second pass removes nothing."""
     out = []
     for rec in records:
         rec = dict(rec)
@@ -633,6 +649,26 @@ def strip_leader_runs(records: list[dict], chunker: HybridChunker) -> list[dict]
                 rec["text"] = text[:cut] + body
                 rec["body_chars"] = len(body)
                 rec["n_tokens"] = chunker.tokenizer.count_tokens(rec["text"])
+        out.append(rec)
+    return out
+
+
+def remove_backspaces(records: list[dict], chunker: HybridChunker) -> list[dict]:
+    """D-037 status 2026-10-06: U+0008 (backspace) is a control character, never printed content;
+    every one is removed from the text of every record, table or prose. The last text transform:
+    it runs after the item-4 checks, which are computed against the document's own text (a header
+    row that carried a U+0008 would otherwise stop matching). ``body_chars`` and ``n_tokens`` are
+    recomputed for touched records; nothing else changes (no new field)."""
+    out = []
+    for rec in records:
+        rec = dict(rec)
+        text = rec["text"]
+        if "\x08" in text:
+            cut = len(text) - rec["body_chars"]
+            head, body = text[:cut].replace("\x08", ""), text[cut:].replace("\x08", "")
+            rec["text"] = head + body
+            rec["body_chars"] = len(body)
+            rec["n_tokens"] = chunker.tokenizer.count_tokens(rec["text"])
         out.append(rec)
     return out
 
@@ -737,7 +773,8 @@ def chunk_document(
 ) -> ChunkedUnit:
     """Raw Docling export -> row fix -> DoclingDocument -> HybridChunker (markdown tables) ->
     chunk records -> unit prefix -> item-5 leader strip -> item-4 checks -> question-source bars
-    (+ ``fffd_in_number``, ``header_row_cause``). ``parse_unit`` and
+    (+ ``fffd_in_number``, ``header_row_cause``) -> U+0008 removal (D-037 status 2026-10-06,
+    the last text transform). ``parse_unit`` and
     the D-037 re-chunk both call this. ``prefix=False`` annotates without printing (tests)."""
     fixed, log = apply_row_fix(doc_dict, pdf_path, row, cfg)
     doc = DoclingDocument.model_validate(fixed)
@@ -756,6 +793,7 @@ def chunk_document(
         cfg.chunking.max_tokens,
     )
     records = mark_header_row_causes(records, causes)
+    records = remove_backspaces(records, chunker)  # D-037 status 2026-10-06: last text transform
     return ChunkedUnit(records, log, doc, sources, checks)
 
 

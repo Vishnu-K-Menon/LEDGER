@@ -577,18 +577,17 @@ def _first_cells(rec: dict) -> list[str]:
 
 
 def test_item5_label_run_removed_everything_else_kept(pdf, cfg, chunker):
-    """Updated for D-037 status 2026-10-06: runs of >= 2 go from every body cell, not only the
-    first; the earlier first-cell-only assertion on a value-cell run is superseded."""
+    """Runs of >= 2 go from every body cell (D-037 status 2026-10-06) except a digit-guarded one:
+    the value-cell run between digits stays."""
     unit = _chunk(_fffd_doc(), pdf, cfg, chunker)
     (rec,) = _tables(unit.records)
     first = _first_cells(rec)
     assert first[0].startswith("Func��tion")  # header row untouched
     assert "Defense" in first[2] and "�" not in first[2]  # [1] is the separator
     assert "Health �" in first[3]  # a single U+FFFD in a label is kept
-    assert "56" in body_of(rec) and "5��6" not in body_of(rec)  # item 5 extended (2026-10-06)
+    assert "5��6" in body_of(rec)  # digit guard (2026-10-06): digits on both sides
     assert "–�2" in body_of(rec)  # sign + U+FFFD + digit in a value cell is kept
-    # the 40-run label and (2026-10-06 extension) the 2-run in a value cell are removed
-    assert rec["fffd_removed"] == 40 + 2 and rec["text"].count("�") == 2 + 1 + 1
+    assert rec["fffd_removed"] == 40 and rec["text"].count("�") == 2 + 1 + 2 + 1
     assert (
         rec["body_chars"]
         == len(body_of(rec))
@@ -696,10 +695,29 @@ def test_item5_ext_second_cell_run_and_backspace_removed_through_chunk_document(
     (rec,) = _tables(after.records)
     body = body_of(rec)
     assert "Opportunity Zones" in body and "Credit" in body
-    assert "�" not in body and body.count("") == 2  # "Lone  backspace" and "Other "
-    assert "Lone  backspace" in body and "Other " in body
+    assert "�" not in body and "" not in body  # every U+0008 goes (2026-10-06)
+    assert "Lone  backspace" in body and "Other " in body
     assert rec["fffd_removed"] == 30 + 9 + 5 and rec["u0008_removed"] == 2
     assert [r["chunk_id"] for r in after.records] == [r["chunk_id"] for r in before.records]
     assert after.checks["prefix_integrity"] == []
     assert after.checks == before.checks
     assert rec["n_tokens"] == chunker.tokenizer.count_tokens(rec["text"])
+
+
+def test_item5_ext_backspace_removed_from_every_record_ids_unchanged(
+    pdf, cfg, chunker, monkeypatch
+):
+    from ledger.ingest import parse as parse_mod
+
+    doc = _bs_doc()
+    after = _chunk(doc, pdf, cfg, chunker)
+    monkeypatch.setattr(parse_mod, "remove_backspaces", lambda recs, _c: recs)
+    before = _chunk(doc, pdf, cfg, chunker)
+    assert [r["chunk_id"] for r in after.records] == [r["chunk_id"] for r in before.records]
+    assert any("" in r["text"] for r in before.records)  # the transform has work to do
+    assert all("" not in r["text"] for r in after.records)
+    assert after.checks["prefix_integrity"] == [] and after.checks == before.checks
+    for r in _tables(after.records):
+        assert r["body_chars"] == len(body_of(r)) and r[
+            "n_tokens"
+        ] == chunker.tokenizer.count_tokens(r["text"])
