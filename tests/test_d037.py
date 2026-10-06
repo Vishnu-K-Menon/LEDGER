@@ -577,15 +577,18 @@ def _first_cells(rec: dict) -> list[str]:
 
 
 def test_item5_label_run_removed_everything_else_kept(pdf, cfg, chunker):
+    """Updated for D-037 status 2026-10-06: runs of >= 2 go from every body cell, not only the
+    first; the earlier first-cell-only assertion on a value-cell run is superseded."""
     unit = _chunk(_fffd_doc(), pdf, cfg, chunker)
     (rec,) = _tables(unit.records)
     first = _first_cells(rec)
     assert first[0].startswith("Func��tion")  # header row untouched
     assert "Defense" in first[2] and "�" not in first[2]  # [1] is the separator
     assert "Health �" in first[3]  # a single U+FFFD in a label is kept
-    assert "5��6" in body_of(rec)  # a run in a value cell is kept
+    assert "56" in body_of(rec) and "5��6" not in body_of(rec)  # item 5 extended (2026-10-06)
     assert "–�2" in body_of(rec)  # sign + U+FFFD + digit in a value cell is kept
-    assert rec["fffd_removed"] == 40 and rec["text"].count("�") == 2 + 1 + 2 + 1
+    # the 40-run label and (2026-10-06 extension) the 2-run in a value cell are removed
+    assert rec["fffd_removed"] == 40 + 2 and rec["text"].count("�") == 2 + 1 + 1
     assert (
         rec["body_chars"]
         == len(body_of(rec))
@@ -649,3 +652,54 @@ def test_item5_header_row_cause(pdf, cfg, chunker):
     ok = _chunk(_doc(rows=30), pdf, cfg, chunker)
     assert {r["header_row_cause"] for r in _tables(ok.records)} == {None}
     assert all("header_row_cause" not in r for r in ok.records if r["chunk_type"] == "prose")
+
+
+def _bs_doc() -> DoclingDocument:
+    """A duplicated spanning label cell: U+0008 then a leader run in the SECOND cell (the
+    BUDGET-2027-PER shape), a lone U+0008, and a lone U+0008 in a cell whose run is elsewhere."""
+    grid = [["Item", "Label", "Value"]]
+    grid += [["1", "Opportunity Zones " + "�" * 30, "3,080"]]
+    grid += [["2", "Credit  " + "�" * 9, "7"]]
+    grid += [["3", "Lone  backspace", "8"]]
+    grid += [["4", "Other ", "�" * 5]]
+    cells = [
+        TableCell(
+            text=t,
+            row_span=1,
+            col_span=1,
+            start_row_offset_idx=r,
+            end_row_offset_idx=r + 1,
+            start_col_offset_idx=c,
+            end_col_offset_idx=c + 1,
+            column_header=(r == 0),
+        )
+        for r, row in enumerate(grid)
+        for c, t in enumerate(row)
+    ]
+    doc = DoclingDocument(name="synthetic")
+    doc.add_page(page_no=1, size=Size(width=612, height=792))
+    doc.add_heading(text=TITLE, prov=_prov(1))
+    doc.add_text(label=DocItemLabel.TEXT, text=UNIT, prov=_prov(1))
+    doc.add_table(data=TableData(num_rows=len(grid), num_cols=3, table_cells=cells), prov=_prov(1))
+    return doc
+
+
+def test_item5_ext_second_cell_run_and_backspace_removed_through_chunk_document(
+    pdf, cfg, chunker, monkeypatch
+):
+    from ledger.ingest import parse as parse_mod
+
+    doc = _bs_doc()
+    after = _chunk(doc, pdf, cfg, chunker)
+    monkeypatch.setattr(parse_mod, "strip_leader_runs", lambda recs, _c: recs)
+    before = _chunk(doc, pdf, cfg, chunker)
+    (rec,) = _tables(after.records)
+    body = body_of(rec)
+    assert "Opportunity Zones" in body and "Credit" in body
+    assert "�" not in body and body.count("") == 2  # "Lone  backspace" and "Other "
+    assert "Lone  backspace" in body and "Other " in body
+    assert rec["fffd_removed"] == 30 + 9 + 5 and rec["u0008_removed"] == 2
+    assert [r["chunk_id"] for r in after.records] == [r["chunk_id"] for r in before.records]
+    assert after.checks["prefix_integrity"] == []
+    assert after.checks == before.checks
+    assert rec["n_tokens"] == chunker.tokenizer.count_tokens(rec["text"])

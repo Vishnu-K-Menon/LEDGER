@@ -565,47 +565,70 @@ LEADER_RUN = re.compile(r"�{2,}")
 FFFD_IN_NUMBER = re.compile(r"[−–\-\d]�\d")
 
 
-def _first_cell_end(line: str) -> int:
-    """Index of the pipe closing a markdown row's first cell (a backslash-escaped pipe is not)."""
-    i = 1
+# D-037 status 2026-10-06 (item 5 extended): a U+0008 in the same cell before a removed run, with
+# only whitespace between, goes with the run (Docling emits "label \x08" then the leader dots).
+BS_LEADER_RUN = re.compile(r"\x08\s*�{2,}")
+
+
+def _unescaped_pipes(line: str) -> list[int]:
+    """Indices of the pipes of a markdown row (a backslash-escaped pipe is not one)."""
+    out, i = [], 0
     while i < len(line):
         if line[i] == "\\":
             i += 2
             continue
         if line[i] == "|":
-            return i
+            out.append(i)
         i += 1
-    return len(line)
+    return out
+
+
+def _strip_row_cells(bare: str) -> tuple[str, int, int]:
+    """One body row with leader runs removed from EVERY cell; returns (row, U+FFFD, U+0008
+    removed). Text outside the cells (before the first pipe, after the last) is untouched."""
+    pipes = _unescaped_pipes(bare)
+    if len(pipes) < 2:
+        return bare, 0, 0
+    out, n_f, n_b = bare[: pipes[0] + 1], 0, 0
+    for a, b in zip(pipes, pipes[1:], strict=False):
+        cell = bare[a + 1 : b]
+        kept = BS_LEADER_RUN.sub("", cell)
+        kept = LEADER_RUN.sub("", kept)
+        n_f += cell.count("�") - kept.count("�")
+        n_b += cell.count("\x08") - kept.count("\x08")
+        out += kept + "|"
+    return out + bare[pipes[-1] + 1 :], n_f, n_b
 
 
 def strip_leader_runs(records: list[dict], chunker: HybridChunker) -> list[dict]:
-    """D-037 item 5 (a): remove runs of >= 2 U+FFFD from the first (row-label) cell of table BODY
-    rows, after chunking. A body row is a pipe line after the header's separator row; header rows,
-    caption/heading/prefix lines, value cells, a single U+FFFD and prose chunks are untouched.
-    Ids, slice boundaries and ``chunk_type`` are unchanged; ``body_chars`` and ``n_tokens`` are
-    recomputed for touched records and ``fffd_removed`` is set on every table record.
-    Idempotent: a second pass removes nothing."""
+    """D-037 item 5 (a), extended by D-037 status 2026-10-06: remove runs of >= 2 U+FFFD from every
+    cell of table BODY rows, after chunking, with a U+0008 in the same cell before a removed run
+    (only whitespace between). A body row is a pipe line after the header's separator row; header
+    rows, caption/heading/prefix lines, a single U+FFFD and prose chunks are untouched. Ids, slice
+    boundaries and ``chunk_type`` are unchanged; ``body_chars`` and ``n_tokens`` are recomputed
+    for touched records, ``fffd_removed`` is set on every table record and ``u0008_removed`` only
+    on a record that lost one. Idempotent: a second pass removes nothing."""
     out = []
     for rec in records:
         rec = dict(rec)
         if rec["chunk_type"] == "table":
             text = rec["text"]
             cut = len(text) - rec["body_chars"]
-            lines, seen_sep, removed = [], False, 0
+            lines, seen_sep, removed, removed_bs = [], False, 0, 0
             for ln in text[cut:].splitlines(keepends=True):
                 bare = ln.rstrip("\r\n")
                 if SEPARATOR_ROW.match(bare):
                     seen_sep = True
                 elif seen_sep and bare.startswith("|"):
-                    end = _first_cell_end(bare)
-                    cell = bare[1:end]
-                    kept = LEADER_RUN.sub("", cell)
-                    if kept != cell:
-                        removed += len(cell) - len(kept)
-                        ln = "|" + kept + ln[end:]
+                    new, n_f, n_b = _strip_row_cells(bare)
+                    removed += n_f
+                    removed_bs += n_b
+                    ln = new + ln[len(bare) :]
                 lines.append(ln)
             rec["fffd_removed"] = removed
-            if removed:
+            if removed_bs:
+                rec["u0008_removed"] = removed_bs
+            if removed or removed_bs:
                 body = "".join(lines)
                 rec["text"] = text[:cut] + body
                 rec["body_chars"] = len(body)
