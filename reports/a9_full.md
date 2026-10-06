@@ -236,3 +236,26 @@ For BUDGET and CBO units (outside the row fix) the dropped cells are **absent fr
 - The D-037 item-4 checks run inside `chunk_document` and are not persisted per unit; re-running it would re-chunk, so every output above is **recomputed from the stored records** (+ raw exports for the verbatim prefix check), not read from the in-parse values. `prefix_integrity` here = the recorded unit/title source text, taken from the raw Docling export, appears verbatim in the slice. It does not detect a unit or title that exists on the page but was never recorded as `prefix_source`.
 - Header repetition is read from `header_row_cause` / `question_source_barred`; blank and partial headers from each table's slice-0 header row.
 
+## Item-5 extension (D-037 status 2026-10-06; code and apply at b441584)
+
+Applied to the installed records only (no chunking). Backup: `data/parsed_prefffd2_20261006/` (38 per-unit chunk files, `data/chunks.jsonl`, `SHA256_MANIFEST.json`; gitignored). Only `govinfo-BUDGET-2027-PER` changed: 87 records. Same 9,678 chunk ids in the same order; every `<unit>.json` and `<unit>.rowfix.json` sha256 unchanged; the prefix/heading region of every record byte-identical; `prefix_integrity` 0 (recomputed from the rewritten file).
+
+| quantity | before | after |
+|---|---|---|
+| U+FFFD removed by this extension | | 3,536 |
+| U+0008 removed (same cell, before a removed run) | | 147 |
+| `fffd_removed` summed over the corpus | 426,318 | 429,854 |
+| U+FFFD kept in table slices | 4,678 | 1,142 |
+|   in header rows | 1,058 | 1,058 |
+|   `fffd_in_number` singles | 83 | 83 |
+|   other (single, elsewhere in a cell) | 3,537 | 1 |
+|   prefix / heading lines | 0 | 0 |
+| U+FFFD in prose chunks (unchanged; 438 in BUDGET-2027-PER) | 440 | 440 |
+| token-weighted share | 0.80402 (1,759,433 / 2,188,300) | **0.80391** (1,758,211 / 2,187,078) |
+| chunk-count share | 0.433664 (4,197 / 9,678) | 0.433664 (4,197 / 9,678) |
+| max contextualized table slice | 561 tokens / 32,488 chars | 561 tokens / 32,488 chars (`BUDGET-2026-CROSSCUT::p56::tbl-45::s9`) |
+| `question_source_barred` slices | 1,679 | 1,679 (reasons unchanged) |
+
+Other D-037 outputs after the extension are unchanged: `unit_line_missing` 3,598 slices, `header_not_repeated` 111 tables, blank/partial headers 3 / 241, body lines not `|` 69, `fffd_in_number` 51 slices.
+
+Observation (not acted on): 3,601 U+0008 remain in table slices. The earlier first-cell strip (f4b6a12 / 98688ad) removed first-cell runs but left their U+0008; the 2026-10-06 ruling removes a U+0008 only when a run follows it in the same cell, so those stay.
