@@ -631,6 +631,8 @@ re-run the blank-header count).
 
 **Status 2026-10-06 (owner; U+0008 and a digit guard — last text change before `ledger index`).** (1) U+0008 (backspace) is a control character and never printed content: every U+0008 in chunk text is removed (3,601 remain in table slices after the item-5 passes, orphaned where the first-cell strip removed the run but not its U+0008; prose counted and removed likewise). (2) Digit guard, narrowing the item-5 strip: a U+FFFD run with a digit immediately on both sides (ignoring spaces) is never removed — such a run could stand for characters inside a number. No current record has one (b441584 report); the guard protects later units. Chunk ids, slice boundaries and the chunk-count share are unchanged.
 
+**Status 2026-10-06 (owner; fill, U+0008 removal at ccc7945).** U+0008 removed: 3,712 (table 3,601, prose 111); U+0008 remaining: 0; digit guard: 0 records affected; token-weighted share now 0.803 (0.80333; 0.80391 before); chunk-count share unchanged at 0.434.
+
 ## D-040 · 2026-10-01 · FIXED · v1 corpus composition without MER — successor to D-034 (sources) and D1; MER deferred to v2 under the D-039 failure branch
 
 **Decision.** EIA = STEO (Sept 2026 edition, rung-1b output, 10a known-wrong) + AEO; GovInfo ERP (rung-1b output); BUDGET; CBO. MER units are marked EXCLUDED in `data/manifest.jsonl` (rows kept, never deleted); moved out of `data/parsed/` (to `data/parsed_excluded/`) before the re-chunk; `source_mix` in config. Floor rechecked at the full-corpus mix: ≥ 25 units / ≥ 3 sources: ___ / ___.

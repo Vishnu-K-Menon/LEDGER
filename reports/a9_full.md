@@ -259,3 +259,26 @@ Applied to the installed records only (no chunking). Backup: `data/parsed_prefff
 Other D-037 outputs after the extension are unchanged: `unit_line_missing` 3,598 slices, `header_not_repeated` 111 tables, blank/partial headers 3 / 241, body lines not `|` 69, `fffd_in_number` 51 slices.
 
 Observation (not acted on): 3,601 U+0008 remain in table slices. The earlier first-cell strip (f4b6a12 / 98688ad) removed first-cell runs but left their U+0008; the 2026-10-06 ruling removes a U+0008 only when a run follows it in the same cell, so those stay.
+
+## U+0008 removal (D-037 status 2026-10-06; code and apply at ccc7945)
+
+Applied to the installed records only (no chunking). Backup: `data/parsed_pre0008_20261006/` (38 per-unit chunk files, `data/chunks.jsonl`, `SHA256_MANIFEST.json`; gitignored). 815 records in 3 units changed, and the only change in any of them is the removed U+0008 (plus the recomputed `body_chars` and `n_tokens`, checked record by record). Same 9,678 chunk ids in the same order; every `<unit>.json` and `<unit>.rowfix.json` sha256 unchanged; `prefix_integrity` 0 (recomputed from the rewritten file); the digit guard changed 0 records.
+
+| U+0008 removed | table | prose | total |
+|---|---|---|---|
+| govinfo-BUDGET-2026-CROSSCUT | 2,743 | 12 | 2,755 |
+| govinfo-BUDGET-2027-PER | 787 | 99 | 886 |
+| govinfo-ERP-2026-table46 | 71 | 0 | 71 |
+| **total** | **3,601** | **111** | **3,712** |
+
+U+0008 remaining in any chunk text: 0. Of the 3,601 in table slices, 13 sat in header rows (the item-5 passes had left header rows untouched).
+
+| quantity | before | after |
+|---|---|---|
+| token-weighted share | 0.80391 (1,758,211 / 2,187,078) | **0.80333** (1,751,290 / 2,180,041) |
+| chunk-count share | 0.433664 (4,197 / 9,678) | 0.433664 (4,197 / 9,678) |
+| max contextualized table slice | 561 tokens / 32,488 chars | 561 tokens / 32,488 chars (`BUDGET-2026-CROSSCUT::p56::tbl-45::s9`) |
+
+Other D-037 outputs unchanged: `unit_line_missing` 3,598 slices, `header_not_repeated` 111 tables, U+FFFD kept in table slices 1,142, `question_source_barred` 1,679 slices, body lines not `|` 69.
+
+For later units, `remove_backspaces` runs last in `parse.chunk_document`, after the item-4 checks, because those checks compare against the document's own text (a header row carrying a U+0008 would otherwise stop matching its table's header).
