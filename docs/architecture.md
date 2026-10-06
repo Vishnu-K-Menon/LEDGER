@@ -178,7 +178,7 @@ Per query: retriever latency, chunks in context, verifier latency, tokens, cost 
 No project skills or slash commands in v1 (D-016): the eval workflow is five `ledger` subcommands and the instrumentation convention is one rule plus `tracing/otel.py`; revisit at T14. Instance sizing and budget live in D-015. The CLI is `ledger`; the claim-ledger data structure lives at `ledger/claims/ledger.py` (`ClaimLedger`) to avoid a `ledger/ledger.py` collision.
 
 ### D31 Config
-All parameters in `configs/*.yaml` validated by pydantic; `experiments/matrix.yaml` expands the 10 cells × 3 seeds; `run_matrix.py` submits one seed at a time. Also: `vector_store.mode`, `verifier.input_mode`, `judge.model` + `judge.revision` (pinned hash). **Rejected:** Hydra (multirun is nice; the learning cost is not worth it at 60 h — convention, no source).
+All parameters in `configs/*.yaml` validated by pydantic; `experiments/matrix.yaml` expands the 10 cells × 2 seeds (D-035 status 2026-10-01); `run_matrix.py` submits one seed at a time. Also: `vector_store.mode`, `verifier.input_mode`, `judge.model` + `judge.revision` (pinned hash). **Rejected:** Hydra (multirun is nice; the learning cost is not worth it at 60 h — convention, no source).
 
 ---
 
@@ -197,4 +197,4 @@ Single writer, frozen snapshot of government-published PDFs (agency sites and GP
 
 ## 10. Decisions resting on no external source (stated so they are not mistaken for evidence)
 
-`chunking.max_tokens: 512` · dense top-30 → top-5 · three sampled runs (at the model's default sampling — `temperature` was removed from the API, D-019; the count is provisional pending the T5 variance probe and the T9/T11 decision) · `max_tool_calls 12`, `max_context_chunks 12`, `max_tokens_per_query 60000` · A1 threshold ≥ 95% cells · recall gate 0.85 / 0.75 · A3 threshold ≥ 8% baseline unsupported · κ branches 0.6 / 0.5 · A4 ≥ 98% schema-valid · A7 ≤ $120 · the D-001 band 50–70% · the D-004 tie-break 0.05 · the D-010 pairing rule for repaired/deleted claims · Qdrant over pgvector · Hydra rejection · all hour estimates in `docs/plan.md`. Each is a convention or an owner/Claude estimate; each is in config so it can be swept later.
+`chunking.max_tokens: 512` · dense top-30 → top-5 · two sampled runs (D-035 status 2026-10-01) (at the model's default sampling — `temperature` was removed from the API, D-019; the count is provisional pending the T5 variance probe and the T9/T11 decision) · `max_tool_calls 12`, `max_context_chunks 12`, `max_tokens_per_query 60000` · A1 threshold ≥ 95% cells · recall gate 0.85 / 0.75 · A3 threshold ≥ 8% baseline unsupported · κ branches 0.6 / 0.5 · A4 ≥ 98% schema-valid · A7 ≤ $120 · the D-001 band 50–70% · the D-004 tie-break 0.05 · the D-010 pairing rule for repaired/deleted claims · Qdrant over pgvector · Hydra rejection · all hour estimates in `docs/plan.md`. Each is a convention or an owner/Claude estimate; each is in config so it can be swept later.
