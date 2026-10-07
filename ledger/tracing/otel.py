@@ -138,6 +138,18 @@ def _kind_attrs(kind: OpenInferenceSpanKindValues) -> dict[str, str]:
 
 
 @contextmanager
+def run_span(name: str, attributes: Mapping[str, Any] | None = None) -> Iterator[Span]:
+    """One span for a whole CLI run (``ledger index``, ``ledger loadtest``), kind CHAIN. Not part
+    of the per-query plan; the run's identifying numbers go in as ``attributes``."""
+    attrs: dict[str, Any] = {
+        **_kind_attrs(OpenInferenceSpanKindValues.CHAIN),
+        **(attributes or {}),
+    }
+    with tracer().start_as_current_span(name, attributes=attrs) as span:
+        yield span
+
+
+@contextmanager
 def query_span(question: str, *, question_id: str, arm: str, seed: int) -> Iterator[Span]:
     """Root span per query, kind AGENT."""
     attrs: dict[str, Any] = {

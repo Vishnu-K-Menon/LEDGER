@@ -35,8 +35,6 @@ def test_help_exits_zero(argv, capsys):
 @pytest.mark.parametrize(
     "argv",
     [
-        ["index"],
-        ["loadtest"],
         ["baseline", "--questions", "data/questions_draft.jsonl"],
         ["questions", "--n", "200", "--controls", "20"],
         ["pilot", "--labels", "data/labels_pilot.jsonl"],
@@ -58,6 +56,8 @@ def test_bodies_not_implemented(argv):
     [
         (["ingest", "--stage", "parse", "--limit", "20"], "cmd_ingest"),
         (["audit-tables", "--n", "10"], "cmd_audit_tables"),
+        (["index"], "cmd_index"),
+        (["loadtest"], "cmd_loadtest"),
     ],
 )
 def test_built_commands_are_wired_without_running_them(argv, handler):

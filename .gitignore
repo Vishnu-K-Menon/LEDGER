@@ -6,6 +6,7 @@ __pycache__/
 # negations work: git never descends into a fully excluded directory.
 data/*
 !data/chunk_ids.lock
+!data/index_meta.json
 !data/frames/
 !data/sources.yaml
 !data/manifest.jsonl

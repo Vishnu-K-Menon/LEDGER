@@ -209,9 +209,14 @@ class ChunkingConfig(_Strict):
 
 class EmbeddingConfig(_Strict):
     model: str
+    revision: str  # commit sha of ``model`` (T4 preflight, 2026-10-07); the index records it
     fallback_model: str
     precision: Literal["bf16"]
     dim: int = Field(gt=0)
+    max_length: int = Field(gt=0)  # tokenizer truncation limit; the card's example uses 8192
+    batch_tokens: int = Field(gt=0)  # padded-token budget per embedding batch (length-sorted)
+    # model card: queries are "Instruct: <task>" + newline + "Query:..."; documents take none
+    query_instruction: str
 
 
 class VectorStoreConfig(_Strict):
@@ -232,6 +237,8 @@ class RetrievalConfig(_Strict):
 
 class RerankerConfig(_Strict):
     model: str
+    revision: str  # commit sha of ``model`` (T4 preflight, 2026-10-07)
+    max_length: int = Field(gt=0)  # card example: 8192
     precision: Literal["bf16"]
 
 
@@ -263,6 +270,14 @@ class DecompositionConfig(_Strict):
     method: Literal["claimify", "sentence_split"]
 
 
+class VerifierPin(_Strict):
+    """A pilot candidate pinned for A8 / T6: the commit sha, and whether the repo ships remote
+    code that must be trusted (``trust_remote_code`` is passed only when this is true)."""
+
+    revision: str
+    trust_remote_code: bool
+
+
 class VerifierConfig(_Strict):
     model: str
     revision: str
@@ -270,6 +285,14 @@ class VerifierConfig(_Strict):
     input_mode: Literal["concatenated", "per_chunk_max"]  # D-004
     threshold: float = Field(ge=0.0, le=1.0)
     pilot_candidates: list[str]
+    pilot_pins: dict[str, VerifierPin]  # every pilot candidate pinned (checked below)
+
+    @model_validator(mode="after")
+    def _candidates_pinned(self) -> VerifierConfig:
+        missing = [c for c in self.pilot_candidates if c not in self.pilot_pins]
+        if missing:
+            raise ValueError(f"verifier.pilot_pins has no entry for: {missing}")
+        return self
 
     @field_validator("precision")
     @classmethod
@@ -377,6 +400,13 @@ class TracingConfig(_Strict):
     service_name: str
 
 
+class LoadtestConfig(_Strict):
+    """A8 (D-012 status 2026-10-07)."""
+
+    limit_gib: float = Field(gt=0)  # pass rule: device memory in use at the verify peak <= this
+    poll_seconds: float = Field(gt=0)  # nvidia-smi sampling interval during the verify call
+
+
 class Config(_Strict):
     @model_validator(mode="before")
     @classmethod
@@ -404,6 +434,7 @@ class Config(_Strict):
     eval: EvalConfig
     fetch: FetchConfig
     tracing: TracingConfig
+    loadtest: LoadtestConfig
 
 
 def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:

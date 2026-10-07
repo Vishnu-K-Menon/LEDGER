@@ -119,8 +119,21 @@ def cmd_audit_tables(cfg: Config, args: argparse.Namespace) -> int:
     return 0
 
 
-cmd_index = _not_built("T4 (D-002, D24: writes data/chunk_ids.lock)")
-cmd_loadtest = _not_built("T4 (A8, D-012)")
+def cmd_index(cfg: Config, args: argparse.Namespace) -> int:
+    """T4: embed the ingested chunks, build the Qdrant file, write data/chunk_ids.lock (D-002,
+    D-032 status 2026-10-07). Needs CUDA; refuses before reading data/ otherwise."""
+    from ledger.retrieval.index import run_index
+
+    return run_index(cfg, Path.cwd())
+
+
+def cmd_loadtest(cfg: Config, args: argparse.Namespace) -> int:
+    """T4: A8 co-residency load test (D-012 status 2026-10-07); writes reports/a8.md."""
+    from ledger.retrieval.loadtest import run_loadtest
+
+    return run_loadtest(cfg, Path.cwd())
+
+
 cmd_baseline = _not_built("T5 (A4/A6/A7)")
 cmd_questions = _not_built("T7 (D24: refuses to run without data/chunk_ids.lock)")
 cmd_pilot = _not_built("T6 (A2, D-003/D-004)")

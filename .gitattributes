@@ -1,0 +1,3 @@
+data/chunk_ids.lock -text
+data/index_meta.json -text
+scripts/*.sh text eol=lf

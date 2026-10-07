@@ -108,9 +108,15 @@ chunking:                             # D3 as revised by D-033: HybridChunker at
 
 embedding:                            # D4, size gated on A8
   model: Qwen/Qwen3-Embedding-4B
+  revision: 5cf2132abc99cad020ac570b19d031efec650f2b   # T4 preflight 2026-10-07
   fallback_model: Qwen/Qwen3-Embedding-0.6B
   precision: bf16
   dim: 2560
+  max_length: 8192                    # model card example; the corpus maximum is ~560 tokens, so no truncation
+  batch_tokens: 16384                 # padded tokens per batch; length-sorted
+  # model card (README.md "Usage"): queries are "Instruct: {task}" + newline + "Query:{query}";
+  # documents take no instruction. T5 builds the query string from this.
+  query_instruction: "Given a question about a government budget or fiscal document, retrieve the passages that answer it"
 
 vector_store:                         # D5 / D-002
   mode: local                         # local | docker (v2/demo)
@@ -128,6 +134,8 @@ retrieval:                            # D8 / D17, gated on A6
 
 reranker:                             # D8
   model: Qwen/Qwen3-Reranker-0.6B
+  revision: e61197ed45024b0ed8a2d74b80b4d909f1255473   # T4 preflight 2026-10-07
+  max_length: 8192                    # model card example
   precision: bf16
 
 generator:                            # D11. No sampling parameters - removed from the API (D-019);
@@ -152,6 +160,13 @@ verifier:                             # D16 / D-004 / D-012
   pilot_candidates:                   # T6 scores each x both input modes -> four kappa values
     - bespokelabs/Bespoke-MiniCheck-7B
     - ibm-granite/granite-guardian-3.3-8b
+  pilot_pins:                         # T4 preflight 2026-10-07; remote code is trusted only at the pinned sha
+    bespokelabs/Bespoke-MiniCheck-7B:
+      revision: 1ed7786bcda3fa1dc35f7c4ed9e3f36b785d33b8
+      trust_remote_code: true         # ships modeling_internlm2.py
+    ibm-granite/granite-guardian-3.3-8b:
+      revision: b3421eda4ba6fc9f9a71121d7e62de08827469a4
+      trust_remote_code: false
 
 judge:                                # D-007: OPEN until the owner picks; loader raises on empty revision
   model: ""
@@ -231,3 +246,7 @@ tracing:                              # D29 / D-014. Endpoint comes ONLY from OT
   enabled: true
   project_name: ledger
   service_name: ledger
+
+loadtest:                             # A8, D-012 (status 2026-10-07: transformers bf16, in-process, no vLLM)
+  limit_gib: 44.7                     # the L40S reports 44.7 GiB usable, not 48
+  poll_seconds: 0.1                   # nvidia-smi sampling during the verify call (peak = max sample)

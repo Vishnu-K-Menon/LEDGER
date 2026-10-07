@@ -28,6 +28,16 @@ dependencies = [
     # the exact versions the frozen rung-1b emitter ran under (port parity gate).
     "pdfplumber==0.11.10",
     "pdfminer-six==20260107",
+    # T4 (D-002, D-011, D-012): exact pins. torch/transformers/huggingface-hub were transitive
+    # (via docling) at these versions; pinned directly so the embedder, reranker and verifier
+    # loads cannot drift. einops + sentencepiece: the MiniCheck remote code (InternLM2) imports
+    # them; no vllm, no minicheck package.
+    "qdrant-client==1.19.1",
+    "einops==0.8.2",
+    "sentencepiece==0.2.2",
+    "torch==2.14.0",
+    "transformers==5.17.0",
+    "huggingface-hub==1.32.0",
 ]
 
 [project.scripts]
