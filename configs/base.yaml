@@ -9,7 +9,7 @@ paths:
   manifest: data/manifest.jsonl
   raw_dir: data/raw                   # fetched PDFs: data/raw/<source>/<unit_id>.pdf (gitignored)
   parsed_dir: data/parsed
-  qdrant_path: data/qdrant            # D-002 local file mode; NVMe on the g6e
+  qdrant_path: data/qdrant            # D-002 local file mode; EBS root on the g6e (instance-store NVMe is wiped on stop)
   chunks: data/chunks.jsonl           # D-032: chunks are written at ingest, before embedding
   chunk_ids_lock: data/chunk_ids.lock # D24: written by `ledger index`, required by `ledger questions`
   questions_draft: data/questions_draft.jsonl
@@ -144,13 +144,13 @@ decomposition:                        # D15
   method: claimify                    # claimify | sentence_split
 
 verifier:                             # D16 / D-004 / D-012
-  model: bespoke-ai/Bespoke-MiniCheck-7B   # pilot candidate; fixed after A2
+  model: bespokelabs/Bespoke-MiniCheck-7B   # pilot candidate; fixed after A2
   revision: ""
   precision: bf16                     # D-012: bf16 and only bf16
   input_mode: concatenated            # concatenated | per_chunk_max (D-004)
   threshold: 0.5
   pilot_candidates:                   # T6 scores each x both input modes -> four kappa values
-    - bespoke-ai/Bespoke-MiniCheck-7B
+    - bespokelabs/Bespoke-MiniCheck-7B
     - ibm-granite/granite-guardian-3.3-8b
 
 judge:                                # D-007: OPEN until the owner picks; loader raises on empty revision

@@ -99,12 +99,16 @@ Rule for the build (from the owner, 2026-09-12): when you reach the code that im
 **Status 2026-09-14.** G-family quota **approved: 8 vCPU, us-east-1**, effective immediately. That is exactly one g6e.xlarge (4 vCPU) with **no room for a concurrent second GPU instance and no headroom to step up to g6e.2xlarge (8 vCPU) if A8 comes back tight** — a second quota request would be needed first. Every GPU task in the plan is sequential, so 8 vCPU is sufficient. The day-4 non-AWS pilot fallback below is **moot** (kept, not deleted). Billing alarm at $50 set; credits confirmed for EC2 and S3 in us-east-1. Idle auto-stop pending until the g6e launches at T4. **Budget: the D-015 figures are superseded by D-023 §7 (actuals for the tracing host).**
 **Day-1 blockers to raise with the owner (from the owner's own list).** (1) "Running On-Demand G and VT instances" vCPU quota is often 0 on new accounts and approval can take days; the κ pilot is week 1 day 6 — request the quota on day 1, and on day 4 without approval take the non-AWS pilot path. (2) Billing alarm at $50; confirm credits apply to EC2 + S3 in the chosen region before the first GPU hour. (3) Auto-stop on idle (CloudWatch alarm on CPU/GPU util → stop) — the instance is idle ~153 h/week.
 
+**Status 2026-10-07 (owner).** The Qdrant file and the model cache go on the g6e's EBS root, never on the instance-store NVMe: instance-store data is lost every time the instance stops, and E3 idle auto-stop stops it. The NVMe is not used.
+
 ## D-012 · 2026-09-12 · FIXED · D18 revised — verifier runs bf16; the quantized path is removed
 
 **What changed.** Phase 2 D18 said bf16 on a 40 GB card, AWQ-int4 on 24 GB. With the 48 GB L40S there is no 24 GB branch.
 **Decision.** The verifier runs bf16 in the pilot and the matrix. The AWQ-int4 code path is not written. A8 still runs in week 1 as a load test: embedder 4B bf16 (~8 GB) + reranker 0.6B (~1.2 GB) + verifier 8B bf16 (~16 GB) ≈ 25 GB on 44.7 GiB. If A8 fails, the fallback order is 0.6B embedder, then separate stages — never quantization.
 **Code.** `verifier.precision` is fixed to `bf16` and validated; any other value raises.
 **Validation.** A8: load all three, run one verify call, read `nvidia-smi`, record the number in `docs/plan.md`.
+
+**Status 2026-10-07 (owner; how A8 is run).** A8 runs before `ledger index`, because this entry's first fallback changes the embedder. Each verifier candidate is loaded in-process with transformers at bf16; vLLM is not used for A8 (by default it reserves most of the GPU's memory, so its reading is not a co-residency measurement, and it would add a second torch requirement). A candidate that cannot be loaded is reported NOT LOADED with the reason and is never a pass. The measured number is device memory in use at the peak of the verify call, read from nvidia-smi; the pass rule (44.7 GiB) is unchanged. How MiniCheck is scored in the κ pilot is decided before T6, not here.
 
 ## D-013 · 2026-09-12 · OPEN (owner decides) · Tracing backend hosting
 
@@ -381,6 +385,8 @@ signal to take the escape hatch — decide in week 1, not week 4.
 
 **Status 2026-10-01 (owner).** The 27.1 s/page parse rate was measured on a MER unit; MER is excluded from v1 (D-040), so the full-corpus parse ETA is re-estimated from non-MER units.
 
+**Status 2026-10-07 (owner; what the freeze covers).** `data/chunk_ids.lock` freezes the chunk IDs and each chunk's text (sha256) and nothing else. It is written once and never rewritten. The Qdrant index is derived from the locked chunks and may be rebuilt — after a failed run, on another instance, or under a logged fallback (D-012, A6) — only when every chunk ID and text hash equals the lock. Index facts (model, revision, dim) are recorded beside the index, not in the lock.
+
 ## D-033 · 2026-09-19 · FIXED · D3 successor: tables are split by rows at `max_tokens` with the header on every slice; `tables_atomic` removed; three `HybridChunker` switches pinned; A6 risk named
 
 **Contradiction.** `docs/architecture.md:43` said "tables atomic (never split; header row serialized with every table chunk)". Docling's `HybridChunker` (docs and source, main @ 2.97.1) "splits chunks only when needed (i.e. oversized w.r.t. tokens)" and its `repeat_table_header` means "table headers are repeated at the beginning of each chunk **when a table spans multiple chunks**" — tables are split at `max_tokens`, by rows, header repeated. There is no atomic switch. D3's own second clause and D17's "top-5 chunks (~2.5k tokens)" (`architecture.md:112`, ≈ 500 tokens per chunk) already presupposed splitting; only "never split" and `configs/base.yaml:37 tables_atomic` — a key the loader validated and nothing read — presupposed the opposite.
@@ -632,6 +638,8 @@ re-run the blank-header count).
 **Status 2026-10-06 (owner; U+0008 and a digit guard — last text change before `ledger index`).** (1) U+0008 (backspace) is a control character and never printed content: every U+0008 in chunk text is removed (3,601 remain in table slices after the item-5 passes, orphaned where the first-cell strip removed the run but not its U+0008; prose counted and removed likewise). (2) Digit guard, narrowing the item-5 strip: a U+FFFD run with a digit immediately on both sides (ignoring spaces) is never removed — such a run could stand for characters inside a number. No current record has one (b441584 report); the guard protects later units. Chunk ids, slice boundaries and the chunk-count share are unchanged.
 
 **Status 2026-10-06 (owner; fill, U+0008 removal at ccc7945).** U+0008 removed: 3,712 (table 3,601, prose 111); U+0008 remaining: 0; digit guard: 0 records affected; token-weighted share now 0.803 (0.80333; 0.80391 before); chunk-count share unchanged at 0.434.
+
+**Status 2026-10-07 (owner; correction to the U+0008 ruling's description).** The ruling's parenthetical described the 3,601 U+0008 in table slices as orphaned by the first-cell strip. The fill (ccc7945; reports/a9_full.md) shows 2,743 in BUDGET-2026-CROSSCUT, 787 in BUDGET-2027-PER and 71 in ERP-2026-table46; 13 of the 3,601 sat in header rows, which the item-5 passes left untouched, so those 13 were not strip leftovers. Whether the others were is not established. The ruling (remove every U+0008) is unchanged; only its description is corrected.
 
 ## D-040 · 2026-10-01 · FIXED · v1 corpus composition without MER — successor to D-034 (sources) and D1; MER deferred to v2 under the D-039 failure branch
 

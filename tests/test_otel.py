@@ -18,7 +18,7 @@ VERDICT = otel.VerdictRecord(
     input_mode="concatenated",
     threshold=0.5,
     cited_support=True,
-    verifier_model="bespoke-ai/Bespoke-MiniCheck-7B",
+    verifier_model="bespokelabs/Bespoke-MiniCheck-7B",
     verifier_revision="abc123",
 )
 
@@ -47,7 +47,7 @@ def test_verdict_inline_on_open_verify_span(exporter):
     assert a["evaluations.0.evaluation.label"] == "SUPPORTED"
     assert a["evaluations.0.evaluation.score"] == pytest.approx(0.91)
     assert a["evaluations.0.evaluation.annotator_kind"] == "LLM"
-    assert a["evaluations.0.evaluation.identifier"] == "bespoke-ai/Bespoke-MiniCheck-7B@abc123"
+    assert a["evaluations.0.evaluation.identifier"] == "bespokelabs/Bespoke-MiniCheck-7B@abc123"
     assert json.loads(a["evaluations.0.evaluation.metadata"])["claim_id"] == "c1"
 
 
