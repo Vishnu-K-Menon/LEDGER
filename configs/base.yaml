@@ -15,7 +15,7 @@ paths:
   questions_draft: data/questions_draft.jsonl
   questions: data/questions.jsonl
   matrix_cells: experiments/matrix.yaml
-  s3_bucket: ""                       # set at T4 with the IAM instance profile; empty until then
+  s3_bucket: "ledger-vkm-2026"        # set at T4 (bucket + IAM instance profile)
 
 corpus:                               # D-034 (succeeds D1 / D-001): 20-unit PILOT composition. GAO dropped.
   source_mix:                         # full-corpus mix is set at A9 from measurement, not here

@@ -5,13 +5,13 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![status: in progress](https://img.shields.io/badge/status-in%20progress-orange.svg)
 
-> **Status, 6 October 2026: in progress.** Built and measured: the document pipeline (fetch, parse, table repair, chunking), tracing, tests and CI. Designed, not yet built: retrieval, answer generation and the claim-checking loop. Next update when the checker pilot result is in.
+> **Status, 8 October 2026: in progress.** Built and measured: the document pipeline (fetch, parse, table repair, chunking, search index), tracing, tests and CI. Designed, not yet built: retrieval, answer generation and the claim-checking loop. Next update when the checker pilot result is in.
 
 ## Project In 30 seconds
 
 - **What it is.** A retrieval-augmented generation (RAG) system over US federal budget and energy publications. The design splits each answer into single-fact claims, checks each claim against the retrieved text with a small local model, and repairs the claims that fail.
 - **Measured so far.** Docling, the PDF parser, was merging rows in dense tables. A fix that rebuilds those tables from the PDF's own text was scored once, on tables it had never seen, against a 95% bar set in advance. Exact-cell accuracy rose from 30.5% to 100% in one document family and from 54% and 89% to 94.95% and 94.4% in two others, both just under the bar. Of those two, the densest was removed from version 1 rather than lowering the bar.
-- **Built and next.** Built: ingestion, parsing, chunking (38 PDFs, 9,678 chunks), OpenTelemetry tracing, tests and CI. Next: the search index, then a test of whether the checking model agrees with hand labels on 50 claims. That test decides whether the design goes ahead.
+- **Built and next.** Built: ingestion, parsing, chunking (38 PDFs, 9,678 chunks), the search index (all 9,678 chunks embedded with Qwen3-Embedding-4B into Qdrant; chunk IDs frozen), OpenTelemetry tracing, tests and CI. Next: a test of whether the checking model agrees with hand labels on 50 claims. That test decides whether the design goes ahead.
 
 ## The problem
 
@@ -21,7 +21,7 @@ A system that deletes every claim from its answers also has 0% unsupported claim
 
 ## How it works
 
-<!-- Put both SVGs in docs/assets/ and replace the mermaid block in "How it works" with this: --> <picture> <source media="(prefers-color-scheme: dark)" srcset="docs/assets/ledger-pipeline-dark.svg"> <source media="(prefers-color-scheme: light)" srcset="docs/assets/ledger-pipeline-light.svg"> <img alt="LEDGER pipeline: a built document pipeline (fetch, parse, chunk) feeds a designed answer loop (index, retrieve, generate, decompose, verify, route). Unsupported claims go to a repair step (delete, rewrite or re-retrieve) that loops back." src="docs/assets/ledger-pipeline-light.svg" width="100%"> </picture>
+<!-- Put both SVGs in docs/assets/ and replace the mermaid block in "How it works" with this: --> <picture> <source media="(prefers-color-scheme: dark)" srcset="docs/assets/ledger-pipeline-dark.svg"> <source media="(prefers-color-scheme: light)" srcset="docs/assets/ledger-pipeline-light.svg"> <img alt="LEDGER pipeline: a built document pipeline (fetch, parse, chunk, index) feeds a designed answer loop (retrieve, generate, decompose, verify, route). Unsupported claims go to a repair step (delete, rewrite or re-retrieve) that loops back." src="docs/assets/ledger-pipeline-light.svg" width="100%"> </picture>
 
 **Solid green boxes are built. Dashed boxes and dashed arrows are designed, not built.**
 
@@ -55,7 +55,7 @@ Full method, the first attempt (which failed its test) and caveats: [`docs/parse
 
 ## Status and roadmap
 
-- **Done.** Command-line skeleton and config; tracing; seeded draw, fetch, parse and chunk of the 38-PDF corpus; table fix built and scored once on unseen tables (results above); tests and CI.
+- **Done.** Command-line skeleton and config; tracing; seeded draw, fetch, parse and chunk of the 38-PDF corpus; search index built and chunk IDs frozen; table fix built and scored once on unseen tables (results above); tests and CI.
 - **Next.** Embed and index; single-shot baseline; **checker pilot on 50 hand-labelled claims (the next milestone)**; claim splitting, checking and repair; 200 paired human labels and the results table with confidence intervals.
 - **After version 1.** Monthly Energy Review loaded from the publisher's spreadsheets and checked against the printed page.
 

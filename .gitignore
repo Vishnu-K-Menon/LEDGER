@@ -24,6 +24,7 @@ data/oracle/**
 results/
 # reports/ is local, except the rung-1 records of D-038 (morning report, clock, baselines).
 reports/*
+!reports/a8.md
 !reports/a1_diag/
 reports/a1_diag/*
 !reports/a1_diag/rung1/

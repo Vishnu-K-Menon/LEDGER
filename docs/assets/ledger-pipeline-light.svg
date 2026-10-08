@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 486" width="1000" height="486" role="img" aria-labelledby="ttl dsc">
 <title id="ttl">LEDGER pipeline</title>
-<desc id="dsc">Built document pipeline (fetch, parse, chunk) feeding a designed answer loop: index, retrieve, generate, decompose, verify, route; unsupported claims go to a repair step (delete, rewrite or re-retrieve) that loops back.</desc>
+<desc id="dsc">Built document pipeline (fetch, parse, chunk, index) feeding a designed answer loop: retrieve, generate, decompose, verify, route; unsupported claims go to a repair step (delete, rewrite or re-retrieve) that loops back.</desc>
 <style>
  text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; text-anchor: middle; }
  .t { font-size: 14px; font-weight: 600; fill: #1f2328; }
@@ -36,13 +36,13 @@
 <text class="t" x="637.0" y="83">Chunk</text>
 <text class="s" x="637.0" y="103">row-split tables</text>
 <text class="s" x="637.0" y="119">header on every slice</text>
-<rect class="p" x="762" y="56" width="206" height="76" rx="10"/>
+<rect class="b" x="762" y="56" width="206" height="76" rx="10"/>
 <text class="t" x="865.0" y="83">Index</text>
 <text class="s" x="865.0" y="103">Qwen3-Embedding-4B</text>
 <text class="s" x="865.0" y="119">Qdrant</text>
 <path class="ab" d="M232,94 H260" marker-end="url(#mb)"/>
 <path class="ab" d="M512,94 H540" marker-end="url(#mb)"/>
-<path class="ap" d="M732,94 H760" marker-end="url(#mp)"/>
+<path class="ab" d="M732,94 H760" marker-end="url(#mb)"/>
 <path class="ap" d="M865,132 V158 H122 V190" marker-end="url(#mp)"/>
 <rect class="p" x="32" y="192" width="180" height="76" rx="10"/>
 <text class="t" x="122.0" y="219">1 · Retrieve</text>

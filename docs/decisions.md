@@ -101,6 +101,12 @@ Rule for the build (from the owner, 2026-09-12): when you reach the code that im
 
 **Status 2026-10-07 (owner).** The Qdrant file and the model cache go on the g6e's EBS root, never on the instance-store NVMe: instance-store data is lost every time the instance stops, and E3 idle auto-stop stops it. The NVMe is not used.
 
+**Status 2026-10-08 (owner; GPU region).** g6e.xlarge and g6e.2xlarge could not be launched in us-east-1 at three sittings (2026-10-07 00:18 and 22:46 ET; 2026-10-08 ~13:20 ET), "Insufficient capacity" in every supported zone. The GPU instance moves to us-east-2 (G and VT quota 8 vCPU approved 2026-10-08; g6e offered in us-east-2a, 2b, 2c). Phoenix, the S3 bucket and the IAM role stay in us-east-1. Traces go to Phoenix's public address, with port 6006 opened only to the GPU instance's public IP (/32), never 0.0.0.0/0; D-023's private-address rule applies within us-east-1 only.
+
+**Status 2026-10-08 (owner; quota arithmetic).** The G and VT quota is counted in vCPUs. 8 vCPU (quota L-DB2E81BA; us-east-1 read 2026-10-07, us-east-2 approved 2026-10-08) fits one g6e.xlarge (4 vCPU) or one g6e.2xlarge (8 vCPU); the 2026-09-14 status line's "no headroom … to step up to g6e.2xlarge" is wrong on that point. A second concurrent GPU instance still needs a new request.
+
+**Status 2026-10-08 (owner; E3 idle stop and Phoenix access, measured).** E3 is a CloudWatch alarm on the GPU instance: average CPUUtilization < 5 % for 12 consecutive 5-minute periods → stop; missing data treated as missing. It was first set at 6 periods and stopped the box at 18:06 UTC on 2026-10-08 after six points of 4.68, 0.76, 0.85, 3.65, 0.70 and 0.69 % during bootstrap and typing: non-GPU work stays under 5 %, so only the duration was changed. Phoenix's port-6006 rule for the GPU instance is added at each start with that start's public IP (/32) and deleted at each stop, because the address is released on stop and may be reassigned; no Elastic IP on the GPU instance.
+
 ## D-012 · 2026-09-12 · FIXED · D18 revised — verifier runs bf16; the quantized path is removed
 
 **What changed.** Phase 2 D18 said bf16 on a 40 GB card, AWQ-int4 on 24 GB. With the 48 GB L40S there is no 24 GB branch.
@@ -109,6 +115,8 @@ Rule for the build (from the owner, 2026-09-12): when you reach the code that im
 **Validation.** A8: load all three, run one verify call, read `nvidia-smi`, record the number in `docs/plan.md`.
 
 **Status 2026-10-07 (owner; how A8 is run).** A8 runs before `ledger index`, because this entry's first fallback changes the embedder. Each verifier candidate is loaded in-process with transformers at bf16; vLLM is not used for A8 (by default it reserves most of the GPU's memory, so its reading is not a co-residency measurement, and it would add a second torch requirement). A candidate that cannot be loaded is reported NOT LOADED with the reason and is never a pass. The measured number is device memory in use at the peak of the verify call, read from nvidia-smi; the pass rule (44.7 GiB) is unchanged. How MiniCheck is scored in the κ pilot is decided before T6, not here.
+
+**Status 2026-10-08 (owner; A8 result).** A8 ran 2026-10-08 on g6e.xlarge in us-east-2 (L40S, driver 595.71.05, torch 2.14.0+cu130, transformers 5.17.0; reports/a8.md). Embedder 4B and reranker 0.6B resident at 10.61 GiB. ibm-granite/granite-guardian-3.3-8b PASS: nvidia-smi 24.55 GiB after load, 25.55 GiB peak at the verify call, limit 44.7. bespokelabs/Bespoke-MiniCheck-7B NOT LOADED: weights loaded (24.13 GiB), then its remote code raised AttributeError: type object 'DynamicCache' has no attribute 'from_legacy_cache' under transformers 5.17.0 — a software failure, not memory. A8 is ticked on Granite Guardian alone; no fallback applies. How MiniCheck is loaded and scored is decided before T6, as the 2026-10-07 status line requires.
 
 ## D-013 · 2026-09-12 · OPEN (owner decides) · Tracing backend hosting
 
@@ -386,6 +394,8 @@ signal to take the escape hatch — decide in week 1, not week 4.
 **Status 2026-10-01 (owner).** The 27.1 s/page parse rate was measured on a MER unit; MER is excluded from v1 (D-040), so the full-corpus parse ETA is re-estimated from non-MER units.
 
 **Status 2026-10-07 (owner; what the freeze covers).** `data/chunk_ids.lock` freezes the chunk IDs and each chunk's text (sha256) and nothing else. It is written once and never rewritten. The Qdrant index is derived from the locked chunks and may be rebuilt — after a failed run, on another instance, or under a logged fallback (D-012, A6) — only when every chunk ID and text hash equals the lock. Index facts (model, revision, dim) are recorded beside the index, not in the lock.
+
+**Status 2026-10-08 (owner; fill — the freeze).** `ledger index` at dec71ff, 2026-10-08T19:38:38Z: 9,678 points, max 562 embedder tokens, 0 truncations, Qwen/Qwen3-Embedding-4B@5cf2132abc99cad020ac570b19d031efec650f2b bf16, dim 2560, 248.8 s build (read, embed, upsert, checks; model download and load excluded). data/chunk_ids.lock written once; verify_lock.py passed on the GPU box and on the laptop. Qdrant tar sha256 b9e61236d158016573223576b050df7d83839a30590a581ab09dd51fb01f1b29 at s3://ledger-vkm-2026/index/. Chunk IDs are frozen from here.
 
 ## D-033 · 2026-09-19 · FIXED · D3 successor: tables are split by rows at `max_tokens` with the header on every slice; `tables_atomic` removed; three `HybridChunker` switches pinned; A6 risk named
 

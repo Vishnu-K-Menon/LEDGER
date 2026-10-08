@@ -1,0 +1,21 @@
+{
+  "embedding": {
+    "model": "Qwen/Qwen3-Embedding-4B",
+    "revision": "5cf2132abc99cad020ac570b19d031efec650f2b",
+    "dim": 2560,
+    "precision": "bf16"
+  },
+  "point_id_scheme": "uuid5(5f0c4f58-6c1e-5d0e-9a53-1e5d6a0b7d11, chunk_id)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "gpu": "NVIDIA L40S",
+  "max_tokens_embedded": 562,
+  "truncations": 0,
+  "point_count": 9678,
+  "collection": "ledger_chunks",
+  "config_hash": "43f5e1b221196a0ac8e314a1ec40c5912be07ac3755916cf5948515f4da22465",
+  "git_commit": "dec71ff0ac1ff5e5767535e304022b98e0076d86",
+  "created_utc": "2026-10-08T19:38:38Z",
+  "seconds": 248.8,
+  "lock_written": true
+}
