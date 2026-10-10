@@ -236,6 +236,14 @@ class Qwen3Embedder:
         self.truncations = 0
 
     def embed_documents(self, texts: Sequence[str]) -> list[list[float]]:
+        return self._embed(texts)
+
+    def embed_queries(self, queries: Sequence[str], instruction: str) -> list[list[float]]:
+        """Card format: ``Instruct: {task}\nQuery:{query}`` (D-042: ``instruction`` comes from
+        config). Same pooling and checks as documents."""
+        return self._embed([f"Instruct: {instruction}\nQuery:{q}" for q in queries])
+
+    def _embed(self, texts: Sequence[str]) -> list[list[float]]:
         torch = self._torch
         f = torch.nn.functional
         # untruncated lengths: truncation is counted, never silent

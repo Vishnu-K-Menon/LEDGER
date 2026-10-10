@@ -97,3 +97,18 @@ def upsert_points(
             for r, v in zip(records[i : i + batch], vectors[i : i + batch], strict=True)
         ]
         client.upsert(collection_name=name, points=pts)
+
+
+def dense_search(
+    client: QdrantClient, cfg: Config, vector: list[float], k: int
+) -> list[tuple[str, float]]:
+    """Top-``k`` ``(chunk_id, cosine score)`` by the dense named vector, best first. The payload
+    holds ids only; texts come from ``data/chunks.jsonl``, checked against the lock."""
+    res = client.query_points(
+        collection_name=cfg.vector_store.collection,
+        query=vector,
+        using=DENSE_VECTOR,
+        limit=k,
+        with_payload=["chunk_id"],
+    )
+    return [(p.payload["chunk_id"], float(p.score)) for p in res.points]

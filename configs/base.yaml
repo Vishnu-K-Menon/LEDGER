@@ -115,8 +115,9 @@ embedding:                            # D4, size gated on A8
   max_length: 8192                    # model card example; the corpus maximum is ~560 tokens, so no truncation
   batch_tokens: 16384                 # padded tokens per batch; length-sorted
   # model card (README.md "Usage"): queries are "Instruct: {task}" + newline + "Query:{query}";
-  # documents take no instruction. T5 builds the query string from this.
-  query_instruction: "Given a question about a government budget or fiscal document, retrieve the passages that answer it"
+  # documents take no instruction. T5 builds the query string from this. D-042: one domain
+  # string, shared with reranker.instruction.
+  query_instruction: "Given a question about a U.S. government budget, economic or energy document, retrieve the passages that answer it"
 
 vector_store:                         # D5 / D-002
   mode: local                         # local | docker (v2/demo)
@@ -137,11 +138,15 @@ reranker:                             # D8
   revision: e61197ed45024b0ed8a2d74b80b4d909f1255473   # T4 preflight 2026-10-07
   max_length: 8192                    # model card example
   precision: bf16
+  instruction: "Given a question about a U.S. government budget, economic or energy document, retrieve the passages that answer it"   # D-042
+  card_instruction: "Given a web search query, retrieve relevant passages that answer the query"   # D-042 second arm (descriptive only): the cards' example string
 
 generator:                            # D11. No sampling parameters - removed from the API (D-019);
   model: claude-sonnet-5-5            # D-041 (successor to D11); a "seed" is an independent run at default sampling.
   thinking: between_tools             # D-041: 'disabled' returns 400 on Sonnet 5.5; between_tools is the lowest setting
   effort: high                        # D-041: output_config.effort pinned so runs are comparable
+  output_mode: ""                     # D-043 item 5: structured_output | strict_tool; EMPTY until the owner rules.
+                                      # batch/run scripts refuse to run while empty; only t5_dry_run may.
   max_tokens: 4096
   use_batch: true                     # Batch API for generate/decompose/rewrite (D28 guard at T14)
   pricing_usd_per_mtok:               # cost = measured usage x price; usage is never estimated
@@ -149,6 +154,21 @@ generator:                            # D11. No sampling parameters - removed fr
     output: 10.0
     batch_input: 1.0
     batch_output: 5.0
+
+baseline:                             # D-043 (T5 single-shot baseline)
+  draw_seed: 20261009                 # arbitrary; fixes the candidate draw (scripts/t5_draw.py)
+  n_table: 13                         # table-derived draft questions
+  n_prose: 12                         # prose draft questions
+  candidates_per_slot: 2              # spares for owner rejections
+  n_controls: 5                       # unanswerable controls the owner accepts, beside the drafts
+  n_control_candidates: 10            # all retrieved; the owner accepts n_controls after reading their top-5
+  reserve: 6                          # replacement candidates after each stratum's primary list (draw order)
+  supplement_per_source: 1            # table items for a source with eligible tables and no primary candidate
+  runs: 3                             # repeat runs: cells <cell>_r1.._rN at seed 1, one Batch
+  dense_record_k: 100                 # dense candidates stored per question
+  record_k_finals: [5, 8]             # top-k lists stored after reranking (k_final_fallback stays checkable)
+  prose_min_tokens: 20                # eligible prose chunks must have n_tokens above this
+  cell: t5_baseline
 
 decomposition:                        # D15
   method: claimify                    # claimify | sentence_split

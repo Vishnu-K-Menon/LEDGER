@@ -10,6 +10,11 @@ data/*
 !data/frames/
 !data/sources.yaml
 !data/manifest.jsonl
+# T5 (D-043): the draw record and the owner-checked draft questions are reproducibility records.
+!data/questions_draft.jsonl
+!data/questions_draft_draw.json
+!data/questions_draft_draw_run1.json
+!data/controls_accepted.json
 # The A1 cell oracle (D-038): publisher files stay local; each snapshot's hash manifest is tracked,
 # because reproducibility rests on the hashes, not on committing EIA's and GovInfo's files.
 !data/oracle/
@@ -25,6 +30,7 @@ results/
 # reports/ is local, except the rung-1 records of D-038 (morning report, clock, baselines).
 reports/*
 !reports/a8.md
+!reports/t5_*.md
 !reports/a1_diag/
 reports/a1_diag/*
 !reports/a1_diag/rung1/

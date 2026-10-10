@@ -28,6 +28,7 @@ import os
 import sys
 import time
 
+from ledger.baseline.request import message_params as _message_params
 from ledger.config import load_config
 from ledger.tracing import otel
 
@@ -48,14 +49,11 @@ def _usage(msg) -> dict[str, int | None]:
 
 def message_params(model: str, max_tokens: int, thinking: str, effort: str) -> dict:
     """The exact request body for both paths. No sampling keys (D-019) - tested on the wire.
-    ``thinking`` and ``effort`` are the D-041 pins from ``generator`` config."""
-    return {
-        "model": model,
-        "max_tokens": max_tokens,
-        "thinking": {"type": thinking},
-        "output_config": {"effort": effort},
-        "messages": [{"role": "user", "content": PROMPT}],
-    }
+    ``thinking`` and ``effort`` are the D-041 pins from ``generator`` config; the shape itself
+    lives in ``ledger.baseline.request`` (one source for the probe and the T5 requests)."""
+    return _message_params(
+        model, max_tokens, thinking, effort, messages=[{"role": "user", "content": PROMPT}]
+    )
 
 
 def _call_sync(client, model: str, max_tokens: int, thinking: str, effort: str):

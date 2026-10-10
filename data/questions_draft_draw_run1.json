@@ -1,0 +1,79 @@
+{
+  "baseline_config_sha256": "efec64adaaffb17cd23db0e4af1a604451fd99f1f9c92afa0d0e80ffc6592358",
+  "chunks_sha256": "a42243a0f30e81e02b372f49d39d1d4f7f70f78d4bff137665485e6556cfd8c3",
+  "eligibility": {
+    "chunks": 9678,
+    "chunks_sharing_text_with_another": 1257,
+    "eligible_distinct_tables": 635,
+    "eligible_prose_chunks": 3548,
+    "eligible_table_chunks": 2516
+  },
+  "prose_candidates": [
+    "govinfo-CRPT-118hrpt468::p14::txt-411::s0",
+    "govinfo-BUDGET-2027-PER::p5::txt-45::s0",
+    "govinfo-BUDGET-2027-PER::p71::txt-1065::s0",
+    "govinfo-BUDGET-2027-BUD::p87::txt-729::s0",
+    "eia-pdf-steo_full::p33::txt-2496::s0",
+    "govinfo-BUDGET-2026-DOD::p5::txt-27::s0",
+    "govinfo-CRPT-118hrpt468::p34::txt-904::s0",
+    "govinfo-CRPT-118hrpt468::p27::txt-708::s0",
+    "govinfo-ERP-2026-table22::p2::txt-13::s0",
+    "govinfo-BUDGET-2025-CLIMATE::p72::txt-369::s0",
+    "govinfo-BUDGET-2027-BALANCES::p6::txt-36::s0",
+    "govinfo-BUDGET-2027-PER::p61::txt-879::s0",
+    "govinfo-CRPT-118hrpt468::p49::txt-1279::s0",
+    "cbo-61099::p3::txt-68::s0",
+    "cbo-59853::p1::txt-6::s0",
+    "govinfo-BUDGET-2027-FCS::p29::txt-83::s0",
+    "govinfo-CRPT-118hrpt468::p58::txt-1489::s0",
+    "govinfo-BUDGET-2027-BUD::p28::txt-240::s0",
+    "govinfo-BUDGET-2027-PER::p56::txt-799::s0",
+    "govinfo-CRPT-118hrpt468::p26::txt-685::s0",
+    "eia-pdf-steo_full::p46::txt-2692::s0",
+    "govinfo-BUDGET-2026-CROSSCUT::p27::txt-134::s0",
+    "govinfo-BUDGET-2026-DOD::p78::txt-1283::s0",
+    "govinfo-CRPT-118hrpt468::p46::txt-1201::s0"
+  ],
+  "seed": 20261009,
+  "source_mix": {
+    "prose": {
+      "cbo_manual": 2,
+      "eia": 2,
+      "govinfo_budget": 12,
+      "govinfo_crpt": 7,
+      "govinfo_erp": 1
+    },
+    "table": {
+      "eia": 1,
+      "govinfo_budget": 25
+    }
+  },
+  "table_candidates": [
+    "govinfo-BUDGET-2026-DOD::p56::tbl-259::s0",
+    "govinfo-BUDGET-2027-FCS::p5::tbl-0::s0",
+    "govinfo-BUDGET-2026-DOD::p43::tbl-190::s0",
+    "govinfo-BUDGET-2026-DOD::p86::tbl-410::s1",
+    "govinfo-BUDGET-2026-DOD::p29::tbl-122::s0",
+    "govinfo-BUDGET-2026-DOD::p10::tbl-25::s0",
+    "govinfo-BUDGET-2027-OBJCLASS::p33::tbl-25::s1",
+    "govinfo-BUDGET-2026-DOD::p64::tbl-297::s1",
+    "govinfo-BUDGET-2026-DOD::p31::tbl-135::s0",
+    "govinfo-BUDGET-2026-DOD::p68::tbl-326::s0",
+    "govinfo-BUDGET-2026-DOD::p69::tbl-329::s3",
+    "govinfo-BUDGET-2026-DOD::p13::tbl-42::s0",
+    "govinfo-BUDGET-2026-DOD::p79::tbl-377::s0",
+    "govinfo-BUDGET-2027-OBJCLASS::p35::tbl-27::s1",
+    "govinfo-BUDGET-2026-DOD::p100::tbl-475::s0",
+    "govinfo-BUDGET-2026-DOD::p14::tbl-48::s3",
+    "govinfo-BUDGET-2027-FCS::p31::tbl-18::s1",
+    "eia-pdf-steo_full::p32::tbl-4::s1",
+    "govinfo-BUDGET-2027-OBJCLASS::p26::tbl-18::s1",
+    "govinfo-BUDGET-2027-FCS::p23::tbl-12::s4",
+    "govinfo-BUDGET-2026-DOD::p14::tbl-50::s0",
+    "govinfo-BUDGET-2026-DOD::p56::tbl-260::s0",
+    "govinfo-BUDGET-2027-BALANCES::p15::tbl-3::s1",
+    "govinfo-BUDGET-2026-DOD::p21::tbl-83::s0",
+    "govinfo-BUDGET-2026-DOD::p54::tbl-248::s0",
+    "govinfo-BUDGET-2027-OBJCLASS::p70::tbl-61::s1"
+  ]
+}

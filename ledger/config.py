@@ -218,7 +218,14 @@ class EmbeddingConfig(_Strict):
     max_length: int = Field(gt=0)  # tokenizer truncation limit; the card's example uses 8192
     batch_tokens: int = Field(gt=0)  # padded-token budget per embedding batch (length-sorted)
     # model card: queries are "Instruct: <task>" + newline + "Query:..."; documents take none
-    query_instruction: str
+    query_instruction: str  # D-042
+
+    @field_validator("query_instruction")
+    @classmethod
+    def _instruction_not_empty(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("embedding.query_instruction must not be empty (D-042)")
+        return v
 
 
 class VectorStoreConfig(_Strict):
@@ -242,6 +249,18 @@ class RerankerConfig(_Strict):
     revision: str  # commit sha of ``model`` (T4 preflight, 2026-10-07)
     max_length: int = Field(gt=0)  # card example: 8192
     precision: Literal["bf16"]
+    instruction: str  # D-042: the primary arm's string, shared with embedding.query_instruction
+    card_instruction: str  # D-042: the cards' example string, second (descriptive) arm
+
+    @field_validator("instruction", "card_instruction")
+    @classmethod
+    def _instruction_not_empty(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError(
+                "reranker instructions must not be empty (D-042): an empty string would fall "
+                "back to the built-in web-search default"
+            )
+        return v
 
 
 class PricingConfig(_Strict):
@@ -258,6 +277,8 @@ class GeneratorConfig(_Strict):
     pricing_usd_per_mtok: PricingConfig
     thinking: Literal["between_tools", "adaptive"]  # D-041
     effort: Literal["low", "medium", "high", "xhigh", "max"]  # D-041
+    # D-043 item 5: empty until the owner rules; scripts refuse while empty
+    output_mode: Literal["", "structured_output", "strict_tool"] = ""
 
     @field_validator("thinking", mode="before")
     @classmethod
@@ -287,6 +308,31 @@ class GeneratorConfig(_Strict):
         tokens_in = usage.get("input_tokens") or 0
         tokens_out = usage.get("output_tokens") or 0
         return (tokens_in * rate_in + tokens_out * rate_out) / 1_000_000
+
+
+class BaselineConfig(_Strict):
+    """D-043: the T5 single-shot baseline protocol."""
+
+    draw_seed: int
+    n_table: int = Field(gt=0)
+    n_prose: int = Field(gt=0)
+    candidates_per_slot: int = Field(gt=0)
+    n_controls: int = Field(ge=0)
+    n_control_candidates: int = Field(ge=0)
+    reserve: int = Field(ge=0)
+    supplement_per_source: int = Field(ge=0)
+    runs: int = Field(gt=0)
+    dense_record_k: int = Field(gt=0)
+    record_k_finals: list[int]
+    prose_min_tokens: int = Field(ge=0)
+    cell: str
+
+    @field_validator("record_k_finals")
+    @classmethod
+    def _positive_unique(cls, v: list[int]) -> list[int]:
+        if not v or any(k <= 0 for k in v) or len(set(v)) != len(v):
+            raise ValueError("baseline.record_k_finals must be distinct positive integers")
+        return v
 
 
 class DecompositionConfig(_Strict):
@@ -448,6 +494,7 @@ class Config(_Strict):
     retrieval: RetrievalConfig
     reranker: RerankerConfig
     generator: GeneratorConfig
+    baseline: BaselineConfig
     decomposition: DecompositionConfig
     verifier: VerifierConfig
     judge: JudgeConfig
