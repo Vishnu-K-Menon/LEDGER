@@ -139,7 +139,9 @@ reranker:                             # D8
   precision: bf16
 
 generator:                            # D11. No sampling parameters - removed from the API (D-019);
-  model: claude-sonnet-5              # a "seed" is an independent run at default sampling.
+  model: claude-sonnet-5-5            # D-041 (successor to D11); a "seed" is an independent run at default sampling.
+  thinking: between_tools             # D-041: 'disabled' returns 400 on Sonnet 5.5; between_tools is the lowest setting
+  effort: high                        # D-041: output_config.effort pinned so runs are comparable
   max_tokens: 4096
   use_batch: true                     # Batch API for generate/decompose/rewrite (D28 guard at T14)
   pricing_usd_per_mtok:               # cost = measured usage x price; usage is never estimated

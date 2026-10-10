@@ -46,20 +46,23 @@ def _usage(msg) -> dict[str, int | None]:
     }
 
 
-def message_params(model: str, max_tokens: int) -> dict:
-    """The exact request body for both paths. No sampling keys (D-019) - tested on the wire."""
+def message_params(model: str, max_tokens: int, thinking: str, effort: str) -> dict:
+    """The exact request body for both paths. No sampling keys (D-019) - tested on the wire.
+    ``thinking`` and ``effort`` are the D-041 pins from ``generator`` config."""
     return {
         "model": model,
         "max_tokens": max_tokens,
+        "thinking": {"type": thinking},
+        "output_config": {"effort": effort},
         "messages": [{"role": "user", "content": PROMPT}],
     }
 
 
-def _call_sync(client, model: str, max_tokens: int):
-    return client.messages.create(**message_params(model, max_tokens))
+def _call_sync(client, model: str, max_tokens: int, thinking: str, effort: str):
+    return client.messages.create(**message_params(model, max_tokens, thinking, effort))
 
 
-def _call_batch(client, model: str, max_tokens: int):
+def _call_batch(client, model: str, max_tokens: int, thinking: str, effort: str):
     from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
     from anthropic.types.messages.batch_create_params import Request
 
@@ -67,7 +70,9 @@ def _call_batch(client, model: str, max_tokens: int):
         requests=[
             Request(
                 custom_id="a5-probe",
-                params=MessageCreateParamsNonStreaming(**message_params(model, max_tokens)),
+                params=MessageCreateParamsNonStreaming(
+                    **message_params(model, max_tokens, thinking, effort)
+                ),
             )
         ]
     )
@@ -111,7 +116,7 @@ def main(argv: list[str] | None = None) -> int:
             model_name=gen.model,
             invocation_parameters={"max_tokens": gen.max_tokens, "batch": args.batch},
         ) as llm:
-            msg = call(client, gen.model, gen.max_tokens)
+            msg = call(client, gen.model, gen.max_tokens, gen.thinking, gen.effort)
             text = next((b.text for b in msg.content if b.type == "text"), "")
             usage = _usage(msg)
             otel.set_llm_result(

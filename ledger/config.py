@@ -14,8 +14,9 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 DEFAULT_CONFIG_PATH = Path("configs/base.yaml")
 
 # D-019: sampling parameters were removed from the Claude API (anthropic SDK 1.0.0, 2026-08-20;
-# Sonnet 5 returns 400 for non-default values on both the sync and Batch paths). They may not be
-# reintroduced anywhere in config; a "seed" is an independent run at the model's default sampling.
+# Sonnet 5 and Sonnet 5.5 (D-041) return 400 for non-default values on both the sync and Batch
+# paths). They may not be reintroduced anywhere in config; a "seed" is an independent run at the
+# model's default sampling.
 REMOVED_SAMPLING_KEYS = frozenset({"temperature", "top_p", "top_k"})
 
 
@@ -26,8 +27,9 @@ def _reject_sampling_keys(data: Any, path: str = "") -> None:
             if key in REMOVED_SAMPLING_KEYS:
                 raise ValueError(
                     f"config key {here!r} is not allowed (D-019): {key} was removed from the "
-                    "Claude API itself (anthropic SDK 1.0.0, 2026-08-20; Sonnet 5 rejects it with "
-                    "400 on both the sync and Batch paths). This is not a missing schema field - "
+                    "Claude API itself (anthropic SDK 1.0.0, 2026-08-20; Sonnet 5 and 5.5 (D-041) "
+                    "reject it with 400 on both the sync and Batch paths). This is not a missing "
+                    "schema field - "
                     "do not add it. A 'seed' is an independent run at default sampling."
                 )
             _reject_sampling_keys(value, here)
@@ -254,6 +256,27 @@ class GeneratorConfig(_Strict):
     max_tokens: int = Field(gt=0)
     use_batch: bool
     pricing_usd_per_mtok: PricingConfig
+    thinking: Literal["between_tools", "adaptive"]  # D-041
+    effort: Literal["low", "medium", "high", "xhigh", "max"]  # D-041
+
+    @field_validator("thinking", mode="before")
+    @classmethod
+    def _thinking_not_disabled(cls, v: Any) -> Any:
+        if v == "disabled":
+            raise ValueError(
+                "generator.thinking 'disabled' is refused (D-041): Sonnet 5.5 returns 400 for "
+                "{'type': 'disabled'}; the lowest setting is 'between_tools'."
+            )
+        return v
+
+    @model_validator(mode="after")
+    def _effort_fits_thinking(self) -> GeneratorConfig:
+        if self.thinking == "between_tools" and self.effort in ("xhigh", "max"):
+            raise ValueError(
+                f"generator.effort {self.effort!r} is refused with thinking 'between_tools' "
+                "(D-041): the API returns 400 for that combination."
+            )
+        return self
 
     def cost_usd(self, usage: Mapping[str, int | None], *, batch: bool) -> float:
         """D30/D31: cost = measured API usage fields x configured price. ``batch`` selects the

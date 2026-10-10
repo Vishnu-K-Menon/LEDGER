@@ -97,7 +97,7 @@ def test_posthoc_noop_when_tracing_disabled(base_config_path, tmp_path):
 
 
 def test_llm_span_token_counts(exporter):
-    with otel.llm_span("generate", provider="anthropic", model_name="claude-sonnet-5") as span:
+    with otel.llm_span("generate", provider="anthropic", model_name="claude-sonnet-5-5") as span:
         otel.set_llm_result(
             span,
             input_messages=[{"role": "user", "content": "q"}],

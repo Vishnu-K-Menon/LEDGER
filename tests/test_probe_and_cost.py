@@ -32,9 +32,21 @@ def test_batch_selects_batch_rates(base_config_path):
 def test_message_body_has_no_sampling_keys(repo_root):
     """D-019: the body sent on both the sync and Batch paths carries no sampling key."""
     probe = _probe_module(repo_root)
-    body = probe.message_params("claude-sonnet-5", 64)
+    body = probe.message_params("claude-sonnet-5-5", 64, "between_tools", "high")
     assert not ({"temperature", "top_p", "top_k"} & set(body))
-    assert set(body) == {"model", "max_tokens", "messages"}
+    assert set(body) == {"model", "max_tokens", "messages", "thinking", "output_config"}
+    assert body["thinking"] == {"type": "between_tools"}  # D-041
+    assert body["output_config"] == {"effort": "high"}  # D-041
+
+
+def test_probe_body_matches_config_pins(repo_root, base_config_path):
+    """D-041: the body built from base.yaml carries the configured model, thinking and effort."""
+    probe = _probe_module(repo_root)
+    gen = load_config(base_config_path).generator
+    body = probe.message_params(gen.model, 64, gen.thinking, gen.effort)
+    assert body["model"] == "claude-sonnet-5-5"
+    assert body["thinking"] == {"type": "between_tools"}
+    assert body["output_config"] == {"effort": "high"}
 
 
 def test_batch_request_on_the_wire_has_no_sampling_keys(repo_root):
@@ -74,9 +86,11 @@ def test_batch_request_on_the_wire_has_no_sampling_keys(repo_root):
         class messages:
             batches = _Batches()
 
-    probe._call_batch(_Client(), "claude-sonnet-5", 64)
+    probe._call_batch(_Client(), "claude-sonnet-5-5", 64, "between_tools", "high")
     (req,) = sent["requests"]
     assert req["custom_id"] == "a5-probe"
+    assert req["params"]["thinking"] == {"type": "between_tools"}  # D-041
+    assert req["params"]["output_config"] == {"effort": "high"}  # D-041
     assert not ({"temperature", "top_p", "top_k"} & set(req["params"]))
 
 

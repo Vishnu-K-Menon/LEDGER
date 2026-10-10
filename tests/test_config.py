@@ -41,6 +41,28 @@ def test_sampling_parameters_rejected_explicitly(base_config_path: Path, key: st
         Config.model_validate(_mutated(base_config_path, "questions", key, 0.3))
 
 
+def test_generator_pins_d041(base_config_path: Path):
+    gen = load_config(base_config_path).generator
+    assert (gen.model, gen.thinking, gen.effort) == ("claude-sonnet-5-5", "between_tools", "high")
+
+
+def test_thinking_disabled_refused_naming_d041(base_config_path: Path):
+    with pytest.raises(ValidationError, match=r"D-041.*400"):
+        Config.model_validate(_mutated(base_config_path, "generator", "thinking", "disabled"))
+
+
+@pytest.mark.parametrize("effort", ["xhigh", "max"])
+def test_high_effort_refused_with_between_tools(base_config_path: Path, effort: str):
+    with pytest.raises(ValidationError, match="D-041"):
+        Config.model_validate(_mutated(base_config_path, "generator", "effort", effort))
+
+
+def test_high_effort_allowed_with_adaptive(base_config_path: Path):
+    data = _mutated(base_config_path, "generator", "thinking", "adaptive")
+    data["generator"]["effort"] = "xhigh"
+    assert Config.model_validate(data).generator.effort == "xhigh"
+
+
 def test_base_config_has_no_sampling_keys(base_config_path: Path):
     text = base_config_path.read_text("utf-8")
     for key in ("temperature:", "top_p:", "top_k:"):

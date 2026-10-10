@@ -664,3 +664,13 @@ re-run the blank-header count).
 **Status 2026-10-01 (owner; fills).** A9 `table_chunk_share` on the pilot without MER = 0.636 (5,664 / 8,910; 13 units; in band, nothing adjusted; 4d9bb30); after the re-chunk: ___ (owed). Floor: the active pilot is 14 units across 5 sources (govinfo-BUDGET-2027-TAB unfetchable since T2); the ≥ 25 units / ≥ 3 sources floor is checked at the full-corpus mix. `source_mix` stays the pilot-draw composition; `corpus.excluded_parent_series` carries the exclusion; the v1 full-corpus mix is set at the full-corpus draw.
 **Status 2026-10-02 (owner; fill).** A9 `table_chunk_share` after the re-chunk = 0.490 (3,115 / 6,358; 13 units; 9ed7b85).
 **Status 2026-10-06 (owner; fill).** Full-corpus A9 `table_chunk_share` = 0.434 by chunk count (4,197 / 9,678; 38 units, 5 sources; token-weighted 0.804); interim before CBO was 0.443 (2026-10-05 parse). Floor ≥ 25 units / ≥ 3 sources: 38 / 5.
+
+## D-041 · 2026-10-08 · FIXED · Generator: Claude Sonnet 5.5 — successor to D11 (generator and A3 fallback only; D11 body unedited)
+
+**Decision (owner, 2026-10-08, before any T5 output exists).** `generator.model: claude-sonnet-5-5` for generate, decompose and rewrite. Every generator request pins `thinking: {"type": "between_tools"}` — no up-front thinking, the closest setting to D17's no-chain-of-thought stance, since `{"type": "disabled"}` is rejected — and `output_config.effort: "high"`, so runs are comparable. No sampling parameters (D-019 unchanged). The A3 fallback generator becomes `claude-haiku-5-5`; its request shape is verified only if the fallback fires.
+
+**Evidence (Anthropic docs, read 2026-10-08).** Sonnet 5.5: $2/$10 per MTok, Batch $1/$5, same tokenizer as Sonnet 5; adaptive thinking runs when `thinking` is omitted; `disabled` returns 400; forced tool use (`tool_choice` `any`/`tool`) returns 400; released 2026-09-28, retirement not before 2027-09-28. Haiku 4.5 retirement not before 2026-10-15. Haiku 5.5: $0.10/$0.50 per MTok up to 100,000 prompt tokens, $0.50/$2.50 above.
+
+**Consequences.** A4's fallback "forced tool-use schema" (plan.md:42) is unavailable on this model; the replacement is strict tool use (`strict: true`, `tool_choice: auto`) or `output_config.format`, fixed with the A4 definition before T5 runs. A3 risk may rise if the newer model grounds better (D-034); measured at T6, not argued. No independent faithfulness evidence for Sonnet 5.5 exists yet (10 days old).
+
+**Not changed.** D11's local models, cost method (measured usage × configured price), Batch use and budget arithmetic. architecture.md:87–88 and evaluation.md:9 still name Sonnet 5 / Haiku 4.5; their bodies stay unedited and this entry supersedes them.
