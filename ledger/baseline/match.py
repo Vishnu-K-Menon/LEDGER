@@ -124,8 +124,12 @@ def differing_tokens(token_sets: Sequence[frozenset[str]]) -> frozenset[str]:
 
 
 def tokens_absent_from(tokens: frozenset[str], supplied_texts: Sequence[str]) -> frozenset[str]:
-    """Differing tokens that occur in none of the supplied chunk texts (the D12/D14 reading)."""
-    return frozenset(t for t in tokens if not any(t in text for text in supplied_texts))
+    """Differing tokens that occur in none of the supplied chunk texts (the D12/D14 reading).
+    "Occur" is the answer comparison's: ``occurs`` on normalised text, longer-number guard."""
+    normalized = [normalize_numeric(text) for text in supplied_texts]
+    return frozenset(
+        t for t in tokens if not any(occurs(normalize_numeric(t), text) for text in normalized)
+    )
 
 
 def summarize(statuses: Sequence[RunMatch]) -> dict[str, Any]:

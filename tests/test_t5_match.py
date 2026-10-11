@@ -526,3 +526,18 @@ def test_dry_run_script_refuses_without_the_controls_file(tmp_path, monkeypatch,
     monkeypatch.setenv("ANTHROPIC_API_KEY", "x")
     monkeypatch.setattr(mod, "CONTROLS", tmp_path / "missing.json")
     assert mod.main([]) == 2
+
+
+# ---- (e): "occur" is the guarded occurrence, not a substring --------------------------------------
+
+
+def test_token_absent_when_the_chunk_only_prints_a_longer_number():
+    assert match.tokens_absent_from(frozenset({"177"}), ["outlays 1,177 million"]) == {"177"}
+
+
+def test_token_present_when_the_chunk_prints_it_with_a_unit():
+    assert match.tokens_absent_from(frozenset({"177"}), ["177 million"]) == frozenset()
+
+
+def test_token_with_a_dash_matches_a_hyphen_in_the_chunk():
+    assert match.tokens_absent_from(frozenset({"–106.3"}), ["net -106.3 billion"]) == frozenset()
