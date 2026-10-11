@@ -1,0 +1,14 @@
+{
+  "checked_by": "Vishnu K Menon",
+  "procedure": "Owner read each candidate's primary-arm top-5 (reports/t5_a6.md; texts from data/chunks.jsonl) in file order against D-043 status 2026-10-10 (item 2). A Claude planning chat gave a reading of each candidate against the rule before the owner decided.",
+  "question_ids": ["c001", "c002", "c003", "c004", "c005"],
+  "candidates": [
+    {"id": "c001", "decision": "accept", "tag": "near_miss", "reason": "same quantity (ten-year budgetary effect), other entity: H.R. 6703 in cbo-61959::p1::txt-3::s0; the asked act appears in no top-5 chunk"},
+    {"id": "c002", "decision": "accept", "tag": "near_miss", "reason": "same series (SBA Section 504 subsidy rate), other periods: 2026 and 2027 in govinfo-BUDGET-2027-FCS::p17::tbl-7::s0; no FY 2031 value"},
+    {"id": "c003", "decision": "accept", "tag": null, "reason": "top-5 chunks are table titles and figure captions only; no gasoline price value for any period"},
+    {"id": "c004", "decision": "accept", "tag": "near_miss", "reason": "same series (surplus or deficit as percent of GDP), other periods: Table B-46 covers fiscal years 1955-2025; no 1948 value"},
+    {"id": "c005", "decision": "accept", "tag": "near_miss", "reason": "same series (civilian labor force participation rate), other periods and all ages: Table B-22 covers 1929-2025; no 1925 or ages 16-24 value"},
+    {"id": "c006", "decision": "not_selected", "tag": "near_miss", "reason": "passes the rule (other bills' costs only); beyond the first five in file order; used by the harness check"},
+    {"id": "c007", "decision": "not_selected", "tag": "near_miss", "reason": "passes the rule (Table B-30 rows for other periods only); beyond the first five in file order; used by the harness check"}
+  ]
+}
