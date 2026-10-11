@@ -5,13 +5,13 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![status: in progress](https://img.shields.io/badge/status-in%20progress-orange.svg)
 
-> **Status, 8 October 2026: in progress.** Built and measured: the document pipeline (fetch, parse, table repair, chunking, search index), tracing, tests and CI. Designed, not yet built: retrieval, answer generation and the claim-checking loop. Next update when the checker pilot result is in.
+> **Status, 11 October 2026: in progress.** Built and measured: the document pipeline (fetch, parse, table repair, chunking, search index), retrieval and single-shot answer generation (baselined on 25 draft questions), tracing, tests and CI. Designed, not yet built: the claim-checking loop (decompose, verify, route, repair). Next: the checker pilot (T6); next update when its result is in.
 
 ## Project In 30 seconds
 
 - **What it is.** A retrieval-augmented generation (RAG) system over US federal budget and energy publications. The design splits each answer into single-fact claims, checks each claim against the retrieved text with a small local model, and repairs the claims that fail.
 - **Measured so far.** Docling, the PDF parser, was merging rows in dense tables. A fix that rebuilds those tables from the PDF's own text was scored once, on tables it had never seen, against a 95% bar set in advance. Exact-cell accuracy rose from 30.5% to 100% in one document family and from 54% and 89% to 94.95% and 94.4% in two others, both just under the bar. Of those two, the densest was removed from version 1 rather than lowering the bar.
-- **Built and next.** Built: ingestion, parsing, chunking (38 PDFs, 9,678 chunks), the search index (all 9,678 chunks embedded with Qwen3-Embedding-4B into Qdrant; chunk IDs frozen), OpenTelemetry tracing, tests and CI. Next: a test of whether the checking model agrees with hand labels on 50 claims. That test decides whether the design goes ahead.
+- **Built and next.** Built: ingestion, parsing, chunking (38 PDFs, 9,678 chunks), the search index (all 9,678 chunks embedded with Qwen3-Embedding-4B into Qdrant; chunk IDs frozen), retrieval (embedding search, then reranking to the top 5), single-shot answer generation with Claude Sonnet 5.5 through the Batch API, OpenTelemetry tracing, tests and CI. Next: a test of whether the checking model agrees with hand labels on 50 claims. That test decides whether the design goes ahead.
 
 ## The problem
 
@@ -21,7 +21,7 @@ A system that deletes every claim from its answers also has 0% unsupported claim
 
 ## How it works
 
-<!-- Put both SVGs in docs/assets/ and replace the mermaid block in "How it works" with this: --> <picture> <source media="(prefers-color-scheme: dark)" srcset="docs/assets/ledger-pipeline-dark.svg"> <source media="(prefers-color-scheme: light)" srcset="docs/assets/ledger-pipeline-light.svg"> <img alt="LEDGER pipeline: a built document pipeline (fetch, parse, chunk, index) feeds a designed answer loop (retrieve, generate, decompose, verify, route). Unsupported claims go to a repair step (delete, rewrite or re-retrieve) that loops back." src="docs/assets/ledger-pipeline-light.svg" width="100%"> </picture>
+<picture> <source media="(prefers-color-scheme: dark)" srcset="docs/assets/ledger-pipeline-dark.svg"> <source media="(prefers-color-scheme: light)" srcset="docs/assets/ledger-pipeline-light.svg"> <img alt="LEDGER pipeline: a built document pipeline (fetch, parse, chunk, index) feeds retrieve and generate, which are built; decompose, verify, route and repair are designed, not built. Unsupported claims go to a repair step (delete, rewrite or re-retrieve) that loops back." src="docs/assets/ledger-pipeline-light.svg" width="100%"> </picture>
 
 **Solid green boxes are built. Dashed boxes and dashed arrows are designed, not built.**
 
@@ -45,9 +45,22 @@ The fix was scored once, on tables not used during development, against the publ
 
 Full method, the first attempt (which failed its test) and caveats: [`docs/parser_results.md`](docs/parser_results.md). Raw results: [`evaluation.json`](reports/a1_diag/rung1b/evaluation/evaluation.json).
 
+## Results so far: single-shot baseline
+
+Retrieval and one answer per question, with no claim checking, on 25 draft questions (3 runs each at default sampling, 90 requests, plus 5 unanswerable control questions). Reports: [`t5_a6.md`](reports/t5_a6.md), [`t5_a4.md`](reports/t5_a4.md), [`t5_variance.md`](reports/t5_variance.md), [`t5_controls.md`](reports/t5_controls.md), [`t5_closeout.md`](reports/t5_closeout.md).
+
+- **Retrieval.** The gold chunk was in the top 5 for 23 of 25 questions (0.92; Wilson 95% interval 0.75 to 0.98). Both misses were demoted by the reranker (rank 1 before it, rank 9 after).
+- **Format.** All 90 requests ended normally, parsed, and cited only chunks they were given (90/90).
+- **Numeric answers.** 14 questions x 3 runs = 42 answers: 36 contain the gold number as written, 0 do not, 6 abstained (the two questions whose gold chunk was not retrieved, in every run). This counts string matches only; whether a matched number belongs to the right period, entity or unit was not checked.
+- **Short-phrase answers (11 questions).** Not scored for correctness. The gold phrase appears in 31 of 33 answers (lexical containment).
+- **Repeat runs.** The same questions abstained in all three runs (30/30) and cited the same chunks (30/30). Digit strings differed between runs on 2 of 25 questions by the committed definition; read by hand, both are a trailing comma after a table number (such as "Table B-22,") and the answer values were identical.
+- **Control questions.** 5 of 5 abstained in the first run. That is a gross-failure check on 5 questions, not a rate.
+
+Scope and dependence: these cover only questions whose gold chunk carries its own unit, label and period. The questions were drafted by the same model that answers them, and the owner's check of them was assisted by Claude chats. Recall and answer match are therefore likely optimistic and any unsupported-claim rate likely low (direction only, not measured). With 25 questions the intervals are wide.
+
 ## Engineering
 
-- **Tests and CI.** 236 tests; 147 run in CI on a fresh clone, 89 need local data or the tokenizer.
+- **Tests and CI.** 404 tests; 392 pass on a fresh clone and 12 are skipped because they need local data or the tokenizer.
 - **Tracing.** OpenTelemetry spans (OpenInference conventions) to a self-hosted Arize Phoenix server, verified on probe calls; a traced Batch API call cost exactly half a direct call.
 - **Batch job ledger.** Crash and resume behaviour tested against a fake client (12 tests); not yet run against the real Batch API.
 - **Reproducible ingestion.** Seeded draws, a fetcher that obeys robots.txt and rate limits, and a manifest with a SHA-256 hash for every file.
@@ -55,8 +68,8 @@ Full method, the first attempt (which failed its test) and caveats: [`docs/parse
 
 ## Status and roadmap
 
-- **Done.** Command-line skeleton and config; tracing; seeded draw, fetch, parse and chunk of the 38-PDF corpus; search index built and chunk IDs frozen; table fix built and scored once on unseen tables (results above); tests and CI.
-- **Next.** Embed and index; single-shot baseline; **checker pilot on 50 hand-labelled claims (the next milestone)**; claim splitting, checking and repair; 200 paired human labels and the results table with confidence intervals.
+- **Done.** Command-line skeleton and config; tracing; seeded draw, fetch, parse and chunk of the 38-PDF corpus; search index built and chunk IDs frozen; retrieval and the single-shot baseline built and measured on 25 draft questions (above); table fix built and scored once on unseen tables (results above); tests and CI.
+- **Next.** **Checker pilot on 50 hand-labelled claims (the next milestone)**; claim splitting, checking and repair; 200 paired human labels and the results table with confidence intervals.
 - **After version 1.** Monthly Energy Review loaded from the publisher's spreadsheets and checked against the printed page.
 
 Task list with checkboxes: [`docs/plan.md`](docs/plan.md).
@@ -65,16 +78,16 @@ Task list with checkboxes: [`docs/plan.md`](docs/plan.md).
 
 ```bash
 uv sync                # Python 3.12; installs Docling and PyTorch, a large download
-uv run pytest          # 147 passed, 89 skipped on a fresh clone
+uv run pytest          # 392 passed, 12 skipped on a fresh clone
 uv run ruff check . && uv run ruff format --check .
 uv run ledger --help   # lists every subcommand
 ```
 
-Run on a clean clone (Linux, 6 October 2026) with no API keys and no data. `ledger ingest` needs a GovInfo API key and local data and was not run for this README; `index`, `baseline`, `pilot`, `matrix` and the other subcommands are listed in `--help` but not implemented yet.
+Run on a clean clone (Linux, 6 October 2026) with no API keys and no data. `ledger ingest` needs a GovInfo API key and local data and was not run for this README; `ledger index` needs a GPU. The single-shot baseline was run by the scripts in `scripts/t5_*.py` (see [`docs/t5_runbook.md`](docs/t5_runbook.md)); the `baseline`, `questions`, `pilot`, `matrix`, `eval`, `kappa`, `audit-decomp` and `smoke` subcommands are listed in `--help` but not implemented yet.
 
 ## Limitations
 
-- **In progress.** No answer-quality numbers exist yet. Everything measured so far is about the document pipeline.
+- **In progress.** The only answer-quality numbers are the 25-question single-shot baseline above (retrieval, format and numeric string match, no claim checking). No faithfulness or unsupported-claim numbers exist yet, and short-phrase answers are not scored for correctness.
 - **Production-shaped, not production.** It has evaluations, tracing, tests and CI. It has no deployment, no scaling work and no user-facing service.
 - **It checks faithfulness, not truth.** A claim counts as supported when the retrieved text supports it, even if the source itself is wrong.
 - **The parser result is narrow.** It covers text-based government PDFs; one family rests on 6 table files; the Monthly Energy Review is excluded.
@@ -84,7 +97,7 @@ Run on a clean clone (Linux, 6 October 2026) with no API keys and no data. `ledg
 ## Design record
 
 - [`docs/architecture.md`](docs/architecture.md): every component with its rejected alternatives, and why this idea beat four others
-- [`docs/decisions.md`](docs/decisions.md): 40 dated decisions, D-001 to D-040; the parser story is D-038 to D-040
+- [`docs/decisions.md`](docs/decisions.md): 43 dated decisions, D-001 to D-043; the parser story is D-038 to D-040
 - [`docs/evaluation.md`](docs/evaluation.md): metrics, the kappa protocol, the planned results table
 - [`docs/plan.md`](docs/plan.md): tasks T1 to T18 with measured gate numbers
 - [`docs/parser_results.md`](docs/parser_results.md): the parser result in full, with its caveats

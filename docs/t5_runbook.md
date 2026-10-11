@@ -41,6 +41,9 @@ Steps 2, 7 and 9 (draft, harness check, Batch) emit spans. To see them:
 1. Start the `ledger-phoenix` instance (us-east-1) and wait for the UI.
 2. Add an inbound TCP 6006 rule on `ledger-phoenix-sg` for **your current public IP /32**
    (`curl https://checkip.amazonaws.com`). Never 0.0.0.0/0. Delete the rule when you stop.
+   The laptop needs its own 6006 /32 rule to see the UI, separate from the GPU instance's. At the
+   end delete **every** 6006 rule on `ledger-phoenix-sg` (list the group; do not stop at the one
+   you added: an old laptop rule was found there after the T5 run).
 3. `$env:OTEL_EXPORTER_OTLP_ENDPOINT = "http://54.160.244.106:6006"` — the **base** URL (the
    exporter appends `/v1/traces`; the banner's `/v1/traces` form belongs in the other variable).
 
@@ -116,6 +119,10 @@ Start Phoenix first (§1 step 1) if you want traces. Then:
    export OTEL_EXPORTER_OTLP_ENDPOINT=http://54.160.244.106:6006
    cd ~/LEDGER && git pull --ff-only
    ```
+   A box cloned before `data/chunk_ids.lock` and `data/index_meta.json` were tracked refuses the
+   pull (untracked files would be overwritten). Compare each file's hash with
+   `git show origin/main:<path>` (`git fetch` first); only if they are identical, move the two
+   files aside (for example into `~/pre_pull_backup`), then pull. If they differ, stop.
    Confirm the idle alarm exists for this instance id (t4_runbook §3) before any GPU work.
    If `data/qdrant` or `data/chunks.jsonl` are missing (new instance), run
    `bash scripts/gpu_bootstrap.sh ledger-vkm-2026` and restore the index from
@@ -144,7 +151,8 @@ Start Phoenix first (§1 step 1) if you want traces. Then:
    (github.com/Liyan06/MiniCheck at commit `b58b9fa69acbd1015ec970fa65dd752413a053d2`; the two
    models' READMEs at the revisions in `verifier.pilot_pins`) and records each file's sha256.
    It needs outbound HTTPS to raw.githubusercontent.com and huggingface.co.
-8. Stop the instance (do not rely on the alarm), delete the 6006 /32 rule, stop Phoenix.
+8. Stop the instance (do not rely on the alarm), delete every 6006 rule on `ledger-phoenix-sg`
+   (the GPU's and the laptop's), stop Phoenix.
    **Keep idle stretches under ~50 minutes** (alarm: CPU < 5 % for 12 x 5 min).
 
 ## 5. Laptop: extract, A6, controls, join
@@ -156,6 +164,14 @@ aws s3 cp s3://ledger-vkm-2026/t5/t5_verifier_probe.md reports\t5_verifier_probe
 uv run python scripts/t5_join.py --tarball t5-retrieval.tar.gz     # verifies + extracts, then stops (exit 3)
 uv run python scripts/t5_report.py                                  # A6 only at this point
 ```
+**Laptop without the AWS CLI** (the T5 laptop had none): use the S3 console for downloads and
+uploads. A console download may drop the `.gz` (it saved `t5-retrieval.tar.gz` as
+`t5-retrieval.tar`): check `Get-FileHash -Algorithm SHA256 <file>` against the `.sha256` file
+**before** renaming, then rename. `t5_join.py` expects the name `t5-retrieval.tar.gz`.
+
+Rerunning `t5_report.py` before the Batch has collected writes A6 only: with contexts present
+and no Batch result for any request it prints why and stops after A6; it never writes a
+generation report from zero results.
 `t5_join.py` verifies the tarball's sha256 and extracts it; with `data/controls_accepted.json` not
 yet written it stops there with exit code 3 and says what to do. `reports/t5_a6.md` has the
 composition by source and unit in its header, the 25 drafts' recall@5 (Wilson interval), MRR and
@@ -182,7 +198,9 @@ a further status line; no candidate is drafted or picked by hand. Write
 }
 ```
 (`tag` is `near_miss` or null; `rejecting_chunk_id` only on a rejection; keys other than
-`question_ids` and `checked_by` are ignored by the join.) Then rerun
+`question_ids` and `checked_by` are ignored by the join.) Write the file **without a BOM**:
+PowerShell 5 `Set-Content -Encoding UTF8` adds one. The command used at T5 was
+`[IO.File]::WriteAllText(path, text, (New-Object System.Text.UTF8Encoding $false))`. Then rerun
 `uv run python scripts/t5_join.py --tarball t5-retrieval.tar.gz`: it verifies the run against this
 questions file and the lock, joins every text, verifies it against the lock, and writes
 `results/t5/contexts.jsonl` for the 25 drafts, the supplement items and the 5 accepted controls
@@ -230,3 +248,18 @@ batch. If a run died between the API accepting the batch and the ledger recordin
 10 minutes plus the local-clock margin, matched on request count and custom IDs); if two batches
 match it stops with `AmbiguousBatch` and you resolve by hand — never delete the ledger to "fix"
 it. Run 1 (`t5_baseline_r1`) is the baseline of record and the input to T6.
+
+**Tracing at collection.** Spans for the Batch results are emitted once, by the run that
+collects, and each collected request is marked in `results/t5_traced.txt` **even if the export
+failed**. A later re-run does not emit them again. If you want these traces, start Phoenix
+(§1) and set the endpoint **before** the collecting run, not after.
+
+## 9. Laptop: after collection, back up `results/` (it is gitignored)
+
+```powershell
+Compress-Archive -Path results\t5_baseline_r1, results\t5_baseline_r2, results\t5_baseline_r3, results\t5_jobs.jsonl, results\t5_batch_sidecar.jsonl, results\t5_traced.txt, results\t5\contexts.jsonl -DestinationPath $env:USERPROFILE\t5-batch-results.zip
+Get-FileHash -Algorithm SHA256 $env:USERPROFILE\t5-batch-results.zip
+```
+Upload the zip to `s3://ledger-vkm-2026/t5/` (CLI or console) and record the hash in the
+close-out report (`reports/t5_closeout.md`, section a).
+

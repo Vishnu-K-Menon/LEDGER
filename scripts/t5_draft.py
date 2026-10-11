@@ -140,6 +140,7 @@ def main(argv: list[str] | None = None) -> int:
                 if cand_id in done:
                     continue
                 ch = chunks[cid]
+                text = stop = None  # kept on a failure: the raw reply and why it stopped
                 try:
                     text, usage, stop = _call(client, cfg, drafting.draft_params(cfg, ch), "draft")
                     d = drafting.parse_draft(text)
@@ -160,6 +161,17 @@ def main(argv: list[str] | None = None) -> int:
                         "notes": "",
                     }
                     spent += cfg.generator.cost_usd(usage, batch=False)
+                except drafting.DraftSkipped as exc:  # the drafter declined, in the structured form
+                    rec = {
+                        "candidate_id": cand_id,
+                        **meta,
+                        "chunk_id": cid,
+                        "error": f"skipped by the drafter: {exc}",
+                        "stop_reason": stop,
+                        "raw_reply": text,
+                        "accept": None,
+                        "notes": "",
+                    }
                 except Exception as exc:  # noqa: BLE001 - one bad reply must not lose the rest
                     errors += 1
                     rec = {
@@ -167,6 +179,8 @@ def main(argv: list[str] | None = None) -> int:
                         **meta,
                         "chunk_id": cid,
                         "error": repr(exc),
+                        "stop_reason": stop,
+                        "raw_reply": text,
                         "accept": None,
                         "notes": "",
                     }

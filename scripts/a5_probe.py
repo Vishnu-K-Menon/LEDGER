@@ -157,11 +157,19 @@ def main(argv: list[str] | None = None) -> int:
     print(f"(b) verify span_id={target[1]}  (inline evaluations.0.evaluation.*)")
     print(f"(c) carrier span_id={otel.ids_of(carrier)[1]} -> linked to verify {target[1]}")
     print("Open Phoenix, project 'ledger', and check (a)(b)(c).")
-    print(
-        "Against localhost this is an instrumentation smoke test. A5 passed 2026-09-16 on "
-        "ledger-phoenix (t3.small, Phoenix v20.12.0, D-023); re-run there after any server change."
-    )
+    if _is_localhost(os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "")):
+        print(
+            "Against localhost this is an instrumentation smoke test. A5 passed 2026-09-16 on "
+            "ledger-phoenix (t3.small, Phoenix v20.12.0, D-023); re-run there after any server "
+            "change."
+        )
     return 0
+
+
+def _is_localhost(endpoint: str) -> bool:
+    from urllib.parse import urlparse
+
+    return (urlparse(endpoint).hostname or "") in ("localhost", "127.0.0.1", "::1")
 
 
 if __name__ == "__main__":

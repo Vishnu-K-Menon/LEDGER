@@ -393,3 +393,74 @@ def test_report_records_repo_path_revision_and_stops(tmp_path: Path):
     )
     assert "o/r" in text and "`a/b.py`" in text and "`deadbeef`" in text and s.sha256 in text
     assert "## Stopped" in text and "no template" in text
+
+
+# ---- MiniCheck section: a non-reproduced README example is a stop (W5) ---------------------------
+
+_EXAMPLE = {"expected": [0.984, 0.011]}
+_TOP5 = [(" no", -0.1), ("No", -1.2), ("yes|", -3.0), ("\n", -4.0), ("x", -5.0)]
+_ROWS = [
+    {
+        "question_id": "q001",
+        "label": "supported",
+        "context_chunks": 1,
+        "p": 0,
+        "top5": _TOP5,
+    },
+    {
+        "question_id": "q001",
+        "label": "altered",
+        "context_chunks": 1,
+        "p": 0,
+        "top5": _TOP5,
+    },
+]
+
+
+def test_top5_is_rendered_with_repr_so_leading_spaces_show():
+    out = probe.render_top5(_TOP5)
+    assert "' no': -0.100" in out and "'No': -1.200" in out
+    assert r"\|" in out  # a pipe in a token cannot break the markdown table
+
+
+def test_example_not_reproduced_is_a_stop_without_a_correct_tally():
+    text, stop = probe.minicheck_section(_EXAMPLE, [0, 0], [_TOP5, _TOP5], False, _ROWS)
+    assert stop is not None and "not interpretable: README example not reproduced" in stop
+    assert "NOT REPRODUCED" in text and "not interpretable" in text
+    assert "correct" not in text.lower().replace("no 'correct' tally", "")
+    assert "' no': -0.100" in text  # the top-5 diagnosis is still written
+
+
+def test_example_reproduced_keeps_the_tally_and_has_no_stop():
+    text, stop = probe.minicheck_section(_EXAMPLE, [0.98, 0.01], [_TOP5, _TOP5], True, _ROWS)
+    assert stop is None
+    assert "**REPRODUCED**" in text and "predicted supported" in text
+    assert "| label | context chunks | correct |" in text and "1/1" in text
+    assert "' no': -0.100" in text
+
+
+def test_a_stop_reaches_the_report_under_stopped():
+    _, stop = probe.minicheck_section(_EXAMPLE, [0, 0], [_TOP5, _TOP5], False, _ROWS)
+    report = probe.render_report(
+        {}, [], {"Bespoke-MiniCheck-7B": "body"}, {"Bespoke-MiniCheck-7B": stop}
+    )
+    assert "## Stopped" in report and "not interpretable" in report
+
+
+def test_parse_draft_reports_a_structured_skip_apart_from_a_parse_failure():
+    from ledger.baseline.drafting import DraftSkipped
+
+    with pytest.raises(DraftSkipped, match="heading only"):
+        parse_draft('{"skip": true, "reason": "section heading only"}')
+    with pytest.raises(ValueError) as exc:
+        parse_draft("I cannot write a question for this chunk.")
+    assert not isinstance(exc.value, DraftSkipped)  # a prose decline is still a JSON failure
+    assert '"skip": true' in __import__("ledger.baseline.drafting", fromlist=["x"]).DRAFT_SYSTEM
+
+
+def test_t5_draft_keeps_the_raw_reply_and_stop_reason_on_a_failure():
+    src = (Path(__file__).resolve().parent.parent / "scripts" / "t5_draft.py").read_text(
+        encoding="utf-8"
+    )
+    assert '"raw_reply": text' in src and '"stop_reason": stop' in src
+    assert "text = stop = None" in src

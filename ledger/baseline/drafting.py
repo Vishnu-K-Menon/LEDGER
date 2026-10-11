@@ -24,6 +24,9 @@ Requirements:
 - Numeric answers: the unit and period must be recoverable from the same chunk.
 - 8 to 40 words.
 
+If the chunk has no value that can carry a self-contained question under these rules (for
+example a section heading only), reply with {"skip": true, "reason": "..."} instead.
+
 Reply with one JSON object and nothing else:
 {"question": "...", "gold_answer": "...", "answer_type": "number" | "short_phrase"}"""  # noqa: E501
 
@@ -79,8 +82,14 @@ def _loads(text: str) -> Any:
     return json.loads(_FENCE.sub("", text.strip()))
 
 
+class DraftSkipped(ValueError):
+    """The drafter declined the chunk in the structured form (not a parse failure)."""
+
+
 def parse_draft(text: str) -> dict[str, Any]:
     obj = _loads(text)
+    if isinstance(obj, dict) and obj.get("skip") is True:
+        raise DraftSkipped(str(obj.get("reason", "")))
     if not isinstance(obj, dict) or not {"question", "gold_answer", "answer_type"} <= set(obj):
         raise ValueError("draft reply lacks question / gold_answer / answer_type")
     if obj["answer_type"] not in ("number", "short_phrase"):

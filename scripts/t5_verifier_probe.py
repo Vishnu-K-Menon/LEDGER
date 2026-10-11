@@ -10,6 +10,8 @@ MiniCheck (bespokelabs/Bespoke-MiniCheck-7B at the pinned revision):
   digit-altered claims at one-chunk and five-chunk context.
   (b) If (a) still fails, the exception is reported verbatim and this script stops for MiniCheck.
   It does NOT apply an unreviewed shim; candidate fixes are the planning chat's to choose.
+  (c) A README example that is NOT REPRODUCED is a stop for that verifier (listed under Stopped,
+  no 'correct' tally); every MiniCheck call's top-5 (repr token, logprob) is written either way.
 Granite Guardian 3.3 8B (pinned revision): its official groundedness template through the
 tokenizer's chat template (``guardian_config={"criteria_id": "groundedness"}``, ``think=False``),
 README at the pinned revision checked for the call shape; "yes" = ungrounded (its card).
@@ -86,7 +88,9 @@ def minicheck_scorer(model, tok, system_prompt, user_prompt):
         pairs = [
             (tok.decode([int(i)]), float(lp)) for lp, i in zip(top.values, top.indices, strict=True)
         ]
-        return probe.support_prob(pairs)
+        return probe.support_prob(
+            pairs
+        ), pairs  # the rule is unchanged; the top-5 is kept for the report
 
     return score
 
@@ -122,27 +126,17 @@ def run_minicheck(cfg, fetch, claims, sources):
     model, tok = _load(cfg, MC)
     try:
         score = minicheck_scorer(model, tok, system_prompt, user_prompt)
-        got = [score(example["doc"], example["claim_1"]), score(example["doc"], example["claim_2"])]
-        ok = probe.within(got, example["expected"])
-        lines = [
-            f"README example (expected {example['expected']}): got {got} -> "
-            f"**{'REPRODUCED' if ok else 'NOT REPRODUCED'}** (tolerance +/- {probe.README_TOLERANCE})",
-            "",
-            "| question | label | context chunks | P(yes) | predicted supported | correct |",
-            "|---|---|---|---|---|---|",
+        scored = [
+            score(example["doc"], example["claim_1"]),
+            score(example["doc"], example["claim_2"]),
         ]
-        tally = defaultdict(lambda: [0, 0])
+        got = [p for p, _ in scored]
+        ok = probe.within(got, example["expected"])
+        rows = []
         for c in claims:
-            p = score(c["doc"], c["claim"])
-            ok_c = probe.correct(c["label"], p > 0.5)
-            tally[(c["label"], c["context_chunks"])][0] += ok_c
-            tally[(c["label"], c["context_chunks"])][1] += 1
-            lines.append(
-                f"| {c['question_id']} | {c['label']} | {c['context_chunks']} | {p:.3f} | {p > 0.5} | {ok_c} |"
-            )
-        lines += ["", "| label | context chunks | correct |", "|---|---|---|"]
-        lines += [f"| {k[0]} | {k[1]} | {v[0]}/{v[1]} |" for k, v in sorted(tally.items())]
-        return "\n".join(lines)
+            p, pairs = score(c["doc"], c["claim"])
+            rows.append({**c, "p": p, "top5": pairs})
+        return probe.minicheck_section(example, got, [t for _, t in scored], ok, rows)
     finally:
         del model, tok
         _unload()
@@ -202,7 +196,7 @@ def run_granite(cfg, fetch, claims, sources):
             )
         lines += ["", "| label | context chunks | correct |", "|---|---|---|"]
         lines += [f"| {k[0]} | {k[1]} | {v[0]}/{v[1]} |" for k, v in sorted(tally.items())]
-        return "\n".join(lines)
+        return "\n".join(lines), None
     finally:
         del model, tok
         _unload()
@@ -242,7 +236,9 @@ def main() -> int:
         ("Granite Guardian 3.3 8B", run_granite),
     ):
         try:
-            sections[name] = fn(cfg, probe.default_fetch, claims, sources)
+            sections[name], stop = fn(cfg, probe.default_fetch, claims, sources)
+            if stop:  # e.g. README example not reproduced: a stop for this verifier, no tally
+                stops[name] = stop
         except probe.ProbeStop as exc:
             stops[name] = str(exc)
         except Exception as exc:  # noqa: BLE001 - reported verbatim, nothing is worked around

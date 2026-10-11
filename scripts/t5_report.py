@@ -10,6 +10,9 @@ the input hashes and the composition by source and unit in its header. No API ca
   reports/t5_a7.md           measured tokens over every submitted request
   reports/t5_supplement.md   the supplement items, separately from every count above
 
+With contexts.jsonl but no Batch result for any request (the state after t5_join, before the
+Batch collects) only reports/t5_a6.md is written; no generation report is written from zero results.
+
     uv run python scripts/t5_report.py
 """
 
@@ -93,6 +96,12 @@ def main(argv: list[str] | None = None) -> int:
     supplied = {c["question_id"]: [x["chunk_id"] for x in c["chunks"]] for c in contexts}
     mode = cfg.generator.output_mode
     runs = load_runs(cfg, sorted(supplied), mode)
+    if all(r.result_type == "missing" for r in runs):
+        print(
+            "A4 / variance / controls / A7 / claim yield / supplement skipped: no request has a "
+            "Batch result yet (run t5_batch.py until it collects); A6 only"
+        )
+        return 0
     set_of = {c["question_id"]: c["set"] for c in contexts}
     core_runs = [r for r in runs if set_of[r.question_id] != "supplement"]
     supp_runs = [r for r in runs if set_of[r.question_id] == "supplement"]

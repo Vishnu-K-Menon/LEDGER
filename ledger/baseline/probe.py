@@ -198,6 +198,73 @@ def correct(label: str, supported: bool) -> bool:
     return supported if label == "supported" else not supported
 
 
+NOT_INTERPRETABLE = "not interpretable: README example not reproduced"
+
+
+def render_top5(pairs: Sequence[tuple[str, float]]) -> str:
+    """The first-position top-5 as ``repr(token): logprob`` (repr, so leading spaces show)."""
+    return "; ".join(f"{tok!r}: {lp:.3f}".replace("|", "\\|") for tok, lp in pairs)
+
+
+def minicheck_section(
+    example: Mapping[str, Any],
+    got: Sequence[float],
+    example_top5: Sequence[Sequence[tuple[str, float]]],
+    ok: bool,
+    rows: Sequence[Mapping[str, Any]],
+) -> tuple[str, str | None]:
+    """The MiniCheck report section and, when the README example is not reproduced, the stop
+    message. A stop carries no 'correct' column and no tally: nothing there is a result. The
+    top-5 of every call is written either way (the diagnosis)."""
+    verdict = "REPRODUCED" if ok else "NOT REPRODUCED"
+    lines = [
+        f"README example (expected {example['expected']}): got {list(got)} -> "
+        f"**{verdict}** (tolerance +/- {README_TOLERANCE})",
+        "",
+        "Top-5 first-position (decoded token, logprob) for the two README calls:",
+        "",
+    ]
+    lines += [f"- claim {i}: {render_top5(t)}" for i, t in enumerate(example_top5, 1)]
+    lines.append("")
+    if ok:
+        lines += [
+            "| question | label | context chunks | P(yes) | predicted supported | correct "
+            "| top-5 (token: logprob) |",
+            "|---|---|---|---|---|---|---|",
+        ]
+        tally: dict[tuple[str, int], list[int]] = {}
+        for r in rows:
+            sup = r["p"] > 0.5
+            hit = correct(r["label"], sup)
+            t = tally.setdefault((r["label"], r["context_chunks"]), [0, 0])
+            t[0] += hit
+            t[1] += 1
+            lines.append(
+                f"| {r['question_id']} | {r['label']} | {r['context_chunks']} | {r['p']:.3f} | "
+                f"{sup} | {hit} | {render_top5(r['top5'])} |"
+            )
+        lines += ["", "| label | context chunks | correct |", "|---|---|---|"]
+        lines += [f"| {k[0]} | {k[1]} | {v[0]}/{v[1]} |" for k, v in sorted(tally.items())]
+        return "\n".join(lines), None
+    lines += [
+        f"**{NOT_INTERPRETABLE}.** The rows below carry P(yes) and the top-5 only; no 'correct' "
+        "tally is presented as a result for this verifier.",
+        "",
+        "| question | label | context chunks | P(yes) | top-5 (token: logprob) |",
+        "|---|---|---|---|---|",
+    ]
+    for r in rows:
+        lines.append(
+            f"| {r['question_id']} | {r['label']} | {r['context_chunks']} | {r['p']:.3f} | "
+            f"{render_top5(r['top5'])} |"
+        )
+    stop = (
+        f"README example not reproduced (got {list(got)}, "
+        f"expected {list(example['expected'])}); {NOT_INTERPRETABLE}"
+    )
+    return "\n".join(lines), stop
+
+
 # ---- report -----------------------------------------------------------------------------------
 
 
