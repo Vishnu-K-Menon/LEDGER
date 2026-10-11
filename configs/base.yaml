@@ -145,8 +145,8 @@ generator:                            # D11. No sampling parameters - removed fr
   model: claude-sonnet-5-5            # D-041 (successor to D11); a "seed" is an independent run at default sampling.
   thinking: between_tools             # D-041: 'disabled' returns 400 on Sonnet 5.5; between_tools is the lowest setting
   effort: high                        # D-041: output_config.effort pinned so runs are comparable
-  output_mode: ""                     # D-043 item 5: structured_output | strict_tool; EMPTY until the owner rules.
-                                      # batch/run scripts refuse to run while empty; only t5_dry_run may.
+  output_mode: structured_output      # owner ruling: D-043 status line of 2026-10-10 (item 5); structured_output | strict_tool.
+                                      # batch/run scripts and the harness check refuse to run while empty.
   max_tokens: 4096
   use_batch: true                     # Batch API for generate/decompose/rewrite (D28 guard at T14)
   pricing_usd_per_mtok:               # cost = measured usage x price; usage is never estimated

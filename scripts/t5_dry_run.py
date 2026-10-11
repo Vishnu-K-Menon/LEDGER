@@ -1,15 +1,15 @@
-# ruff: noqa: E501
-"""T5 harness check (D-043 item 3): ONE question, sent once per output mode as a SYNC call with the
-exact body the Batch will carry. Prints, per mode: stop_reason, input / output / thinking tokens,
-pydantic validation result and cited chunk IDs (and whether they are among the supplied five).
+"""T5 harness check (D-043 status 2026-10-10, item 5). Sync calls, in ``generator.output_mode``
+only, with the exact request body the Batch carries, on RETRIEVED contexts (the primary arm's
+top-5 from
+results/t5/retrieval_primary.jsonl; texts verified against the lock), for s001 and for each control
+candidate that is not in data/controls_accepted.json. It reads nothing from the 25 drafts or the 5
+accepted controls. Writes reports/t5_harness_check.md (tracked): per question stop_reason, request
+accepted, parse result, abstained, cited IDs among the supplied, and input / output / thinking
+tokens; overall PASS only if every call was accepted, ended end_turn and parsed.
 
-This is the only T5 script allowed to run with ``generator.output_mode`` empty: it passes each
-mode explicitly. It runs BEFORE the GPU retrieval, so its context is not retrieved: the gold chunk
-of the first answerable draft question plus the next four chunks of the same unit in file order.
-That tests request shape, validity and the parser, not answer quality. 2 API calls.
-
-Needs ANTHROPIC_API_KEY (env only). Tracing is optional (Phoenix + your IP on its SG); if the
-endpoint is unreachable the printed results are unaffected.
+Runs after the controls choice and before the Batch. Refuses if data/controls_accepted.json, the
+retrieval output or generator.output_mode is missing. The report is written before tracing is shut
+down, so an unreachable OTLP endpoint loses nothing. Needs ANTHROPIC_API_KEY (env only).
 
     uv run python scripts/t5_dry_run.py
 """
@@ -17,26 +17,27 @@ endpoint is unreachable the printed results are unaffected.
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
+from pathlib import Path
 
-from ledger.baseline.request import OUTPUT_MODES, build_params
+from ledger.baseline import harness
+from ledger.baseline.join import (
+    JoinRefused,
+    harness_contexts,
+    read_controls_accepted,
+    read_primary,
+)
+from ledger.baseline.request import OutputModeUnset, require_output_mode
 from ledger.baseline.runtime import init_tracing_safely, read_questions, shutdown_tracing_safely
-from ledger.baseline.schema import AnswerInvalid, parse_answer
 from ledger.config import load_config
-from ledger.retrieval.index import read_chunks
+from ledger.retrieval.index import IndexRefused, lf_sha256, read_lock
 from ledger.retrieval.query import load_verified_texts
 from ledger.tracing import otel
 
-
-def dry_context(question: dict, chunks: list[dict], n: int = 5) -> list[tuple[str, str]]:
-    gold = next(c for c in chunks if c["chunk_id"] == question["gold_chunk_id"])
-    same_unit = [
-        c for c in chunks if c["unit_id"] == gold["unit_id"] and c["chunk_id"] != gold["chunk_id"]
-    ]
-    picked = [gold, *same_unit[: n - 1]]
-    return [(c["chunk_id"], c["text"]) for c in picked]
+QUESTIONS = Path("data/questions_draft.jsonl")
+CONTROLS = Path("data/controls_accepted.json")
+REPORT = Path("reports/t5_harness_check.md")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -47,83 +48,51 @@ def main(argv: list[str] | None = None) -> int:
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("t5_dry_run: ANTHROPIC_API_KEY is not set (env only)", file=sys.stderr)
         return 2
+    try:
+        mode = require_output_mode(cfg.generator)
+        questions = read_questions(QUESTIONS)
+        accepted = read_controls_accepted(CONTROLS, questions, cfg.baseline.n_controls)
+        texts = load_verified_texts(cfg.paths.chunks, cfg.paths.chunk_ids_lock)
+        lock_header, _ = read_lock(cfg.paths.chunk_ids_lock)
+        ctxs = harness_contexts(
+            questions,
+            read_primary(cfg.paths.results_dir),
+            texts,
+            questions_sha256=lf_sha256(QUESTIONS),
+            lock_chunks_sha256=lock_header["chunks_jsonl_sha256 (CRLF->LF)"],
+            accepted_controls=accepted,
+        )
+    except (JoinRefused, IndexRefused, OutputModeUnset, FileNotFoundError) as exc:
+        print(f"t5_dry_run: refused: {exc}", file=sys.stderr)
+        return 2
 
     import anthropic
 
-    load_verified_texts(cfg.paths.chunks, cfg.paths.chunk_ids_lock)  # refuses on any mismatch
-    questions = [q for q in read_questions(cfg.paths.questions_draft) if q.get("set") == "draft"]
-    chunks = read_chunks(cfg.paths.chunks)
-    q = questions[0]
-    ctx = dry_context(q, chunks)
-    supplied = {cid for cid, _ in ctx}
     client = anthropic.Anthropic()
     init_tracing_safely(cfg)
-    code = 0
+    rows: list[dict] = []
     try:
-        with otel.run_span("ledger.t5_dry_run", {"rag.record_type": "t5_dry_run"}):
-            print(f"question {q['question_id']}: {q['question']}")
-            print(f"context: {sorted(supplied)}  (NOT retrieved: gold + same-unit neighbours)")
-            for mode in OUTPUT_MODES:
-                params = build_params(
-                    cfg.generator, question=q["question"], chunks=ctx, output_mode=mode
-                )
-                print(f"\n== {mode}")
-                try:
-                    with otel.llm_span(
-                        "generate",
-                        provider="anthropic",
-                        model_name=cfg.generator.model,
-                        invocation_parameters={
-                            "max_tokens": cfg.generator.max_tokens,
-                            "thinking": cfg.generator.thinking,
-                            "effort": cfg.generator.effort,
-                            "output_mode": mode,
-                            "batch": False,
-                        },
-                    ) as span:
-                        msg = client.messages.create(**params)
-                        content = [b.model_dump(mode="json") for b in msg.content]
-                        u = msg.usage
-                        details = getattr(u, "output_tokens_details", None)
-                        otel.set_llm_result(
-                            span,
-                            input_messages=[
-                                {"role": "user", "content": params["messages"][0]["content"]}
-                            ],
-                            output_messages=[
-                                {
-                                    "role": "assistant",
-                                    "content": json.dumps(content, ensure_ascii=False),
-                                }
-                            ],
-                            usage={
-                                "input_tokens": u.input_tokens,
-                                "output_tokens": u.output_tokens,
-                            },
-                        )
-                except anthropic.APIStatusError as exc:
-                    print(f"API ERROR {exc.status_code}: {exc.response.text}")
-                    code = 1
-                    continue
-                print(f"stop_reason: {msg.stop_reason}")
+        with otel.run_span("ledger.t5_harness_check", {"rag.record_type": "t5_harness_check"}):
+            for ctx in ctxs:
+                row = harness.check_question(client, cfg.generator, ctx, mode)
+                rows.append(row)
                 print(
-                    f"tokens: input={u.input_tokens} output={u.output_tokens} "
-                    f"thinking={getattr(details, 'thinking_tokens', None)}"
+                    f"{row['question_id']}: accepted={row['accepted']} "
+                    f"stop={row['stop_reason']} parse={row['parse']}"
                 )
-                print(
-                    f"cost (sync rates): ${cfg.generator.cost_usd({'input_tokens': u.input_tokens, 'output_tokens': u.output_tokens}, batch=False):.6f}"
-                )
-                try:
-                    ans = parse_answer(content, output_mode=mode)
-                    cited = ans.cited_ids()
-                    print(f"validation: OK  abstained={ans.abstained}")
-                    print(f"cited ids: {cited}  all supplied: {set(cited) <= supplied}")
-                except AnswerInvalid as exc:
-                    print(f"validation: FAILED: {exc}")
-                    print(f"raw content: {json.dumps(content, ensure_ascii=False)[:600]}")
+        meta = {
+            "model": cfg.generator.model,
+            "thinking / effort": f"{cfg.generator.thinking} / {cfg.generator.effort}",
+            "questions sha256 (LF)": lf_sha256(QUESTIONS),
+            "controls_accepted.json sha256 (LF)": lf_sha256(CONTROLS),
+            "questions": ", ".join(c["question_id"] for c in ctxs),
+        }
+        REPORT.parent.mkdir(parents=True, exist_ok=True)
+        REPORT.write_text(harness.render(meta, rows, mode), encoding="utf-8", newline="\n")
+        print(f"wrote {REPORT}: {'PASS' if harness.overall_pass(rows) else 'FAIL'}")
     finally:
         shutdown_tracing_safely()
-    return code
+    return 0 if harness.overall_pass(rows) else 1
 
 
 if __name__ == "__main__":

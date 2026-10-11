@@ -99,7 +99,7 @@ def test_unknown_mode_and_unset_mode(base_config_path):
     with pytest.raises(ValueError):
         build_params(_gen(base_config_path), question="q", chunks=CHUNKS, output_mode="")
     with pytest.raises(OutputModeUnset):
-        require_output_mode(_gen(base_config_path))
+        require_output_mode(_gen(base_config_path).model_copy(update={"output_mode": ""}))
 
 
 def test_answer_validation_rules():
@@ -199,6 +199,7 @@ def test_run_cells_are_repeat_cells_not_seeds(base_config_path):
 
 def test_submit_refuses_while_output_mode_empty(base_config_path, tmp_path):
     cfg = load_config(base_config_path)
+    cfg = cfg.model_copy(update={"generator": cfg.generator.model_copy(update={"output_mode": ""})})
     with pytest.raises(OutputModeUnset):
         submit_or_collect(cfg, _contexts(), _FakeBatch(), ledger_path=tmp_path / "jobs.jsonl")
 

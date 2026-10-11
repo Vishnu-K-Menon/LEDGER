@@ -109,7 +109,21 @@ def main(argv: list[str] | None = None) -> int:
         "supplement requests": len(supp_runs),
     }
     _write("t5_a4.md", rp.finish(rp.a4_report(meta, core_runs, supplied, mode), composition))
-    _write("t5_variance.md", rp.finish(rp.variance_report(meta, core_runs, core_q), composition))
+    supplied_texts = {c["question_id"]: [x["text"] for x in c["chunks"]] for c in contexts}
+    _write(
+        "t5_variance.md",
+        rp.finish(rp.variance_report(meta, core_runs, core_q, supplied_texts), composition),
+    )
+    if CONTROLS.exists():
+        _write(
+            "t5_controls.md",
+            rp.finish(
+                rp.controls_abstention_report(
+                    meta, core_runs, questions, json.loads(CONTROLS.read_text(encoding="utf-8"))
+                ),
+                composition,
+            ),
+        )
     matrix = yaml.safe_load(MATRIX.read_text(encoding="utf-8"))
     prices = cfg.generator.pricing_usd_per_mtok.model_dump()
     _write(

@@ -15,6 +15,8 @@ data/*
 !data/questions_draft_draw.json
 !data/questions_draft_draw_run1.json
 !data/controls_accepted.json
+!data/questions_draft_candidates.jsonl
+!data/questions_draft_candidates.backup-20261010-153159.jsonl
 # The A1 cell oracle (D-038): publisher files stay local; each snapshot's hash manifest is tracked,
 # because reproducibility rests on the hashes, not on committing EIA's and GovInfo's files.
 !data/oracle/

@@ -65,8 +65,9 @@ def test_baseline_block_is_strict(base_config_path: Path):
         Config.model_validate(_mutated(base_config_path, "baseline", "n_extra", 1))
 
 
-def test_output_mode_defaults_empty(base_config_path: Path):
-    assert load_config(base_config_path).generator.output_mode == ""
+def test_output_mode_is_the_ruled_one(base_config_path: Path):
+    # D-043 status line of 2026-10-10 (item 5): structured_output
+    assert load_config(base_config_path).generator.output_mode == "structured_output"
 
 
 # ---- draw -------------------------------------------------------------------------------------

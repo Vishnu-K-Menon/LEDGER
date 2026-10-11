@@ -12,6 +12,7 @@ from collections.abc import Mapping, Sequence
 from statistics import mean, pstdev
 from typing import Any
 
+from ledger.baseline import match
 from ledger.baseline.run import RunRecord
 
 A4_PASS = 0.98
@@ -110,13 +111,32 @@ def classify_miss(
     return "reranker demotion"
 
 
+def _gold_in_top5(
+    rec: Mapping[str, Any],
+    golds: Mapping[str, tuple[str, str]] | None,
+    chunk_meta: Mapping[str, Mapping[str, Any]],
+) -> str:
+    if golds is None or rec["question_id"] not in golds:
+        return "n/a"
+    kind, gold = golds[rec["question_id"]]
+    found = [
+        cid
+        for cid in rec["top5"]
+        if match.gold_in_text(kind, gold, str(chunk_meta[cid].get("text", "")))
+    ]
+    return ("yes: " + ", ".join(f"`{c}`" for c in found)) if found else "no"
+
+
 def a6_arm_section(
     name: str,
     header: Mapping[str, Any],
     records: Sequence[Mapping[str, Any]],
     chunk_meta: Mapping[str, Mapping[str, Any]],
     k_dense: int,
+    golds: Mapping[str, tuple[str, str]] | None = None,
 ) -> str:
+    """``golds``: question id -> (answer_type, gold string); used only to say, per miss, whether
+    the gold string occurs in a top-5 chunk (D-043 status 2026-10-10, item 2). Recall is unchanged."""
     ans = [r for r in records if r["gold_chunk_id"] is not None]
     n = len(ans)
     hit5 = [r for r in ans if r["gold_chunk_id"] in r["top5"]]
@@ -145,14 +165,14 @@ def a6_arm_section(
     if misses:
         out += [
             "",
-            "| question | gold | cause | dense rank | rerank rank |",
-            "|---|---|---|---|---|",
+            "| question | gold | cause | dense rank | rerank rank | gold string in a top-5 chunk |",
+            "|---|---|---|---|---|---|",
         ]
         for r in misses:
             out.append(
                 f"| {r['question_id']} | `{r['gold_chunk_id']}` | "
                 f"{classify_miss(r, chunk_meta, k_dense)} | {r['gold_rank_dense']} | "
-                f"{r['gold_rank_rerank']} |"
+                f"{r['gold_rank_rerank']} | {_gold_in_top5(r, golds, chunk_meta)} |"
             )
     out.append("")
     return "\n".join(out)
@@ -169,11 +189,16 @@ def a6_controls_section(
         out = ["## Controls (the 5 accepted): top-5", ""]
     else:
         out = [
-            "## Control candidates: top-5 for the owner to read (D-043 item 2)",
+            "## Control candidates: top-5 for the owner to read (D-043 status 2026-10-10, item 2)",
             "",
-            f"All {len(ctrl)} candidates were retrieved. Accept 5 after reading their top-5 and "
-            "finding no answer in them; write the ids to data/controls_accepted.json. A rejection "
-            "needs no second retrieval.",
+            f"All {len(ctrl)} candidates were retrieved (primary arm's top-5 is the one the "
+            "generator receives). Read them in file order. Reject a candidate only if a top-5 "
+            "chunk states the asked quantity for the asked entity and the asked period, and "
+            "record the rejecting chunk ID. The same series for another period, or the same "
+            "quantity for another entity, does not reject: accept it and tag it `near_miss`. The "
+            "first five not rejected are the controls; if fewer than five pass, T5 stops for a "
+            "further status line (no candidate is drafted or picked by hand). Write all candidates "
+            "with decision, reason and tag, and the five ids, to data/controls_accepted.json.",
             "",
         ]
     for q in ctrl:
@@ -183,6 +208,86 @@ def a6_controls_section(
             out.append(f"- {name}: " + ", ".join(f"`{c}`" for c in r["top5"]))
         out.append("")
     return "\n".join(out)
+
+
+def clopper_pearson(k: int, n: int, alpha: float = 0.05) -> tuple[float, float]:
+    """Exact two-sided interval, by bisection on the binomial tail (no SciPy dependency)."""
+    if n == 0:
+        return (0.0, 1.0)
+
+    def tail_ge(p: float) -> float:  # P(X >= k | p)
+        return sum(math.comb(n, i) * p**i * (1 - p) ** (n - i) for i in range(k, n + 1))
+
+    def tail_le(p: float) -> float:  # P(X <= k | p)
+        return sum(math.comb(n, i) * p**i * (1 - p) ** (n - i) for i in range(0, k + 1))
+
+    def solve(f, target: float, increasing: bool) -> float:
+        lo, hi = 0.0, 1.0
+        for _ in range(100):
+            mid = (lo + hi) / 2
+            if (f(mid) < target) == increasing:
+                lo = mid
+            else:
+                hi = mid
+        return (lo + hi) / 2
+
+    lower = 0.0 if k == 0 else solve(tail_ge, alpha / 2, True)
+    upper = 1.0 if k == n else solve(tail_le, alpha / 2, False)
+    return (lower, upper)
+
+
+def controls_abstention_report(
+    meta: Mapping[str, Any],
+    runs: Sequence[RunRecord],
+    questions: Sequence[Mapping[str, Any]],
+    controls: Mapping[str, Any],
+    baseline_run: int = 1,
+) -> str:
+    """Abstention on the accepted controls, run 1 (D-043 status 2026-10-10, item 2): k of n with
+    an exact interval, by control_kind and by tag. A check for gross failure, not a rate. Nothing
+    gates on it (the config's abstention floor is not read here)."""
+    qmap = {q["question_id"]: q for q in questions}
+    tags = {
+        c["id"]: c.get("tag") or "none"
+        for c in controls.get("candidates", [])
+        if isinstance(c, Mapping) and "id" in c
+    }
+    ids = set(controls["question_ids"])
+    rows = [r for r in runs if r.run == baseline_run and r.question_id in ids]
+
+    def line(label: str, sel: Sequence[RunRecord]) -> str:
+        k = sum(1 for r in sel if match.usable(r) and r.answer is not None and r.answer.abstained)
+        bad = sum(1 for r in sel if not match.usable(r))
+        lo, hi = clopper_pearson(k, len(sel))
+        return f"| {label} | {k} of {len(sel)} | [{lo:.2f}, {hi:.2f}] | {bad} |"
+
+    body = header_block(f"T5 controls: abstention, run {baseline_run}", meta)
+    body += (
+        "A check for gross failure, **not a rate** (5 of 5 has a 95 % lower bound of 0.48). "
+        "k = runs that returned a valid abstention; n = all run-1 requests for the accepted "
+        "controls (an invalid run stays in n and is counted in the last column). Exact "
+        "(Clopper-Pearson) 95 % interval. Nothing gates on this number.\n\n"
+        "| group | abstained | 95 % interval | invalid |\n|---|---|---|---|\n"
+    )
+    body += line("all accepted controls", rows) + "\n"
+    for kind in sorted({qmap[r.question_id].get("control_kind") or "?" for r in rows}):
+        sel = [r for r in rows if (qmap[r.question_id].get("control_kind") or "?") == kind]
+        body += line(f"kind: {kind}", sel) + "\n"
+    for tag in sorted({tags.get(r.question_id, "none") for r in rows}):
+        sel = [r for r in rows if tags.get(r.question_id, "none") == tag]
+        body += line(f"tag: {tag}", sel) + "\n"
+    body += "\n### Per control\n\n"
+    for r in rows:
+        status = (
+            "invalid"
+            if not match.usable(r)
+            else ("abstained" if r.answer and r.answer.abstained else "ANSWERED")
+        )
+        body += (
+            f"- {r.question_id} ({qmap[r.question_id].get('control_kind')}, tag "
+            f"{tags.get(r.question_id, 'none')}): {status}\n"
+        )
+    return body
 
 
 def a6_supplement_section(
@@ -218,6 +323,11 @@ def a6_report(
     accepted_controls: Sequence[str] | None = None,
 ) -> str:
     core_ids = {q["question_id"] for q in questions if q.get("set", "draft") == "draft"}
+    golds = {
+        q["question_id"]: (q.get("answer_type") or "", q["gold_answer"])
+        for q in questions
+        if q.get("gold_answer")
+    }
     body = header_block("T5 A6: retrieval on the draft questions", meta)
     body += (
         "Descriptive only (D-033 status 2026-10-09): recall@5 with its Wilson interval, MRR and the "
@@ -228,7 +338,7 @@ def a6_report(
     )
     for name, (header, recs) in arms.items():
         core = [r for r in recs if r["question_id"] in core_ids]
-        body += a6_arm_section(name, header, core, chunk_meta, k_dense) + "\n"
+        body += a6_arm_section(name, header, core, chunk_meta, k_dense, golds) + "\n"
     all_arms = {k: v[1] for k, v in arms.items()}
     body += a6_supplement_section(all_arms, questions, chunk_meta) + "\n"
     body += a6_controls_section(all_arms, questions, accepted_controls)
@@ -302,10 +412,6 @@ def a4_report(
 # ---- variance (plan.md:41) ---------------------------------------------------------------------
 
 
-def _answer_text(r: RunRecord) -> str:
-    return " ".join(s.text for s in r.answer.sentences) if r.answer else ""
-
-
 def _by_question(runs: Sequence[RunRecord]) -> dict[str, list[RunRecord]]:
     out: dict[str, list[RunRecord]] = {}
     for r in sorted(runs, key=lambda x: (x.question_id, x.run)):
@@ -314,27 +420,53 @@ def _by_question(runs: Sequence[RunRecord]) -> dict[str, list[RunRecord]]:
 
 
 def variance_report(
-    meta: Mapping[str, Any], runs: Sequence[RunRecord], questions: Sequence[Mapping[str, Any]]
+    meta: Mapping[str, Any],
+    runs: Sequence[RunRecord],
+    questions: Sequence[Mapping[str, Any]],
+    supplied_texts: Mapping[str, Sequence[str]] | None = None,
 ) -> str:
+    """D-043 status 2026-10-10 (answer matching). ``supplied_texts``: question id -> the texts of
+    the five chunks the generator was given (``results/t5/contexts.jsonl``)."""
     qmap = {q["question_id"]: q for q in questions}
     by_q = _by_question(runs)
     ans_q = [q for q in by_q if not qmap[q].get("unanswerable")]
-
-    # numeric exact match vs gold: gold string appears in the answer text
     num_q = [q for q in ans_q if qmap[q].get("answer_type") == "number"]
-    per_run_hit: dict[int, int] = Counter()
-    unanimous = 0
-    for q in num_q:
-        hits = [qmap[q]["gold_answer"] in _answer_text(r) for r in by_q[q]]
-        unanimous += len(set(hits)) == 1
-        for r, h in zip(by_q[q], hits, strict=True):
-            per_run_hit[r.run] += h
-    # digit-level disagreement: the set of numeric tokens differs between runs of one question
-    digit_dis = []
+    phr_q = [q for q in ans_q if qmap[q].get("answer_type") == "short_phrase"]
+
+    # (b) numeric items: every run stays in the denominator (items x runs)
+    num_runs = {
+        q: [(r, match.classify_run("number", qmap[q]["gold_answer"], r)) for r in by_q[q]]
+        for q in num_q
+    }
+    flat = [m for rs in num_runs.values() for _, m in rs]
+    sm = match.summarize(flat)
+    per_run: dict[int, Counter[str]] = {}
+    for rs in num_runs.values():
+        for r, m in rs:
+            per_run.setdefault(r.run, Counter())[m.status] += 1
+    misses = [
+        (q, r, qmap[q]["gold_answer"], match.answer_text(r))
+        for q, rs in num_runs.items()
+        for r, m in rs
+        if m.status == match.MISS
+    ]
+    # (d) short_phrase items: lexical containment only
+    phr_flat = [
+        match.classify_run("short_phrase", qmap[q]["gold_answer"], r)
+        for q in phr_q
+        for r in by_q[q]
+    ]
+    pm = match.summarize(phr_flat)
+    # (e) digit-level disagreement: the set of numeric tokens differs between runs of one question
+    digit_dis, differing, absent = [], {}, {}
     for q in ans_q:
-        sets = [frozenset(NUM.findall(_answer_text(r))) for r in by_q[q] if r.answer]
+        usable_runs = [r for r in by_q[q] if r.answer]
+        sets = [frozenset(NUM.findall(match.answer_text(r))) for r in usable_runs]
         if len(sets) > 1 and len(set(sets)) > 1:
             digit_dis.append(q)
+            differing[q] = match.differing_tokens(sets)
+            if supplied_texts is not None and q in supplied_texts:
+                absent[q] = match.tokens_absent_from(differing[q], supplied_texts[q])
     # abstention consistency
     abst_cons = 0
     for rs in by_q.values():
@@ -364,19 +496,65 @@ def variance_report(
         "Same prompt, repeat runs at default sampling (D-019). **This does not decide the seed "
         "count**: that waits for the first run with an unsupported-claim rate (T9/T11).\n\n"
     )
-    body += f"- numeric exact-match agreement vs gold ({len(num_q)} numeric questions): "
+    n_runs = max((len(v) for v in num_runs.values()), default=0)
     body += (
-        ", ".join(f"run {r}: {_pct(per_run_hit[r], len(num_q))}" for r in sorted(per_run_hit))
-        + f"; identical outcome in all runs: {_pct(unanimous, len(num_q))}\n"
-        if num_q
-        else "n/a\n"
+        "## Answer match (D-043 status 2026-10-10)\n\n"
+        f"Numeric items ({len(num_q)}) x runs = {len(flat)} runs, all in the denominator. "
+        "Normalisation: whitespace runs to one space; U+2212, U+2013 and ASCII `-` directly before a "
+        "digit to one minus sign; nothing else. Correct = the gold occurs in the answer text and "
+        "is not part of a longer number. Abstained and invalid runs (no usable answer: failed "
+        "validation, stop_reason other than end_turn, errored/expired/canceled/missing) are counted "
+        "as such and not matched.\n\n"
+        f"- hits {sm['hit']}, misses {sm['miss']}, abstained {sm['abstained']}, invalid "
+        f"{sm['invalid']} (sum {sm['hit'] + sm['miss'] + sm['abstained'] + sm['invalid']} of "
+        f"{len(flat)}); hit rate {_pct(sm['hit'], len(flat))}\n"
+        f"- hits that needed the minus mapping: {sm['needed_minus']}\n"
+        + "".join(
+            f"- run {r}: hits {c['hit']}, misses {c['miss']}, abstained {c['abstained']}, "
+            f"invalid {c['invalid']} (of {len(num_q)})\n"
+            for r, c in sorted(per_run.items())
+        )
+        + "- **Not checked at T5:** whether the matched number is attached to the right period, "
+        "entity or unit.\n"
+    )
+    if not flat:
+        body += f"- no numeric items (n_runs {n_runs})\n"
+    body += "\n### Misses (gold and answer text)\n\n"
+    if misses:
+        for q, r, gold, text in misses:
+            body += f"- {q} run {r.run}: gold `{gold}`; answer: {text!r}\n"
+    else:
+        body += "None.\n"
+    body += (
+        f"\n### short_phrase items ({len(phr_q)}): lexical containment, NOT correctness\n\n"
+        "Not scored at T5: correctness waits for the D-007 judge (evaluation.md section 3). "
+        "Reported only: gold phrase present after whitespace collapse and case-folding, with the "
+        "same longer-number guard.\n\n"
+        f"- contained {pm['contained']}, not contained {pm['not_contained']}, abstained "
+        f"{pm['abstained']}, invalid {pm['invalid']} (sum "
+        f"{pm['contained'] + pm['not_contained'] + pm['abstained'] + pm['invalid']} of "
+        f"{len(phr_flat)})\n\n"
+        "### Other probes\n\n"
     )
     body += (
         f"- **digit-level disagreement: {len(digit_dis)} of {len(ans_q)} answerable questions**"
-        f" (runs cite different digit strings; non-zero is a D12/D14 problem, not a seed question)"
+        " (runs cite different digit strings)"
         + (f": {', '.join(digit_dis)}" if digit_dis else "")
         + "\n"
     )
+    for q in digit_dis:
+        body += f"  - {q}: differing tokens {sorted(differing[q])}\n"
+    if supplied_texts is None:
+        body += "- differing tokens in none of the supplied chunk texts: n/a (contexts missing)\n"
+    else:
+        n_abs = sum(len(v) for v in absent.values())
+        body += (
+            f"- **differing tokens that occur in none of the run's five supplied chunk texts: "
+            f"{n_abs}** (this line, not the one above, is the D12/D14 reading; scale-word and "
+            "period swaps between runs are not measured here)"
+            + "".join(f"\n  - {q}: {sorted(v)}" for q, v in absent.items() if v)
+            + "\n"
+        )
     body += f"- abstention consistency: {_pct(abst_cons, len(by_q))} questions with the same abstention decision in every run\n"
     body += (
         f"- citation-set stability: mean pairwise Jaccard {mean(jac):.3f}; identical set in every run for {_pct(identical, len(jac))}\n"
@@ -535,6 +713,6 @@ def supplement_report(
     ):
         q = qmap[r.question_id]
         cited = q["gold_chunk_id"] in r.answer.cited_ids() if r.answer else False
-        text = _answer_text(r)[:140].replace("|", "/") or (r.error or "")
+        text = match.answer_text(r)[:140].replace("|", "/") or (r.error or "")
         body += f"| {r.question_id} | {q.get('source')} | {r.run} | {cited} | {text} |\n"
     return body

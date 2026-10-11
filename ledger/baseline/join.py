@@ -60,8 +60,9 @@ def read_controls_accepted(path: Path, questions: Sequence[Mapping[str, Any]], n
 def select_questions(
     questions: Sequence[Mapping[str, Any]], accepted_controls: Sequence[str]
 ) -> list[Mapping[str, Any]]:
-    """The 25 drafts, the supplement items and the accepted controls; unaccepted control
-    candidates are retrieved but never generated or reported."""
+    """The 25 drafts, the supplement items and the accepted controls. Unaccepted control
+    candidates are retrieved but are never in the Batch or the reports; only the harness check
+    (``harness_questions``) sends them, as sync calls."""
     keep = set(accepted_controls)
     return [
         q
@@ -69,6 +70,66 @@ def select_questions(
         if q.get("set") in CORE_SETS
         or (q.get("set") == "control_candidate" and q["question_id"] in keep)
     ]
+
+
+def harness_questions(
+    questions: Sequence[Mapping[str, Any]], accepted_controls: Sequence[str]
+) -> list[Mapping[str, Any]]:
+    """The harness check's questions (D-043 status 2026-10-10, item 5): s001 (the supplement items)
+    and every control candidate NOT accepted. Reads nothing from the 90 core requests: it refuses
+    if a draft question or an accepted control would be selected."""
+    keep = set(accepted_controls)
+    out = [
+        q
+        for q in questions
+        if q.get("set") == "supplement"
+        or (q.get("set") == "control_candidate" and q["question_id"] not in keep)
+    ]
+    bad = [q["question_id"] for q in out if q.get("set") == "draft" or q["question_id"] in keep]
+    if bad:  # unreachable by construction; kept as the stated guard
+        raise JoinRefused(f"harness check must not touch core questions: {bad}")
+    if not out:
+        raise JoinRefused("harness check: no questions selected")
+    return out
+
+
+def harness_contexts(
+    questions: Sequence[Mapping[str, Any]],
+    primary: tuple[Mapping[str, Any], Sequence[Mapping[str, Any]]],
+    texts: Mapping[str, str],
+    *,
+    questions_sha256: str,
+    lock_chunks_sha256: str,
+    accepted_controls: Sequence[str],
+    k: int = 5,
+) -> list[dict[str, Any]]:
+    """Contexts for ``harness_questions`` from the primary arm's retrieved top-``k`` (no new
+    retrieval, no hand-built context); texts come from the lock-verified corpus. This is separate
+    from ``build_contexts`` because that one covers only the accepted controls."""
+    header, records = primary
+    if header.get("questions_sha256") != questions_sha256:
+        raise JoinRefused("retrieval was run against a different questions file")
+    if header.get("lock_chunks_sha256") != lock_chunks_sha256:
+        raise JoinRefused("retrieval was run against a different chunks.jsonl (lock hash differs)")
+    by_id = {r["question_id"]: r for r in records}
+    out = []
+    for q in harness_questions(questions, accepted_controls):
+        rec = by_id.get(q["question_id"])
+        if rec is None:
+            raise JoinRefused(f"{q['question_id']}: not in the retrieval file")
+        top = rec[f"top{k}"]
+        missing = [cid for cid in top if cid not in texts]
+        if missing:
+            raise JoinRefused(f"{q['question_id']}: ids not in the lock-verified corpus: {missing}")
+        out.append(
+            {
+                "question_id": q["question_id"],
+                "question": q["question"],
+                "set": q.get("set"),
+                "chunks": [{"chunk_id": cid, "text": texts[cid]} for cid in top],
+            }
+        )
+    return out
 
 
 def build_contexts(

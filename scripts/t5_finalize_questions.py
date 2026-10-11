@@ -1,8 +1,8 @@
 """Finalize the owner-checked draft questions (D-043). Reads data/questions_draft_candidates.jsonl
-(``accept`` true set by the owner on 13 table + 12 prose + 5 control lines, ``checked_by`` filled)
-and writes data/questions_draft.jsonl. Refuses unless: the counts are 13 / 12 / 5; every gold
-answer is an exact substring of its gold chunk's text; at most one question per distinct table;
-every gold chunk id is in the lock. No API call.
+(``accept`` true set by the owner on 13 table + 12 prose + at least n_controls control lines,
+``checked_by`` filled) and writes data/questions_draft.jsonl. Refuses unless: the counts are
+13 / 12 / at least n_controls; every gold answer is an exact substring of its gold chunk's text;
+at most one question per distinct table; every gold chunk id is in the lock. No API call.
 
     uv run python scripts/t5_finalize_questions.py
 """

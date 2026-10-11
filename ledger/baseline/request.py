@@ -24,8 +24,8 @@ class OutputModeUnset(RuntimeError):
 def require_output_mode(gen: GeneratorConfig) -> str:
     if gen.output_mode not in OUTPUT_MODES:
         raise OutputModeUnset(
-            "generator.output_mode is empty: the owner rules on it (D-043 item 5) after the "
-            "dry run; only scripts/t5_dry_run.py may run without it"
+            "generator.output_mode is empty: set it in configs/base.yaml (ruled in the D-043 "
+            "status line of 2026-10-10, item 5)"
         )
     return gen.output_mode
 
