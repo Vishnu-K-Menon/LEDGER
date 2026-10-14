@@ -6,3 +6,9 @@ data/questions_draft_candidates.backup-20261010-153159.jsonl -text
 docs/t5_owner_check/t5_review.py -text
 docs/t5_owner_check/t5_export_packet.py -text
 docs/t5_owner_check/t5_checker_prompt.md -text
+ledger/claims/prompts/claimify_v1.md -text
+data/t6_claims.jsonl -text
+data/labels_pilot.jsonl -text
+data/labels_pilot_relabel.jsonl -text
+data/t6_panel.jsonl -text
+docs/t6_label_guide.md -text

@@ -17,6 +17,11 @@ data/*
 !data/controls_accepted.json
 !data/questions_draft_candidates.jsonl
 !data/questions_draft_candidates.backup-20261010-153159.jsonl
+# T6 (D-044): the claims, the pilot claim ids and labels, the relabels and the panel are records.
+!data/t6_claims.jsonl
+!data/labels_pilot.jsonl
+!data/labels_pilot_relabel.jsonl
+!data/t6_panel.jsonl
 # The A1 cell oracle (D-038): publisher files stay local; each snapshot's hash manifest is tracked,
 # because reproducibility rests on the hashes, not on committing EIA's and GovInfo's files.
 !data/oracle/
@@ -33,6 +38,7 @@ results/
 reports/*
 !reports/a8.md
 !reports/t5_*.md
+!reports/t6_*.md
 !reports/a1_diag/
 reports/a1_diag/*
 !reports/a1_diag/rung1/

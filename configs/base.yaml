@@ -172,6 +172,50 @@ baseline:                             # D-043 (T5 single-shot baseline)
 
 decomposition:                        # D15
   method: claimify                    # claimify | sentence_split
+  # D-044 item 2: one frozen Claimify-style prompt; the decomposer refuses unless the file's
+  # SHA-256 equals prompt_sha256 (the freeze). Model, thinking and effort come from generator
+  # (D-041 pins); no sampling parameters (D-019).
+  prompt_path: ledger/claims/prompts/claimify_v1.md
+  prompt_sha256: ""
+  max_tokens: 4096
+  cell: t6_decompose                  # Batch cell; results/<cell>/1.jsonl
+  input_cell: t5_baseline_r1          # D-044 item 1: run 1 of the T5 Batch of record only
+
+pilot:                                # D-044 (T6 kappa pilot) and its status lines of 2026-10-14
+  sample_seed: 20261014               # arbitrary; item 3 seeded draw and the label order
+  max_claims_per_answer: 3            # item 3
+  readable_min_each: 8                # item 5: binary kappa readable only if k >= 8 and m >= 8
+  a3_min_rate: 0.08                   # item 5: A3 on claims flagged "entailed by the answer"
+  elig_max_flag_supported: 0.20       # item 6(b): flags at most 20 % of the SUPPORTED-labelled
+  elig_min_k: 4                       # item 6(b): if k >= 4 ...
+  elig_min_catch: 2                   # ... flags at least 2 of the k
+  one_claim: 1                        # item 6(b) status 2026-10-14: |dTP| + |dTN| <= 1
+  default_verifier: ibm-granite/granite-guardian-3.3-8b   # item 6(b): "Granite Guardian"
+  bootstrap_seed: 20261014            # answer-clustered bootstrap (B = eval.bootstrap_n)
+  ci_level: 0.95
+  relabel_disagreements: 10           # item 6(a)
+  relabel_agreements: 10              # item 6(a)
+  relabel_seed: 20261014
+  granite_max_new_tokens: 24          # think=False output is "<score> yes|no </score>"
+  part_a_budget_min: 60               # item 8: MiniCheck attempt incl. one retry
+  minicheck_vllm: "0.31.0"            # requires torch==2.13.0 (PyPI, read 2026-10-14)
+  minicheck_vllm_retry: "0.30.0"      # item 8's one retry with an older vLLM (also torch==2.13.0)
+  minicheck_commit: b58b9fa69acbd1015ec970fa65dd752413a053d2   # Liyan06/MiniCheck (git only:
+                                      # PyPI "minicheck" is an unrelated project)
+  minicheck_venv: ~/mc-venv           # own venv on the GPU box (item 8)
+  readme_tolerance: 0.02              # item 8: README example within +/- 0.02
+  paths:
+    claims: data/t6_claims.jsonl
+    labels: data/labels_pilot.jsonl
+    relabel: data/labels_pilot_relabel.jsonl
+    panel: data/t6_panel.jsonl
+    label_guide: docs/t6_label_guide.md
+    gate_report: reports/t6_gate.md
+    pilot_report: reports/t6_pilot.md
+    decompose_report: reports/t6_decompose.md
+    scores: results/t6/scores.jsonl
+    part_a: results/t6/part_a.json
+    part_a_report: results/t6/part_a.md
 
 verifier:                             # D16 / D-004 / D-012
   model: bespokelabs/Bespoke-MiniCheck-7B   # pilot candidate; fixed after A2
@@ -221,8 +265,8 @@ eval:                                 # evaluation.md sections 3-9, plan.md gate
   kappa_go: 0.6                       # A2 branches
   kappa_tune: 0.5
   input_mode_tie: 0.05                # D-004 tie-break
-  pilot_claims: 50
-  pilot_min_unsupported: 4            # A3
+  pilot_claims: 50                    # superseded by D-044 items 3 and 5; unused
+  pilot_min_unsupported: 4            # A3 # superseded by D-044 items 3 and 5; unused
   labels_per_half: 100                # D-010
   schema_valid_min: 0.98              # A4
   budget_max_usd: 120                 # A7

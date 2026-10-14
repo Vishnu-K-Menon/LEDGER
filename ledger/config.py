@@ -337,6 +337,54 @@ class BaselineConfig(_Strict):
 
 class DecompositionConfig(_Strict):
     method: Literal["claimify", "sentence_split"]
+    # D-044 item 2: the frozen prompt and its pinned hash (the decomposer refuses on a mismatch;
+    # an empty pin loads, the decomposer raises at the use site - the D-020 pattern)
+    prompt_path: Path
+    prompt_sha256: str
+    max_tokens: int = Field(gt=0)
+    cell: str
+    input_cell: str
+
+
+class PilotPaths(_Strict):
+    claims: Path
+    labels: Path
+    relabel: Path
+    panel: Path
+    label_guide: Path
+    gate_report: Path
+    pilot_report: Path
+    decompose_report: Path
+    scores: Path
+    part_a: Path
+    part_a_report: Path
+
+
+class PilotConfig(_Strict):
+    """D-044 (T6 kappa pilot) and its status lines of 2026-10-14."""
+
+    sample_seed: int
+    max_claims_per_answer: int = Field(gt=0)
+    readable_min_each: int = Field(ge=0)
+    a3_min_rate: float = Field(ge=0.0, le=1.0)
+    elig_max_flag_supported: float = Field(ge=0.0, le=1.0)
+    elig_min_k: int = Field(ge=0)
+    elig_min_catch: int = Field(ge=0)
+    one_claim: int = Field(ge=0)
+    default_verifier: str
+    bootstrap_seed: int
+    ci_level: float = Field(gt=0.0, lt=1.0)
+    relabel_disagreements: int = Field(ge=0)
+    relabel_agreements: int = Field(ge=0)
+    relabel_seed: int
+    granite_max_new_tokens: int = Field(gt=0)
+    part_a_budget_min: float = Field(gt=0)
+    minicheck_vllm: str
+    minicheck_vllm_retry: str
+    minicheck_commit: str
+    minicheck_venv: str
+    readme_tolerance: float = Field(ge=0.0)
+    paths: PilotPaths
 
 
 class VerifierPin(_Strict):
@@ -496,6 +544,7 @@ class Config(_Strict):
     generator: GeneratorConfig
     baseline: BaselineConfig
     decomposition: DecompositionConfig
+    pilot: PilotConfig
     verifier: VerifierConfig
     judge: JudgeConfig
     loop: LoopConfig
@@ -505,6 +554,15 @@ class Config(_Strict):
     fetch: FetchConfig
     tracing: TracingConfig
     loadtest: LoadtestConfig
+
+    @model_validator(mode="after")
+    def _pilot_default_is_a_candidate(self) -> Config:
+        if self.pilot.default_verifier not in self.verifier.pilot_candidates:
+            raise ValueError(
+                f"pilot.default_verifier {self.pilot.default_verifier!r} is not in "
+                "verifier.pilot_candidates (D-044 item 6(b))"
+            )
+        return self
 
 
 def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
