@@ -276,3 +276,33 @@ def run_session(labels_path: Path, items: Sequence[LabelItem], ask: Ask, say: Sa
         done_now += 1
     say(f"All {len(rows)} rows are labelled. Commit {labels_path} before any verifier runs.")
     return done_now
+
+
+# ---- item 6(a): the blinded relabel -------------------------------------------------------------
+
+
+def run_relabel_session(out_path: Path, items: Sequence[LabelItem], ask: Ask, say: Say) -> int:
+    """Relabel the selected claims (order as given: shuffled by ``relabel_selection``) into their
+    own file. The first label and every verifier output stay hidden: this session never reads the
+    labels file. Resumable: rows already in ``out_path`` are skipped."""
+    done: dict[str, dict[str, Any]] = {}
+    if out_path.exists():
+        for ln in out_path.read_text(encoding="utf-8").splitlines():
+            if ln.strip():
+                row = PilotRelabel(**json.loads(ln)).model_dump(mode="json")
+                done[row["claim_id"]] = row
+    now = 0
+    for i, it in enumerate(items):
+        if it.claim_id in done:
+            continue
+        say(screen_one(it, i + 1, len(items)))
+        done[it.claim_id] = label_one(it, ask, say, set_name="pilot_relabel")
+        lines = [
+            json.dumps(done[x.claim_id], sort_keys=True, ensure_ascii=False)
+            for x in items
+            if x.claim_id in done
+        ]
+        write_atomic(out_path, ("\n".join(lines) + "\n").encode("utf-8"))
+        now += 1
+    say(f"All {len(items)} relabels written to {out_path}. Commit it, then re-run ledger pilot.")
+    return now

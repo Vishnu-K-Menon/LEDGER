@@ -134,9 +134,18 @@ def cmd_loadtest(cfg: Config, args: argparse.Namespace) -> int:
     return run_loadtest(cfg, Path.cwd())
 
 
+def cmd_pilot(cfg: Config, args: argparse.Namespace) -> int:
+    """T6 (D-044): the readability gate; with scores present, every kappa, AUROC, eligibility,
+    balanced accuracy and GO / NO-GO CANDIDATE / INCONCLUSIVE. Recommends only."""
+    from ledger.eval.pilot_report import run_pilot
+
+    code, text = run_pilot(cfg, Path(args.labels))
+    print(text)
+    return code
+
+
 cmd_baseline = _not_built("T5 (A4/A6/A7)")
 cmd_questions = _not_built("T7 (D24: refuses to run without data/chunk_ids.lock)")
-cmd_pilot = _not_built("T6 (A2, D-003/D-004)")
 cmd_matrix = _not_built("T14 (D-009, Batch only per D28)")
 cmd_eval = _not_built("T16 (D26)")
 cmd_kappa = _not_built("T16 (D-010)")

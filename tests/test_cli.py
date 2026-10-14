@@ -37,7 +37,6 @@ def test_help_exits_zero(argv, capsys):
     [
         ["baseline", "--questions", "data/questions_draft.jsonl"],
         ["questions", "--n", "200", "--controls", "20"],
-        ["pilot", "--labels", "data/labels_pilot.jsonl"],
         ["matrix", "--seed", "1"],
         ["matrix", "--seed", "2", "--confirm-seed-1-inspected"],
         ["eval", "results/"],
@@ -58,6 +57,7 @@ def test_bodies_not_implemented(argv):
         (["audit-tables", "--n", "10"], "cmd_audit_tables"),
         (["index"], "cmd_index"),
         (["loadtest"], "cmd_loadtest"),
+        (["pilot", "--labels", "data/labels_pilot.jsonl"], "cmd_pilot"),  # T6 (D-044)
     ],
 )
 def test_built_commands_are_wired_without_running_them(argv, handler):

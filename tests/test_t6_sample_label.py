@@ -320,3 +320,15 @@ def test_panel_validation(tmp_path):
 
     with pytest.raises(LabelsRefused):
         load_paired_labels(p)
+
+
+def test_relabel_session_own_file_and_resume(tmp_path):
+    out = tmp_path / "relabel.jsonl"
+    items = [item("q001::c02"), item("q001::c01")]
+    one = ["u", "", "", "n", "y", "y", "n"]
+    with pytest.raises(IndexError):
+        T.run_relabel_session(out, items, Script(one + ["s"]).ask, lambda _: None)
+    assert T.run_relabel_session(out, items, Script(one).ask, lambda _: None) == 1
+    rows = [json.loads(ln) for ln in out.read_text(encoding="utf-8").splitlines()]
+    assert [r["claim_id"] for r in rows] == ["q001::c02", "q001::c01"]
+    assert all(r["set"] == "pilot_relabel" for r in rows)
