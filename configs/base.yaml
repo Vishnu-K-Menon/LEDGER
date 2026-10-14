@@ -176,7 +176,7 @@ decomposition:                        # D15
   # SHA-256 equals prompt_sha256 (the freeze). Model, thinking and effort come from generator
   # (D-041 pins); no sampling parameters (D-019).
   prompt_path: ledger/claims/prompts/claimify_v1.md
-  prompt_sha256: ""
+  prompt_sha256: 1c29c5a6dd2461405cb920e4d875c72d24ebe408321bc8faf711999e600093a4   # sha256 of the file bytes
   max_tokens: 4096
   cell: t6_decompose                  # Batch cell; results/<cell>/1.jsonl
   input_cell: t5_baseline_r1          # D-044 item 1: run 1 of the T5 Batch of record only
