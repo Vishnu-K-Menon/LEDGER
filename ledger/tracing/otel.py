@@ -304,7 +304,7 @@ class VerdictRecord(BaseModel):
     evidence_ids: list[str]
     input_mode: Literal["concatenated", "per_chunk_max"]
     threshold: float
-    cited_support: bool
+    cited_support: bool | None  # None: not computed (the T6 pilot runs no D16 cited-chunk check)
     verifier_model: str
     verifier_revision: str
 
